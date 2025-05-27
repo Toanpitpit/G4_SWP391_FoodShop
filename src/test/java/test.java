@@ -1,7 +1,9 @@
 
 import com.example.servlet.dao.NutritionistDAO;
 import com.example.servlet.model.Blogs;
+import com.example.servlet.model.Requests;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 /*
@@ -16,7 +18,7 @@ import java.util.List;
 public class test {
     
     public static void main(String[] args) {
-        dis3();
+        dis4();
     }
     public static void dis(){
         NutritionistDAO _dao = new NutritionistDAO();
@@ -51,5 +53,14 @@ public class test {
     NutritionistDAO _dao = new NutritionistDAO();
     _dao.deleteBlogByID(11);
 }
-
+public static void dis4() {
+    NutritionistDAO _dao = new NutritionistDAO();
+    List<Requests> lstR = _dao.getRequestByFilter(-3,"" , "");
+    if(lstR.isEmpty()){
+        System.out.println("deo có du lieu");
+    }
+    for (Requests requests : lstR) {
+        System.out.println(requests.toString());
+    }
+}
 }

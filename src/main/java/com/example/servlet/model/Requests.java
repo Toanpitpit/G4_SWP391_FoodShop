@@ -4,10 +4,115 @@
  */
 package com.example.servlet.model;
 
+import java.sql.Timestamp;
+
 /**
  *
  * @author Admin
  */
 public class Requests {
+  private int rID;
+  private String title;
+  private int authorID;
+  private String authorName;
+  private String type;
+  private int draftID;
+  private String status;
+  private String note;
+  private Timestamp create_at;
+
+    public Requests(int rID, String title, int authorID, String authorName, String type, int draftID, String status, String note, Timestamp create_at) {
+        this.rID = rID;
+        this.title = title;
+        this.authorID = authorID;
+        this.authorName = authorName;
+        this.type = type;
+        this.draftID = draftID;
+        this.status = status;
+        this.note = note;
+        this.create_at = create_at;
+    }
+
+    public Requests() {
+    }
+
+    public int getrID() {
+        return rID;
+    }
+
+    public void setrID(int rID) {
+        this.rID = rID;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public int getAuthorID() {
+        return authorID;
+    }
+
+    public void setAuthorID(int authorID) {
+        this.authorID = authorID;
+    }
+
+    public String getAuthorName() {
+        return authorName;
+    }
+
+    public void setAuthorName(String authorName) {
+        this.authorName = authorName;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public int getDraftID() {
+        return draftID;
+    }
+
+    public void setDraftID(int draftID) {
+        this.draftID = draftID;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+    public Timestamp getCreate_at() {
+        return create_at;
+    }
+
+    public void setCreate_at(Timestamp create_at) {
+        this.create_at = create_at;
+    }
+
+    @Override
+    public String toString() {
+        return "Requests{" + "rID=" + rID + ", title=" + title + ", authorID=" + authorID + ", authorName=" + authorName + ", type=" + type + ", draftID=" + draftID + ", status=" + status + ", note=" + note + ", create_at=" + create_at + '}';
+    }
+ 
     
+  
 }
