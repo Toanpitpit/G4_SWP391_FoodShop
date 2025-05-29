@@ -1,5 +1,6 @@
 
-import com.example.servlet.dao.NutritionistDAO;
+import com.example.servlet.dao.BlogDAO;
+import com.example.servlet.dao.RequestDAO;
 import com.example.servlet.model.Blogs;
 import com.example.servlet.model.Requests;
 import java.sql.Timestamp;
@@ -21,7 +22,7 @@ public class test {
         dis4();
     }
     public static void dis(){
-        NutritionistDAO _dao = new NutritionistDAO();
+        BlogDAO _dao = new BlogDAO();
         List<Blogs> lstBlog = _dao.getBlogsByFilter("d" , 2 , true);
         System.out.println("Aloo Xin chào ");
         for(Blogs b : lstBlog){
@@ -30,7 +31,7 @@ public class test {
         }
     }
    public static void dis2() {
-    NutritionistDAO _dao = new NutritionistDAO();
+    BlogDAO _dao = new BlogDAO();
     Blogs testBlog = new Blogs(
     11, // blogID
     9,  // authorID
@@ -50,12 +51,12 @@ public class test {
     
 }
    public static void dis3() {
-    NutritionistDAO _dao = new NutritionistDAO();
+    BlogDAO _dao = new BlogDAO();
     _dao.deleteBlogByID(11);
 }
 public static void dis4() {
-    NutritionistDAO _dao = new NutritionistDAO();
-    List<Requests> lstR = _dao.getRequestByFilter(-3,"" , "");
+    RequestDAO _dao = new RequestDAO();
+    List<Requests> lstR = _dao.getRequestByFilter(-3,"" , null);
     if(lstR.isEmpty()){
         System.out.println("deo có du lieu");
     }

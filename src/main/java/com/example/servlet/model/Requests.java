@@ -20,8 +20,9 @@ public class Requests {
   private String status;
   private String note;
   private Timestamp create_at;
+  private Timestamp update_at;
 
-    public Requests(int rID, String title, int authorID, String authorName, String type, int draftID, String status, String note, Timestamp create_at) {
+    public Requests(int rID, String title, int authorID, String authorName, String type, int draftID, String status, String note, Timestamp create_at, Timestamp update_at) {
         this.rID = rID;
         this.title = title;
         this.authorID = authorID;
@@ -31,6 +32,7 @@ public class Requests {
         this.status = status;
         this.note = note;
         this.create_at = create_at;
+        this.update_at = update_at;
     }
 
     public Requests() {
@@ -108,11 +110,20 @@ public class Requests {
         this.create_at = create_at;
     }
 
+    public Timestamp getUpdate_at() {
+        return update_at;
+    }
+
+    public void setUpdate_at(Timestamp update_at) {
+        this.update_at = update_at;
+    }
+
     @Override
     public String toString() {
-        return "Requests{" + "rID=" + rID + ", title=" + title + ", authorID=" + authorID + ", authorName=" + authorName + ", type=" + type + ", draftID=" + draftID + ", status=" + status + ", note=" + note + ", create_at=" + create_at + '}';
+        return "Requests{" + "rID=" + rID + ", title=" + title + ", authorID=" + authorID + ", authorName=" + authorName + ", type=" + type + ", draftID=" + draftID + ", status=" + status + ", note=" + note + ", create_at=" + create_at + ", update_at=" + update_at + '}';
     }
- 
+
+   
     
   
 }

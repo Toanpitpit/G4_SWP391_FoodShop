@@ -4,8 +4,9 @@
  */
 
 package com.example.servlet.controller.Nutritionist;
-import com.example.servlet.dao.BlogDAO;
-import com.example.servlet.model.Blogs;
+
+import com.example.servlet.dao.RequestDAO;
+import com.example.servlet.model.Requests;
 import com.example.servlet.model.User;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -14,13 +15,14 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  *
  * @author Admin
  */
-public class ListBlogsServerLet extends HttpServlet {
+public class DashboardServerLet extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -37,10 +39,10 @@ public class ListBlogsServerLet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ListBlogsServerLet</title>");  
+            out.println("<title>Servlet Dashboard</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ListBlogsServerLet at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet Dashboard at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -49,12 +51,13 @@ public class ListBlogsServerLet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        HttpSession sesion = request.getSession(false);
-        User u = (User) request.getSession().getAttribute("User"); 
-        BlogDAO _dao =  new BlogDAO();
-        List<Blogs> lstblog = _dao.getBlogsByFilter("", -1, true);
-        request.setAttribute("lstBlog", lstblog);
-        request.getRequestDispatcher("/Nutritionist/listBlog.jsp")
+//        HttpSession sesssion = request.getSession(false);
+//        User u = (User) request.getSession().getAttribute("account");
+        RequestDAO r_dao = new RequestDAO();
+        List<Requests> lstR = new ArrayList(); 
+        lstR = r_dao.getRequestByFilter(-2, "", "newest");
+        request.setAttribute("lstR", lstR);
+        request.getRequestDispatcher("/Nutritionist/DaskbashNutrif.jsp")
                 .forward(request, response);
         
     } 

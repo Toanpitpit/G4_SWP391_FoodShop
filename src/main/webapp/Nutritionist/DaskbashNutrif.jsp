@@ -169,21 +169,21 @@
                             <tr>
                                 <td>Title</td>
                                 <td>Type</td>
-                                <td>Food Name</td>
+                                <td colspan="3">Food Name</td>
                                 <td>Status</td>
-                                <td>Note</td>
+                                <td colspan="5">Note</td>
                             </tr>
                         </thead>
 
                         <tbody>
                             
-                             <c:forEach var="Re" items="${lstRen}">
+                             <c:forEach var="Re" items="${lstR}" begin="0" end="3" >
                             <tr>
                                 <td>${Re.title}</td>
                                 <td>${Re.type}</td>
-                                <td>${Re.name}</td>
-                                <td><span class="status delivered">${Re.status}</span></td>
-                                <td>${Re.note}</td>
+                                <td colspan="3">${Re.authorName}</td>
+                                <td><span class="status delivered">${Re.status.toLowerCase()}</span></td>
+                                <td colspan="5">${Re.note}</td>
                             </tr>
                              </c:forEach>
 

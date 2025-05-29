@@ -24,6 +24,10 @@
         <servlet-name>ListBlogsServerLet</servlet-name>
         <servlet-class>com.example.servlet.controller.Nutritionist.ListBlogsServerLet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Dashboard</servlet-name>
+        <servlet-class>com.example.servlet.controller.Nutritionist.DashboardServerLet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>GoogleLoginServlet</servlet-name>
         <url-pattern>/GoogleLoginServlet</url-pattern>
@@ -51,6 +55,10 @@
     <servlet-mapping>
         <servlet-name>ListBlogsServerLet</servlet-name>
         <url-pattern>/listblog</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Dashboard</servlet-name>
+        <url-pattern>/dashboadnutri</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

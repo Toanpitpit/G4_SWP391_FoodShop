@@ -21,7 +21,7 @@ import java.util.logging.Logger;
  *
  * @author Admin
  */
-public class NutritionistDAO {
+public class BlogDAO {
 
     Connection conn;
     PreparedStatement ps;
@@ -199,7 +199,7 @@ public class NutritionistDAO {
         }
 
     } catch (Exception ex) {
-        Logger.getLogger(NutritionistDAO.class.getName()).log(Level.SEVERE, null, ex);
+        Logger.getLogger(BlogDAO.class.getName()).log(Level.SEVERE, null, ex);
     } finally {
         try {
             if (ps != null) ps.close();
@@ -210,89 +210,7 @@ public class NutritionistDAO {
     }
 }
 
-   public List<Requests> getRequestByFilter(int authorId, String keyword, String sort) { 
-        List<Requests> lstR = new ArrayList<>();
-        try {
-            StringBuilder sql = new StringBuilder();
-            sql.append("SELECT\n")
-               .append("    r.reqID ,\n")
-               .append("    r.title ,\n")
-               .append("    r.nutritionistID,\n")
-               .append("    a.name,\n")
-               .append("    r.type ,\n")
-               .append("    r.foodDraftID,\n")
-               .append("    r.status ,\n")
-               .append("    r.create_at\n")
-               .append("FROM\n")
-               .append("    Requests r\n")
-               .append("JOIN\n")
-               .append("    Accounts a ON r.nutritionistID = a.id\n")
-               .append("WHERE 1=1");
-
-            List<Object> params = new ArrayList<>(); 
-            if (authorId > 0) {
-                sql.append(" AND r.nutritionistID = ?");
-                params.add(authorId);
-            }
-            if (keyword != null && !keyword.trim().isEmpty()) {
-                sql.append(" AND (r.title LIKE ?  ");
-                String like = "%" + keyword.trim() + "%";
-                params.add(like);
-            }          
-            if (sort != null && !sort.trim().isEmpty()) {
-                sql.append(" ORDER BY r.create_at ");
-                if (sort.equalsIgnoreCase("newest")) {
-                    sql.append("DESC");
-                } else if (sort.equalsIgnoreCase("oldest")) {
-                    sql.append("ASC");
-                }
-            } else {
-           
-                sql.append(" ORDER BY r.create_at DESC");
-            }
-            conn = db.getConnection(); 
-
-            ps = conn.prepareStatement(sql.toString());
-
-            for (int i = 0; i < params.size(); i++) {
-                ps.setObject(i + 1, params.get(i));
-            }
-
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                Requests req = new Requests(
-                        rs.getInt(1),
-                        rs.getString(2),
-                        rs.getInt(3),
-                        rs.getString(4),
-                        rs.getString(5),
-                        rs.getInt(6),
-                        rs.getString(7),
-                        rs.getString(8),
-                        rs.getTimestamp(9)
-                );
-                lstR.add(req);
-            }
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        } finally {
-            try {
-                if (rs != null) {
-                    rs.close();
-                }
-                if (ps != null) {
-                    ps.close();
-                }
-                if (conn != null) {
-                    conn.close();
-                }
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
-        }
-        return lstR;
-    }
+   
     
     
 }

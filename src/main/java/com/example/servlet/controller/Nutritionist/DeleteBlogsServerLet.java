@@ -48,9 +48,9 @@ public class DeleteBlogsServerLet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         HttpSession session = request.getSession(false);
-        int id = request.getAttribute("id");
-        BlogDAO b_dao = new BlogDAO();
-        b_dao.deleteBlogByID(id);
+//        int id = request.getAttribute("id");
+//        BlogDAO b_dao = new BlogDAO();
+//        b_dao.deleteBlogByID(id);
         response.sendRedirect("listblog");
     } 
 
@@ -58,7 +58,7 @@ public class DeleteBlogsServerLet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         
-    }
+    } 
     @Override
     public String getServletInfo() {
         return "Short description";
