@@ -44,7 +44,7 @@
     <div style="text-align: center;">
         <button type="submit"><i class="fas fa-paper-plane"></i> Đăng bài</button>
     </div>
-</form>
+</form> 
 
 
 

@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="6.0" xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
     <servlet>
-        <servlet-name>GoogleLoginServlet</servlet-name>
-        <servlet-class>com.example.servlet.controller.GoogleLoginServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>GitHubLoginServlet</servlet-name>
-        <servlet-class>com.example.servlet.controller.GitHubLoginServlet</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>CreateBlogsServerLet</servlet-name>
         <servlet-class>com.example.servlet.controller.Nutritionist.CreateBlogsServerLet</servlet-class>
     </servlet>
@@ -28,14 +20,6 @@
         <servlet-name>Dashboard</servlet-name>
         <servlet-class>com.example.servlet.controller.Nutritionist.DashboardServerLet</servlet-class>
     </servlet>
-    <servlet-mapping>
-        <servlet-name>GoogleLoginServlet</servlet-name>
-        <url-pattern>/GoogleLoginServlet</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>GitHubLoginServlet</servlet-name>
-        <url-pattern>/GitHubLoginServlet</url-pattern>
-    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ResetPasswordController</servlet-name>
         <url-pattern>/ResetPasswordController</url-pattern>
@@ -89,10 +73,6 @@
         <servlet-class>com.example.servlet.controller.HomeController</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>ForgotPasswordController</servlet-name>
-        <servlet-class>com.example.servlet.controller.ForgotPasswordController</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>ResetPasswordController</servlet-name>
         <servlet-class>com.example.servlet.controller.ResetPasswordController</servlet-class>
     </servlet>
@@ -115,9 +95,5 @@
     <servlet-mapping>
         <servlet-name>HomeController</servlet-name>
         <url-pattern>/Home</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>ForgotPasswordController</servlet-name>
-        <url-pattern>/ForgotPasswordController</url-pattern>
     </servlet-mapping>
 </web-app>

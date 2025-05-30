@@ -5,16 +5,18 @@
 
 package com.example.servlet.controller.Nutritionist;
 
+import com.example.servlet.dao.BlogDAO;
+import com.example.servlet.dao.NotifyDAO;
 import com.example.servlet.dao.RequestDAO;
+import com.example.servlet.model.Blogs;
+import com.example.servlet.model.Notifys;
 import com.example.servlet.model.Requests;
-import com.example.servlet.model.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,15 +53,25 @@ public class DashboardServerLet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-//        HttpSession sesssion = request.getSession(false);
-//        User u = (User) request.getSession().getAttribute("account");
+//        HttpSession session = request.getSession(false);
+//        if (session == null || session.getAttribute("account") == null) {
+//            response.sendRedirect("login.jsp");
+//            return;
+//        }
+
         RequestDAO r_dao = new RequestDAO();
-        List<Requests> lstR = new ArrayList(); 
-        lstR = r_dao.getRequestByFilter(-2, "", "newest");
+        BlogDAO b_dao = new BlogDAO();
+        NotifyDAO n_dao = new NotifyDAO();
+        
+        List<Blogs> lstB = b_dao.getBlogsByFilter("", -1, true);
+        List<Requests> lstR = r_dao.getRequestByFilter(-2, "", "newest");
+        List<Notifys> lstN = n_dao.getNotificationsByFilter(null, "Saler", false, true);
         request.setAttribute("lstR", lstR);
+        request.setAttribute("lstB", lstB);
+        request.setAttribute("lstN", lstN);
         request.getRequestDispatcher("/Nutritionist/DaskbashNutrif.jsp")
                 .forward(request, response);
-        
+
     } 
 
     @Override

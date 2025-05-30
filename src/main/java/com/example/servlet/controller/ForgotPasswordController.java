@@ -1,6 +1,6 @@
 package com.example.servlet.controller;
 
-import com.example.servlet.dao.UserDAO;
+import com.example.servlet.dao.AccountDAO;
 import jakarta.mail.*;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
@@ -21,7 +21,7 @@ import java.util.logging.Logger;
 public class ForgotPasswordController extends HttpServlet {
 
     static final ConcurrentHashMap<String, String> verificationCodes = new ConcurrentHashMap<>();
-    private final UserDAO userDAO = new UserDAO();
+    private final AccountDAO userDAO = new AccountDAO();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -50,7 +50,7 @@ public class ForgotPasswordController extends HttpServlet {
         verificationCodes.put(email, code);
 
         try {
-            sendEmail(req.getServletContext(), email, "Mã Xác Nhận Đặt Lại Mật Khẩu",
+            sendEmail(req.getServletContext(), email, "Mã Xác Nhận �?ặt Lại Mật Khẩu",
                     "Mã xác nhận của bạn là: " + code);
             req.setAttribute("success", "Mã xác nhận đã được gửi!");
             req.setAttribute("email", email);

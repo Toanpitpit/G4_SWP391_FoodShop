@@ -1,11 +1,18 @@
 
+import com.example.servlet.dao.AccountDAO;
 import com.example.servlet.dao.BlogDAO;
+import com.example.servlet.dao.NotifyDAO;
 import com.example.servlet.dao.RequestDAO;
+import com.example.servlet.model.Account;
 import com.example.servlet.model.Blogs;
+import com.example.servlet.model.Notifys;
 import com.example.servlet.model.Requests;
+import java.sql.Date;
+import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.ArrayList;
+import java.time.LocalDate;
 import java.util.List;
+import org.mindrot.jbcrypt.BCrypt;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -18,8 +25,10 @@ import java.util.List;
  */
 public class test {
     
-    public static void main(String[] args) {
-        dis4();
+    public static void main(String[] args) throws SQLException {
+//        dis4();
+        dis6();
+//         dis5();
     }
     public static void dis(){
         BlogDAO _dao = new BlogDAO();
@@ -62,6 +71,31 @@ public static void dis4() {
     }
     for (Requests requests : lstR) {
         System.out.println(requests.toString());
+    }
+}
+public static void dis5() throws SQLException {
+    AccountDAO dao = new AccountDAO();
+    Account testUser = new Account();
+            testUser.setUsername("ToanAdmin");
+            String pass = "Tatoan@123";
+            String hashedPassword = BCrypt.hashpw(pass, BCrypt.gensalt());
+            testUser.setPass(hashedPassword);
+            testUser.setName("Tạ Văn Toàn");
+            testUser.setEmail("he187337tavantoan@gmail.com");
+            testUser.setPhone("0707408906");
+            testUser.setGender("Male");
+            testUser.setBirthDate(Date.valueOf(LocalDate.of(2004, 10, 04))); // yyyy-MM-dd
+            testUser.setRole("Nutritonist");
+            testUser.setStatus("Active");
+            testUser.setImage("default.png");
+            dao.registerUser(testUser);
+}
+
+public static void dis6() {
+    NotifyDAO n_dao = new NotifyDAO();
+    List<Notifys> lstN = n_dao.getNotificationsByFilter(null, "Saler", false, true);
+    for (Notifys notifys : lstN) {
+        System.out.println(notifys.toString());
     }
 }
 }

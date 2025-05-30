@@ -1,9 +1,9 @@
 package com.example.servlet.controller;
 
-import com.example.servlet.dao.UserDAO;
-import com.example.servlet.model.User;
+import com.example.servlet.dao.AccountDAO;
+import com.example.servlet.model.Account;
 import com.google.gson.Gson;
-//import io.github.cdimascio.dotenv.Dotenv;
+import io.github.cdimascio.dotenv.Dotenv;
 import org.apache.http.client.fluent.Request;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -24,11 +24,11 @@ public class GoogleLoginServlet extends HttpServlet {
     String clientSecret = "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";
     
     private static final String REDIRECT_URI = "http://localhost:8080/GoogleLoginServlet";
-    private UserDAO userDAO;
+    private AccountDAO userDAO;
 
     @Override
     public void init() {
-        userDAO = new UserDAO();
+        userDAO = new AccountDAO();
     }
 
     @Override
@@ -65,18 +65,19 @@ public class GoogleLoginServlet extends HttpServlet {
                     .execute().returnContent().asString();
 
             UserInfo userInfo = gson.fromJson(userInfoJson, UserInfo.class);
-            User user = null;
+            Account user = null;
             try {
                 user = userDAO.findByEmail(userInfo.email);
             } catch (SQLException ex) {
                 Logger.getLogger(GoogleLoginServlet.class.getName()).log(Level.SEVERE, "Error in doGet", ex);
             }
             if (user == null) {
-                user = new User();
+                user = new Account();
                 user.setUsername(userInfo.email);
                 user.setName(userInfo.name);
                 user.setEmail(userInfo.email);
-                user.setRole("USER_OAUTH");
+                user.setRole("USER_OAUTH2");
+                user.setPass("NoPassOauth2");
                 try {
                     userDAO.registerUser(user);
                 } catch (SQLException ex) {

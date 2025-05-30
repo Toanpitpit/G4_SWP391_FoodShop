@@ -10,6 +10,7 @@
     <title></title>
     <!-- ======= Styles ====== -->
     <link rel="stylesheet" href="../CSS/Ncss/Homed.css">
+    <link rel="stylesheet" href="../CSS/Ncss/common.css">
 </head>
 
 <body>
@@ -18,7 +19,7 @@
         <div class="navigation">
             <ul>
                 <li>
-                    <a href="#">
+                    <a href="dashboadnutri">
                         <span class="icon">
 <!--                            <ion-icon name="logo-apple"></ion-icon>-->
                         </span>
@@ -27,7 +28,7 @@
                 </li>
 
                 <li>
-                    <a href="#">
+                    <a href="dashboadnutri">
                         <span class="icon">
                             <ion-icon name="home-outline"></ion-icon>
                         </span>
@@ -36,7 +37,7 @@
                 </li>
 
                 <li>
-                    <a href="#">
+                    <a href="listfood">
                         <span class="icon">
                             <ion-icon name="people-outline"></ion-icon>
                         </span>
@@ -45,7 +46,7 @@
                 </li>
 
                 <li>
-                    <a href="#">
+                    <a href="/Nutritionist/Blogs.jsp">
                         <span class="icon">
                             <ion-icon name="chatbubble-outline"></ion-icon>
                         </span>
@@ -54,7 +55,7 @@
                 </li>
 
                 <li>
-                    <a href="#">
+                    <a href="notify">
                         <span class="icon">
                             <ion-icon name="help-outline"></ion-icon>
                         </span>
@@ -63,7 +64,7 @@
                 </li>
 
                 <li>
-                    <a href="#">
+                    <a href="profile">
                         <span class="icon">
                             <ion-icon name="settings-outline"></ion-icon>
                         </span>
@@ -72,7 +73,7 @@
                 </li>
 
                 <li>
-                    <a href="#">
+                    <a href="changePassword">
                         <span class="icon">
                             <ion-icon name="lock-closed-outline"></ion-icon>
                         </span>
@@ -81,7 +82,7 @@
                 </li>
 
                 <li>
-                    <a href="#">
+                    <a href="logout">
                         <span class="icon">
                             <ion-icon name="log-out-outline"></ion-icon>
                         </span>
@@ -136,7 +137,7 @@
 
                 <div class="card">
                     <div>
-                        <div class="numbers">${lstRe.size()} 0</div>
+                        <div class="numbers">${lstR.size()}</div>
                         <div class="cardName">Your Request</div>
                     </div>
 
@@ -146,7 +147,7 @@
                 </div>
                     <div class="card">
                     <div>
-                        <div class="numbers">${lstBlog.size()} 0</div>
+                        <div class="numbers">${lstB.size()}</div>
                         <div class="cardName">Your Blogs</div>
                     </div>
 
@@ -160,58 +161,63 @@
             <div class="details">
                 <div class="recentOrders">
                     <div class="cardHeader">
+                        <p></p>
                         <h2>Recent Request</h2>
-                        <a href="request.jsp" class="btn">View All</a>
+                        <a href="request.jsp" class="btn"><p>View All</p></a>
                     </div>
-
-                    <table>
+                    <div class="table_Wap">
+                        <table>
                         <thead>
                             <tr>
                                 <td>Title</td>
                                 <td>Type</td>
                                 <td colspan="3">Food Name</td>
-                                <td>Status</td>
-                                <td colspan="5">Note</td>
+                                <td>Note</td>
+                                <td colspan="5">Status</td>
                             </tr>
                         </thead>
 
                         <tbody>
                             
-                             <c:forEach var="Re" items="${lstR}" begin="0" end="3" >
-                            <tr>
-                                <td>${Re.title}</td>
+                             <c:forEach var="Re" items="${lstR}" begin="0" end="5" >
+                            <tr onclick="window.location.href='request-detail?id=${Re.rID}'" style="cursor: pointer;">
+                                <td class "sub_info">${Re.title}</td>
                                 <td>${Re.type}</td>
-                                <td colspan="3">${Re.authorName}</td>
-                                <td><span class="status delivered">${Re.status.toLowerCase()}</span></td>
-                                <td colspan="5">${Re.note}</td>
+                                <td colspan="3">${Re.foodName}</td>
+                                <td  class ="sub_info" colspan="5">${Re.note}</td>
+                                <td><span class="status ${Re.status.toLowerCase()}">${Re.status}</span></td>
                             </tr>
                              </c:forEach>
 
                         </tbody>
                     </table>
+                    </div>
                 </div>
 
                 <!-- ================= New Customers ================ -->
-                <div class="recentCustomers">
-                    <div class="cardHeader">
+                <div class="recentnotify">
+                    <div>
                         <h2>NOTIFICATION</h2>
                     </div>
-
-                    <table>
-                        <c:forEach var="Re" items="${lstRen}">
+                    <table> 
+                        <c:forEach var="No" items="${lstN}">
                             <tr>
                                 <td>
-                                    <h4> ${sessionScope.account.name}<br> <span> You have new update from request </span></h4>
+<!--                                    <img src="a" alt="avatar" style="width: 30px; height: 30px; border-radius: 50%;">-->
+                                    <div >
+                                        <p>${No.message}</p>
+                                    </div>
+                                    <div class="status-dot"  
+                                         style="width: 8px; height: 8px; border-radius: 50%; background-color: ${No.isRead ? 'transparent' : '#28a745'}; cursor: pointer;">
+                                    </div>
                                 </td>
-                            </tr> 
-                        </c:forEach>            
+                            </tr>
+                        </c:forEach>
                     </table>
-                    
                 </div>
             </div>
         </div>
     </div>
-
     <!-- =========== Scripts =========  -->
     <script src="../JS/Nutritionist/home.js"></script>
 

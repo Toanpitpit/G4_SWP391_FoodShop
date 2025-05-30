@@ -6,7 +6,6 @@
 package com.example.servlet.controller.Nutritionist;
 import com.example.servlet.dao.BlogDAO;
 import com.example.servlet.model.Blogs;
-import com.example.servlet.model.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -49,8 +48,8 @@ public class ListBlogsServerLet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        HttpSession sesion = request.getSession(false);
-        User u = (User) request.getSession().getAttribute("User"); 
+//        HttpSession sesion = request.getSession(false);
+//        User u = (User) request.getSession().getAttribute("User"); 
         BlogDAO _dao =  new BlogDAO();
         List<Blogs> lstblog = _dao.getBlogsByFilter("", -1, true);
         request.setAttribute("lstBlog", lstblog);
