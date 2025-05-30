@@ -15,13 +15,17 @@
     background: linear-gradient(to right, #6AAF70, #5DA463);
     color: white;
     padding: 30px 50px;
-    border-radius: 12px;
     display: flex;
     align-items: center;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    margin: 20px;
-    position: relative;  /* Thêm để dùng position absolute cho tiêu đề */
+    width: 100%;
+    border-radius: 20px;
+    box-sizing: border-box;
+    margin: 20px auto;
+    position: relative;
+    overflow: hidden;
 }
+
 
 .order-header h2 {
     font-size: 32px;
@@ -77,32 +81,45 @@
 
 </style>
 
-
-<div class="order-header">
-    <a href="home.jsp">
-    <img src="${pageContext.request.contextPath}/img/logo/logo.png" alt="Logo" width="100">
-    </a>
-    <h2>Manage Order</h2>
-    <div class="order-buttons">
-    <a href="invoice.jsp" class="nav-button">Invoice</a>
-    <a href="profile.jsp" class="nav-button">Profile</a>
-    <a href="Homedemo.jsp" class="nav-button">Home</a>
+<div style="background: white;">
+    <div class="order-header">
+        <a href="home.jsp">
+            <img src="${pageContext.request.contextPath}/img/logo/logo.png" alt="Logo" width="100">
+        </a>
+        <h2>Manage Order</h2>
+        <div class="order-buttons">
+            <a href="invoice.jsp" class="nav-button">Invoice</a>
+            <a href="profile.jsp" class="nav-button">Profile</a>
+            <a href="Homedemo.jsp" class="nav-button">Home</a>
+        </div>
+    </div>
 </div>
+
 </div>
 
-    <table border="1" width="100%" style="margin-top:20px; text-align:center;">
-        <tr>
-            <th style=" background-color: violet;width: 70px">OrderID</th>
-            <th style=" background-color: violet;width: 200px">Name customer</th>
-            <th style=" background-color: violet;width: 260px">Address</th>
-            <th style=" background-color: violet;width: 200px">Phone number</th>
-            <th style=" background-color: violet;width: 260px">Order food</th>
-            <th style=" background-color: violet;width: 50px">Quantity</th>
-            <th style=" background-color: violet;width: 200px">Price</th>
-            <th style=" background-color: violet;width: 260px">Actions</th>
-        </tr>
+    <table border="1" style="
+    width: 95%;
+    margin: 30px auto;
+    text-align: center;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 12px;
+    overflow: hidden;
+">
+    <tr style="background-color: #28a745; color: white; font-weight: bold;">
+        <th style="width: 70px; padding: 10px; border-top-left-radius: 12px;">OrderID</th>
+        <th style="width: 200px; padding: 10px;">Name customer</th>
+        <th style="width: 260px; padding: 10px;">Address</th>
+        <th style="width: 200px; padding: 10px;">Phone number</th>
+        <th style="width: 260px; padding: 10px;">Order food</th>
+        <th style="width: 50px; padding: 10px;">Quantity</th>
+        <th style="width: 200px; padding: 10px;">Price</th>
+        <th style="width: 260px; padding: 10px; border-top-right-radius: 12px;">Actions</th>
+    </tr>
+</table>
 
-        <c:forEach var="order" items="${requestScope.orderList}">
+
+        <c:forEach var="order" items="${orderList}">
             <tr>
                 <td>${order.id}</td>
                 <td>${order.customerName}</td>
@@ -112,13 +129,14 @@
                 <td>${order.quantity}</td>
                 <td>${order.price} vnd</td>
                 <td>
-                    <form action="ManageOrderAction" method="post">
+                    <form action="order" method="post">
                         <input type="hidden" name="orderId" value="${order.id}" />
-                        <button name="action" value="accept">Accept</button>
-                        <button name="action" value="reject">Reject</button>
-                        <button name="action" value="cancel">Cancel</button>
-                        <button name="action" value="status">Status</button>
+                        <button type="submit" name="action" value="accept">Accept</button>
+                        <button type="submit" name="action" value="reject">Reject</button>
+                        <button type="submit" name="action" value="cancel">Cancel</button>
+                        <button type="submit" name="action" value="status">Status</button>
                     </form>
+
                 </td>
             </tr>
         </c:forEach>
