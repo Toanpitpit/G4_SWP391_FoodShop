@@ -20,7 +20,6 @@
                     <li>
                         <a href="../dashboadnutri">
                             <span class="icon">
-                                <!--                            <ion-icon name="logo-apple"></ion-icon>-->
                             </span>
                             <span class="title">Heathy Foods</span>
                         </a>
@@ -158,14 +157,13 @@
 
                 <!-- ================ Request Newest List ================= -->
                 <div class="details">
-                    <!-- Left: Blog List -->
                     <div class="blogList">
                         <div class="cardHeader">
                             <h2>Blog Posts</h2>
                             <a href="blog.jsp" class="btn"><p>View All</p></a>
                         </div>
-                        <div class="table_Wap">
-                            <table>
+                     
+<!--                            <table>
                                 <thead>
                                     <tr>
                                         <td>Title</td>
@@ -175,7 +173,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <c:forEach var="post" items="${blogList}" begin="0" end="5">
+                                    <c:forEach var="post" items="${lstB}">
                                         <tr onclick="window.location.href = 'blog-detail?id=${post.id}'" style="cursor:pointer;">
                                             <td class="sub_info">${post.title}</td>
                                             <td>${post.author}</td>
@@ -184,22 +182,19 @@
                                         </tr>
                                     </c:forEach>
                                 </tbody>
-                            </table>
-                        </div>
+                            </table>-->
+                 
                     </div>
 
-                    <!-- Right: Filter & Search -->
                     <div class="filterBox">
                         <div class="cardHeader">
                             <h2>Filter & Search</h2>
                         </div>
                         <form action="blog.jsp" method="get">
-                            <!-- Search -->
                             <div class="form-group">
-                                <input type="text" name="q" placeholder="Search posts..." />
+                                <input type="text" name="search" placeholder="Search posts..." />
                                 <button type="submit">Search</button>
                             </div>
-                            <!-- BMI Filter -->
                             <fieldset class="form-group">
                                 <legend>By BMI</legend>
                                 <c:forEach var="bmi" items="${bmiList}">
@@ -221,35 +216,8 @@
                                 </div>
                             </fieldset>
                         </form>
-                        <!-- Results Table -->
-                        <div class="table_Wap">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <td>Image</td>
-                                        <td>Title</td>
-                                        <td>Status</td>
-                                        <td>Content</td>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <c:forEach var="post" items="${filteredBlogList}">
-                                        <tr onclick="window.location.href = 'blog-detail?id=${post.id}'" style="cursor:pointer;">
-                                            <td><img src="${post.imageUrl}" alt="thumb"/></td>
-                                            <td class="sub_info">${post.title}</td>
-                                            <td><span class="status ${post.status.toLowerCase()}">${post.status}</span></td>
-                                            <td class="sub_info">${post.content}</td>
-                                        </tr>
-                                    </c:forEach>
-                                </tbody>
-                            </table>
-                        </div>
                     </div>
                 </div>
-
-
-                <!-- ================= New Customers ================ -->
-
             </div>
         </div>
     </div>

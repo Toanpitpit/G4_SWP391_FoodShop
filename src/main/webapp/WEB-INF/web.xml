@@ -20,6 +20,18 @@
         <servlet-name>Dashboard</servlet-name>
         <servlet-class>com.example.servlet.controller.Nutritionist.DashboardServerLet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>BlogDetailServerLet</servlet-name>
+        <servlet-class>com.example.servlet.controller.Nutritionist.BlogDetailServerLet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ListFoodDraftServerLet</servlet-name>
+        <servlet-class>com.example.servlet.controller.Nutritionist.ListFoodDraftServerLet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CreateFoodDraftServerLet</servlet-name>
+        <servlet-class>com.example.servlet.controller.Nutritionist.CreateFoodDraftServerLet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ResetPasswordController</servlet-name>
         <url-pattern>/ResetPasswordController</url-pattern>
@@ -43,6 +55,18 @@
     <servlet-mapping>
         <servlet-name>Dashboard</servlet-name>
         <url-pattern>/dashboadnutri</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BlogDetailServerLet</servlet-name>
+        <url-pattern>/BlogDetailServerLet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ListFoodDraftServerLet</servlet-name>
+        <url-pattern>/lstfooddraft</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CreateFoodDraftServerLet</servlet-name>
+        <url-pattern>/createfdr</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
