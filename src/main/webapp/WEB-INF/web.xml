@@ -32,6 +32,10 @@
         <servlet-name>CreateFoodDraftServerLet</servlet-name>
         <servlet-class>com.example.servlet.controller.Nutritionist.CreateFoodDraftServerLet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ListRequestServerLet</servlet-name>
+        <servlet-class>com.example.servlet.controller.Nutritionist.ListRequestServerLet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ResetPasswordController</servlet-name>
         <url-pattern>/ResetPasswordController</url-pattern>
@@ -58,7 +62,7 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>BlogDetailServerLet</servlet-name>
-        <url-pattern>/BlogDetailServerLet</url-pattern>
+        <url-pattern>/blogdetail</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ListFoodDraftServerLet</servlet-name>
@@ -67,6 +71,10 @@
     <servlet-mapping>
         <servlet-name>CreateFoodDraftServerLet</servlet-name>
         <url-pattern>/createfdr</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ListRequestServerLet</servlet-name>
+        <url-pattern>/lstreq</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

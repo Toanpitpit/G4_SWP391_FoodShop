@@ -5,21 +5,18 @@
 
 package com.example.servlet.controller.Nutritionist;
 
-import com.example.servlet.dao.BlogDAO;
-import com.example.servlet.model.Blogs;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
 
 /**
  *
  * @author Admin
  */
-public class BlogDetailServerLet extends HttpServlet {
+public class ListRequestServerLet extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -36,10 +33,10 @@ public class BlogDetailServerLet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet BlogDetailServerLet</title>");  
+            out.println("<title>Servlet ListRequestServerLet</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet BlogDetailServerLet at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet ListRequestServerLet at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -48,11 +45,6 @@ public class BlogDetailServerLet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        BlogDAO b_dao = new BlogDAO();
-        List<Blogs> lstB = b_dao.getBlogsByFilter("", -1, true,null);
-        request.setAttribute("lstB", lstB);
-        request.getRequestDispatcher("/Nutritionist/BlogDetail.jsp")
-                .forward(request, response);
     } 
 
     @Override

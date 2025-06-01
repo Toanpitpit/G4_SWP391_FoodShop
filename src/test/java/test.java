@@ -1,16 +1,20 @@
 
 import com.example.servlet.dao.AccountDAO;
+import com.example.servlet.dao.BMIClassificationDAO;
 import com.example.servlet.dao.BlogDAO;
 import com.example.servlet.dao.NotifyDAO;
 import com.example.servlet.dao.RequestDAO;
 import com.example.servlet.model.Account;
+import com.example.servlet.model.BMIClassification;
 import com.example.servlet.model.Blogs;
+import com.example.servlet.model.MonthlyStat;
 import com.example.servlet.model.Notifys;
 import com.example.servlet.model.Requests;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -27,17 +31,23 @@ public class test {
     
     public static void main(String[] args) throws SQLException {
 //        dis4();
-        dis6();
+//        dis6();
 //         dis5();
+dis();
     }
-    public static void dis(){
+    public static void dis() throws SQLException{
         BlogDAO _dao = new BlogDAO();
-        List<Blogs> lstBlog = _dao.getBlogsByFilter("d" , 2 , true);
-        System.out.println("Aloo Xin chào ");
+        List<MonthlyStat> typeStats = new ArrayList<>();
+       List<Blogs> lstBlog = _dao.getBlogsByFilter("", 5, true,null);
+        
         for(Blogs b : lstBlog){
             System.out.println(b.toString());
             System.out.println("Bai moi ne");
         }
+//        typeStats = _dao.countByTypeBMI(-3);
+//        for (MonthlyStat typeStat : typeStats) {
+//            System.out.println(typeStat.toString());
+//        }
     }
    public static void dis2() {
     BlogDAO _dao = new BlogDAO();
@@ -97,5 +107,12 @@ public static void dis6() {
     for (Notifys notifys : lstN) {
         System.out.println(notifys.toString());
     }
+}
+
+
+public static void dis7() throws SQLException {
+    BMIClassificationDAO dao = new BMIClassificationDAO();
+    BMIClassification b = dao.getBMIByID(2);
+    System.out.println(b.toString());
 }
 }

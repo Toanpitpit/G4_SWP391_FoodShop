@@ -46,11 +46,11 @@
                 </li>
 
                 <li>
-                    <a href="/Nutritionist/Blogs.jsp">
+                    <a href="listblog">
                         <span class="icon">
                             <ion-icon name="chatbubble-outline"></ion-icon>
                         </span>
-                        <span class="title">Blogs</span>
+                        <span class="title">My    Blogs</span>
                     </a>
                 </li>
 
@@ -113,48 +113,58 @@
 
             <!-- ======================= Cards ================== -->
             <div class="cardBox">
-                <div class="card">
-                    <div>
-                        <div class="numbers">${lstF.size()}  0</div>
-                        <div class="cardName">Total Foods</div>
-                    </div>
-
-                    <div class="iconBx">
-                        <ion-icon name="nutrition-outline"></ion-icon>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div>
-                        <div class="numbers">${lstFd.size()} 0 </div>
-                        <div class="cardName">Your Fooddraft</div>
-                    </div> 
-
-                    <div class="iconBx">
-                        <ion-icon name="create-outline"></ion-icon>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div>
-                        <div class="numbers">${lstR.size()}</div>
-                        <div class="cardName">Your Request</div>
-                    </div>
-
-                    <div class="iconBx">
-                        <ion-icon name="paper-plane-outline"></ion-icon>
-                    </div>
-                </div>
+                <a href="abc">
                     <div class="card">
-                    <div>
-                        <div class="numbers">${lstB.size()}</div>
-                        <div class="cardName">Your Blogs</div>
+                        <div>
+                            <div class="numbers">${lstF.size()}  0</div>
+                            <div class="cardName">Total Foods</div>
+                        </div>
+
+                        <div class="iconBx">
+                            <ion-icon name="nutrition-outline"></ion-icon>
+                        </div>
                     </div>
+                </a>
+
+                <a href="">
+                    <div class="card">
+                        <div>
+                            <div class="numbers">${lstFd.size()} 0 </div>
+                            <div class="cardName">Your Fooddraft</div>
+                        </div> 
+
+                        <div class="iconBx">
+                            <ion-icon name="create-outline"></ion-icon>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="">
+                    <div class="card">
+                        <div>
+                            <div class="numbers">${lstR.size()}</div>
+                            <div class="cardName">Your Request</div>
+                        </div>
+
+                        <div class="iconBx">
+                            <ion-icon name="paper-plane-outline"></ion-icon>
+                        </div>
+                    </div>
+                </a>
+
+
+                <a href="">
+                    <div class="card">
+                        <div>
+                            <div class="numbers">${lstB.size()}</div>
+                            <div class="cardName">Your Blogs</div>
+                        </div>
 
                         <div class="iconBx">
                             <ion-icon name="document-text-outline"></ion-icon>
                         </div>
                     </div> 
+                </a>
             </div>
 
             <!-- ================ Request Newest List ================= -->

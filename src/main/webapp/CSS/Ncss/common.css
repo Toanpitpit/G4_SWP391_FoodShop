@@ -14,7 +14,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
 }
 
 :root {
-  --green: #2e7d32;
+  --green: #2ecc71;
   --white: #fff;
   --gray: #f5f5f5;
   --black1: #222;
@@ -225,8 +225,13 @@ body {
   grid-template-columns: repeat(4, 1fr);
   grid-gap: 30px;
 }
-
-.cardBox .card {
+.cardBox a {
+  text-decoration: none;   
+  color: inherit;           
+  display: block;            
+}
+.cardBox a .card {
+  text-decoration: none;
   position: relative;
   background: var(--white);
   padding: 30px;
@@ -243,13 +248,16 @@ body {
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.cardBox .card .numbers {
+.cardBox a .card .numbers {
   position: relative;
   font-weight: 500;
   font-size: 2.5rem;
   color: var(--green);
 }
-
+.cardBox a .card .numbers 
+.cardBox a .card .cardName{
+    text-decoration: none;  
+}
 .cardBox .card .cardName {
   color: var(--black2);
   font-size: 1.1rem;
@@ -264,9 +272,12 @@ body {
 .cardBox .card:hover {
   background: var(--green);
 }
+.cardBox .card:hover,
 .cardBox .card:hover .numbers,
 .cardBox .card:hover .cardName,
 .cardBox .card:hover .iconBx {
   color: var(--white);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transform: translateY(-4px);
 }
 

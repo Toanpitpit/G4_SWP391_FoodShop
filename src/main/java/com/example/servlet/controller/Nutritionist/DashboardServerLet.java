@@ -63,7 +63,7 @@ public class DashboardServerLet extends HttpServlet {
         BlogDAO b_dao = new BlogDAO();
         NotifyDAO n_dao = new NotifyDAO();
         
-        List<Blogs> lstB = b_dao.getBlogsByFilter("", -1, true);
+        List<Blogs> lstB = b_dao.getBlogsByFilter(null, -1, true,null);
         List<Requests> lstR = r_dao.getRequestByFilter(-2, "", "newest");
         List<Notifys> lstN = n_dao.getNotificationsByFilter(null, "Saler", false, true);
         request.setAttribute("lstR", lstR);

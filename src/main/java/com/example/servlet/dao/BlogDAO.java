@@ -5,13 +5,14 @@
 package com.example.servlet.dao;
 
 import com.example.servlet.model.Blogs;
-import com.example.servlet.model.Requests;
+import com.example.servlet.model.MonthlyStat;
 import com.example.servlet.utils.DBConnect;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -30,7 +31,7 @@ public class BlogDAO {
     DBConnect db = new DBConnect();
     
 
-    public List<Blogs> getBlogsByFilter(String keyword, int typeBMI, boolean sortNewestFirst) {
+ public List<Blogs> getBlogsByFilter(String keyword, int typeBMI, boolean sortNewestFirst , String status) {
     List<Blogs> lstBlog = new ArrayList<>();
     DBConnect db = new DBConnect();
 
@@ -54,7 +55,10 @@ public class BlogDAO {
             params.add(like);
             params.add(like);
         }
-
+        if (status != null && !status.trim().isEmpty()) {
+            sql.append("AND (b.status = ?) ");
+            params.add(status);
+        }
         sql.append("ORDER BY b.update_at ").append(sortNewestFirst ? "DESC" : "ASC");
 
         conn = db.getConnection();
@@ -95,6 +99,38 @@ public class BlogDAO {
 
     return lstBlog;
 }
+ public List<MonthlyStat> countByTypeBMI(int authorId) throws SQLException {
+    conn = db.getConnection();
+
+    StringBuilder sql = new StringBuilder(
+        "SELECT typeBMI, COUNT(*) AS cnt FROM Blogs "
+    );
+    if (authorId > 0 ) {
+        sql.append("WHERE AuthorID = ? ");
+    }
+    sql.append("GROUP BY typeBMI ORDER BY typeBMI");
+
+    List<MonthlyStat> result = new ArrayList<>();
+
+    try (PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+        if (authorId >=0 ) {
+            ps.setInt(1, authorId);
+        }
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            int typeId = rs.getInt("typeBMI");
+            int cnt    = rs.getInt("cnt");
+
+            MonthlyStat m = new MonthlyStat();
+            m.setMonthlName(String.valueOf(typeId));
+            m.setCount(cnt);
+            result.add(m);
+        }
+    }
+
+    return result;
+}
+
 
     public void insertBlog(Blogs blog) {
     
@@ -210,7 +246,91 @@ public class BlogDAO {
     }
 }
 
-   
-    
-    
+public List<Blogs> getBlogsByFilterAndPage(
+        String keyword,
+        int typeBMI,
+        boolean sortNewestFirst,
+        String status,
+        int pageIndex,
+        int pageSize
+) {
+    List<Blogs> lstBlog = new ArrayList<>();
+    try {
+        StringBuilder sql = new StringBuilder(
+            "SELECT b.blogID, b.AuthorID, a.name AS authorName, b.typeBMI, " +
+            "       b.title, b.image, b.content, b.status, b.create_at, b.update_at " +
+            "FROM Blogs b " +
+            "  JOIN Accounts a ON b.AuthorID = a.id " +
+            "WHERE 1 = 1 "
+        );
+        List<Object> params = new ArrayList<>();
+
+        // Lọc theo typeBMI (nếu != -1 mới thêm)
+        if (typeBMI != -1) {
+            sql.append("  AND b.typeBMI = ? ");
+            params.add(typeBMI);
+        }
+
+        // Lọc theo từ khóa (trong title hoặc tên tác giả)
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            sql.append("  AND (b.title LIKE ? OR a.name LIKE ?) ");
+            String like = "%" + keyword.trim() + "%";
+            params.add(like);
+            params.add(like);
+        }
+
+      
+        if (status != null && !status.trim().isEmpty()) {
+            sql.append("  AND b.status = ? ");
+            params.add(status.trim());
+        }
+
+
+        sql.append("ORDER BY b.update_at ").append(sortNewestFirst ? "DESC " : "ASC ");
+        sql.append("OFFSET ? ROWS FETCH NEXT ? ROWS ONLY;");
+
+        conn = db.getConnection();
+        ps = conn.prepareStatement(sql.toString());
+        int idx = 1;
+        for (Object param : params) {
+            ps.setObject(idx++, param);
+        }
+        int offset = (pageIndex - 1) * pageSize;
+        ps.setInt(idx++, offset);
+        ps.setInt(idx, pageSize);
+
+        rs = ps.executeQuery();
+        while (rs.next()) {
+            Blogs blog = new Blogs(
+                rs.getInt("blogID"),
+                rs.getInt("AuthorID"),
+                rs.getString("authorName"),
+                rs.getInt("typeBMI"),
+                rs.getString("title"),
+                rs.getString("image"),
+                rs.getString("content"),
+                rs.getString("status"),
+                rs.getTimestamp("create_at"),
+                rs.getTimestamp("update_at")
+            );
+            lstBlog.add(blog);
+        }
+    } catch (Exception ex) {
+        ex.printStackTrace();
+    } finally {
+        try {
+            if (rs != null)    rs.close();
+            if (ps != null)    ps.close();
+            if (conn != null)  conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    return lstBlog;
 }
+
+}
+
+    
+

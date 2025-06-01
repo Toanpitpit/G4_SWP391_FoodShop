@@ -79,7 +79,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
   border-bottom: none;
 }
 /*.recentOrders*/
-.details table tbody tr:hover {
+.details .recentOrders table tbody tr:hover {
   background: var(--green);
   color: var(--white);
 }
@@ -140,8 +140,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.details .recentOrders:hover,
-.details .recentnotify:hover {
+.details .recentOrders:hover
+{
   transform: translateY(-4px);
   box-shadow:
     0 6px 12px rgba(0,0,0,0.10),
@@ -171,13 +171,18 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
   width: 100%;
   flex: 1;
   border-collapse: collapse;
-  border: 2px solid #ccc;
 }
 .recentnotify table tr td {
     display: flex ;
     justify-content: space-between; 
     text-align: center;
+    border-radius: 10px;
+    height: 50px;
     
+}
+.details .recentnotify table tbody tr td:hover {
+  background: var(--green);
+  color: var(--white);
 }
 .recentnotify table tr td p {
     padding: 10px 10px;  

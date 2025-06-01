@@ -5,12 +5,15 @@
 
 package com.example.servlet.controller.Nutritionist;
 
+import com.example.servlet.dao.BlogDAO;
+import com.example.servlet.model.Blogs;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  *
@@ -45,6 +48,11 @@ public class ListFoodDraftServerLet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
+         BlogDAO _dao =  new BlogDAO();
+         List<Blogs> lstB = _dao.getBlogsByFilter(null, -1, true,null);
+         request.setAttribute("lstB", lstB);
+         request.getRequestDispatcher("/Nutritionist/Blogs.jsp")
+                .forward(request, response);
     } 
 
     @Override

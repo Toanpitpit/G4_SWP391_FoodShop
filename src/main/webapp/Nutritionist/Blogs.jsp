@@ -1,4 +1,6 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -10,7 +12,10 @@
         <title></title>
         <!-- ======= Styles ====== -->
         <link rel="stylesheet" href="../CSS/Ncss/common.css">
-        <link rel="stylesheet" href="../CSS/Ncss/Blogs.css">
+        <link rel="stylesheet" href="../CSS/Ncss/blogs.css">
+        <!-- Thêm link thẻ <head> -->
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
     </head>
 
     <body>
@@ -44,7 +49,7 @@
                     </li>
 
                     <li>
-                        <a href="/Nutritionist/Blogs.jsp">
+                        <a href="listblog">
                             <span class="icon">
                                 <ion-icon name="chatbubble-outline"></ion-icon>
                             </span>
@@ -96,137 +101,280 @@
                     <div class="toggle">
                         <ion-icon name="menu-outline"></ion-icon>
                     </div>
-
-                    <div class="search">
-                        <label>
-                            <input type="text" placeholder="Search here">
-                            <ion-icon name="search-outline"></ion-icon>
-                        </label>
-                    </div>
-
                     <div class="user">
                         <img src="assets/imgs/customer01.jpg" alt="">
                     </div>
                 </div>
-
-                <!-- ======================= Cards ================== -->
-                <div class="cardBox">
-                    <div class="card">
-                        <div>
-                            <div class="numbers">${lstF.size()}  0</div>
-                            <div class="cardName">Total Foods</div>
+                <!-- ================================Main content ====================-->
+                <div class="overview-container">
+                    <div class="status-overview">
+                        <div class="status-chart">
+                            <canvas id="statusChart"></canvas>
                         </div>
-
-                        <div class="iconBx">
-                            <ion-icon name="nutrition-outline"></ion-icon>
-                        </div>
-                    </div>
-
-                    <div class="card">
-                        <div>
-                            <div class="numbers">${lstFd.size()} 0 </div>
-                            <div class="cardName">Your Fooddraft</div>
-                        </div> 
-
-                        <div class="iconBx">
-                            <ion-icon name="create-outline"></ion-icon>
-                        </div>
-                    </div>
-
-                    <div class="card">
-                        <div>
-                            <div class="numbers">${lstR.size()}</div>
-                            <div class="cardName">Your Request</div>
-                        </div>
-
-                        <div class="iconBx">
-                            <ion-icon name="paper-plane-outline"></ion-icon>
+                        <div class="status-legend">
+                            <h3>Thống kê theo trạng thái</h3>
+                            <ul class="legend-list">
+                                <li>
+                                    <span class="legend-color-box" style="background-color: rgba(75, 192, 192, 0.8);"></span>
+                                    <span class="legend-label">Public</span>
+                                    <span class="legend-value">${publicCount}</span>
+                                </li>
+                                <li>
+                                    <span class="legend-color-box" style="background-color: rgba(255, 205, 86, 0.8);"></span>
+                                    <span class="legend-label">Draft</span>
+                                    <span class="legend-value">${draftCount}</span>
+                                </li>
+                                <li>
+                                    <span class="legend-color-box" style="background-color: rgba(255, 99, 132, 0.8);"></span>
+                                    <span class="legend-label">Private</span>
+                                    <span class="legend-value">${privateCount}</span>
+                                </li>
+                                 <li>
+                                    <span class="legend-color-box" style="background-color: #6B21A8;;"></span>
+                                    <span class="legend-label">Total</span>
+                                    <span class="legend-value">${privateCount + draftCount+ publicCount}</span>
+                                </li>
+                            </ul>
+                            <div class="chart-name">Biểu đồ: Số bài Blog theo trạng thái</div>
                         </div>
                     </div>
-                    <div class="card">
-                        <div>
-                            <div class="numbers">${lstB.size()}</div>
-                            <div class="cardName">Your Blogs</div>
-                        </div>
 
-                        <div class="iconBx">
-                            <ion-icon name="document-text-outline"></ion-icon>
+                    <div class="bmi-overview">
+                        <div class="bmi-chart">
+                            <canvas id="bmiChart"></canvas>
                         </div>
-                    </div> 
-                </div>
-
-                <!-- ================ Request Newest List ================= -->
-                <div class="details">
-                    <div class="blogList">
-                        <div class="cardHeader">
-                            <h2>Blog Posts</h2>
-                            <a href="blog.jsp" class="btn"><p>View All</p></a>
-                        </div>
-                     
-<!--                            <table>
-                                <thead>
-                                    <tr>
-                                        <td>Title</td>
-                                        <td>Author</td>
-                                        <td>Date</td>
-                                        <td>Status</td>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <c:forEach var="post" items="${lstB}">
-                                        <tr onclick="window.location.href = 'blog-detail?id=${post.id}'" style="cursor:pointer;">
-                                            <td class="sub_info">${post.title}</td>
-                                            <td>${post.author}</td>
-                                            <td>${post.date}</td>
-                                            <td><span class="status ${post.status.toLowerCase()}">${post.status}</span></td>
-                                        </tr>
-                                    </c:forEach>
-                                </tbody>
-                            </table>-->
-                 
-                    </div>
-
-                    <div class="filterBox">
-                        <div class="cardHeader">
-                            <h2>Filter & Search</h2>
-                        </div>
-                        <form action="blog.jsp" method="get">
-                            <div class="form-group">
-                                <input type="text" name="search" placeholder="Search posts..." />
-                                <button type="submit">Search</button>
-                            </div>
-                            <fieldset class="form-group">
-                                <legend>By BMI</legend>
-                                <c:forEach var="bmi" items="${bmiList}">
-                                    <div class="checkbox">
-                                        <label>
-                                            <input type="checkbox" name="bmi" value="${bmi}" /> ${bmi}
-                                        </label>
-                                    </div>
+                        <div class="bmi-legend">
+                            <h3>Thống kê theo loại BMI</h3>
+                            <ul class="legend-list">
+                                <c:forEach var="i" begin="0" end="${fn:length(typeLabels) - 1}">
+                                    <c:set var="colorIdx" value="${i % 6}" />
+                                    <li>
+                                        <span class="legend-color-box"
+                                              style="background-color: var(--bmi-color-${colorIdx});"></span>
+                                        <span class="legend-label">${typeLabels[i]}</span>
+                                        <span class="legend-value">${typeCounts[i]}</span>
+                                    </li>
                                 </c:forEach>
-                            </fieldset>
-                            <!-- Time Filter -->
-                            <fieldset class="form-group">
-                                <legend>By Date</legend>
-                                <div class="radio">
-                                    <label><input type="radio" name="order" value="newest" checked/> Newest</label>
-                                </div>
-                                <div class="radio">
-                                    <label><input type="radio" name="order" value="oldest" /> Oldest</label>
-                                </div>
-                            </fieldset>
-                        </form>
+
+                            </ul>
+                            <div class="chart-name">Biểu đồ: Số bài Blog theo loại BMI</div>
+                        </div>
                     </div>
                 </div>
+                <hr> 
+                <a href="Nutritionist/CreateBlog.jsp" class="button-form">
+                    <button type="submit" class="create-button">
+                        + Create Blog
+                    </button>
+                </a>
+                <div class="Blog_box">
+                    <div class="blog-list-container">
+                        <c:choose>
+                            <c:when test="${not empty lstB}">
+                                <table class="blog-table">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Tiêu đề</th>
+                                            <th>Tác giả</th>
+                                            <th>Trạng thái</th>
+                                            <th>Ngày tạo</th>
+                                            <th style="text-align: center;">Hành động</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <c:forEach var="blog" items="${lstB}">
+                                            <tr>
+                                                <td>${blog.bID}</td>
+                                                <td>${blog.title}</td>
+                                                <td>${blog.authorName}</td>
+                                                <td>
+                                                    <span class="status status-${blog.status}">
+                                                        ${blog.status}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <fmt:formatDate
+                                                        value="${blog.create_at}"
+                                                        pattern="yyyy-MM-dd HH:mm:ss" />
+                                                </td>
+                                                <td class="action-cell" style="text-align: center;">
+                                                    <a href="viewBlog.do?id=${blog.bID}" title="View">
+                                                        <ion-icon name="eye-outline"></ion-icon>
+                                                    </a>
+                                                    <a href="editBlog.do?id=${blog.bID}" title="Edit">
+                                                        <ion-icon name="pencil-outline"></ion-icon>
+                                                    </a>
+                                                    <a href="deleteBlog.do?id=${blog.bID}"
+                                                       title="Delete"
+                                                       onclick="return confirm('Bạn có chắc chắn muốn xóa bài viết này?');">
+                                                        <ion-icon name="trash-outline" style="color: red"></ion-icon>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </c:forEach>
+                                    </tbody>
+                                </table>
+
+                                <!-- Phân trang -->
+                                <div class="pagination">
+                                    <c:if test="${currentPage > 1}">
+                                        <a href="admin/blogs?page=${currentPage - 1}">&laquo; Prev</a>
+                                    </c:if>
+                                    <c:forEach begin="1" end="${totalPages}" var="p">
+                                        <c:choose>
+                                            <c:when test="${p == currentPage}">
+                                                <a href="admin/blogs?page=${p}" class="active">${p}</a>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <a href="admin/blogs?page=${p}">${p}</a>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </c:forEach>
+                                    <c:if test="${currentPage < totalPages}">
+                                        <a href="admin/blogs?page=${currentPage + 1}">Next &raquo;</a>
+                                    </c:if>
+                                </div>
+                            </c:when>
+                            <c:otherwise>
+                                <p style="text-align: center; font-style: italic; color: #555;">
+                                    Không có bài viết nào.
+                                </p>
+                            </c:otherwise>
+                        </c:choose>
+                    </div>
+
+                    <!-- Phần search / filter -->
+                    <div class="search-filter">
+                        <label>
+                            <input
+                                type="text"
+                                placeholder="Search here"
+                                id="blogSearchInput"
+                                />
+                            <ion-icon name="search-outline"></ion-icon>
+                        </label>
+
+                        <select id="filterStatus">
+                            <option value="">Tất cả trạng thái</option>
+                            <option value="Public">Public</option>
+                            <option value="Draft">Draft</option>
+                            <option value="Private">Private</option>
+                        </select>
+                    </div>
+                </div>
+                                    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                                    <script>
+
+                        document.addEventListener('DOMContentLoaded', function () {
+                            const ctx = document.getElementById('statusChart').getContext('2d');
+                            const data = {
+                            labels: ['Public', 'Draft', 'Private'],
+                            datasets: [{
+                            data: [
+                                        ${publicCount},
+                                        ${draftCount},
+                                        ${privateCount}
+                            ],
+                            backgroundColor: [
+                                'rgba(75, 192, 192, 0.8)',
+                                'rgba(255, 205, 86, 0.8)',
+                                'rgba(255, 99, 132, 0.8)'
+                            ],
+                            hoverOffset: 4
+                                }]
+                                    };
+                            new Chart(ctx, {
+                            type: 'pie',
+                            data: data,
+                            options: {
+                            responsive: true,
+                            plugins: {
+                            legend: {
+                            display: false
+                            },
+                            tooltip: {
+                            callbacks: {
+                            label: function (context) {
+                            const label = context.label || '';
+                            const value = context.parsed || 0;
+                            return label + ': ' + value;
+                            }
+                            }
+                            }
+                            }
+                            }
+                            });
+                            });     
+                                    </script>
+                                    <script type="text/javascript">
+                                        var typeLabels = [
+                                        <c:forEach var="lbl" items="${typeLabels}" varStatus="st">
+                                        "${lbl}"<c:if test="${!st.last}">,</c:if>
+                                        </c:forEach>
+                                        ];
+                                        var typeCounts = [
+                                        <c:forEach var="cnt" items="${typeCounts}" varStatus="st">
+                                            ${cnt}<c:if test="${!st.last}">,</c:if>
+                                        </c:forEach>
+                                        ];
+                                    </script>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        const ctxBmi = document.getElementById('bmiChart').getContext('2d');
+                        const colorList = [
+                            'rgba(54, 162, 235, 0.8)',
+                            'rgba(255, 99, 132, 0.8)',
+                            'rgba(255, 205, 86, 0.8)',
+                            'rgba(75, 192, 192, 0.8)',
+                            'rgba(153, 102, 255, 0.8)',
+                            'rgba(255, 159, 64, 0.8)'
+                        ];
+                        const backgroundColors = typeLabels.map((_, idx) => {
+                            return colorList[idx % colorList.length];
+                        });
+
+                        const bmiData = {
+                            labels: typeLabels,
+                            datasets: [{
+                                    data: typeCounts,
+                                    backgroundColor: backgroundColors,
+                                    hoverOffset: 4
+                                }]
+                        };
+
+                        new Chart(ctxBmi, {
+                            type: 'pie',
+                            data: bmiData,
+                            options: {
+                                responsive: true,
+                                plugins: {
+                                    legend: {display: false},
+                                    tooltip: {
+                                        callbacks: {
+                                            label: function (context) {
+                                                const label = context.label || '';
+                                                const value = context.parsed || 0;
+                                                return label + ': ' + value;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                    });
+                </script>
+
+
+
             </div>
         </div>
-    </div>
-    <!-- =========== Scripts =========  -->
-    <script src="../JS/Nutritionist/home.js"></script>
+        <!-- =========== Scripts =========  -->
+        <script src="../JS/Nutritionist/home.js"></script>
 
-    <!-- ====== ionicons ======= -->
-    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
-</body>
+        <!-- ====== ionicons ======= -->
+        <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+        <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    </body>
 
 </html>

@@ -1,0 +1,92 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : Jun 1, 2025, 9:56:22 PM
+    Author     : Admin
+*/
+
+/* Blog Form Styles */
+.form-container {
+  margin-left: 320px;
+  margin-top: 40px;
+  background-color: #fff;
+  padding: 30px;
+  max-width: 800px;
+  border-radius: 20px;
+  box-shadow:
+    0 4px 8px rgba(0,0,0,0.06),
+    0 8px 16px rgba(0,0,0,0.08),
+    0 12px 24px rgba(0,0,0,0.10);
+  border: 1px solid rgba(0,0,0,0.04);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-container h2 {
+  text-align: center;
+  font-size: 24px;
+  color: var(--black1);
+  margin-bottom: 20px;
+  border-left: 6px solid var(--green);
+  padding-left: 12px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: var(--black1);
+}
+
+.form-group input[type="text"],
+.form-group input[type="file"],
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+}
+
+.form-group input[type="text"]:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: var(--green);
+  outline: none;
+}
+
+.btn-submit {
+  background-color: var(--green);
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-submit:hover {
+  background-color: #28b765;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(46, 204, 113, 0.3);
+}
+
+textarea {
+  resize: vertical;
+}
+
+@media screen and (max-width: 900px) {
+  .form-container {
+    margin-left: 0;
+    margin-top: 100px;
+    padding: 20px;
+  }
+}
