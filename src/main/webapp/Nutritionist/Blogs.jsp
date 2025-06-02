@@ -162,11 +162,22 @@
                     </div>
                 </div>
                 <hr> 
-                <a href="Nutritionist/CreateBlog.jsp" class="button-form">
-                    <button type="submit" class="create-button">
-                        + Create Blog
-                    </button>
-                </a>
+                <div class="button-message-container">
+                    <a href="createblog" class="button-form">
+                        <button type="submit" class="create-button">
+                            + Create Blog
+                        </button>
+                    </a>
+                    
+                   
+                    <c:if test="${not empty mess}">
+                        <h6 class="message success">${mess}</h6>
+                    </c:if>
+                    <c:if test="${empty mess and not empty Errmess}">
+                        <h6 class="message error">${Errmess}</h6>
+                    </c:if>
+                   
+                </div>
                 <div class="Blog_box">
                     <div class="blog-list-container">
                         <c:choose>
@@ -174,20 +185,21 @@
                                 <table class="blog-table">
                                     <thead>
                                         <tr>
+                                            <th colspan="3">Image</th>
                                             <th>ID</th>
                                             <th>Tiêu đề</th>
-                                            <th>Tác giả</th>
                                             <th>Trạng thái</th>
-                                            <th>Ngày tạo</th>
-                                            <th style="text-align: center;">Hành động</th>
+                                            <th>Cập nhật gần nhất</th>
+                                            <th style="text-align: center;" colspan="3">Hành động</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <c:forEach var="blog" items="${lstB}">
+                                        <c:forEach var="blog" items="${lstB}" varStatus="loop" >
                                             <tr>
-                                                <td>${blog.bID}</td>
+                                                <td colspan="3"><img src="${blog.imageUlr}" alt="Anh blog" style="width: 80px; height: 44px;"></img></td>
+                                                <td>${loop.index + 1}</td>
                                                 <td>${blog.title}</td>
-                                                <td>${blog.authorName}</td>
+                                                
                                                 <td>
                                                     <span class="status status-${blog.status}">
                                                         ${blog.status}
@@ -195,7 +207,7 @@
                                                 </td>
                                                 <td>
                                                     <fmt:formatDate
-                                                        value="${blog.create_at}"
+                                                        value="${blog.update_at}"
                                                         pattern="yyyy-MM-dd HH:mm:ss" />
                                                 </td>
                                                 <td class="action-cell" style="text-align: center;">
@@ -219,20 +231,22 @@
                                 <!-- Phân trang -->
                                 <div class="pagination">
                                     <c:if test="${currentPage > 1}">
-                                        <a href="admin/blogs?page=${currentPage - 1}">&laquo; Prev</a>
+                                        <a href="?page=${currentPage-1}">&laquo; Previous</a>
                                     </c:if>
-                                    <c:forEach begin="1" end="${totalPages}" var="p">
+                                
+                                    <c:forEach begin="1" end="${totalPages}" var="i">
                                         <c:choose>
-                                            <c:when test="${p == currentPage}">
-                                                <a href="admin/blogs?page=${p}" class="active">${p}</a>
+                                            <c:when test="${currentPage == i}">
+                                                <span class="current">${i}</span>
                                             </c:when>
                                             <c:otherwise>
-                                                <a href="admin/blogs?page=${p}">${p}</a>
+                                                <a href="?page=${i}">${i}</a>
                                             </c:otherwise>
                                         </c:choose>
                                     </c:forEach>
+                                
                                     <c:if test="${currentPage < totalPages}">
-                                        <a href="admin/blogs?page=${currentPage + 1}">Next &raquo;</a>
+                                        <a href="?page=${currentPage+1}">Next &raquo;</a>
                                     </c:if>
                                 </div>
                             </c:when>
@@ -244,125 +258,131 @@
                         </c:choose>
                     </div>
 
-                    <!-- Phần search / filter -->
-                    <div class="search-filter">
-                        <label>
-                            <input
-                                type="text"
-                                placeholder="Search here"
-                                id="blogSearchInput"
-                                />
-                            <ion-icon name="search-outline"></ion-icon>
-                        </label>
+                 <!-- Phần search / filter -->
+                 <div class="search-filter">
+                     <label>
+                         <input
+                             type="text"
+                             placeholder="Search here"
+                             id="blogSearchInput"
+                             />
+                         <ion-icon name="search-outline"></ion-icon>
+                     </label>
 
-                        <select id="filterStatus">
-                            <option value="">Tất cả trạng thái</option>
-                            <option value="Public">Public</option>
-                            <option value="Draft">Draft</option>
-                            <option value="Private">Private</option>
-                        </select>
-                    </div>
+            
+                     <div class="form-group">
+                         <label>BMI Category</label>
+                         <div class="bmi-list">
+                             <c:forEach var="bmi" items="${lstBMI}">
+                                 <label class="bmi-item">
+                                     <input type="radio" name="bmiId" value="${bmi.bmiID}" 
+                                            <c:if test="${bmi.bmiID == selectedBmiId}">checked</c:if> />
+                                     ${bmi.classification}
+                                 </label>
+                             </c:forEach>
+                         </div>
+                     </div>
+                 </div>
+
                 </div>
-                                    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-                                    <script>
-
-                        document.addEventListener('DOMContentLoaded', function () {
-                            const ctx = document.getElementById('statusChart').getContext('2d');
-                            const data = {
-                            labels: ['Public', 'Draft', 'Private'],
-                            datasets: [{
-                            data: [
-                                        ${publicCount},
-                                        ${draftCount},
-                                        ${privateCount}
-                            ],
-                            backgroundColor: [
-                                'rgba(75, 192, 192, 0.8)',
-                                'rgba(255, 205, 86, 0.8)',
-                                'rgba(255, 99, 132, 0.8)'
-                            ],
-                            hoverOffset: 4
-                                }]
-                                    };
-                            new Chart(ctx, {
-                            type: 'pie',
-                            data: data,
-                            options: {
-                            responsive: true,
-                            plugins: {
-                            legend: {
-                            display: false
-                            },
-                            tooltip: {
-                            callbacks: {
-                            label: function (context) {
-                            const label = context.label || '';
-                            const value = context.parsed || 0;
-                            return label + ': ' + value;
-                            }
-                            }
-                            }
-                            }
-                            }
-                            });
-                            });     
-                                    </script>
-                                    <script type="text/javascript">
-                                        var typeLabels = [
-                                        <c:forEach var="lbl" items="${typeLabels}" varStatus="st">
-                                        "${lbl}"<c:if test="${!st.last}">,</c:if>
-                                        </c:forEach>
-                                        ];
-                                        var typeCounts = [
-                                        <c:forEach var="cnt" items="${typeCounts}" varStatus="st">
-                                            ${cnt}<c:if test="${!st.last}">,</c:if>
-                                        </c:forEach>
-                                        ];
-                                    </script>
+                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
                 <script>
-                    document.addEventListener('DOMContentLoaded', function () {
+                document.addEventListener('DOMContentLoaded', function () {
+                const ctx = document.getElementById('statusChart').getContext('2d');
+                const data = {
+                labels: ['Public', 'Draft', 'Private'],
+                datasets: [{
+                data: [
+                    ${publicCount},
+                    ${draftCount},
+                    ${privateCount}
+                ],
+                backgroundColor: [
+                'rgba(75, 192, 192, 0.8)',
+                'rgba(255, 205, 86, 0.8)',
+                'rgba(255, 99, 132, 0.8)'
+                ],
+                hoverOffset: 4
+                }]
+                 };
+                new Chart(ctx, {
+                type: 'pie',
+                data: data,
+                options: {
+                responsive: true,
+                plugins: {
+                legend: {
+                display: false
+                },
+                tooltip: {
+                callbacks: {
+                label: function (context) {
+                const label = context.label || '';
+                const value = context.parsed || 0;
+                return label + ': ' + value;
+                }
+                }
+                }
+                }
+                }
+                });
+                });     
+                </script>
+                <script type="text/javascript">
+                      var typeLabels = [
+                    <c:forEach var="lbl" items="${typeLabels}" varStatus="st">
+                       "${lbl}"<c:if test="${!st.last}">,</c:if>
+                    </c:forEach>
+                           var typeCounts = [
+                    <c:forEach var="cnt" items="${typeCounts}" varStatus="st">
+                        ${cnt}<c:if test="${!st.last}">,</c:if>
+                    </c:forEach>
+                         ];
+                </script>
+                <script>
+                document.addEventListener('DOMContentLoaded', function () {
                         const ctxBmi = document.getElementById('bmiChart').getContext('2d');
                         const colorList = [
-                            'rgba(54, 162, 235, 0.8)',
-                            'rgba(255, 99, 132, 0.8)',
-                            'rgba(255, 205, 86, 0.8)',
-                            'rgba(75, 192, 192, 0.8)',
-                            'rgba(153, 102, 255, 0.8)',
-                            'rgba(255, 159, 64, 0.8)'
-                        ];
-                        const backgroundColors = typeLabels.map((_, idx) => {
-                            return colorList[idx % colorList.length];
-                        });
+                                            'rgba(54, 162, 235, 0.8)',
+                                            'rgba(255, 99, 132, 0.8)',
+                                            'rgba(255, 205, 86, 0.8)',
+                                            'rgba(75, 192, 192, 0.8)',
+                                            'rgba(153, 102, 255, 0.8)',
+                                            'rgba(255, 159, 64, 0.8)'
+                                        ];
+                                        const backgroundColors = typeLabels.map((_, idx) => {
+                                            return colorList[idx % colorList.length];
+                                        });
 
-                        const bmiData = {
-                            labels: typeLabels,
-                            datasets: [{
-                                    data: typeCounts,
-                                    backgroundColor: backgroundColors,
-                                    hoverOffset: 4
-                                }]
-                        };
+                                        const bmiData = {
+                                            labels: typeLabels,
+                                            datasets: [{
+                                                    data: typeCounts,
+                                                    backgroundColor: backgroundColors,
+                                                    hoverOffset: 4
+                                                }]
+                                        };
 
-                        new Chart(ctxBmi, {
-                            type: 'pie',
-                            data: bmiData,
-                            options: {
-                                responsive: true,
-                                plugins: {
-                                    legend: {display: false},
-                                    tooltip: {
-                                        callbacks: {
-                                            label: function (context) {
-                                                const label = context.label || '';
-                                                const value = context.parsed || 0;
-                                                return label + ': ' + value;
+                                        new Chart(ctxBmi, {
+                                            type: 'pie',
+                                            data: bmiData,
+                                            options: {
+                                                responsive: true,
+                                                plugins: {
+                                                    legend: {display: false},
+                                                    tooltip: {
+                                                        callbacks: {
+                                                            label: function (context) {
+                                                                const label = context.label || '';
+                                                                const value = context.parsed || 0;
+                                                                return label + ': ' + value;
+                                                            }
+                                                        }
+                                                    }
+                                                }
                                             }
-                                        }
-                                    }
-                                }
-                            }
-                        });
-                    });
+                                        });
+                                    });
                 </script>
 
 

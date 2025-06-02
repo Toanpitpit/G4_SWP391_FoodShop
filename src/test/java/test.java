@@ -16,6 +16,7 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 import org.mindrot.jbcrypt.BCrypt;
 
 /*
@@ -39,11 +40,15 @@ dis();
         BlogDAO _dao = new BlogDAO();
         List<MonthlyStat> typeStats = new ArrayList<>();
        List<Blogs> lstBlog = _dao.getBlogsByFilter("", 5, true,null);
-        
-        for(Blogs b : lstBlog){
-            System.out.println(b.toString());
-            System.out.println("Bai moi ne");
+       List<Blogs> lstB = _dao.getBlogsByFilterAndPage(null, -1, true, null, 2, 10);
+        List<String> ststuss = _dao.getAllDistinctStatuses();
+        for (String ststus : ststuss) {
+            System.out.println(ststus);
         }
+//        for(Blogs b : lstBlog){
+//            System.out.println(b.toString());
+//            System.out.println("Bai moi ne");
+//        }
 //        typeStats = _dao.countByTypeBMI(-3);
 //        for (MonthlyStat typeStat : typeStats) {
 //            System.out.println(typeStat.toString());
@@ -64,7 +69,7 @@ dis();
     new Timestamp(System.currentTimeMillis())  // update_at
 );
 
-     System.out.println(testBlog);
+
 //     _dao.insertBlog(testBlog);
      _dao.updateBlog(testBlog);
     
@@ -113,6 +118,9 @@ public static void dis6() {
 public static void dis7() throws SQLException {
     BMIClassificationDAO dao = new BMIClassificationDAO();
     BMIClassification b = dao.getBMIByID(2);
-    System.out.println(b.toString());
+    List<BMIClassification> lstBMI = dao.getAllBMI();
+    for (BMIClassification bMIClassification : lstBMI) {
+        System.out.println(bMIClassification.toString());
+    }
 }
 }

@@ -49,7 +49,25 @@ public class BMIClassificationDAO {
             return bi;
         }
     }
-    return null; // hoặc throw exception nếu bạn muốn kiểm soát chặt
-}
+    return null; 
+} 
 
+    public List<BMIClassification> getAllBMI() throws SQLException {
+        conn = db.getConnection();
+        List<BMIClassification> lstBMI = new ArrayList<>();
+        String sql = "SELECT * FROM bmi_classification ";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
+             while (rs.next()) {
+                BMIClassification bi = new BMIClassification();
+                bi.setBmiID(rs.getInt("type_id"));
+                bi.setClassification(rs.getString("classification"));
+                bi.setBmiRange(rs.getString("bmi_range"));
+                bi.setDecription(rs.getString("description"));
+                bi.setTagetAudience(rs.getString("target_audience"));
+                lstBMI.add(bi);
+            }
+        }
+        return lstBMI;
+    } 
 }

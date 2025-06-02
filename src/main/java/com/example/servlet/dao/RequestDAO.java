@@ -102,13 +102,7 @@ public List<Requests> getRequestByFilter(int authorId, String keyword, String so
     } catch (Exception ex) {
         ex.printStackTrace();
     } finally {
-        try {
-            if (rs != null) rs.close();
-            if (ps != null) ps.close();
-            if (conn != null) conn.close();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
+        db.closeConnection();
     }
     return lstR;
 }

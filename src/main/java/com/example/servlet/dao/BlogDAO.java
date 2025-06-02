@@ -94,7 +94,7 @@ public class BlogDAO {
             if (conn != null) conn.close();
         } catch (SQLException ex) {
             ex.printStackTrace();
-        }
+    }
     }
 
     return lstBlog;
@@ -132,7 +132,7 @@ public class BlogDAO {
 }
 
 
-    public void insertBlog(Blogs blog) {
+    public boolean insertBlog(Blogs blog) {
     
         try {
             conn = db.getConnection();
@@ -153,26 +153,18 @@ public class BlogDAO {
             if (hasResultSet) {
                 ResultSet rs = cs.getResultSet();
                 if (rs.next()) {
-                    System.out.println("Rows inserted: " + rs.getInt("RowsInserted"));
+                    return true;
                 }
             } else {
-                System.out.println("Procedure executed, no result set.");
+                return false;
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            try {
-                if (cs != null) {
-                    cs.close();
-                }
-                if (conn != null) {
-                    conn.close();
-                }
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
+            db.closeConnection();
         }
+        return false;
     }
 
     public void updateBlog(Blogs blog) {
@@ -237,12 +229,7 @@ public class BlogDAO {
     } catch (Exception ex) {
         Logger.getLogger(BlogDAO.class.getName()).log(Level.SEVERE, null, ex);
     } finally {
-        try {
-            if (ps != null) ps.close();
-            if (conn != null) conn.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+       db.closeConnection();
     }
 }
 
@@ -317,20 +304,27 @@ public List<Blogs> getBlogsByFilterAndPage(
         }
     } catch (Exception ex) {
         ex.printStackTrace();
-    } finally {
-        try {
-            if (rs != null)    rs.close();
-            if (ps != null)    ps.close();
-            if (conn != null)  conn.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+    } 
 
     return lstBlog;
 }
+    public List<String> getAllDistinctStatuses() throws SQLException {
+    List<String> statuses = new ArrayList<>();
+    String sql = "SELECT DISTINCT status FROM Blogs";
 
+
+    try (Connection conn = db.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql);
+         ResultSet rs = ps.executeQuery()) {
+
+        while (rs.next()) {
+            statuses.add(rs.getString("status"));
+        }
+    } catch (Exception ex) {
+        ex.printStackTrace();
+    }
+    return statuses;
 }
 
-    
+}
 

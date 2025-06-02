@@ -95,71 +95,98 @@
       </div>
 
      <!-- ========================= Main ==================== -->
-       <div class="main">
-                <div class="topbar">
-                    <div class="toggle">
-                        <ion-icon name="menu-outline"></ion-icon>
-                    </div>
-                    <div class="user">
-                        <img src="assets/imgs/customer01.jpg" alt="">
-                    </div>
-                </div>
-           
-         
-     <div class="form-container">
-         <h2>Blog Post</h2>
-         <form action="CreateBlogServlet" method="post" enctype="multipart/form-data">
-             <div class="form-card">
-                 <div class="form-group">
-                     <label for="bmiId">BMI Category</label>
-                     <select name="bmiId" id="bmiId" required>
-                         <option value="">-- Select BMI --</option>
-                         <c:forEach var="bmi" items="${bmiList}">
-                             <option value="${bmi.id}" ${bmi.id == selectedBmiId ? 'selected' : ''}>${bmi.name}</option>
-                         </c:forEach>
-                     </select>
-                 </div>
-
-                 <div class="form-group">
-                     <label for="title">Title</label>
-                     <input type="text" id="title" name="title" value="${title != null ? title : ''}" required />
-                 </div>
-                 <div class="form-group">
-                     <label for="imageUrl">Image</label>
-                     <input type="file" id="imageUrl" name="imageUrl" accept="image/*" />
-                 </div>
-                 <div class="form-group">
-                     <label for="content">Content</label>
-                     <textarea id="content" name="content" rows="10">${content != null ? content : ''}</textarea>
-                 </div>
-                 <div class="form-group">
-                     <label for="status">Status</label>
-                     <select id="status" name="status" required>
-                         <option value="Draft" ${status == 'Draft' ? 'selected' : ''}>Draft</option>
-                         <option value="Published" ${status == 'Published' ? 'selected' : ''}>Published</option>
-                         <option value="Archived" ${status == 'Archived' ? 'selected' : ''}>Archived</option>
-                     </select>
-                 </div>
-                 <button type="submit" class="btn-submit">Publish</button>
+     <div class="main">
+         <div class="topbar">
+             <div class="toggle">
+                 <ion-icon name="menu-outline"></ion-icon>
              </div>
-         </form>
-     </div>
+             <div class="user">
+                 <img src="assets/imgs/customer01.jpg" alt="">
+             </div>
+         </div>
 
-     <script>
-             ClassicEditor
+
+         <div class="form-container">
+             <h2>Blog Post</h2>
+             <form action="createblog" method="post" enctype="multipart/form-data">
+                 <div class="form-card">
+                     <div class="form-group image-preview-group">
+                         <label for="imageUrl">Thumbnail Image</label>
+                         <img id="preview" src="#" alt="Preview Image" style="display:none; width:100%; max-height:500px; object-fit:cover; margin-bottom: 10px; border-radius: 10px;" />
+                         <input type="file" id="imageUrl" name="imageUrl" accept="image/*" onchange="previewImage(event)" />
+                     </div>
+
+                     <div class="form-group">
+                         <label for="title">Title</label>
+                         <input type="text" id="title" name="title" value="${title != null ? title : ''}" required />
+                     </div>
+
+                     <div class="form-group">
+                         <label for="bmiId">BMI Category</label>
+                         <select name="bmiId" id="bmiId" required>
+                             <option value="">-- Select BMI --</option>
+                             <c:forEach var="bmi" items="${lstBMI}">
+                                 <option value="${bmi.bmiID}" ${bmi.bmiID == selectedBmiId ? 'selected' : ''}>${bmi.classification}</option>
+                             </c:forEach>
+                         </select>
+                     </div>
+
+                     <div class="form-group">
+                         <label>Status</label>
+                         <div class="status-options">
+                             <c:forEach var="s" items="${statusList}">
+                                 <label class="radio-inline">
+                                     <input type="radio" name="status" value="${s}" ${s == status ? 'checked' : ''} />
+                                     ${s}
+                                 </label>
+                             </c:forEach>
+                         </div>
+                     </div>
+
+                     <!-- Content -->
+                     <div class="form-group">
+                         <label for="content">Content</label>
+                         <textarea id="content" name="content" rows="10">${content != null ? content : ''}</textarea>
+                     </div>
+
+                     <button type="submit" class="btn-submit">Publish</button>
+                 </div>
+             </form>
+
+         </div>
+
+                     <script>
+                             ClassicEditor
                 .create(document.querySelector('#content'), {
-                    language: 'vi'
+                    language: 'vi',
+                    toolbar: {
+                        items: [
+                            'heading', '|',
+                            'bold', 'italic', 'link', '|',
+                            'bulletedList', 'numberedList', '|',
+                            'insertTable', 'tableColumn', 'tableRow', 'mergeTableCells', 'tableProperties', 'tableCellProperties', '|',
+                            'undo', 'redo'
+                        ]
+                    },
+                    table: {
+                        contentToolbar: [
+                            'tableColumn', 'tableRow', 'mergeTableCells',
+                            'tableProperties', 'tableCellProperties'
+                        ]
+                    }
                 })
                 .catch(error => {
                     console.error(error);
-            });
-     </script>
+                });
+
+                     </script>
 
 
+     </div>
     </div>
-    </div>>
     <!-- =========== Scripts =========  -->
     <script src="../JS/Nutritionist/home.js"></script>
+    <script src="../JS/Nutritionist/createblog.js"></script>
 
     <!-- ====== ionicons ======= -->
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
