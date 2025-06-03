@@ -98,12 +98,11 @@ public List<Requests> getRequestByFilter(int authorId, String keyword, String so
             );
             lstR.add(req);
         }
+        conn.close();;
 
     } catch (Exception ex) {
         ex.printStackTrace();
-    } finally {
-        db.closeConnection();
-    }
+    } 
     return lstR;
 }
 

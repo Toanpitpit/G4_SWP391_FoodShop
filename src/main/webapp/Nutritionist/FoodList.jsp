@@ -96,17 +96,17 @@
                 <script type="text/javascript">
                     var typeLabels = [
                     <c:forEach var="lbl" items="${typeLabels}" varStatus="st">
-                    "${lbl}"<c:if test="${!st.last}">,</c:if>
-                    </c:forEach>
+                               "${lbl}"<c:if test="${!st.last}">,</c:if>
+                        </c:forEach>
                     ];
                     var typeCounts = [
-                    <c:forEach var="cnt" items="${typeCounts}" varStatus="st">
-                        ${cnt}<c:if test="${!st.last}">,</c:if>
+                        <c:forEach var="cnt" items="${typeCounts}" varStatus="st">
+                                          ${cnt}<c:if test="${!st.last}">,</c:if>
                     </c:forEach>
                     ];
-                </script>
+                                             </script>
                 <script>
-                    document.addEventListener('DOMContentLoaded', function () {
+                        document.addEventListener('DOMContentLoaded', function () {
                         const ctxBmi = document.getElementById('bmiChart').getContext('2d');
                         const colorList = [
                             'rgba(54, 162, 235, 0.8)',

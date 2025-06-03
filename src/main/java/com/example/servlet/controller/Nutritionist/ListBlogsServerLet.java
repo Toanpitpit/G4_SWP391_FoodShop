@@ -52,67 +52,74 @@ public class ListBlogsServerLet extends HttpServlet {
         }
     } 
 
-    @Override
 protected void doGet(HttpServletRequest request, HttpServletResponse response)
-throws ServletException, IOException {
-    request.setCharacterEncoding("UTF-8");
-    response.setContentType("text/html;charset=UTF-8");
-    try (PrintWriter out = response.getWriter()) {
-        HttpSession session = request.getSession(false);
-//        User u = (User) request.getSession().getAttribute("User"); 
-        String mess = (String) session.getAttribute("mess");
-        String errMess = (String) session.getAttribute("Errmess");
-        if (mess != null) {
-            request.setAttribute("mess", mess);
-            session.removeAttribute("mess");
-        }
-        if (errMess != null) {
-            request.setAttribute("Errmess", errMess);
-            session.removeAttribute("Errmess");
-        }
-        BlogDAO _dao =  new BlogDAO();
-        try {
-            List<String> ststuss = _dao.getAllDistinctStatuses();
-        } catch (SQLException ex) {            
-            out.print("dsfdsf");
-        }
-        
-        List<Blogs> lstB = _dao.getBlogsByFilter(null, -1, true,null);
-        List<Blogs> lstB1 = _dao.getBlogsByFilter("", -1, true,"Public");
-        List<Blogs> lstB2 = _dao.getBlogsByFilter("", -1, true,"Private");
-        List<Blogs> lstB3 = _dao.getBlogsByFilter("", -1, true,"Draft");
-        List<String> typeLables = new ArrayList<>();
-        List<Integer> typeCounts = new ArrayList<>();
-        List<MonthlyStat> typeStats = new ArrayList<>();
-        try {
-        
-            BMIClassificationDAO bmiDAO = new BMIClassificationDAO();
-            
-            
-            typeStats = _dao.countByTypeBMI(-1);
-            for (MonthlyStat typeStat : typeStats) {
-                String typeIdStr = typeStat.getMonthlName();
-                int typeId = Integer.parseInt(typeIdStr);
-                BMIClassification bmi = bmiDAO.getBMIByID(typeId); 
-                String typeName = bmi.getClassification();
-                typeLables.add(typeName);
-                typeCounts.add(typeStat.getCount());
+    throws ServletException, IOException {
+        request.setCharacterEncoding ("UTF-8");
+        response.setContentType ("text/html;charset=UTF-8");
+        BlogDAO _dao = new BlogDAO ();
+        BMIClassificationDAO b_dao = new BMIClassificationDAO ();
+        HttpSession session = request.getSession (false);
+        if (session != null) {
+            String mess = (String) session.getAttribute ("mess");
+            String errMess = (String) session.getAttribute ("Errmess");
+            if (mess != null) {
+                request.setAttribute ("mess", mess);
+                session.removeAttribute ("mess");
             }
-            
-//            request.setAttribute("statusList", ststuss);
-            request.setAttribute("typeLabels", typeLables);
-            request.setAttribute("typeCounts", typeCounts);
-            request.setAttribute("lstB", lstB);
-            request.setAttribute("publicCount", lstB1.size());
-            request.setAttribute("privateCount", lstB2.size());
-            request.setAttribute("draftCount", lstB3.size());
-            request.getRequestDispatcher("/Nutritionist/Blogs.jsp")
-                    .forward(request, response);
+            if (errMess != null) {
+                request.setAttribute ("Errmess", errMess);
+                session.removeAttribute ("Errmess");
+            }
+        }
+        String index = request.getParameter ("index");
+        request.setAttribute ("currentPage", index);
+        int  indexPage =1;
+        if(index != null) {
+            indexPage = Integer.parseInt (index);
+        }
+        try {
+            List<Blogs> lstB =_dao.getBlogsByFilterAndPage (null, -1, true,"" , indexPage, 10);
+            List<Blogs> lstB1 = _dao.getBlogsByFilter ("", -1, true, "Public");
+            List<Blogs> lstB2 = _dao.getBlogsByFilter ("", -1, true, "Private");
+            List<Blogs> lstB3 = _dao.getBlogsByFilter ("", -1, true, "Draft");
+            List<String> ststuss = _dao.getAllDistinctStatuses ();
+            List<String> typeLables = new ArrayList<> ();
+            List<Integer> typeCounts = new ArrayList<> ();
+            List< BMIClassification> lstBMI = b_dao.getAllBMI ();
+            List<MonthlyStat> typeStats = _dao.countByTypeBMI (-1);
+            int totalBlog = _dao.getTotalBlog ();
+            int totalPages = (totalBlog/10) +1;
+            request.setAttribute ("totalPages", totalPages);
+            request.setAttribute ("typeStats", typeStats);
+
+            BMIClassificationDAO bmiDAO = new BMIClassificationDAO ();
+            typeStats = _dao.countByTypeBMI (-1);
+            for (MonthlyStat typeStat : typeStats) {
+                String typeIdStr = typeStat.getMonthlName ();
+                int typeId = Integer.parseInt (typeIdStr);
+                BMIClassification bmi = bmiDAO.getBMIByID (typeId);
+                typeLables.add (bmi.getClassification ());
+                typeCounts.add (typeStat.getCount ());
+            }
+
+            request.setAttribute ("lstBMI", lstBMI);
+            request.setAttribute ("statusList", ststuss);
+            request.setAttribute ("typeLabels", typeLables);
+            request.setAttribute ("typeCounts", typeCounts);
+            request.setAttribute ("lstB", lstB);
+            request.setAttribute ("publicCount", lstB1.size ());
+            request.setAttribute ("privateCount", lstB2.size ());
+            request.setAttribute ("draftCount", lstB3.size ());
+            request.getRequestDispatcher ("/Nutritionist/Blogs.jsp")
+                    .forward (request, response);
+
         } catch (SQLException ex) {
-            Logger.getLogger(ListBlogsServerLet.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace ();
+        } catch (Exception ex) {
+            Logger.getLogger (ListBlogsServerLet.class.getName ()).log (Level.SEVERE, null, ex);
         }
     }
-}
+
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)

@@ -12,7 +12,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -36,6 +35,7 @@ public class BlogDAO {
     DBConnect db = new DBConnect();
 
     try {
+        
         StringBuilder sql = new StringBuilder(
             "SELECT b.blogID, b.AuthorID, a.name AS authorName, b.typeBMI, b.title, " +
             "b.image, b.content, b.status, b.create_at, b.update_at " +
@@ -84,23 +84,18 @@ public class BlogDAO {
             );
             lstBlog.add(blog);
         }
-
+        conn.close();
     } catch (Exception ex) {
         ex.printStackTrace();
-    } finally {
-        try {
-            if (rs != null) rs.close();
-            if (ps != null) ps.close();
-            if (conn != null) conn.close();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-    }
-    }
+    } 
+    
 
     return lstBlog;
 }
  public List<MonthlyStat> countByTypeBMI(int authorId) throws SQLException {
-    conn = db.getConnection();
+        
+            
+       
 
     StringBuilder sql = new StringBuilder(
         "SELECT typeBMI, COUNT(*) AS cnt FROM Blogs "
@@ -111,8 +106,13 @@ public class BlogDAO {
     sql.append("GROUP BY typeBMI ORDER BY typeBMI");
 
     List<MonthlyStat> result = new ArrayList<>();
-
-    try (PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+        try {
+            conn = db.getConnection();
+        } catch (Exception ex) {
+            Logger.getLogger(BlogDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    try (  
+            PreparedStatement ps = conn.prepareStatement(sql.toString())) {
         if (authorId >=0 ) {
             ps.setInt(1, authorId);
         }
@@ -126,6 +126,7 @@ public class BlogDAO {
             m.setCount(cnt);
             result.add(m);
         }
+        conn.close();
     }
 
     return result;
@@ -158,16 +159,16 @@ public class BlogDAO {
             } else {
                 return false;
             }
-
+            conn.close();
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            db.closeConnection();
+        } catch (Exception ex) { 
+            Logger.getLogger(BlogDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
     }
 
-    public void updateBlog(Blogs blog) {
+    public void updateBlog(Blogs blog)  {
         DBConnect db = new DBConnect();
         try {
             conn = db.getConnection();
@@ -193,21 +194,12 @@ public class BlogDAO {
             } else {
                 System.out.println("Procedure executed, no result set.");
             }
-
+            conn.close();
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            try {
-                if (cs != null) {
-                    cs.close();
-                }
-                if (conn != null) {
-                    conn.close();
-                }
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
-        }
+        } catch (Exception ex) {
+            Logger.getLogger(BlogDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } 
     }
     
     public void deleteBlogByID(int blogID) {
@@ -225,12 +217,11 @@ public class BlogDAO {
         } else {
             System.out.println("Không tìm thấy blog để xóa.");
         }
+        conn.close();
 
     } catch (Exception ex) {
         Logger.getLogger(BlogDAO.class.getName()).log(Level.SEVERE, null, ex);
-    } finally {
-       db.closeConnection();
-    }
+    } 
 }
 
 public List<Blogs> getBlogsByFilterAndPage(
@@ -251,28 +242,20 @@ public List<Blogs> getBlogsByFilterAndPage(
             "WHERE 1 = 1 "
         );
         List<Object> params = new ArrayList<>();
-
-        // Lọc theo typeBMI (nếu != -1 mới thêm)
         if (typeBMI != -1) {
             sql.append("  AND b.typeBMI = ? ");
             params.add(typeBMI);
         }
-
-        // Lọc theo từ khóa (trong title hoặc tên tác giả)
         if (keyword != null && !keyword.trim().isEmpty()) {
             sql.append("  AND (b.title LIKE ? OR a.name LIKE ?) ");
             String like = "%" + keyword.trim() + "%";
             params.add(like);
             params.add(like);
         }
-
-      
         if (status != null && !status.trim().isEmpty()) {
             sql.append("  AND b.status = ? ");
             params.add(status.trim());
         }
-
-
         sql.append("ORDER BY b.update_at ").append(sortNewestFirst ? "DESC " : "ASC ");
         sql.append("OFFSET ? ROWS FETCH NEXT ? ROWS ONLY;");
 
@@ -288,43 +271,56 @@ public List<Blogs> getBlogsByFilterAndPage(
 
         rs = ps.executeQuery();
         while (rs.next()) {
-            Blogs blog = new Blogs(
-                rs.getInt("blogID"),
-                rs.getInt("AuthorID"),
-                rs.getString("authorName"),
-                rs.getInt("typeBMI"),
-                rs.getString("title"),
-                rs.getString("image"),
-                rs.getString("content"),
-                rs.getString("status"),
-                rs.getTimestamp("create_at"),
-                rs.getTimestamp("update_at")
+            Blogs blog;
+            blog = new Blogs(
+                    rs.getInt("blogID"),
+                    rs.getInt("AuthorID"),
+                    rs.getString("authorName"),
+                    rs.getInt("typeBMI"),
+                    rs.getString("title"),
+                    rs.getString("image"),
+                    rs.getString("content"),
+                    rs.getString("status"),
+                    rs.getTimestamp("create_at"),
+                    rs.getTimestamp("update_at")
             );
             lstBlog.add(blog);
         }
+        conn.close ();
     } catch (Exception ex) {
         ex.printStackTrace();
     } 
-
     return lstBlog;
 }
-    public List<String> getAllDistinctStatuses() throws SQLException {
-    List<String> statuses = new ArrayList<>();
-    String sql = "SELECT DISTINCT status FROM Blogs";
-
-
-    try (Connection conn = db.getConnection();
-         PreparedStatement ps = conn.prepareStatement(sql);
-         ResultSet rs = ps.executeQuery()) {
-
+    public List<String> getAllDistinctStatuses() throws SQLException, Exception {
+        List<String> statuses = new ArrayList<>();
+        String sql = "SELECT DISTINCT status FROM Blogs";
+        conn = db.getConnection();
+        ps = conn.prepareStatement(sql);
+        rs = ps.executeQuery();
         while (rs.next()) {
-            statuses.add(rs.getString("status"));
+            statuses.add(rs.getString(1));
         }
-    } catch (Exception ex) {
-        ex.printStackTrace();
+        conn.close();
+        return statuses;
     }
-    return statuses;
-}
+    
+    public int getTotalBlog() {
+        int count = 0;
+        try {
+            conn = db.getConnection ();
+            String sql = "SELECT COUNT (*) FROM Blogs";
+            ps = conn.prepareStatement (sql);
+            rs = ps.executeQuery ();
+            while (rs.next ()) {
+               return rs.getInt (1);
+            }
+            conn.close ();
+        } catch (Exception ex) {
+            Logger.getLogger (BlogDAO.class.getName ()).log (Level.SEVERE, null, ex);
+        }
+        return count;
+    }
 
 }
 

@@ -30,7 +30,6 @@ public class NotifyDAO {
     public List<Notifys> getNotificationsByFilter(Integer receiverID, String roleTarget, Boolean isRead, boolean sortNewestFirst) {
     List<Notifys> lstNoti = new ArrayList<>();
     DBConnect db = new DBConnect();
-//notiID, receiverID, role_target, message, senderID, relatedRequestID, isRead, create_at "
     try {
         StringBuilder sql = new StringBuilder(
             "SELECT * " +
@@ -77,12 +76,10 @@ public class NotifyDAO {
             );
             lstNoti.add(noti);
         }
-
+        conn.close();;
     } catch (Exception ex) {
         ex.printStackTrace();
-    } finally {
-        db.closeConnection();
-    }
+    } 
 
     return lstNoti;
 }

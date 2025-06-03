@@ -6,13 +6,20 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.mindrot.jbcrypt.BCrypt;
 
 public class AccountDAO {
 
     public void registerUser(Account user) throws SQLException {
         DBConnect dbConnect = new DBConnect();
-        Connection conn = dbConnect.getConnection();
+        Connection conn;
+        try {
+            conn = dbConnect.getConnection();
+        } catch (Exception ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
         try {
             String sql = "INSERT INTO Accounts (username, pass, name, email, phone, gender, birthDate, role, status, image, create_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, GETDATE())";
             PreparedStatement stmt = conn.prepareStatement(sql);

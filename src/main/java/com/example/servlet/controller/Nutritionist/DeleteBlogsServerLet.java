@@ -5,6 +5,7 @@
 
 package com.example.servlet.controller.Nutritionist;
 
+import com.example.servlet.dao.BlogDAO;
 import com.example.servlet.model.Blogs;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -47,10 +48,13 @@ public class DeleteBlogsServerLet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        HttpSession session = request.getSession(false);
-//        int id = request.getAttribute("id");
-//        BlogDAO b_dao = new BlogDAO();
-//        b_dao.deleteBlogByID(id);
+//        HttpSession session = request.getSession(false);
+//        if(session == null){
+//            response.sendRedirect("login.jsp");
+//        }
+        int id = Integer.parseInt(request.getParameter("id"));
+        BlogDAO b_dao = new BlogDAO();
+        b_dao.deleteBlogByID(id);
         response.sendRedirect("listblog");
     } 
 

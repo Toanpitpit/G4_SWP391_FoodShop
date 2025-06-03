@@ -72,7 +72,9 @@ private static final String UPLOAD_DIRECTORY = "D:\\Semester 5\\SWP391\\Project\
                 .forward(request, response);
         } catch (SQLException ex) {
             Logger.getLogger(CreateBlogsServerLet.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        } catch (Exception ex) {
+        Logger.getLogger(CreateBlogsServerLet.class.getName()).log(Level.SEVERE, null, ex);
+    }
         
     } 
 @Override

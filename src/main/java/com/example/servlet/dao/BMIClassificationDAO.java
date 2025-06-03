@@ -14,6 +14,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -25,48 +27,52 @@ public class BMIClassificationDAO {
     CallableStatement cs = null;
     ResultSet rs;
     DBConnect db = new DBConnect();
-    /*
-    private int bmiID;
-    private String classification;
-    private String bmiRange;
-    private String decription;
-    private String tagetAudience;*/
     
-    
-    public BMIClassification getBMIByID(int bmiID) throws SQLException {
+ public BMIClassification getBMIByID(int bmiID) throws SQLException {
+    BMIClassification bi = new BMIClassification();
+    try {
         conn = db.getConnection();
-    String sql = "SELECT * FROM bmi_classification WHERE type_id = ?";
-    try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        String sql = "SELECT * FROM bmi_classification WHERE type_id = ?";
+        ps = conn.prepareStatement(sql);
         ps.setInt(1, bmiID);
-        ResultSet rs = ps.executeQuery();
+        rs = ps.executeQuery();
         if (rs.next()) {
-            BMIClassification bi = new BMIClassification();
-            bi.setBmiID(rs.getInt("type_id")); 
-            bi.setClassification(rs.getString("classification")); 
+            bi.setBmiID(rs.getInt("type_id"));
+            bi.setClassification(rs.getString("classification"));
             bi.setBmiRange(rs.getString("bmi_range"));
             bi.setDecription(rs.getString("description"));
             bi.setTagetAudience(rs.getString("target_audience"));
-            return bi;
         }
+        conn.close();
+    } catch (Exception ex) {
+        Logger.getLogger(BMIClassificationDAO.class.getName()).log(Level.SEVERE, null, ex);
     }
-    return null; 
-} 
+    return bi;
+}
+
 
     public List<BMIClassification> getAllBMI() throws SQLException {
-        conn = db.getConnection();
         List<BMIClassification> lstBMI = new ArrayList<>();
-        String sql = "SELECT * FROM bmi_classification ";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ResultSet rs = ps.executeQuery();
-             while (rs.next()) {
-                BMIClassification bi = new BMIClassification();
-                bi.setBmiID(rs.getInt("type_id"));
-                bi.setClassification(rs.getString("classification"));
-                bi.setBmiRange(rs.getString("bmi_range"));
-                bi.setDecription(rs.getString("description"));
-                bi.setTagetAudience(rs.getString("target_audience"));
-                lstBMI.add(bi);
-            }
+        try {
+            conn = db.getConnection();
+            
+           
+            String sql = "SELECT * FROM bmi_classification ";
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
+                while (rs.next()) {
+                    BMIClassification bi = new BMIClassification();
+                    bi.setBmiID(rs.getInt("type_id"));
+                    bi.setClassification(rs.getString("classification"));
+                    bi.setBmiRange(rs.getString("bmi_range"));
+                    bi.setDecription(rs.getString("description"));
+                    bi.setTagetAudience(rs.getString("target_audience"));
+                    lstBMI.add(bi);
+                }
+            conn.close();
+            
+        }   catch (Exception ex) {
+            Logger.getLogger(BMIClassificationDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return lstBMI;
     } 

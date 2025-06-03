@@ -16,6 +16,7 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -38,17 +39,23 @@ dis();
     }
     public static void dis() throws SQLException{
         BlogDAO _dao = new BlogDAO();
-        List<MonthlyStat> typeStats = new ArrayList<>();
-       List<Blogs> lstBlog = _dao.getBlogsByFilter("", 5, true,null);
-       List<Blogs> lstB = _dao.getBlogsByFilterAndPage(null, -1, true, null, 2, 10);
-        List<String> ststuss = _dao.getAllDistinctStatuses();
-        for (String ststus : ststuss) {
-            System.out.println(ststus);
-        }
-//        for(Blogs b : lstBlog){
-//            System.out.println(b.toString());
-//            System.out.println("Bai moi ne");
+//        List<MonthlyStat> typeStats = new ArrayList<>();
+//       List<Blogs> lstBlog = _dao.getBlogsByFilter("", 5, true,null);
+       List<Blogs> lstB = _dao.getBlogsByFilterAndPage(null, -1, true, null, 2, 4);
+//          System.out.println (_dao.getTotalBlog());
+//        List<String> ststuss;
+//        try {
+//            ststuss = _dao.getAllDistinctStatuses();
+//            for (String ststus : ststuss) {
+//            System.out.println(ststus);
 //        }
+//        } catch (Exception ex) {
+//            Logger.getLogger(test.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+        
+        for(Blogs b : lstB){
+            System.out.println(b.toString());
+        }
 //        typeStats = _dao.countByTypeBMI(-3);
 //        for (MonthlyStat typeStat : typeStats) {
 //            System.out.println(typeStat.toString());
