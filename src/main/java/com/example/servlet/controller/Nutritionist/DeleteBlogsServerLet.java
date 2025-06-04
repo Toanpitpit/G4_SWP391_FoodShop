@@ -14,6 +14,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -48,15 +51,35 @@ public class DeleteBlogsServerLet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-//        HttpSession session = request.getSession(false);
+        response.setContentType("text/html;charset=UTF-8");
+        try (PrintWriter out = response.getWriter()){
+        HttpSession session = request.getSession(false);
 //        if(session == null){
 //            response.sendRedirect("login.jsp");
 //        }
         int id = Integer.parseInt(request.getParameter("id"));
+        String path = request.getParameter ("image");
         BlogDAO b_dao = new BlogDAO();
-        b_dao.deleteBlogByID(id);
+        
+        try {
+            boolean check = b_dao.deleteBlogByID(id);
+            if (check) {
+                String realPath = request.getServletContext().getRealPath (path);     
+                if(b_dao.deleteImage (realPath)){
+                   out.print ("sucess");
+                }else{
+                out.print ("khoong xoa ");}
+                session.setAttribute ("mess", "Delete Sucsessfuly");
+            }
+            else {
+                session.setAttribute ("Errmess", "Fail to detele");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger (DeleteBlogsServerLet.class.getName()).log (Level.SEVERE, null, ex);
+        }
         response.sendRedirect("listblog");
     } 
+    }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)

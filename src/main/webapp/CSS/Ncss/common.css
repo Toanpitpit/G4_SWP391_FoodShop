@@ -15,15 +15,20 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
 
 :root {
   --green: #2ecc71;
+  --green-hover: #27ae60;
   --white: #fff;
   --gray: #f5f5f5;
   --black1: #222;
   --black2: #999;
+  --shadow-light: rgba(0, 0, 0, 0.05);
+  --shadow-medium: rgba(0, 0, 0, 0.1);
+  --shadow-heavy: rgba(0, 0, 0, 0.15);
 }
 
 body {
   min-height: 100vh;
   overflow-x: hidden;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
 }
 
 .container {
@@ -36,10 +41,12 @@ body {
   position: fixed;
   width: 300px;
   height: 100%;
-  background: var(--green);
+  background: linear-gradient(180deg, var(--green) 0%, var(--green-hover) 100%);
   border-left: 10px solid var(--green);
-  transition: 0.5s;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
+  z-index: 1000;
+  box-shadow: 4px 0 20px var(--shadow-medium);
 }
 .navigation.active {
   width: 80px;
@@ -58,11 +65,13 @@ body {
   list-style: none;
   border-top-left-radius: 30px;
   border-bottom-left-radius: 30px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .navigation ul li:hover,
 .navigation ul li.hovered {
   background-color: var(--white);
+  transform: translateX(5px);
 }
 
 .navigation ul li:nth-child(1) {
@@ -77,6 +86,7 @@ body {
   display: flex;
   text-decoration: none;
   color: var(--white);
+  transition: all 0.3s ease;
 }
 .navigation ul li:hover a,
 .navigation ul li.hovered a {
@@ -90,9 +100,15 @@ body {
   height: 60px;
   line-height: 75px;
   text-align: center;
+  transition: transform 0.3s ease;
 }
 .navigation ul li a .icon ion-icon {
   font-size: 1.75rem;
+  transition: all 0.3s ease;
+}
+
+.navigation ul li:hover a .icon {
+  transform: scale(1.1);
 }
 
 .navigation ul li a .title {
@@ -103,6 +119,7 @@ body {
   line-height: 60px;
   text-align: start;
   white-space: nowrap;
+  transition: all 0.3s ease;
 }
 
 /* --------- curve outside ---------- */
@@ -118,6 +135,7 @@ body {
   border-radius: 50%;
   box-shadow: 35px 35px 0 10px var(--white);
   pointer-events: none;
+  animation: slideInTop 0.3s ease;
 }
 .navigation ul li:hover a::after,
 .navigation ul li.hovered a::after {
@@ -131,6 +149,17 @@ body {
   border-radius: 50%;
   box-shadow: 35px -35px 0 10px var(--white);
   pointer-events: none;
+  animation: slideInBottom 0.3s ease;
+}
+
+@keyframes slideInTop {
+  0% { opacity: 0; transform: translateY(-10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInBottom {
+  0% { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0); }
 }
 
 /* ===================== Main ===================== */
@@ -139,21 +168,39 @@ body {
   width: calc(100% - 300px);
   left: 300px;
   min-height: 100vh;
-  background: var(--white);
-  transition: 0.5s;
+  background: linear-gradient(135deg, var(--white) 0%, #f8f9fa 100%);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: fadeInRight 0.6s ease;
 }
 .main.active {
   width: calc(100% - 80px);
   left: 80px;
 }
 
+@keyframes fadeInRight {
+  0% { opacity: 0; transform: translateX(30px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
 .topbar {
   width: 100%;
-  height: 60px;
+  height: 80px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 10px;
+  padding: 0 20px;
+  background: var(--white);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 20px var(--shadow-light);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  transition: all 0.3s ease;
+}
+
+.topbar:hover {
+  box-shadow: 0 4px 30px var(--shadow-medium);
 }
 
 .toggle {
@@ -165,12 +212,27 @@ body {
   align-items: center;
   font-size: 2.5rem;
   cursor: pointer;
+  border-radius: 15px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  color: var(--black1);
+}
+
+.toggle:hover {
+  background: var(--green);
+  color: var(--white);
+  transform: scale(1.05);
+  box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
 }
 
 .search {
   position: relative;
   width: 400px;
   margin: 0 10px;
+  transition: all 0.3s ease;
+}
+
+.search:focus-within {
+  transform: scale(1.02);
 }
 
 .search label {
@@ -180,29 +242,56 @@ body {
 
 .search label input {
   width: 100%;
-  height: 40px;
-  border-radius: 40px;
+  height: 50px;
+  border-radius: 25px;
   padding: 5px 20px;
-  padding-left: 35px;
-  font-size: 18px;
+  padding-left: 45px;
+  font-size: 16px;
   outline: none;
-  border: 1px solid var(--black2);
+  border: 2px solid transparent;
+  background: var(--gray);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 10px var(--shadow-light);
+}
+
+.search label input:focus {
+  border-color: var(--green);
+  background: var(--white);
+  box-shadow: 0 4px 20px rgba(46, 204, 113, 0.2);
+  transform: translateY(-2px);
 }
 
 .search label ion-icon {
   position: absolute;
-  top: 0;
-  left: 10px;
-  font-size: 1.2rem;
+  top: 50%;
+  left: 15px;
+  transform: translateY(-50%);
+  font-size: 1.3rem;
+  color: var(--black2);
+  transition: all 0.3s ease;
+}
+
+.search:focus-within label ion-icon {
+  color: var(--green);
+  transform: translateY(-50%) scale(1.1);
 }
 
 .user {
   position: relative;
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   overflow: hidden;
   cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 3px solid transparent;
+  box-shadow: 0 4px 15px var(--shadow-light);
+}
+
+.user:hover {
+  transform: scale(1.1);
+  border-color: var(--green);
+  box-shadow: 0 6px 25px rgba(46, 204, 113, 0.3);
 }
 
 .user img {
@@ -212,72 +301,146 @@ body {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.3s ease;
 }
 
-
+.user:hover img {
+  transform: scale(1.05);
+}
 
 /* ======================= Cards ====================== */
 .cardBox {
   position: relative;
   width: 100%;
-  padding: 20px;
+  padding: 30px 20px;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  grid-gap: 30px;
+  grid-gap: 25px;
+  animation: fadeInUp 0.8s ease 0.2s both;
 }
+
+@keyframes fadeInUp {
+  0% { opacity: 0; transform: translateY(30px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
 .cardBox a {
   text-decoration: none;   
   color: inherit;           
-  display: block;            
+  display: block;
+  transition: all 0.3s ease;
 }
+
+.cardBox a:hover {
+  transform: translateY(-5px);
+}
+
 .cardBox a .card {
   text-decoration: none;
   position: relative;
   background: var(--white);
-  padding: 30px;
-  border-radius: 20px;
+  padding: 35px;
+  border-radius: 25px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   cursor: pointer;
+  overflow: hidden;
+  box-shadow: 
+    0 8px 25px var(--shadow-light),
+    0 15px 35px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.02);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(10px);
+}
 
-  box-shadow:
-    0 4px 8px rgba(0,0,0,0.06),
-    0 8px 16px rgba(0,0,0,0.08),
-    0 12px 24px rgba(0,0,0,0.10);
-  border: 1px solid rgba(0,0,0,0.04);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+.cardBox a .card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.cardBox a .card:hover::before {
+  left: 100%;
 }
 
 .cardBox a .card .numbers {
   position: relative;
-  font-weight: 500;
-  font-size: 2.5rem;
+  font-weight: 700;
+  font-size: 3rem;
   color: var(--green);
+  transition: all 0.3s ease;
+  text-shadow: 0 2px 10px rgba(46, 204, 113, 0.2);
 }
-.cardBox a .card .numbers 
-.cardBox a .card .cardName{
-    text-decoration: none;  
-}
-.cardBox .card .cardName {
+
+.cardBox a .card .cardName {
   color: var(--black2);
-  font-size: 1.1rem;
-  margin-top: 5px;
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin-top: 8px;
+  transition: all 0.3s ease;
 }
 
 .cardBox .card .iconBx {
-  font-size: 3.5rem;
+  font-size: 4rem;
   color: var(--black2);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 0.7;
 }
 
 .cardBox .card:hover {
-  background: var(--green);
+  background: linear-gradient(135deg, var(--green) 0%, var(--green-hover) 100%);
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 
+    0 15px 40px rgba(46, 204, 113, 0.3),
+    0 25px 60px rgba(0, 0, 0, 0.1);
 }
-.cardBox .card:hover,
+
 .cardBox .card:hover .numbers,
 .cardBox .card:hover .cardName,
 .cardBox .card:hover .iconBx {
   color: var(--white);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  transform: translateY(-4px);
+  transform: scale(1.05);
 }
 
+.cardBox .card:hover .iconBx {
+  opacity: 1;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1.05); }
+  50% { transform: scale(1.15); }
+}
+
+/* Responsive animations */
+@media (max-width: 768px) {
+  .cardBox {
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 20px;
+    padding: 20px 15px;
+  }
+  
+  .cardBox a .card {
+    padding: 25px;
+  }
+  
+  .cardBox a .card .numbers {
+    font-size: 2.5rem;
+  }
+  
+  .cardBox .card .iconBx {
+    font-size: 3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .cardBox {
+    grid-template-columns: 1fr;
+  }
+}

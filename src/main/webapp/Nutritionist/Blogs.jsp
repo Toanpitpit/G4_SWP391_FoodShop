@@ -203,7 +203,7 @@
                     </div>
                     <c:remove var="Errmess" scope="session" />
                 </c:if>
-                
+
                 <div class="Blog_box">
                     <div class="blog-list-container">
                         <c:choose>
@@ -258,7 +258,7 @@
                                     </p>
                                 </c:otherwise>
                             </c:choose>
-                            </table>
+                        </table>
                         <!--================================================= End table list blog =========================================-->
                         <!--================================ Start pagination ================================-->
                         <c:if test="${totalPages > 1}">
@@ -284,51 +284,53 @@
                                 </c:if>
                             </div>
                         </c:if>
-                        </div>
-                        <!--================================ End  pagination ================================-->
-                        <!-- Phần search / filter -->
+                    </div>
+                    <!--================================ End  pagination ================================-->
+                        
+                        
+                        <!--============================== Start search / filter========================= -->
                         <div class="search-filter">
-                            <label>
-                                <input
-                                    type="text"
+                                <label>
+                                    <input
+                                        type="text"
                                     placeholder="Search here"
-                                    id="blogSearchInput"
-                                    />
-                                <ion-icon name="search-outline"></ion-icon>
-                            </label>
+                                        id="blogSearchInput"
+                                        />
+                                        <ion-icon name="search-outline"></ion-icon>
+                                </label>
 
                             <select id="filterStatus" name="status">
-                                <c:forEach var="status" items="${statusList}">
+                                                <c:forEach var="status" items="${statusList}">
                                     <option value="${status}" <c:if test="${status == status}">selected</c:if>>${status}</option>
-                                </c:forEach>
+                                                </c:forEach>   
                             </select>
                             <div class="form-group">
                                 <label>BMI Category</label>
-                                <div class="bmi-list">
-                                    <c:forEach var="bmi" items="${lstBMI}">
+                                            <div class="bmi-list">
+                                                <c:forEach var="bmi" items="${lstBMI}">
                                         <label class="bmi-item">
                                             <div class="bmi-item <c:if test='${bmi.bmiID == selectedBmiId}'>selected</c:if>'" 
                                                  data-id="${bmi.bmiID}">
-                                                ${bmi.classification}
-                                            </div>
+                                                    ${bmi.classification}
+                                                </div>
                                         </label>
-                                    </c:forEach>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
+                                                </c:forEach>
+                                            </div>
+                                        </div>
+                          </div>
+                         <!--============================== End search / filter========================= -->
+                                    </div>
                     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-                
-            </div>
-        </div>                         
-        <!-- =========== Scripts =========  -->
-        <script src="../JS/Nutritionist/home.js"></script>
-        <script src="../JS/Nutritionist/blog.js"></script>
 
-        <!-- ====== ionicons ======= -->
-        <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-        <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+                        </div>
+                    </div>
+            <!-- =========== Scripts =========  -->
+            <script src="../JS/Nutritionist/home.js"></script>
+            <script src="../JS/Nutritionist/blog.js"></script>
+
+            <!-- ====== ionicons ======= -->
+            <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+            <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
     </body>
 
 </html>

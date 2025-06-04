@@ -1,5 +1,5 @@
 
-import com.example.servlet.dao.AccountDAO;
+//import com.example.servlet.dao.AccountDAO;
 import com.example.servlet.dao.BMIClassificationDAO;
 import com.example.servlet.dao.BlogDAO;
 import com.example.servlet.dao.NotifyDAO;
@@ -35,7 +35,8 @@ public class test {
 //        dis4();
 //        dis6();
 //         dis5();
-dis();
+dis3();
+//dis();
     }
     public static void dis() throws SQLException{
         BlogDAO _dao = new BlogDAO();
@@ -81,9 +82,10 @@ dis();
      _dao.updateBlog(testBlog);
     
 }
-   public static void dis3() {
+   public static void dis3() throws SQLException {
     BlogDAO _dao = new BlogDAO();
-    _dao.deleteBlogByID(11);
+    boolean check = _dao.deleteBlogByID(41);
+       System.out.println (check);
 }
 public static void dis4() {
     RequestDAO _dao = new RequestDAO();
@@ -95,23 +97,23 @@ public static void dis4() {
         System.out.println(requests.toString());
     }
 }
-public static void dis5() throws SQLException {
-    AccountDAO dao = new AccountDAO();
-    Account testUser = new Account();
-            testUser.setUsername("ToanAdmin");
-            String pass = "Tatoan@123";
-            String hashedPassword = BCrypt.hashpw(pass, BCrypt.gensalt());
-            testUser.setPass(hashedPassword);
-            testUser.setName("Tạ Văn Toàn");
-            testUser.setEmail("he187337tavantoan@gmail.com");
-            testUser.setPhone("0707408906");
-            testUser.setGender("Male");
-            testUser.setBirthDate(Date.valueOf(LocalDate.of(2004, 10, 04))); // yyyy-MM-dd
-            testUser.setRole("Nutritonist");
-            testUser.setStatus("Active");
-            testUser.setImage("default.png");
-            dao.registerUser(testUser);
-}
+//public static void dis5() throws SQLException {
+//    AccountDAO dao = new AccountDAO();
+//    Account testUser = new Account();
+//            testUser.setUsername("ToanAdmin");
+//            String pass = "Tatoan@123";
+//            String hashedPassword = BCrypt.hashpw(pass, BCrypt.gensalt());
+//            testUser.setPass(hashedPassword);
+//            testUser.setName("Tạ Văn Toàn");
+//            testUser.setEmail("he187337tavantoan@gmail.com");
+//            testUser.setPhone("0707408906");
+//            testUser.setGender("Male");
+//            testUser.setBirthDate(Date.valueOf(LocalDate.of(2004, 10, 04))); // yyyy-MM-dd
+//            testUser.setRole("Nutritonist");
+//            testUser.setStatus("Active");
+//            testUser.setImage("default.png");
+//            dao.registerUser(testUser);
+//}
 
 public static void dis6() {
     NotifyDAO n_dao = new NotifyDAO();
