@@ -48,6 +48,14 @@ public class ListFoodDraftServerLet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
+        BlogDAO _dao = new BlogDAO ();
+        try {
+            List<Blogs> lstB =_dao.getBlogsByFilterAndPage (null, -1, true,"" , 1, 10);
+            request.setAttribute ("blogList", lstB);
+            request.getRequestDispatcher ("/Nutritionist/SubRequest.jsp")
+                    .forward (request, response);
+        } catch (Exception e) {
+        }
      
     } 
 

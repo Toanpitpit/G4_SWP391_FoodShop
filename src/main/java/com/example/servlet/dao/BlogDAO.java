@@ -219,26 +219,67 @@ public class BlogDAO {
     public boolean deleteImage(String absolutePath) {
         File file = new File (absolutePath);
         if (file.exists ()) {
-            return file.delete ();
+            boolean deleted = file.delete ();
+            if (!deleted) {
+                System.out.println ("Failed to delete: " + absolutePath);
+            }
+            return deleted;
+        } else {
+            System.out.println (" File not found: " + absolutePath);
+            return false;
         }
-        return false;
     }
 
-    public String getPathBlogByID(int blogID) throws SQLException {
+
+    public String getPathBlogByID(int blogID) {
         String path = "";
         try {
-            String sql = "Select  Blog.image FROM Blogs WHERE blogID = ?";
+            String sql = "Select  Blogs.image FROM Blogs WHERE blogID = ?";
             conn = db.getConnection ();
             ps = conn.prepareStatement (sql);
             ps.setInt (1, blogID);
             rs = ps.executeQuery ();
+            while(rs.next ()){
             path = rs.getString (1);
+            }
             conn.close ();
         } catch (Exception ex) {
             Logger.getLogger (BlogDAO.class.getName ()).log (Level.SEVERE, null, ex);
         }
         return path;
     }
+
+   public Blogs getBlogByID(int blogID) {
+    Blogs blog = null;
+    try {
+        String sql = "SELECT b.blogID, b.AuthorID, a.name AS authorName, b.typeBMI, b.title, "
+                   + "b.image, b.content, b.status, b.create_at, b.update_at "
+                   + "FROM Blogs b JOIN Accounts a ON b.AuthorID = a.id WHERE b.blogID = ?";
+        conn = db.getConnection();
+        ps = conn.prepareStatement(sql);
+        ps.setInt(1, blogID);
+        rs = ps.executeQuery();
+
+        if (rs.next()) {
+            blog = new Blogs();
+            blog.setbID (rs.getInt("blogID"));
+            blog.setAuthorID(rs.getInt("AuthorID"));
+            blog.setAuthorName(rs.getString("authorName"));
+            blog.setBmiId (rs.getInt("typeBMI")); // assuming it's int
+            blog.setTitle(rs.getString("title"));
+            blog.setImageUlr (rs.getString("image"));
+            blog.setContent(rs.getString("content"));
+            blog.setStatus(rs.getString("status"));
+            blog.setCreate_at (rs.getTimestamp("create_at"));
+            blog.setUpdate_at (rs.getTimestamp("update_at"));
+        }
+
+        conn.close();
+    } catch (Exception ex) {
+        Logger.getLogger(BlogDAO.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    return blog;
+}
 
     public List<Blogs> getBlogsByFilterAndPage(
             String keyword,

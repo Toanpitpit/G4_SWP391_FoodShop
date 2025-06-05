@@ -220,10 +220,10 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <c:forEach var="blog" items="${lstB}" varStatus="loop" >
+                                        <c:forEach var="blog" items="${lstB}" >
                                             <tr>
-                                                <td colspan="3"><img src="${blog.imageUlr}" alt="Anh blog" style="width: 80px; height: 44px;"></img></td>
-                                                <td>${loop.index + 1}</td>
+                                                <td colspan="3"><img src="${blog.imageUlr}" name="imageUlr" value="${blog.imageUlr}" alt="Anh blog" style="width: 80px; height: 44px;"></img></td>
+                                                <td>${blog.bID}</td>
                                                 <td>${blog.title}</td>
                                                 <td>
                                                     <span class="status status-${blog.status}">
@@ -236,7 +236,7 @@
                                                         pattern="yyyy-MM-dd HH:mm:ss" />
                                                 </td>
                                                 <td class="action-cell" style="text-align: center;">
-                                                    <a href="viewBlog.do?id=${blog.bID}" title="View">
+                                                    <a href="blogdetail?id=${blog.bID}" title="View">
                                                         <ion-icon name="eye-outline"></ion-icon>
                                                     </a>
                                                     <a href="editBlog.do?id=${blog.bID}" title="Edit">
@@ -286,40 +286,7 @@
                         </c:if>
                     </div>
                     <!--================================ End  pagination ================================-->
-                        
-                        
-                        <!--============================== Start search / filter========================= -->
-                        <div class="search-filter">
-                                <label>
-                                    <input
-                                        type="text"
-                                    placeholder="Search here"
-                                        id="blogSearchInput"
-                                        />
-                                        <ion-icon name="search-outline"></ion-icon>
-                                </label>
-
-                            <select id="filterStatus" name="status">
-                                                <c:forEach var="status" items="${statusList}">
-                                    <option value="${status}" <c:if test="${status == status}">selected</c:if>>${status}</option>
-                                                </c:forEach>   
-                            </select>
-                            <div class="form-group">
-                                <label>BMI Category</label>
-                                            <div class="bmi-list">
-                                                <c:forEach var="bmi" items="${lstBMI}">
-                                        <label class="bmi-item">
-                                            <div class="bmi-item <c:if test='${bmi.bmiID == selectedBmiId}'>selected</c:if>'" 
-                                                 data-id="${bmi.bmiID}">
-                                                    ${bmi.classification}
-                                                </div>
-                                        </label>
-                                                </c:forEach>
-                                            </div>
-                                        </div>
-                          </div>
-                         <!--============================== End search / filter========================= -->
-                                    </div>
+                    </div>
                     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
                         </div>

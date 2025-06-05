@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  *
@@ -48,16 +49,32 @@ public class BlogDetailServerLet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        BlogDAO b_dao = new BlogDAO();
-        List<Blogs> lstB = b_dao.getBlogsByFilter("", -1, true,null);
-        request.setAttribute("lstB", lstB);
-        request.getRequestDispatcher("/Nutritionist/BlogDetail.jsp")
-                .forward(request, response);
+        response.setContentType ("text/html;charset=UTF-8");
+        try (PrintWriter out = response.getWriter ()) {
+            BlogDAO b_dao = new BlogDAO ();
+            try {
+                String ids = request.getParameter ("id");
+                if (ids != null) {
+                    if (ids.trim ().isEmpty ()) {
+                        int id = Integer.parseInt (ids);
+                        Blogs blog = b_dao.getBlogByID (id);
+                        request.setAttribute ("blog", blog);
+                        request.getRequestDispatcher ("/Nutritionist/BlogDetail.jsp")
+                                .forward (request, response);
+                    }
+                }
+                Logger.getLogger ("Wrong");
+            } catch (Exception e) {
+                e.printStackTrace ();
+            }
+        } 
     } 
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
+        
+        
         
     }
     @Override

@@ -9,6 +9,7 @@ import com.example.servlet.dao.BMIClassificationDAO;
 import com.example.servlet.dao.BlogDAO;
 import com.example.servlet.model.BMIClassification;
 import com.example.servlet.model.Blogs;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -19,6 +20,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.List;
@@ -41,6 +44,7 @@ public class CreateBlogsServerLet extends HttpServlet {
      */
     
 private static final String UPLOAD_DIRECTORY = "D:\\Semester 5\\SWP391\\Project\\G4_SWP391_FoodShop-master\\G4_SWP391_FoodShop-master\\src\\main\\webapp\\img\\blog";
+private static final String TAGET_DIRECTORY = "D:\\Semester 5\\SWP391\\Project\\G4_SWP391_FoodShop-master\\G4_SWP391_FoodShop-master\\target\\Food-1.0-SNAPSHOT\\img\\blog";
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -112,8 +116,12 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
                 }
                 String filePath = UPLOAD_DIRECTORY + File.separator + uniqueFileName;
                 filePart.write(filePath);
+                File sourceFile = new File (filePath);
+                File targetFile = new File (TAGET_DIRECTORY + File.separator + uniqueFileName);
+                Files.copy (sourceFile.toPath (), targetFile.toPath (), StandardCopyOption.REPLACE_EXISTING);
+                
                 try {
-                    Thread.sleep(500); // Delay 500ms (nửa giây)
+                    Thread.sleep(1000); // Delay 500ms (nửa giây)
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -126,6 +134,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
       Timestamp create_at = new Timestamp(System.currentTimeMillis());
       Timestamp update_at = new Timestamp(System.currentTimeMillis());
       int authorID = 19;
+      
       String name = "nsams";
       Blogs blog = new Blogs(0, authorID, name, bmiId, title, image_ulr, content, status, create_at, update_at);
           BlogDAO _dao = new BlogDAO();

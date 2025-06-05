@@ -35,14 +35,14 @@ public class test {
 //        dis4();
 //        dis6();
 //         dis5();
-dis3();
+dis();
 //dis();
     }
     public static void dis() throws SQLException{
         BlogDAO _dao = new BlogDAO();
 //        List<MonthlyStat> typeStats = new ArrayList<>();
 //       List<Blogs> lstBlog = _dao.getBlogsByFilter("", 5, true,null);
-       List<Blogs> lstB = _dao.getBlogsByFilterAndPage(null, -1, true, null, 2, 4);
+//       List<Blogs> lstB = _dao.getBlogsByFilterAndPage(null, -1, true, null, 2, 4);
 //          System.out.println (_dao.getTotalBlog());
 //        List<String> ststuss;
 //        try {
@@ -53,10 +53,11 @@ dis3();
 //        } catch (Exception ex) {
 //            Logger.getLogger(test.class.getName()).log(Level.SEVERE, null, ex);
 //        }
-        
-        for(Blogs b : lstB){
-            System.out.println(b.toString());
-        }
+Blogs b = _dao.getBlogByID (100);
+        System.out.println (b);
+//        for(Blogs b : lstB){
+//            System.out.println(b.toString());
+//        }
 //        typeStats = _dao.countByTypeBMI(-3);
 //        for (MonthlyStat typeStat : typeStats) {
 //            System.out.println(typeStat.toString());

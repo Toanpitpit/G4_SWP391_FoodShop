@@ -2,7 +2,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-
 package com.example.servlet.controller.Nutritionist;
 
 import com.example.servlet.dao.BlogDAO;
@@ -23,69 +22,70 @@ import java.util.logging.Logger;
  * @author Admin
  */
 public class DeleteBlogsServerLet extends HttpServlet {
-   
-    /** 
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
+            throws ServletException, IOException {
+        response.setContentType ("text/html;charset=UTF-8");
+        try (PrintWriter out = response.getWriter ()) {
             /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet DeleteBlogsServerLet</title>");  
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet DeleteBlogsServerLet at " + request.getContextPath () + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+            out.println ("<!DOCTYPE html>");
+            out.println ("<html>");
+            out.println ("<head>");
+            out.println ("<title>Servlet DeleteBlogsServerLet</title>");
+            out.println ("</head>");
+            out.println ("<body>");
+            out.println ("<h1>Servlet DeleteBlogsServerLet at " + request.getContextPath () + "</h1>");
+            out.println ("</body>");
+            out.println ("</html>");
         }
-    } 
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()){
-        HttpSession session = request.getSession(false);
+            throws ServletException, IOException {
+        response.setContentType ("text/html;charset=UTF-8");
+        try (PrintWriter out = response.getWriter ()) {
+            HttpSession session = request.getSession (false);
 //        if(session == null){
 //            response.sendRedirect("login.jsp");
 //        }
-        int id = Integer.parseInt(request.getParameter("id"));
-        String path = request.getParameter ("image");
-        BlogDAO b_dao = new BlogDAO();
-        
-        try {
-            boolean check = b_dao.deleteBlogByID(id);
-            if (check) {
-                String realPath = request.getServletContext().getRealPath (path);     
-                if(b_dao.deleteImage (realPath)){
-                   out.print ("sucess");
-                }else{
-                out.print ("khoong xoa ");}
-                session.setAttribute ("mess", "Delete Sucsessfuly");
+            int id = Integer.parseInt (request.getParameter ("id"));
+            BlogDAO b_dao = new BlogDAO ();
+            String path = b_dao.getPathBlogByID (id);
+            String basePath = "D:/Semester 5/SWP391/Project/G4_SWP391_FoodShop-master/G4_SWP391_FoodShop-master/src/main/webapp/";
+            String realPath = basePath + path;
+            try {
+                b_dao.deleteImage (realPath);
+//                out.print (path);
+                boolean check = b_dao.deleteBlogByID (id);
+                if (check) {
+                    session.setAttribute ("mess", "Delete Sucsessfuly");
+                } else {
+                    session.setAttribute ("Errmess", "Fail to detele");
+
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger (DeleteBlogsServerLet.class.getName ()).log (Level.SEVERE, null, ex);
             }
-            else {
-                session.setAttribute ("Errmess", "Fail to detele");
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger (DeleteBlogsServerLet.class.getName()).log (Level.SEVERE, null, ex);
+            response.sendRedirect ("listblog");
         }
-        response.sendRedirect("listblog");
-    } 
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-        
-    } 
+            throws ServletException, IOException {
+
+    }
+
     @Override
     public String getServletInfo() {
         return "Short description";

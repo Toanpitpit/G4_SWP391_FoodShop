@@ -110,55 +110,49 @@
                     <h2>Blog Post</h2>
                     <form action="createblog" method="post" enctype="multipart/form-data">
                         <div class="form-card">
-                            <div class="form-layout">
-                                <!-- Phần bên trái: Các trường nhập liệu -->
-                                <div class="form-left">
-                                    <div class="form-group">
-                                        <label for="title">Title</label>
-                                        <input type="text" id="title" name="title" value="${title != null ? title : ''}" required />
-                                    </div>
+                            <div class="form-group image-preview-group">
+                                <label for="imageUrl">Thumbnail Image</label>
+                                <img id="preview" src="#" alt="Preview Image" style="display:none; width:100%; max-height:500px; object-fit:cover; margin-bottom: 10px; border-radius: 10px;" />
+                                <input type="file" id="imageUrl" name="imageUrl" accept="image/*" onchange="previewImage(event)" />
+                            </div>
 
-                                    <div class="form-group">
-                                        <label for="bmiId">BMI Category</label>
-                                        <select name="bmiId" id="bmiId" required>
-                                            <option value="">-- Select BMI --</option>
-                                            <c:forEach var="bmi" items="${lstBMI}">
-                                                <option value="${bmi.bmiID}" ${bmi.bmiID == selectedBmiId ? 'selected' : ''}>${bmi.classification}</option>
-                                            </c:forEach>
-                                        </select>
-                                    </div>
+                            <div class="form-group">
+                                <label for="title">Title</label>
+                                <input type="text" id="title" name="title" value="${title != null ? title : ''}" required />
+                            </div>
 
-                                    <div class="form-group">
-                                        <label>Status</label>
-                                        <div class="status-options">
-                                            <c:forEach var="s" items="${statusList}">
-                                                <label class="radio-inline">
-                                                    <input type="radio" name="status" value="${s}" ${s == status ? 'checked' : ''} />
-                                                    ${s}
-                                                </label>
-                                            </c:forEach>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <!-- Phần bên phải: Ảnh -->
-                                <div class="form-right">
-                                    <div class="form-group image-preview-group">
-                                        <label for="imageUrl">Thumbnail Image</label>
-                                        <img id="preview" src="#" alt="Preview Image" style="display:none; width:100%; max-height:300px; object-fit:cover; margin-bottom: 10px; border-radius: 10px;" />
-                                        <input type="file" id="imageUrl" name="imageUrl" accept="image/*" onchange="previewImage(event)" />
-                                    </div>
+                            <div class="form-group">
+                                <label for="bmiId">BMI Category</label>
+                                <select name="bmiId" id="bmiId" required>
+                                    <option value="">-- Select BMI --</option>
+                                    <c:forEach var="bmi" items="${lstBMI}">
+                                        <option value="${bmi.bmiID}" ${bmi.bmiID == selectedBmiId ? 'selected' : ''}>${bmi.classification}</option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Status</label>
+                                <div class="status-options">
+                                    <c:forEach var="s" items="${statusList}">
+                                        <label class="radio-inline">
+                                            <input type="radio" name="status" value="${s}" ${s == status ? 'checked' : ''} />
+                                            ${s}
+                                        </label>
+                                    </c:forEach>
                                 </div>
                             </div>
+
+                            <!-- Content -->
+                            <div class="form-group">
+                                <label for="content">Content</label>
+                                <textarea id="content" name="content" rows="10">${content != null ? content : ''}</textarea>
+                            </div>
+
+                            <button type="submit" class="btn-submit">Publish</button>
                         </div>
-                        
-                        <!-- Phần content ở cuối -->
-                        <div class="form-group">
-                            <label for="content">Content</label>
-                            <textarea id="content" name="content" rows="10">${content != null ? content : ''}</textarea>
-                        </div>
-                        <button type="submit" class="btn-submit">Publish</button>
                     </form>
+
                 </div>
 
                 <script>

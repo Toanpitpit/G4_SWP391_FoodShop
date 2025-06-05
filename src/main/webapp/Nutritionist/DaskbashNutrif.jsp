@@ -10,7 +10,7 @@
     <title></title>
     <!-- ======= Styles ====== -->
     <link rel="stylesheet" href="../CSS/Ncss/Homed.css">
-    <link rel="stylesheet" href="../CSS/Ncss/common.css">
+<!--    <link rel="stylesheet" href="../CSS/Ncss/common.css">-->
 </head>
 
 <body>
