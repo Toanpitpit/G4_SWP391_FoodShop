@@ -23,198 +23,182 @@ import java.util.logging.Logger;
  * @author Admin
  */
 public class BlogDAO {
+//
+//    Connection conn;
+//    PreparedStatement ps;
+//    CallableStatement cs = null;
+//    ResultSet rs;
+//    DBConnect db = new DBConnect ();
 
-    Connection conn;
-    PreparedStatement ps;
-    CallableStatement cs = null;
-    ResultSet rs;
-    DBConnect db = new DBConnect ();
+public List<Blogs> getBlogsByFilter(String keyword, int typeBMI, boolean sortNewestFirst, String status) {
+    List<Blogs> lstBlog = new ArrayList<>();
+    DBConnect db = new DBConnect();
 
-    public List<Blogs> getBlogsByFilter(String keyword, int typeBMI, boolean sortNewestFirst, String status) {
-        List<Blogs> lstBlog = new ArrayList<> ();
-        DBConnect db = new DBConnect ();
+    StringBuilder sql = new StringBuilder(
+            "SELECT b.blogID, b.AuthorID, a.name AS authorName, b.typeBMI, b.title, "
+            + "b.image, b.content, b.status, b.create_at, b.update_at "
+            + "FROM Blogs b JOIN Accounts a ON b.AuthorID = a.id WHERE 1=1 "
+    );
 
-        try {
+    List<Object> params = new ArrayList<>();
 
-            StringBuilder sql = new StringBuilder (
-                    "SELECT b.blogID, b.AuthorID, a.name AS authorName, b.typeBMI, b.title, "
-                    + "b.image, b.content, b.status, b.create_at, b.update_at "
-                    + "FROM Blogs b JOIN Accounts a ON b.AuthorID = a.id WHERE 1=1 "
-            );
+    if (typeBMI != -1) {
+        sql.append("AND b.typeBMI = ? ");
+        params.add(typeBMI);
+    }
 
-            List<Object> params = new ArrayList<> ();
+    if (keyword != null && !keyword.trim().isEmpty()) {
+        sql.append("AND (b.title LIKE ? OR a.name LIKE ?) ");
+        String like = "%" + keyword.trim() + "%";
+        params.add(like);
+        params.add(like);
+    }
 
-            if (typeBMI != -1) {
-                sql.append ("AND b.typeBMI = ? ");
-                params.add (typeBMI);
-            }
+    if (status != null && !status.trim().isEmpty()) {
+        sql.append("AND b.status = ? ");
+        params.add(status);
+    }
 
-            if (keyword != null && !keyword.trim ().isEmpty ()) {
-                sql.append ("AND (b.title LIKE ? OR a.name LIKE ?) ");
-                String like = "%" + keyword.trim () + "%";
-                params.add (like);
-                params.add (like);
-            }
-            if (status != null && !status.trim ().isEmpty ()) {
-                sql.append ("AND (b.status = ?) ");
-                params.add (status);
-            }
-            sql.append ("ORDER BY b.update_at ").append (sortNewestFirst ? "DESC" : "ASC");
+    sql.append("ORDER BY b.update_at ").append(sortNewestFirst ? "DESC" : "ASC");
 
-            conn = db.getConnection ();
-            ps = conn.prepareStatement (sql.toString ());
+    try (Connection conn = db.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql.toString())) {
 
-            for (int i = 0; i < params.size (); i++) {
-                ps.setObject (i + 1, params.get (i));
-            }
+        // Set parameters
+        for (int i = 0; i < params.size(); i++) {
+            ps.setObject(i + 1, params.get(i));
+        }
 
-            rs = ps.executeQuery ();
-            while (rs.next ()) {
-                Blogs blog = new Blogs (
-                        rs.getInt ("blogID"),
-                        rs.getInt ("AuthorID"),
-                        rs.getString ("authorName"),
-                        rs.getInt ("typeBMI"),
-                        rs.getString ("title"),
-                        rs.getString ("image"),
-                        rs.getString ("content"),
-                        rs.getString ("status"),
-                        rs.getTimestamp ("create_at"),
-                        rs.getTimestamp ("update_at")
+        try (ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Blogs blog = new Blogs(
+                        rs.getInt("blogID"),
+                        rs.getInt("AuthorID"),
+                        rs.getString("authorName"),
+                        rs.getInt("typeBMI"),
+                        rs.getString("title"),
+                        rs.getString("image"),
+                        rs.getString("content"),
+                        rs.getString("status"),
+                        rs.getTimestamp("create_at"),
+                        rs.getTimestamp("update_at")
                 );
-                lstBlog.add (blog);
+                lstBlog.add(blog);
             }
-            conn.close ();
-        } catch (Exception ex) {
-            ex.printStackTrace ();
         }
-        return lstBlog;
+    } catch (SQLException ex) {
+        ex.printStackTrace();
+    }
+    finally{
+        db.closeConnection ();
     }
 
-    public List<MonthlyStat> countByTypeBMI(int authorId) throws SQLException {
+    return lstBlog;
+}
 
-        StringBuilder sql = new StringBuilder (
-                "SELECT typeBMI, COUNT(*) AS cnt FROM Blogs "
-        );
+
+   public List<MonthlyStat> countByTypeBMI(int authorId) {
+    List<MonthlyStat> result = new ArrayList<>();
+    StringBuilder sql = new StringBuilder(
+        "SELECT typeBMI, COUNT(*) AS cnt FROM Blogs "
+    );
+
+    // Chỉ thêm WHERE khi authorId > 0
+    if (authorId > 0) {
+        sql.append("WHERE AuthorID = ? ");
+    }
+
+    sql.append("GROUP BY typeBMI ORDER BY typeBMI");
+
+    DBConnect db = new DBConnect();
+
+    try (Connection conn = db.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+
         if (authorId > 0) {
-            sql.append ("WHERE AuthorID = ? ");
+            ps.setInt(1, authorId);
         }
-        sql.append ("GROUP BY typeBMI ORDER BY typeBMI");
 
-        List<MonthlyStat> result = new ArrayList<> ();
-        try {
-            conn = db.getConnection ();
-        } catch (Exception ex) {
-            Logger.getLogger (BlogDAO.class.getName ()).log (Level.SEVERE, null, ex);
-        }
-        try (
-                PreparedStatement ps = conn.prepareStatement (sql.toString ())) {
-            if (authorId >= 0) {
-                ps.setInt (1, authorId);
+        try (ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                int typeId = rs.getInt("typeBMI");
+                int cnt = rs.getInt("cnt");
+
+                MonthlyStat m = new MonthlyStat();
+                m.setMonthlName(String.valueOf(typeId)); 
+                m.setCount(cnt);
+                result.add(m);
             }
-            ResultSet rs = ps.executeQuery ();
-            while (rs.next ()) {
-                int typeId = rs.getInt ("typeBMI");
-                int cnt = rs.getInt ("cnt");
-
-                MonthlyStat m = new MonthlyStat ();
-                m.setMonthlName (String.valueOf (typeId));
-                m.setCount (cnt);
-                result.add (m);
-            }
-            conn.close ();
         }
 
-        return result;
+    } catch (SQLException ex) {
+        Logger.getLogger(BlogDAO.class.getName()).log(Level.SEVERE, null, ex);
+    }finally{
+        db.closeConnection ();
     }
+
+    return result;
+}
+
 
     public boolean insertBlog(Blogs blog) {
+    String sql = "{call InsertBlog(?, ?, ?, ?, ?, ?)}";
+    DBConnect db = new DBConnect();
 
-        try {
-            conn = db.getConnection ();
-            conn.setAutoCommit (true);
+    try (Connection conn = db.getConnection();
+         CallableStatement cs = conn.prepareCall(sql)) {
 
-            String sql = "{call InsertBlog(?, ?, ?, ?, ?, ?)}";
-            cs = conn.prepareCall (sql);
+        cs.setInt(1, blog.getAuthorID());
+        cs.setInt(2, blog.getBmiId());
+        cs.setString(3, blog.getTitle());
+        cs.setString(4, blog.getImageUlr());
+        cs.setString(5, blog.getContent());
+        cs.setString(6, blog.getStatus());
 
-            cs.setInt (1, blog.getAuthorID ());
-            cs.setInt (2, blog.getBmiId ());
-            cs.setString (3, blog.getTitle ());
-            cs.setString (4, blog.getImageUlr ());
-            cs.setString (5, blog.getContent ());
-            cs.setString (6, blog.getStatus ());
+        boolean hasResultSet = cs.execute();
 
-            boolean hasResultSet = cs.execute ();
-
-            if (hasResultSet) {
-                ResultSet rs = cs.getResultSet ();
-                if (rs.next ()) {
-                    return true;
-                }
-            } else {
-                return false;
-            }
-            conn.close ();
-        } catch (SQLException e) {
-            e.printStackTrace ();
-        } catch (Exception ex) {
-            Logger.getLogger (BlogDAO.class.getName ()).log (Level.SEVERE, null, ex);
-        }
-        return false;
-    }
-
-    public boolean updateBlog(Blogs blog) {
-        DBConnect db = new DBConnect ();
-        try {
-            conn = db.getConnection ();
-            conn.setAutoCommit (true);
-
-            String sql = "{call UpdateBlog(?, ?, ?, ?, ?, ?)}";
-            cs = conn.prepareCall (sql);
-
-            cs.setInt (1, blog.getbID ());         // blogID là tham số đầu tiên
-            cs.setInt (2, blog.getBmiId ());
-            cs.setString (3, blog.getTitle ());
-            cs.setString (4, blog.getImageUlr ());
-            cs.setString (5, blog.getContent ());
-            cs.setString (6, blog.getStatus ());
-
-            boolean hasResultSet = cs.execute ();
-
-            if (hasResultSet) {
-                ResultSet rs = cs.getResultSet ();
-                if (rs.next ()) {
+        if (hasResultSet) {
+            try (ResultSet rs = cs.getResultSet()) {
+                if (rs.next()) {
                     return true;
                 }
             }
-            conn.close ();
-        } catch (SQLException e) {
-            e.printStackTrace ();
-        } catch (Exception ex) {
-            Logger.getLogger (BlogDAO.class.getName ()).log (Level.SEVERE, null, ex);
+        } else {
+            // Nếu procedure không trả resultset, bạn có thể check update count
+            int updateCount = cs.getUpdateCount();
+            return updateCount > 0;
         }
-        return false;
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+        // Bạn có thể log hoặc throw exception tùy mục đích
+    }finally{
+        db.closeConnection ();
     }
 
-    public boolean deleteBlogByID(int blogID) throws SQLException {
-        try {
-            String sql = "DELETE FROM Blogs WHERE blogID = ?";
-            conn = db.getConnection ();
-            ps = conn.prepareStatement (sql);
-            ps.setInt (1, blogID);
+    return false;
+}
 
-            int rowsAffected = ps.executeUpdate ();
-            if (rowsAffected > 0) {
-                return true;
-            } else {
-                return false;
-            }
-        } catch (Exception ex) {
-            Logger.getLogger (BlogDAO.class.getName ()).log (Level.SEVERE, null, ex);
-        }
-        conn.close ();
-        return false;
+public boolean deleteBlogByID(int blogID) {
+    String sql = "DELETE FROM Blogs WHERE blogID = ?";
+    DBConnect db = new DBConnect();
+
+    try (Connection conn = db.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+
+        ps.setInt(1, blogID);
+
+        int rowsAffected = ps.executeUpdate();
+        return rowsAffected > 0;
+
+    } catch (SQLException ex) {
+        Logger.getLogger(BlogDAO.class.getName()).log(Level.SEVERE, null, ex);
+    }finally{
+        db.closeConnection ();
     }
+
+    return false;
+}
 
     public boolean deleteImage(String absolutePath) {
         File file = new File (absolutePath);
@@ -231,153 +215,180 @@ public class BlogDAO {
     }
 
 
-    public String getPathBlogByID(int blogID) {
-        String path = "";
-        try {
-            String sql = "Select  Blogs.image FROM Blogs WHERE blogID = ?";
-            conn = db.getConnection ();
-            ps = conn.prepareStatement (sql);
-            ps.setInt (1, blogID);
-            rs = ps.executeQuery ();
-            while(rs.next ()){
-            path = rs.getString (1);
-            }
-            conn.close ();
-        } catch (Exception ex) {
-            Logger.getLogger (BlogDAO.class.getName ()).log (Level.SEVERE, null, ex);
-        }
-        return path;
-    }
+  public String getPathBlogByID(int blogID) {
+    String path = "";
+    String sql = "SELECT image FROM Blogs WHERE blogID = ?";
+    DBConnect db = new DBConnect();
 
-   public Blogs getBlogByID(int blogID) {
-    Blogs blog = null;
-    try {
-        String sql = "SELECT b.blogID, b.AuthorID, a.name AS authorName, b.typeBMI, b.title, "
-                   + "b.image, b.content, b.status, b.create_at, b.update_at "
-                   + "FROM Blogs b JOIN Accounts a ON b.AuthorID = a.id WHERE b.blogID = ?";
-        conn = db.getConnection();
-        ps = conn.prepareStatement(sql);
+    try (Connection conn = db.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+
         ps.setInt(1, blogID);
-        rs = ps.executeQuery();
 
-        if (rs.next()) {
-            blog = new Blogs();
-            blog.setbID (rs.getInt("blogID"));
-            blog.setAuthorID(rs.getInt("AuthorID"));
-            blog.setAuthorName(rs.getString("authorName"));
-            blog.setBmiId (rs.getInt("typeBMI")); // assuming it's int
-            blog.setTitle(rs.getString("title"));
-            blog.setImageUlr (rs.getString("image"));
-            blog.setContent(rs.getString("content"));
-            blog.setStatus(rs.getString("status"));
-            blog.setCreate_at (rs.getTimestamp("create_at"));
-            blog.setUpdate_at (rs.getTimestamp("update_at"));
+        try (ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                path = rs.getString(1);
+            }
         }
 
-        conn.close();
-    } catch (Exception ex) {
+    } catch (SQLException ex) {
         Logger.getLogger(BlogDAO.class.getName()).log(Level.SEVERE, null, ex);
+    }finally{
+        db.closeConnection ();
     }
+
+    return path;
+}
+
+
+ public Blogs getBlogByID(int blogID) {
+    Blogs blog = null;
+    String sql = "SELECT b.blogID, b.AuthorID, a.name AS authorName, b.typeBMI, b.title, "
+               + "b.image, b.content, b.status, b.create_at, b.update_at "
+               + "FROM Blogs b JOIN Accounts a ON b.AuthorID = a.id WHERE b.blogID = ?";
+    DBConnect db = new DBConnect();
+
+    try (Connection conn = db.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+
+        ps.setInt(1, blogID);
+
+        try (ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                blog = new Blogs();
+                blog.setbID(rs.getInt("blogID"));
+                blog.setAuthorID(rs.getInt("AuthorID"));
+                blog.setAuthorName(rs.getString("authorName"));
+                blog.setBmiId(rs.getInt("typeBMI"));
+                blog.setTitle(rs.getString("title"));
+                blog.setImageUlr(rs.getString("image"));
+                blog.setContent(rs.getString("content"));
+                blog.setStatus(rs.getString("status"));
+                blog.setCreate_at(rs.getTimestamp("create_at"));
+                blog.setUpdate_at(rs.getTimestamp("update_at"));
+            }
+        }
+
+    } catch (SQLException ex) {
+        Logger.getLogger(BlogDAO.class.getName()).log(Level.SEVERE, null, ex);
+    }finally{
+        db.closeConnection ();
+    }
+
     return blog;
 }
 
-    public List<Blogs> getBlogsByFilterAndPage(
-            String keyword,
-            int typeBMI,
-            boolean sortNewestFirst,
-            String status,
-            int pageIndex,
-            int pageSize
-    ) {
-        List<Blogs> lstBlog = new ArrayList<> ();
-        try {
-            StringBuilder sql = new StringBuilder (
-                    "SELECT b.blogID, b.AuthorID, a.name AS authorName, b.typeBMI, "
-                    + "       b.title, b.image, b.content, b.status, b.create_at, b.update_at "
-                    + "FROM Blogs b "
-                    + "  JOIN Accounts a ON b.AuthorID = a.id "
-                    + "WHERE 1 = 1 "
-            );
-            List<Object> params = new ArrayList<> ();
-            if (typeBMI != -1) {
-                sql.append ("  AND b.typeBMI = ? ");
-                params.add (typeBMI);
-            }
-            if (keyword != null && !keyword.trim ().isEmpty ()) {
-                sql.append ("  AND (b.title LIKE ? OR a.name LIKE ?) ");
-                String like = "%" + keyword.trim () + "%";
-                params.add (like);
-                params.add (like);
-            }
-            if (status != null && !status.trim ().isEmpty ()) {
-                sql.append ("  AND b.status = ? ");
-                params.add (status.trim ());
-            }
-            sql.append ("ORDER BY b.update_at ").append (sortNewestFirst ? "DESC " : "ASC ");
-            sql.append ("OFFSET ? ROWS FETCH NEXT ? ROWS ONLY;");
 
-            conn = db.getConnection ();
-            ps = conn.prepareStatement (sql.toString ());
-            int idx = 1;
-            for (Object param : params) {
-                ps.setObject (idx++, param);
-            }
-            int offset = (pageIndex - 1) * pageSize;
-            ps.setInt (idx++, offset);
-            ps.setInt (idx, pageSize);
+public List<Blogs> getBlogsByFilterAndPage(
+        String keyword,
+        int typeBMI,
+        boolean sortNewestFirst,
+        String status,
+        int pageIndex,
+        int pageSize
+) throws SQLException {
+    List<Blogs> lstBlog = new ArrayList<>();
+    StringBuilder sql = new StringBuilder(
+            "SELECT b.blogID, b.AuthorID, a.name AS authorName, b.typeBMI, "
+            + "b.title, b.image, b.content, b.status, b.create_at, b.update_at "
+            + "FROM Blogs b JOIN Accounts a ON b.AuthorID = a.id WHERE 1=1 "
+    );
 
-            rs = ps.executeQuery ();
-            while (rs.next ()) {
-                Blogs blog;
-                blog = new Blogs (
-                        rs.getInt ("blogID"),
-                        rs.getInt ("AuthorID"),
-                        rs.getString ("authorName"),
-                        rs.getInt ("typeBMI"),
-                        rs.getString ("title"),
-                        rs.getString ("image"),
-                        rs.getString ("content"),
-                        rs.getString ("status"),
-                        rs.getTimestamp ("create_at"),
-                        rs.getTimestamp ("update_at")
+    List<Object> params = new ArrayList<>();
+    if (typeBMI != -1) {
+        sql.append(" AND b.typeBMI = ? ");
+        params.add(typeBMI);
+    }
+    if (keyword != null && !keyword.trim().isEmpty()) {
+        sql.append(" AND (b.title LIKE ? OR a.name LIKE ?) ");
+        String like = "%" + keyword.trim() + "%";
+        params.add(like);
+        params.add(like);
+    }
+    if (status != null && !status.trim().isEmpty()) {
+        sql.append(" AND b.status = ? ");
+        params.add(status.trim());
+    }
+
+    sql.append(" ORDER BY b.update_at ").append(sortNewestFirst ? "DESC " : "ASC ");
+    sql.append(" OFFSET ? ROWS FETCH NEXT ? ROWS ONLY;");
+
+    DBConnect db = new DBConnect();
+
+    try (Connection conn = db.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+
+        int idx = 1;
+        for (Object param : params) {
+            ps.setObject(idx++, param);
+        }
+        int offset = (pageIndex - 1) * pageSize;
+        ps.setInt(idx++, offset);
+        ps.setInt(idx, pageSize);
+
+        try (ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Blogs blog = new Blogs(
+                        rs.getInt("blogID"),
+                        rs.getInt("AuthorID"),
+                        rs.getString("authorName"),
+                        rs.getInt("typeBMI"),
+                        rs.getString("title"),
+                        rs.getString("image"),
+                        rs.getString("content"),
+                        rs.getString("status"),
+                        rs.getTimestamp("create_at"),
+                        rs.getTimestamp("update_at")
                 );
-                lstBlog.add (blog);
+                lstBlog.add(blog);
             }
-            conn.close ();
-        } catch (Exception ex) {
-            ex.printStackTrace ();
         }
-        return lstBlog;
+    }finally{
+        db.closeConnection ();
     }
 
-    public List<String> getAllDistinctStatuses() throws SQLException, Exception {
-        List<String> statuses = new ArrayList<> ();
-        String sql = "SELECT DISTINCT status FROM Blogs";
-        conn = db.getConnection ();
-        ps = conn.prepareStatement (sql);
-        rs = ps.executeQuery ();
-        while (rs.next ()) {
-            statuses.add (rs.getString (1));
+    return lstBlog;
+}
+
+
+   public List<String> getAllDistinctStatuses() throws SQLException {
+    List<String> statuses = new ArrayList<>();
+    String sql = "SELECT DISTINCT status FROM Blogs";
+    DBConnect db = new DBConnect();
+
+    try (Connection conn = db.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql);
+         ResultSet rs = ps.executeQuery()) {
+
+        while (rs.next()) {
+            statuses.add(rs.getString(1));
         }
-        conn.close ();
-        return statuses;
+    }finally{
+        db.closeConnection ();
     }
 
-    public int getTotalBlog() {
-        int count = 0;
-        try {
-            conn = db.getConnection ();
-            String sql = "SELECT COUNT (*) FROM Blogs";
-            ps = conn.prepareStatement (sql);
-            rs = ps.executeQuery ();
-            while (rs.next ()) {
-                return rs.getInt (1);
-            }
-            conn.close ();
-        } catch (Exception ex) {
-            Logger.getLogger (BlogDAO.class.getName ()).log (Level.SEVERE, null, ex);
+    return statuses;
+}
+
+public int getTotalBlog() {
+    int count = 0;
+    String sql = "SELECT COUNT(*) FROM Blogs";
+    DBConnect db = new DBConnect();
+
+    try (Connection conn = db.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql);
+         ResultSet rs = ps.executeQuery()) {
+
+        if (rs.next()) {
+            count = rs.getInt(1);
         }
-        return count;
+    } catch (SQLException ex) {
+        Logger.getLogger(BlogDAO.class.getName()).log(Level.SEVERE, null, ex);
+    }finally{
+        db.closeConnection ();
     }
+
+    return count;
+}
 
 }

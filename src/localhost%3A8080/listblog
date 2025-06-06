@@ -1,0 +1,873 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Blog Management</title>
+        <link rel="stylesheet" href="../CSS/Ncss/common.css">
+        <link rel="stylesheet" href="../CSS/Ncss/blogs.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+        <style>
+            * {
+                font-family: "Inter", sans-serif;
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            :root {
+                --green: #2ecc71;
+                --green-hover: #27ae60;
+                --white: #fff;
+                --gray: #f5f5f5;
+                --black1: #222;
+                --black2: #999;
+                --shadow-light: rgba(0, 0, 0, 0.05);
+                --shadow-medium: rgba(0, 0, 0, 0.1);
+                --shadow-heavy: rgba(0, 0, 0, 0.15);
+            }
+
+            body {
+                min-height: 100vh;
+                overflow-x: hidden;
+                background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            }
+
+            .container {
+                position: relative;
+                width: 100%;
+            }
+            /* =============== Content Styles =============== */
+            .content-wrapper {
+                /* padding: 30px; */
+                max-width: 100%;
+                border: 1px solid !important;
+                border-radius: 16px;
+                border-image: linear-gradient(to right, #2f2f2f, red, green, blue) 1;
+                /* padding: 20px 20px; */
+                margin: 30px;
+                padding: 20px 10px;
+            }
+
+            .page-header {
+                margin-bottom: 30px;
+            }
+
+            .page-title {
+                font-size: 2rem;
+                font-weight: 600;
+                color: var(--black1);
+                margin-bottom: 8px;
+            }
+
+            .page-subtitle {
+                color: var(--black2);
+                font-size: 1rem;
+            }
+
+            /* Content Controls */
+            .content-controls {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 20px;
+                margin-bottom: 30px;
+                flex-wrap: wrap;
+            }
+
+            .create-btn {
+                background: linear-gradient(135deg, var(--green) 0%, var(--green-hover) 100%);
+                color: var(--white);
+                border: none;
+                padding: 12px 24px;
+                border-radius: 12px;
+                font-weight: 500;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                text-decoration: none;
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+            }
+
+            .create-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 25px rgba(46, 204, 113, 0.4);
+            }
+
+            .search-filter-container {
+                display: flex;
+                gap: 15px;
+                align-items: center;
+                flex-wrap: wrap;
+            }
+
+            .search-box {
+                position: relative;
+                min-width: 300px;
+            }
+
+            .search-input {
+                width: 100%;
+                padding: 12px 20px 12px 45px;
+                border: 2px solid #e9ecef;
+                border-radius: 12px;
+                font-size: 14px;
+                outline: none;
+                transition: all 0.3s ease;
+                background: var(--white);
+            }
+
+            .search-input:focus {
+                border-color: var(--green);
+                box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.1);
+            }
+
+            .search-icon {
+                position: absolute;
+                left: 15px;
+                top: 50%;
+                transform: translateY(-50%);
+                color: var(--black2);
+                font-size: 16px;
+            }
+
+            .filter-select {
+                padding: 12px 16px;
+                border: 2px solid #e9ecef;
+                border-radius: 12px;
+                font-size: 14px;
+                outline: none;
+                background: var(--white);
+                cursor: pointer;
+                transition: all 0.3s ease;
+                min-width: 120px;
+            }
+
+            .filter-select:focus {
+                border-color: var(--green);
+                box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.1);
+            }
+
+            /* Table Styles */
+            .table-container {
+                background: var(--white);
+                border-radius: 16px;
+                overflow: hidden;
+                box-shadow: 0 4px 20px var(--shadow-light);
+                border: 1px solid #e9ecef;
+            }
+
+            .blog-table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+
+            .blog-table thead {
+                background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            }
+
+            .blog-table th {
+                padding: 20px 16px;
+                text-align: left;
+                font-weight: 600;
+                color: var(--black1);
+                font-size: 14px;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+
+            .blog-table td {
+                padding: 16px;
+                border-bottom: 1px solid #f1f3f4;
+                vertical-align: middle;
+            }
+
+            .blog-table tbody tr {
+                transition: all 0.3s ease;
+            }
+
+            .blog-table tbody tr:hover {
+                background: #f8f9fa;
+                transform: translateY(-1px);
+                box-shadow: 0 4px 15px var(--shadow-light);
+            }
+
+            .blog-image {
+                width: 80px;
+                height: 45px;
+                object-fit: cover;
+                border-radius: 8px;
+                box-shadow: 0 2px 8px var(--shadow-light);
+            }
+
+            .blog-id {
+                font-weight: 600;
+                color: var(--black1);
+            }
+
+            .blog-title {
+                max-width: 300px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                font-weight: 500;
+            }
+
+            .status {
+                padding: 6px 12px;
+                border-radius: 20px;
+                font-size: 12px;
+                font-weight: 500;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+
+            .status-draft {
+                background: #fff3cd;
+                color: #856404;
+            }
+
+            .status-private {
+                background: #f8d7da;
+                color: #721c24;
+            }
+
+            .status-public {
+                background: #d1edff;
+                color: #0c5460;
+            }
+
+            .date-time {
+                color: var(--black2);
+                font-size: 13px;
+            }
+
+            .action-buttons {
+                display: flex;
+                gap: 8px;
+                align-items: center;
+            }
+
+            .action-btn {
+                width: 36px;
+                height: 36px;
+                border: none;
+                border-radius: 8px;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: all 0.3s ease;
+                text-decoration: none;
+            }
+
+            .action-btn.view {
+                background: #e3f2fd;
+                color: #1976d2;
+            }
+
+            .action-btn.edit {
+                background: #fff3e0;
+                color: #f57c00;
+            }
+
+            .action-btn.delete {
+                background: #ffebee;
+                color: #d32f2f;
+            }
+
+            .action-btn:hover {
+                transform: scale(1.1);
+                box-shadow: 0 4px 12px var(--shadow-medium);
+            }
+
+            /* Alert Messages */
+            .alert {
+                padding: 16px 20px;
+                border-radius: 12px;
+                margin-bottom: 20px;
+                font-weight: 500;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+
+            .alert.success {
+                background: #d4edda;
+                color: #155724;
+                border: 1px solid #c3e6cb;
+            }
+
+            .alert.error {
+                background: #f8d7da;
+                color: #721c24;
+                border: 1px solid #f5c6cb;
+            }
+
+            /* Pagination */
+            .pagination {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 8px;
+                margin-top: 30px;
+                flex-wrap: wrap;
+            }
+
+            .pagination a,
+            .pagination span {
+                padding: 10px 16px;
+                border-radius: 8px;
+                text-decoration: none;
+                color: var(--black1);
+                background: var(--white);
+                border: 1px solid #e9ecef;
+                transition: all 0.3s ease;
+                font-weight: 500;
+            }
+
+            .pagination a:hover {
+                background: var(--green);
+                color: var(--white);
+                transform: translateY(-2px);
+            }
+
+            .pagination .current {
+                background: var(--green);
+                color: var(--white);
+                border-color: var(--green);
+            }
+
+            .pagination .ellipsis {
+                border: none;
+                background: transparent;
+                color: var(--black2);
+            }
+
+            /* Empty State */
+            .empty-state {
+                text-align: center;
+                padding: 60px 20px;
+                color: var(--black2);
+            }
+
+            .empty-state i {
+                font-size: 4rem;
+                margin-bottom: 20px;
+                color: #dee2e6;
+            }
+
+            /* Responsive */
+            @media (max-width: 768px) {
+                .content-controls {
+                    flex-direction: column;
+                    align-items: stretch;
+                }
+
+                .search-filter-container {
+                    justify-content: stretch;
+                }
+
+                .search-box {
+                    min-width: 100%;
+                }
+
+                .blog-table {
+                    font-size: 14px;
+                }
+
+                .blog-table th,
+                .blog-table td {
+                    padding: 12px 8px;
+                }
+
+                .blog-title {
+                    max-width: 150px;
+                }
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="container">
+            <!-- Navigation -->
+            <div class="navigation active">
+                <ul>
+                    <li>
+                        <a href="../dashboadnutri">
+                            <span class="icon"></span>
+                            <span class="title">Healthy Foods</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="../dashboadnutri">
+                            <span class="icon">
+                                <ion-icon name="home-outline"></ion-icon>
+                            </span>
+                            <span class="title">Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="listfood">
+                            <span class="icon">
+                                <ion-icon name="restaurant-outline"></ion-icon>
+                            </span>
+                            <span class="title">Foods</span>
+                        </a>
+                    </li>
+                    <li class="hovered">
+                        <a href="listblog">
+                            <span class="icon">
+                                <ion-icon name="chatbubble-outline"></ion-icon>
+                            </span>
+                            <span class="title">Blogs</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="notify">
+                            <span class="icon">
+                                <ion-icon name="notifications-outline"></ion-icon>
+                            </span>
+                            <span class="title">Notification</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="profile">
+                            <span class="icon">
+                                <ion-icon name="settings-outline"></ion-icon>
+                            </span>
+                            <span class="title">Settings</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="changePassword">
+                            <span class="icon">
+                                <ion-icon name="lock-closed-outline"></ion-icon>
+                            </span>
+                            <span class="title">Password</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="logout">
+                            <span class="icon">
+                                <ion-icon name="log-out-outline"></ion-icon>
+                            </span>
+                            <span class="title">Sign Out</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Main Content -->
+            <div class="main active">
+                <!-- Top Bar -->
+                <div class="topbar">
+                    <div class="toggle">
+                        <ion-icon name="menu-outline"></ion-icon>
+                    </div>
+                    <div class="page-header">
+                        <h1 class="page-title">Blog Management</h1>
+                        <p class="page-subtitle">Manage and organize your blog posts</p>
+                    </div>
+                    <div class="user">
+                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face" alt="User">
+                    </div>
+                </div>
+
+                <!-- Content -->
+                <div class="content-wrapper">
+                    <!-- Success/Error Messages -->
+                    
+
+                    
+
+                    <!-- Content Controls -->
+                    <div class="content-controls">
+                        <a href="createblog" class="create-btn">
+                            <i class="fas fa-plus"></i>
+                            Create New Blog
+                        </a>
+                        <form name="sort" action="listblog" method="POST">
+                            <div class="search-filter-container">
+                                <div class="search-box">
+                                    <i class="fas fa-search search-icon"></i>
+                                    <input type="text" 
+                                           class="search-input" 
+                                           placeholder="Tìm kiếm theo tiêu đề blog..." 
+                                           id="searchInput"
+                                           oninput="this.form.submit()">
+                                </div>
+                                <script>
+                                    let typingTimer;
+                                    function debouncedSubmit() {
+                                      clearTimeout(typingTimer);
+                                      typingTimer = setTimeout(() => {
+                                        document.getElementById('searchInput').form.submit();
+                                      }, 1000); 
+                                    }
+                                </script>
+                                
+                                <select class="filter-select" id="statusFilter" onchange="this.form.submit()">
+                                    <option name="status" value="all" selected>Tất cả trạng thái</option>
+                                        
+                                            <option name="status" value="Draft"   >Draft</option>
+                                        
+                                            <option name="status" value="Private"   >Private</option>
+                                        
+                                            <option name="status" value="Public"   >Public</option>
+                                        
+                                </select>
+                                
+                                <select class="filter-select" id="sortFilter" onchange="this.form.submit()">
+                                    <option value="newest">Mới nhất</option>
+                                    <option value="oldest">Cũ nhất</option>
+                                    <option value="title_asc">Tiêu đề A-Z</option>
+                                    <option value="title_desc">Tiêu đề Z-A</option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="table-container">
+                        
+                            
+                                <table class="blog-table">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="3">Image</th>
+                                            <th >ID</th>
+                                            <th>Tiêu đề</th>
+                                            <th>Trạng thái</th>
+                                            <th>Cập nhật gần nhất</th>
+                                            <th style="text-align: center;" colspan="3">Hành động</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        
+                                            <tr>
+                                                <td colspan="3"><img src="beophi1.jpg" name="imageUlr" value="beophi1.jpg" alt="Anh blog" style="width: 80px; height: 44px;"></img></td>
+                                                <td class="blog-id">4</td>
+                                                <td class="blog-title">Chiến lược dinh dưỡng và luyện tập cho người béo phì cấp 1</td>
+                                                <td>
+                                                    <span class="status status-Public">
+                                                        Public
+                                                    </span>
+                                                </td>
+                                                <td class="date-time">
+                                                    2025-06-06 22:27:29
+                                                </td>
+                                                <td class="action-cell" style="text-align: center;">
+                                                    <a href="blogdetail?id=4" title="View">
+                                                        <ion-icon name="eye-outline"></ion-icon>
+                                                    </a>
+                                                    <a href="editBlog.do?id=4" title="Edit">
+                                                        <ion-icon name="pencil-outline"></ion-icon>
+                                                    </a>
+                                                    <a href="deleteblog?id=4"
+                                                       title="Delete"
+                                                       onclick="return confirm('Bạn có chắc chắn muốn xóa bài viết này?');">
+                                                        <ion-icon name="trash-outline" style="color: red"></ion-icon>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        
+                                            <tr>
+                                                <td colspan="3"><img src="beophi2.jpg" name="imageUlr" value="beophi2.jpg" alt="Anh blog" style="width: 80px; height: 44px;"></img></td>
+                                                <td class="blog-id">5</td>
+                                                <td class="blog-title">Hướng dẫn dinh dưỡng và lối sống cho người béo phì cấp 2: Giảm nguy cơ biến chứng</td>
+                                                <td>
+                                                    <span class="status status-Public">
+                                                        Public
+                                                    </span>
+                                                </td>
+                                                <td class="date-time">
+                                                    2025-06-06 22:27:29
+                                                </td>
+                                                <td class="action-cell" style="text-align: center;">
+                                                    <a href="blogdetail?id=5" title="View">
+                                                        <ion-icon name="eye-outline"></ion-icon>
+                                                    </a>
+                                                    <a href="editBlog.do?id=5" title="Edit">
+                                                        <ion-icon name="pencil-outline"></ion-icon>
+                                                    </a>
+                                                    <a href="deleteblog?id=5"
+                                                       title="Delete"
+                                                       onclick="return confirm('Bạn có chắc chắn muốn xóa bài viết này?');">
+                                                        <ion-icon name="trash-outline" style="color: red"></ion-icon>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        
+                                            <tr>
+                                                <td colspan="3"><img src="beophi3.jpg" name="imageUlr" value="beophi3.jpg" alt="Anh blog" style="width: 80px; height: 44px;"></img></td>
+                                                <td class="blog-id">6</td>
+                                                <td class="blog-title">Chăm sóc dinh dưỡng và y tế cho người béo phì cấp 3: Giải pháp toàn diện</td>
+                                                <td>
+                                                    <span class="status status-Private">
+                                                        Private
+                                                    </span>
+                                                </td>
+                                                <td class="date-time">
+                                                    2025-06-06 22:27:29
+                                                </td>
+                                                <td class="action-cell" style="text-align: center;">
+                                                    <a href="blogdetail?id=6" title="View">
+                                                        <ion-icon name="eye-outline"></ion-icon>
+                                                    </a>
+                                                    <a href="editBlog.do?id=6" title="Edit">
+                                                        <ion-icon name="pencil-outline"></ion-icon>
+                                                    </a>
+                                                    <a href="deleteblog?id=6"
+                                                       title="Delete"
+                                                       onclick="return confirm('Bạn có chắc chắn muốn xóa bài viết này?');">
+                                                        <ion-icon name="trash-outline" style="color: red"></ion-icon>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        
+                                            <tr>
+                                                <td colspan="3"><img src="bmi.jpg" name="imageUlr" value="bmi.jpg" alt="Anh blog" style="width: 80px; height: 44px;"></img></td>
+                                                <td class="blog-id">7</td>
+                                                <td class="blog-title">Tầm quan trọng của việc theo dõi chỉ số BMI trong chăm sóc sức khỏe cá nhân</td>
+                                                <td>
+                                                    <span class="status status-Private">
+                                                        Private
+                                                    </span>
+                                                </td>
+                                                <td class="date-time">
+                                                    2025-06-06 22:27:29
+                                                </td>
+                                                <td class="action-cell" style="text-align: center;">
+                                                    <a href="blogdetail?id=7" title="View">
+                                                        <ion-icon name="eye-outline"></ion-icon>
+                                                    </a>
+                                                    <a href="editBlog.do?id=7" title="Edit">
+                                                        <ion-icon name="pencil-outline"></ion-icon>
+                                                    </a>
+                                                    <a href="deleteblog?id=7"
+                                                       title="Delete"
+                                                       onclick="return confirm('Bạn có chắc chắn muốn xóa bài viết này?');">
+                                                        <ion-icon name="trash-outline" style="color: red"></ion-icon>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        
+                                            <tr>
+                                                <td colspan="3"><img src="tapluyen.jpg" name="imageUlr" value="tapluyen.jpg" alt="Anh blog" style="width: 80px; height: 44px;"></img></td>
+                                                <td class="blog-id">8</td>
+                                                <td class="blog-title">Tập luyện hiệu quả cho người có BMI trung bình: Giữ dáng và tăng cơ</td>
+                                                <td>
+                                                    <span class="status status-Public">
+                                                        Public
+                                                    </span>
+                                                </td>
+                                                <td class="date-time">
+                                                    2025-06-06 22:27:29
+                                                </td>
+                                                <td class="action-cell" style="text-align: center;">
+                                                    <a href="blogdetail?id=8" title="View">
+                                                        <ion-icon name="eye-outline"></ion-icon>
+                                                    </a>
+                                                    <a href="editBlog.do?id=8" title="Edit">
+                                                        <ion-icon name="pencil-outline"></ion-icon>
+                                                    </a>
+                                                    <a href="deleteblog?id=8"
+                                                       title="Delete"
+                                                       onclick="return confirm('Bạn có chắc chắn muốn xóa bài viết này?');">
+                                                        <ion-icon name="trash-outline" style="color: red"></ion-icon>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        
+                                            <tr>
+                                                <td colspan="3"><img src="treemgay.jpg" name="imageUlr" value="treemgay.jpg" alt="Anh blog" style="width: 80px; height: 44px;"></img></td>
+                                                <td class="blog-id">9</td>
+                                                <td class="blog-title">Dinh dưỡng hợp lý cho trẻ em nhẹ cân: Phòng tránh suy dinh dưỡng</td>
+                                                <td>
+                                                    <span class="status status-Public">
+                                                        Public
+                                                    </span>
+                                                </td>
+                                                <td class="date-time">
+                                                    2025-06-06 22:27:29
+                                                </td>
+                                                <td class="action-cell" style="text-align: center;">
+                                                    <a href="blogdetail?id=9" title="View">
+                                                        <ion-icon name="eye-outline"></ion-icon>
+                                                    </a>
+                                                    <a href="editBlog.do?id=9" title="Edit">
+                                                        <ion-icon name="pencil-outline"></ion-icon>
+                                                    </a>
+                                                    <a href="deleteblog?id=9"
+                                                       title="Delete"
+                                                       onclick="return confirm('Bạn có chắc chắn muốn xóa bài viết này?');">
+                                                        <ion-icon name="trash-outline" style="color: red"></ion-icon>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        
+                                            <tr>
+                                                <td colspan="3"><img src="giacngu.jpg" name="imageUlr" value="giacngu.jpg" alt="Anh blog" style="width: 80px; height: 44px;"></img></td>
+                                                <td class="blog-id">10</td>
+                                                <td class="blog-title">Vai trò của giấc ngủ và tinh thần trong việc duy trì cân nặng lành mạnh</td>
+                                                <td>
+                                                    <span class="status status-Public">
+                                                        Public
+                                                    </span>
+                                                </td>
+                                                <td class="date-time">
+                                                    2025-06-06 22:27:29
+                                                </td>
+                                                <td class="action-cell" style="text-align: center;">
+                                                    <a href="blogdetail?id=10" title="View">
+                                                        <ion-icon name="eye-outline"></ion-icon>
+                                                    </a>
+                                                    <a href="editBlog.do?id=10" title="Edit">
+                                                        <ion-icon name="pencil-outline"></ion-icon>
+                                                    </a>
+                                                    <a href="deleteblog?id=10"
+                                                       title="Delete"
+                                                       onclick="return confirm('Bạn có chắc chắn muốn xóa bài viết này?');">
+                                                        <ion-icon name="trash-outline" style="color: red"></ion-icon>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        
+                                            <tr>
+                                                <td colspan="3"><img src="gaynhe.jpg" name="imageUlr" value="gaynhe.jpg" alt="Anh blog" style="width: 80px; height: 44px;"></img></td>
+                                                <td class="blog-id">1</td>
+                                                <td class="blog-title">Chế độ dinh dưỡng khoa học cho người gầy: Hướng dẫn tăng cân hiệu quả và bền vững</td>
+                                                <td>
+                                                    <span class="status status-Draft">
+                                                        Draft
+                                                    </span>
+                                                </td>
+                                                <td class="date-time">
+                                                    2025-06-06 22:27:29
+                                                </td>
+                                                <td class="action-cell" style="text-align: center;">
+                                                    <a href="blogdetail?id=1" title="View">
+                                                        <ion-icon name="eye-outline"></ion-icon>
+                                                    </a>
+                                                    <a href="editBlog.do?id=1" title="Edit">
+                                                        <ion-icon name="pencil-outline"></ion-icon>
+                                                    </a>
+                                                    <a href="deleteblog?id=1"
+                                                       title="Delete"
+                                                       onclick="return confirm('Bạn có chắc chắn muốn xóa bài viết này?');">
+                                                        <ion-icon name="trash-outline" style="color: red"></ion-icon>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        
+                                            <tr>
+                                                <td colspan="3"><img src="binhthuong.jpg" name="imageUlr" value="binhthuong.jpg" alt="Anh blog" style="width: 80px; height: 44px;"></img></td>
+                                                <td class="blog-id">2</td>
+                                                <td class="blog-title">Duy trì vóc dáng khỏe mạnh: Bí quyết dinh dưỡng và lối sống cho người có BMI bình thường</td>
+                                                <td>
+                                                    <span class="status status-Draft">
+                                                        Draft
+                                                    </span>
+                                                </td>
+                                                <td class="date-time">
+                                                    2025-06-06 22:27:29
+                                                </td>
+                                                <td class="action-cell" style="text-align: center;">
+                                                    <a href="blogdetail?id=2" title="View">
+                                                        <ion-icon name="eye-outline"></ion-icon>
+                                                    </a>
+                                                    <a href="editBlog.do?id=2" title="Edit">
+                                                        <ion-icon name="pencil-outline"></ion-icon>
+                                                    </a>
+                                                    <a href="deleteblog?id=2"
+                                                       title="Delete"
+                                                       onclick="return confirm('Bạn có chắc chắn muốn xóa bài viết này?');">
+                                                        <ion-icon name="trash-outline" style="color: red"></ion-icon>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        
+                                            <tr>
+                                                <td colspan="3"><img src="thua_can.jpg" name="imageUlr" value="thua_can.jpg" alt="Anh blog" style="width: 80px; height: 44px;"></img></td>
+                                                <td class="blog-id">3</td>
+                                                <td class="blog-title">Quản lý cân nặng hiệu quả cho người thừa cân: Dinh dưỡng và lối sống</td>
+                                                <td>
+                                                    <span class="status status-Draft">
+                                                        Draft
+                                                    </span>
+                                                </td>
+                                                <td class="date-time">
+                                                    2025-06-06 22:27:29
+                                                </td>
+                                                <td class="action-cell" style="text-align: center;">
+                                                    <a href="blogdetail?id=3" title="View">
+                                                        <ion-icon name="eye-outline"></ion-icon>
+                                                    </a>
+                                                    <a href="editBlog.do?id=3" title="Edit">
+                                                        <ion-icon name="pencil-outline"></ion-icon>
+                                                    </a>
+                                                    <a href="deleteblog?id=3"
+                                                       title="Delete"
+                                                       onclick="return confirm('Bạn có chắc chắn muốn xóa bài viết này?');">
+                                                        <ion-icon name="trash-outline" style="color: red"></ion-icon>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        
+                                    </tbody>
+                                
+                                
+                            
+                        </table>
+                    </div>
+                    <!-- pagnent -->
+                    <div style="display: flex ; justify-content: space-between ; padding: 10px">
+                        <div style="margin: 30px 0 20px">Show 10 of 12 items</div>
+                       
+                        <div class="pagination">
+                            
+                            
+                                
+                                    
+                                    
+                                        <a href="listblog?index=1">1</a>
+                                    
+                                    
+                                
+                            
+                                
+                                    
+                                    
+                                        <a href="listblog?index=2">2</a>
+                                    
+                                    
+                                
+                            
+                            
+                        </div>
+                        
+                    
+                </div>
+                 </div>
+            </div>
+        </div>
+
+
+        <!-- =========== Scripts =========  -->
+        <script src="../JS/Nutritionist/home.js"></script>
+        <script src="../JS/Nutritionist/blog.js"></script>
+
+        <!-- ====== ionicons ======= -->
+        <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+        <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+    </body>
+
+</html>

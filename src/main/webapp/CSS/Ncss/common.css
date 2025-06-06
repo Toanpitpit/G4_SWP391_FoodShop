@@ -241,6 +241,7 @@ body {
   left: 300px;
   min-height: 100vh;
   background: linear-gradient(135deg, var(--white) 0%, #f8f9fa 100%);
+  background-color: #0bc3d0;
   transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   animation: fadeInRight 0.6s ease;
 }
@@ -263,6 +264,7 @@ body {
   padding: 0 20px;
   background: var(--white);
   backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px); 
   box-shadow: 0 2px 20px var(--shadow-light);
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   position: sticky;

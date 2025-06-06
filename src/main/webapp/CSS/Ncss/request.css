@@ -1,4 +1,8 @@
 /* Blog Detail Styles */
+.main{
+    background-color: #1976d2;
+    padding: 10px 10px;
+}
 .blog-container {
     max-width: 1200px;
     margin: 20px auto;

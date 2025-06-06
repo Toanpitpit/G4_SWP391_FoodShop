@@ -12,7 +12,7 @@
         <link rel="stylesheet" href="../CSS/Ncss/common.css">
         <link rel="stylesheet" href="../CSS/Ncss/createblog.css">
         <!--==============linkJS===========-->
-        <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/FixitUpOrg/ckeditor5-custom-build-full/ckeditor.js"></script>
 
     </head>
 
@@ -52,7 +52,7 @@
                             <span class="icon">
                                 <ion-icon name="chatbubble-outline"></ion-icon>
                             </span>
-                            <span class="title">My    Blogs</span>
+                            <span class="title">My Blogs</span>
                         </a>
                     </li>
 
@@ -134,12 +134,18 @@
                             <div class="form-group">
                                 <label>Status</label>
                                 <div class="status-options">
-                                    <c:forEach var="s" items="${statusList}">
-                                        <label class="radio-inline">
-                                            <input type="radio" name="status" value="${s}" ${s == status ? 'checked' : ''} />
-                                            ${s}
-                                        </label>
-                                    </c:forEach>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="status" value="Public" ${s == status ? 'checked' : ''} />
+                                        Public
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="status" value="Draft" ${s == status ? 'checked' : ''} />
+                                        Draft
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="status" value="Private" ${s == status ? 'checked' : ''} />
+                                        Private
+                                    </label>
                                 </div>
                             </div>
 
@@ -162,7 +168,7 @@
                                 toolbar: {
                                     items: [
                                         'heading', '|',
-                                        'bold', 'italic', 'link', '|',
+                                        'bold', 'italic', 'strikethrough', 'highlight', 'link', '|',
                                         'bulletedList', 'numberedList', '|',
                                         'insertTable', 'tableColumn', 'tableRow', 'mergeTableCells', 'tableProperties', 'tableCellProperties', '|',
                                         'undo', 'redo'
@@ -173,11 +179,24 @@
                                         'tableColumn', 'tableRow', 'mergeTableCells',
                                         'tableProperties', 'tableCellProperties'
                                     ]
+                                },
+                                highlight: {
+                                    options: [
+                                        {
+                                            model: 'yellowMarker',
+                                            class: 'marker-yellow',
+                                            title: 'Yellow marker',
+                                            color: 'var(--ck-highlight-marker-yellow)',
+                                            type: 'marker'
+                                        },
+                                                // Bạn có thể thêm các màu khác ở đây
+                                    ]
                                 }
                             })
                             .catch(error => {
                                 console.error(error);
                             });
+
 
                 </script>
 

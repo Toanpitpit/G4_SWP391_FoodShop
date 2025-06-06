@@ -63,18 +63,13 @@ public class DeleteBlogsServerLet extends HttpServlet {
             String path = b_dao.getPathBlogByID (id);
             String basePath = "D:/Semester 5/SWP391/Project/G4_SWP391_FoodShop-master/G4_SWP391_FoodShop-master/src/main/webapp/";
             String realPath = basePath + path;
-            try {
-                b_dao.deleteImage (realPath);
-//                out.print (path);
-                boolean check = b_dao.deleteBlogByID (id);
-                if (check) {
-                    session.setAttribute ("mess", "Delete Sucsessfuly");
-                } else {
-                    session.setAttribute ("Errmess", "Fail to detele");
-
-                }
-            } catch (SQLException ex) {
-                Logger.getLogger (DeleteBlogsServerLet.class.getName ()).log (Level.SEVERE, null, ex);
+            b_dao.deleteImage (realPath);
+            boolean check = b_dao.deleteBlogByID (id);
+            if (check) {
+                session.setAttribute ("mess", "Delete Sucsessfuly");
+            } else {
+                session.setAttribute ("Errmess", "Fail to detele");
+                
             }
             response.sendRedirect ("listblog");
         }

@@ -1,149 +1,413 @@
-<%-- 
-    Document   : FoodDetail
-    Created on : May 31, 2025, 11:35:20 PM
-    Author     : Admin
---%>
-
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog Management</title>
+    <title>Blog Management Dashboard</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
+        @import url("https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap");
+        @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap");
+
         * {
+            font-family: "Ubuntu", sans-serif;
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
+        :root {
+            --green: #2ecc71;
+            --green-hover: #27ae60;
+            --white: #fff;
+            --gray: #f5f5f5;
+            --black1: #222;
+            --black2: #999;
+            --primary: #4a90e2;
+            --primary-hover: #357ab7;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --info: #17a2b8;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --shadow-light: rgba(0, 0, 0, 0.05);
+            --shadow-medium: rgba(0, 0, 0, 0.1);
+            --shadow-heavy: rgba(0, 0, 0, 0.15);
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background-color: #f8fafc;
-            color: #334155;
+            min-height: 100vh;
+            overflow-x: hidden;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
         }
 
-        .blog-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 24px;
+        .container {
+            position: relative;
+            width: 100%;
         }
 
-        /* Header Section */
-        .header-section {
+        /* =============== Navigation ================ */
+        .navigation {
+            position: fixed;
+            width: 300px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--green) 0%, var(--green-hover) 100%);
+            border-left: 10px solid var(--green);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+            z-index: 1000;
+            box-shadow: 4px 0 20px var(--shadow-medium);
+        }
+        .navigation.active {
+            width: 80px;
+        }
+
+        .navigation ul {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding-top: 20px;
+        }
+
+        .navigation ul li {
+            position: relative;
+            width: 100%;
+            list-style: none;
+            border-top-left-radius: 30px;
+            border-bottom-left-radius: 30px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .navigation ul li:hover,
+        .navigation ul li.hovered {
+            background-color: var(--white);
+            transform: translateX(5px);
+        }
+
+        .navigation ul li:nth-child(1) {
+            margin-bottom: 40px;
+            pointer-events: none;
+        }
+
+        .navigation ul li a {
+            position: relative;
+            display: block;
+            width: 100%;
+            display: flex;
+            text-decoration: none;
+            color: var(--white);
+            transition: all 0.3s ease;
+        }
+        .navigation ul li:hover a,
+        .navigation ul li.hovered a {
+            color: var(--green);
+        }
+
+        .navigation ul li a .icon {
+            position: relative;
+            display: block;
+            min-width: 60px;
+            height: 60px;
+            line-height: 75px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        .navigation ul li a .icon i {
+            font-size: 1.75rem;
+            transition: all 0.3s ease;
+        }
+
+        .navigation ul li:hover a .icon {
+            transform: scale(1.1);
+        }
+
+        .navigation ul li a .title {
+            position: relative;
+            display: block;
+            padding: 0 10px;
+            height: 60px;
+            line-height: 60px;
+            text-align: start;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        /* ===================== Main ===================== */
+        .main {
+            position: absolute;
+            width: calc(100% - 300px);
+            left: 300px;
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--white) 0%, #f8f9fa 100%);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .main.active {
+            width: calc(100% - 80px);
+            left: 80px;
+        }
+
+        .topbar {
+            width: 100%;
+            height: 80px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 24px;
-            flex-wrap: wrap;
-            gap: 16px;
+            padding: 0 20px;
+            background: var(--white);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px var(--shadow-light);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: all 0.3s ease;
         }
 
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .search-container {
+        .toggle {
             position: relative;
+            width: 60px;
+            height: 60px;
             display: flex;
+            justify-content: center;
             align-items: center;
-        }
-
-        .search-input {
-            padding: 10px 16px 10px 40px;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            width: 280px;
-            font-size: 14px;
-            transition: all 0.2s;
-            background: white;
-        }
-
-        .search-input:focus {
-            outline: none;
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
-
-        .search-icon {
-            position: absolute;
-            left: 12px;
-            color: #94a3b8;
-            font-size: 16px;
-        }
-
-        .view-toggle {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: white;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            padding: 8px 12px;
-            font-size: 14px;
-            color: #64748b;
-        }
-
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .btn {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 16px;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 500;
-            text-decoration: none;
-            border: none;
+            font-size: 2.5rem;
             cursor: pointer;
-            transition: all 0.2s;
+            border-radius: 15px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            color: var(--black1);
         }
 
-        .btn-primary {
-            background: #3b82f6;
-            color: white;
+        .toggle:hover {
+            background: var(--green);
+            color: var(--white);
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
         }
 
-        .btn-primary:hover {
-            background: #2563eb;
-            transform: translateY(-1px);
+        .search {
+            position: relative;
+            width: 400px;
+            margin: 0 10px;
+            transition: all 0.3s ease;
         }
 
-        .btn-secondary {
-            background: white;
-            color: #64748b;
-            border: 2px solid #e2e8f0;
+        .search label {
+            position: relative;
+            width: 100%;
         }
 
-        .btn-secondary:hover {
-            background: #f8fafc;
+        .search label input {
+            width: 100%;
+            height: 50px;
+            border-radius: 25px;
+            padding: 5px 20px;
+            padding-left: 45px;
+            font-size: 16px;
+            outline: none;
+            border: 2px solid transparent;
+            background: var(--gray);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 10px var(--shadow-light);
         }
 
-        .filter-btn {
-            background: white;
-            color: #64748b;
-            border: 2px solid #e2e8f0;
-            padding: 10px;
-            min-width: 80px;
+        .search label input:focus {
+            border-color: var(--green);
+            background: var(--white);
+            box-shadow: 0 4px 20px rgba(46, 204, 113, 0.2);
         }
 
-        /* Table Styles */
-        .table-container {
-            background: white;
-            border-radius: 12px;
+        .search label i {
+            position: absolute;
+            top: 50%;
+            left: 15px;
+            transform: translateY(-50%);
+            font-size: 1.3rem;
+            color: var(--black2);
+            transition: all 0.3s ease;
+        }
+
+        .user {
+            position: relative;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
             overflow: hidden;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            margin-bottom: 24px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 3px solid transparent;
+            box-shadow: 0 4px 15px var(--shadow-light);
+            background: var(--green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .user:hover {
+            transform: scale(1.1);
+            border-color: var(--green);
+            box-shadow: 0 6px 25px rgba(46, 204, 113, 0.3);
+        }
+
+        /* =============== Blog Management Content ================ */
+        .blog-management {
+            padding: 30px;
+            min-height: calc(100vh - 80px);
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 25px 30px;
+            background: linear-gradient(135deg, var(--white) 0%, #f8fafc 100%);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin: 0;
+            background: linear-gradient(135deg, var(--green), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .create-blog-btn {
+            background: linear-gradient(135deg, var(--green), var(--green-hover));
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 15px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(46, 204, 113, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .create-blog-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(46, 204, 113, 0.4);
+        }
+
+        /* Filter Section */
+        .filters-section {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .filters-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .filters-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .filters-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr auto;
+            gap: 20px;
+            align-items: end;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .filter-label {
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 14px;
+        }
+
+        .filter-input {
+            height: 45px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 0 15px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            background: var(--white);
+        }
+
+        .filter-input:focus {
+            outline: none;
+            border-color: var(--green);
+            box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.1);
+        }
+
+        .filter-select {
+            height: 45px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 0 15px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            background: var(--white);
+            cursor: pointer;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--green);
+            box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.1);
+        }
+
+        .clear-filters-btn {
+            height: 45px;
+            background: linear-gradient(135deg, #fc8181, #f687b3);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 0 20px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .clear-filters-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(252, 129, 129, 0.3);
+        }
+
+        /* Blog Table */
+        .blog-table-container {
+            background: var(--white);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            margin-bottom: 25px;
         }
 
         .blog-table {
@@ -152,583 +416,497 @@
         }
 
         .blog-table thead {
-            background: #f8fafc;
+            background: linear-gradient(135deg, var(--primary), var(--primary-hover));
         }
 
-        .blog-table th {
-            padding: 16px;
-            text-align: left;
+        .blog-table thead th {
+            color: white;
             font-weight: 600;
             font-size: 14px;
-            color: #475569;
-            border-bottom: 1px solid #e2e8f0;
+            padding: 20px 15px;
+            text-align: left;
+            position: relative;
+            cursor: pointer;
+            transition: background 0.3s ease;
         }
 
-        .blog-table td {
-            padding: 16px;
-            border-bottom: 1px solid #f1f5f9;
-            vertical-align: middle;
+        .blog-table thead th:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .blog-table thead th.sortable {
+            padding-right: 35px;
+        }
+
+        .blog-table thead th .sort-icon {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0.6;
+            transition: all 0.3s ease;
+        }
+
+        .blog-table thead th:hover .sort-icon {
+            opacity: 1;
+        }
+
+        .blog-table thead th.sort-asc .sort-icon {
+            opacity: 1;
+            color: #ffd700;
+        }
+
+        .blog-table thead th.sort-desc .sort-icon {
+            opacity: 1;
+            color: #ffd700;
+            transform: translateY(-50%) rotate(180deg);
         }
 
         .blog-table tbody tr {
-            transition: background-color 0.2s;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid #f1f5f9;
         }
 
         .blog-table tbody tr:hover {
-            background-color: #f8fafc;
+            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+            transform: scale(1.01);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
 
-        /* Avatar Styles */
-        .client-cell {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
+        .blog-table tbody td {
+            padding: 18px 15px;
             font-size: 14px;
-            color: white;
+            color: var(--dark);
+            vertical-align: middle;
         }
 
-        .avatar-1 { background: #3b82f6; }
-        .avatar-2 { background: #ef4444; }
-        .avatar-3 { background: #10b981; }
-        .avatar-4 { background: #f59e0b; }
-        .avatar-5 { background: #8b5cf6; }
-        .avatar-6 { background: #06b6d4; }
-        .avatar-7 { background: #f97316; }
-        .avatar-8 { background: #84cc16; }
-
-        .client-name {
-            font-weight: 500;
-            color: #1e293b;
+        .blog-id {
+            font-weight: 600;
+            color: var(--primary);
         }
 
-        /* Blog Image */
-        .blog-image {
-            width: 60px;
-            height: 36px;
-            border-radius: 6px;
-            object-fit: cover;
-            border: 1px solid #e2e8f0;
+        .blog-title {
+            font-weight: 600;
+            max-width: 250px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
-        /* Status Badges */
+        .blog-author {
+            color: var(--black2);
+        }
+
+        .blog-date {
+            color: var(--black2);
+            font-size: 13px;
+        }
+
         .status-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
+            display: inline-block;
             padding: 6px 12px;
             border-radius: 20px;
             font-size: 12px;
-            font-weight: 500;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        .status-recent {
-            background: #dcfce7;
-            color: #166534;
+        .status-public {
+            background: rgba(40, 167, 69, 0.1);
+            color: var(--success);
+            border: 1px solid rgba(40, 167, 69, 0.2);
         }
 
-        .status-overdue {
-            background: #fee2e2;
-            color: #991b1b;
+        .status-draft {
+            background: rgba(255, 193, 7, 0.1);
+            color: #e6a800;
+            border: 1px solid rgba(255, 193, 7, 0.2);
         }
 
-        .status-remaining {
-            background: #fef3c7;
-            color: #92400e;
+        .status-private {
+            background: rgba(220, 53, 69, 0.1);
+            color: var(--danger);
+            border: 1px solid rgba(220, 53, 69, 0.2);
         }
 
-        .status-responded {
-            background: #dbeafe;
-            color: #1e40af;
+        .bmi-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 11px;
+            font-weight: 600;
+            background: rgba(74, 144, 226, 0.1);
+            color: var(--primary);
+            border: 1px solid rgba(74, 144, 226, 0.2);
         }
 
-        .status-closed {
-            background: #f1f5f9;
-            color: #475569;
-        }
-
-        /* Priority Indicators */
-        .priority-indicator {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 14px;
-            font-weight: 500;
-        }
-
-        .priority-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-        }
-
-        .priority-urgent .priority-dot { background: #ef4444; }
-        .priority-high .priority-dot { background: #f97316; }
-        .priority-medium .priority-dot { background: #3b82f6; }
-        .priority-low .priority-dot { background: #10b981; }
-
-        /* Actions */
         .actions-cell {
             display: flex;
-            align-items: center;
             gap: 8px;
+            justify-content: center;
         }
 
         .action-btn {
-            padding: 8px;
+            width: 35px;
+            height: 35px;
             border: none;
-            background: none;
-            color: #64748b;
+            border-radius: 8px;
             cursor: pointer;
-            border-radius: 6px;
-            transition: all 0.2s;
+            transition: all 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 14px;
+        }
+
+        .view-btn {
+            background: rgba(23, 162, 184, 0.1);
+            color: var(--info);
+            border: 1px solid rgba(23, 162, 184, 0.2);
+        }
+
+        .edit-btn {
+            background: rgba(255, 193, 7, 0.1);
+            color: #e6a800;
+            border: 1px solid rgba(255, 193, 7, 0.2);
+        }
+
+        .delete-btn {
+            background: rgba(220, 53, 69, 0.1);
+            color: var(--danger);
+            border: 1px solid rgba(220, 53, 69, 0.2);
         }
 
         .action-btn:hover {
-            background: #f1f5f9;
-            color: #1e293b;
-        }
-
-        .action-btn.delete:hover {
-            background: #fee2e2;
-            color: #dc2626;
-        }
-
-        /* Agent Dropdown */
-        .agent-select {
-            background: none;
-            border: none;
-            color: #64748b;
-            cursor: pointer;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-
-        .agent-select:hover {
-            background: #f1f5f9;
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
 
         /* Pagination */
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 30px;
+        }
+
         .pagination {
             display: flex;
+            gap: 5px;
             align-items: center;
-            justify-content: center;
-            gap: 8px;
-            margin-top: 24px;
         }
 
-        .pagination a,
-        .pagination span {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-width: 36px;
-            height: 36px;
-            padding: 0 12px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.2s;
-        }
-
-        .pagination a {
-            color: #64748b;
-            border: 1px solid #e2e8f0;
-            background: white;
-        }
-
-        .pagination a:hover {
-            background: #f8fafc;
-            border-color: #cbd5e1;
-        }
-
-        .pagination .current {
-            background: #3b82f6;
-            color: white;
-            border: 1px solid #3b82f6;
-        }
-
-        .pagination .ellipsis {
-            color: #94a3b8;
-            border: none;
-            background: none;
-        }
-
-        /* Sidebar Filter */
-        .main-content {
-            display: flex;
-            gap: 24px;
-        }
-
-        .content-area {
-            flex: 1;
-        }
-
-        .filter-sidebar {
-            width: 280px;
-            background: white;
-            border-radius: 12px;
-            padding: 24px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            height: fit-content;
-        }
-
-        .filter-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: #1e293b;
-            margin-bottom: 20px;
-        }
-
-        .filter-group {
-            margin-bottom: 24px;
-        }
-
-        .filter-label {
-            display: block;
-            font-size: 14px;
-            font-weight: 500;
-            color: #374151;
-            margin-bottom: 8px;
-        }
-
-        .filter-select {
-            width: 100%;
-            padding: 10px 12px;
+        .pagination-btn {
+            min-width: 40px;
+            height: 40px;
             border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 14px;
-            background: white;
-            color: #374151;
-        }
-
-        .filter-select:focus {
-            outline: none;
-            border-color: #3b82f6;
-        }
-
-        .update-btn {
-            width: 100%;
-            background: #3b82f6;
-            color: white;
-            border: none;
-            padding: 12px;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 500;
+            background: var(--white);
+            color: var(--dark);
+            border-radius: 10px;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            text-decoration: none;
         }
 
-        .update-btn:hover {
-            background: #2563eb;
+        .pagination-btn:hover {
+            border-color: var(--green);
+            background: var(--green);
+            color: white;
+            transform: translateY(-2px);
         }
 
-        .no-data {
-            text-align: center;
-            padding: 48px 24px;
-            color: #64748b;
-            font-style: italic;
+        .pagination-btn.active {
+            background: var(--green);
+            border-color: var(--green);
+            color: white;
+        }
+
+        .pagination-btn.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .pagination-btn.disabled:hover {
+            transform: none;
+            border-color: #e2e8f0;
+            background: var(--white);
+            color: var(--dark);
+        }
+
+        /* Success Message */
+        .success-message {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: linear-gradient(135deg, var(--success), #20c997);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(40, 167, 69, 0.3);
+            z-index: 1001;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: slideInRight 0.5s ease, fadeOut 0.5s ease 4.5s forwards;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .filters-row {
+                grid-template-columns: 1fr 1fr;
+                gap: 15px;
+            }
+            
+            .filter-group:nth-child(3),
+            .filter-group:nth-child(4) {
+                grid-column: span 2;
+            }
         }
 
         @media (max-width: 768px) {
-            .header-section {
-                flex-direction: column;
-                align-items: stretch;
+            .main {
+                width: 100%;
+                left: 0;
             }
-
-            .main-content {
-                flex-direction: column;
+            
+            .navigation {
+                transform: translateX(-100%);
             }
-
-            .filter-sidebar {
+            
+            .navigation.active {
+                transform: translateX(0);
                 width: 100%;
             }
-
-            .search-input {
-                width: 100%;
+            
+            .filters-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .blog-table-container {
+                overflow-x: auto;
+            }
+            
+            .blog-table {
+                min-width: 800px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="blog-container">
-        <!-- Header Section -->
-        <div class="header-section">
-            <div class="header-left">
-                <h2 style="color: #1e293b; font-size: 20px; font-weight: 600;">All tickets</h2>
-                <div class="search-container">
-                    <i class="fas fa-search search-icon"></i>
-                    <input type="text" class="search-input" placeholder="Search by name" id="blogSearchInput">
-                </div>
-                <div class="view-toggle">
-                    <span>Table View</span>
-                    <i class="fas fa-chevron-down"></i>
-                </div>
-            </div>
-            <div class="header-right">
-                <a href="#" class="btn btn-primary">
-                    <i class="fas fa-plus"></i>
-                    New
-                </a>
-                <a href="#" class="btn btn-secondary">
-                    <i class="fas fa-download"></i>
-                    Export
-                </a>
-                <button class="btn filter-btn">
-                    <i class="fas fa-ellipsis-h"></i>
-                </button>
-            </div>
+    <div class="container">
+        <!-- Navigation -->
+        <div class="navigation">
+            <ul>
+                <li>
+                    <a href="#">
+                        <span class="icon">
+                            <i class="fas fa-utensils"></i>
+                        </span>
+                        <span class="title">NutriDash</span>
+                    </a>
+                </li>
+                <li class="hovered">
+                    <a href="#">
+                        <span class="icon">
+                            <i class="fas fa-home"></i>
+                        </span>
+                        <span class="title">Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="icon">
+                            <i class="fas fa-users"></i>
+                        </span>
+                        <span class="title">Customers</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="icon">
+                            <i class="fas fa-blog"></i>
+                        </span>
+                        <span class="title">Blogs</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="icon">
+                            <i class="fas fa-calculator"></i>
+                        </span>
+                        <span class="title">BMI Calculator</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="icon">
+                            <i class="fas fa-chart-bar"></i>
+                        </span>
+                        <span class="title">Analytics</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="icon">
+                            <i class="fas fa-cog"></i>
+                        </span>
+                        <span class="title">Settings</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="icon">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </span>
+                        <span class="title">Sign Out</span>
+                    </a>
+                </li>
+            </ul>
         </div>
 
-        <div class="main-content">
-            <!-- Main Content Area -->
-            <div class="content-area">
-                <div class="table-container">
-                    <!-- JSP Logic preserved -->
-                    <c:choose>
-                        <c:when test="${not empty lstB}">
-                            <table class="blog-table">
-                                <thead>
-                                    <tr>
-                                        <th style="width: 40px;">
-                                            <input type="checkbox" style="width: 16px; height: 16px;">
-                                        </th>
-                                        <th>Client</th>
-                                        <th>Subject</th>
-                                        <th>Status</th>
-                                        <th>Priority</th>
-                                        <th>Agent</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <c:forEach var="blog" items="${lstB}" varStatus="loop">
-                                        <tr>
-                                            <td>
-                                                <input type="checkbox" style="width: 16px; height: 16px;">
-                                            </td>
-                                            <td>
-                                                <div class="client-cell">
-                                                    <div class="avatar avatar-${(loop.index % 8) + 1}">
-                                                        ${blog.title.substring(0, 1).toUpperCase()}
-                                                    </div>
-                                                    <img src="${blog.imageUlr}" alt="Blog image" class="blog-image">
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div style="font-weight: 500; color: #3b82f6; cursor: pointer;">
-                                                    ${blog.title}
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <span class="status-badge status-${blog.status.toLowerCase()}">
-                                                    ${blog.status}
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <div class="priority-indicator priority-${blog.status.toLowerCase()}">
-                                                    <div class="priority-dot"></div>
-                                                    ${blog.status}
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <select class="agent-select">
-                                                    <option>Select Agent</option>
-                                                    <option>Anindya</option>
-                                                    <option>Nowrin</option>
-                                                    <option>Khalid</option>
-                                                </select>
-                                                <div class="actions-cell" style="display: inline-flex; margin-left: 12px;">
-                                                    <a href="viewBlog.do?id=${blog.bID}" class="action-btn" title="View">
-                                                        <i class="fas fa-eye"></i>
-                                                    </a>
-                                                    <a href="editBlog.do?id=${blog.bID}" class="action-btn" title="Edit">
-                                                        <i class="fas fa-edit"></i>
-                                                    </a>
-                                                    <a href="deleteblog?id=${blog.bID}" class="action-btn delete" title="Delete"
-                                                       onclick="return confirm('Bạn có chắc chắn muốn xóa bài viết này?');">
-                                                        <i class="fas fa-trash"></i>
-                                                    </a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </c:forEach>
-                                </tbody>
-                            </table>
-                        </c:when>
-                        <c:otherwise>
-                            <div class="no-data">
-                                Không có bài viết nào.
-                            </div>
-                        </c:otherwise>
-                    </c:choose>
+        <!-- Main Content -->
+        <div class="main">
+            <!-- Topbar -->
+            <div class="topbar">
+                <div class="toggle">
+                    <i class="fas fa-bars"></i>
                 </div>
-
-                <!-- Pagination preserved -->
-                <c:if test="${totalPages > 1}">
-                    <div class="pagination">
-                        <c:if test="${currentPage > 1}">
-                            <a href="?page=${currentPage - 1}" class="prev">
-                                <i class="fas fa-chevron-left"></i>
-                            </a>
-                        </c:if>
-                        <c:forEach var="i" begin="1" end="${totalPages}" varStatus="status">
-                            <c:choose>
-                                <c:when test="${i == currentPage}">
-                                    <span class="current">${i}</span>
-                                </c:when>
-                                <c:when test="${i <= currentPage + 2 && i >= currentPage - 2}">
-                                    <a href="listblog?index=${i}">${i}</a>
-                                </c:when>
-                                <c:when test="${i == currentPage - 3 || i == currentPage + 3}">
-                                    <span class="ellipsis">...</span>
-                                </c:when>
-                            </c:choose>
-                        </c:forEach>
-                        <c:if test="${currentPage < totalPages}">
-                            <a href="listblog?index=${currentPage + 1}" class="next">
-                                <i class="fas fa-chevron-right"></i>
-                            </a>
-                        </c:if>
-                    </div>
-                </c:if>
+                <div class="search">
+                    <label>
+                        <input type="text" placeholder="Search here">
+                        <i class="fas fa-search"></i>
+                    </label>
+                </div>
+                <div class="user">
+                    <i class="fas fa-user"></i>
+                </div>
             </div>
 
-            <!-- Filter Sidebar -->
-            <div class="filter-sidebar">
-                <h3 class="filter-title">Filter</h3>
-                
-                <div class="filter-group">
-                    <label class="filter-label">Priority</label>
-                    <select class="filter-select">
-                        <option>High</option>
-                        <option>Medium</option>
-                        <option>Low</option>
-                        <option>Urgent</option>
-                    </select>
+            <!-- Blog Management Content -->
+            <div class="blog-management">
+                <!-- Page Header -->
+                <div class="page-header">
+                    <h1 class="page-title">Blog Management</h1>
+                    <button class="create-blog-btn" onclick="createBlog()">
+                        <i class="fas fa-plus"></i>
+                        Create New Blog
+                    </button>
                 </div>
 
-                <div class="filter-group">
-                    <label class="filter-label">Source</label>
-                    <select class="filter-select">
-                        <option>Facebook</option>
-                        <option>Email</option>
-                        <option>Phone</option>
-                        <option>Website</option>
-                    </select>
-                </div>
-
-                <div class="filter-group">
-                    <label class="filter-label">Status</label>
-                    <select class="filter-select" id="filterStatus" name="status">
-                        <option>None</option>
-                        <c:forEach var="status" items="${statusList}">
-                            <option value="${status}" <c:if test="${status == status}">selected</c:if>>${status}</option>
-                        </c:forEach>   
-                    </select>
-                </div>
-
-                <div class="filter-group">
-                    <label class="filter-label">Group</label>
-                    <select class="filter-select">
-                        <option>My Group</option>
-                        <option>Support</option>
-                        <option>Sales</option>
-                    </select>
-                </div>
-
-                <div class="filter-group">
-                    <label class="filter-label">Agent</label>
-                    <select class="filter-select">
-                        <option>Khalid</option>
-                        <option>Anindya</option>
-                        <option>Nowrin</option>
-                    </select>
-                </div>
-
-                <div class="filter-group">
-                    <label class="filter-label">Type</label>
-                    <select class="filter-select">
-                        <option>None</option>
-                        <option>Bug</option>
-                        <option>Feature</option>
-                        <option>Support</option>
-                    </select>
-                </div>
-
-                <div class="filter-group">
-                    <label class="filter-label">Category</label>
-                    <select class="filter-select">
-                        <option>Engineering</option>
-                        <option>Marketing</option>
-                        <option>Sales</option>
-                    </select>
-                </div>
-
-                <div class="filter-group">
-                    <label class="filter-label">Tags</label>
-                    <select class="filter-select">
-                        <option>Complaint</option>
-                        <option>Feature Request</option>
-                        <option>Bug Report</option>
-                    </select>
-                </div>
-
-                <div class="filter-group">
-                    <label class="filter-label">Subscription</label>
-                    <select class="filter-select">
-                        <option>Active</option>
-                        <option>Inactive</option>
-                        <option>Suspended</option>
-                    </select>
-                </div>
-
-                <!-- BMI Category preserved -->
-                <div class="filter-group">
-                    <label class="filter-label">BMI Category</label>
-                    <div class="bmi-list">
-                        <c:forEach var="bmi" items="${lstBMI}">
-                            <label class="bmi-item">
-                                <div class="bmi-item <c:if test='${bmi.bmiID == selectedBmiId}'>selected</c:if>'" 
-                                     data-id="${bmi.bmiID}">
-                                    ${bmi.classification}
-                                </div>
-                            </label>
-                        </c:forEach>
+                <!-- Filters Section -->
+                <div class="filters-section">
+                    <div class="filters-header">
+                        <h3 class="filters-title">
+                            <i class="fas fa-filter"></i>
+                            Filters & Search
+                        </h3>
+                    </div>
+                    <div class="filters-row">
+                        <div class="filter-group">
+                            <label class="filter-label">Search by Title/Author</label>
+                            <input type="text" class="filter-input" id="searchInput" placeholder="Enter title or author name..." onkeyup="filterBlogs()">
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">Status</label>
+                            <select class="filter-select" id="statusFilter" onchange="filterBlogs()">
+                                <option value="">All Status</option>
+                                <option value="Public">Public</option>
+                                <option value="Draft">Draft</option>
+                                <option value="Private">Private</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">BMI Category</label>
+                            <select class="filter-select" id="bmiFilter" onchange="filterBlogs()">
+                                <option value="">All Categories</option>
+                                <option value="Underweight">Underweight</option>
+                                <option value="Normal">Normal Weight</option>
+                                <option value="Overweight">Overweight</option>
+                                <option value="Obese">Obese</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <button class="clear-filters-btn" onclick="clearFilters()">
+                                <i class="fas fa-times"></i>
+                                Clear
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <button class="update-btn">Update</button>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // Preserve original search functionality
-        document.getElementById('blogSearchInput').addEventListener('input', function() {
-            // Add your search logic here
-            console.log('Search:', this.value);
-        });
-
-        // Filter functionality
-        document.getElementById('filterStatus').addEventListener('change', function() {
-            // Add your filter logic here
-            console.log('Filter status:', this.value);
-        });
-    </script>
-</body>
-</html>
+                <!-- Blog Table -->
+                <div class="blog-table-container">
+                    <table class="blog-table">
+                        <thead>
+                            <tr>
+                                <th class="sortable" onclick="sortTable('id')">
+                                    ID
+                                    <i class="fas fa-sort sort-icon"></i>
+                                </th>
+                                <th class="sortable" onclick="sortTable('title')">
+                                    Title
+                                    <i class="fas fa-sort sort-icon"></i>
+                                </th>
+                                <th>Author</th>
+                                <th>BMI Category</th>
+                                <th class="sortable" onclick="sortTable('status')">
+                                    Status
+                                    <i class="fas fa-sort sort-icon"></i>
+                                </th>
+                                <th class="sortable" onclick="sortTable('date')">
+                                    Last Updated
+                                    <i class="fas fa-sort sort-icon"></i>
+                                </th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="blogTableBody">
+                            <tr>
+                                <td class="blog-id">#001</td>
+                                <td class="blog-title">Healthy Diet Plan for Weight Loss</td>
+                                <td class="blog-author">Dr. Sarah Johnson</td>
+                                <td><span class="bmi-badge">Overweight</span></td>
+                                <td><span class="status-badge status-public">Public</span></td>
+                                <td class="blog-date">2025-06-05</td>
+                                <td class="actions-cell">
+                                    <button class="action-btn view-btn" title="View">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="action-btn edit-btn" title="Edit">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="action-btn delete-btn" title="Delete">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="blog-id">#002</td>
+                                <td class="blog-title">BMI Calculator: Understanding Your Body</td>
+                                <td class="blog-author">Dr. Mike Chen</td>
+                                <td><span class="bmi-badge">Normal</span></td>
+                                <td><span class="status-badge status-draft">Draft</span></td>
+                                <td class="blog-date">2025

@@ -23,36 +23,32 @@
 
     <body>
         <div class="container">
-            <div class="navigation">
+            <!-- Navigation -->
+            <div class="navigation active">
                 <ul>
                     <li>
-                        <a href="../dashboadnutri">
-                            <!-- them ảnh  log hay icon cua web-->
-                            <span class="icon">
-                            </span>
-                            <span class="title">Heathy Foods</span>
+                        <a href="${pageContext.request.contextPath}"/dashboadnutri">
+                            <span class="icon"></span>
+                            <span class="title">Healthy Foods</span>
                         </a>
                     </li>
-
                     <li>
-                        <a href="../dashboadnutri">
+                        <a href="${pageContext.request.contextPath}"/dashboadnutri">
                             <span class="icon">
                                 <ion-icon name="home-outline"></ion-icon>
                             </span>
                             <span class="title">Dashboard</span>
                         </a>
                     </li>
-
                     <li>
-                        <a href="listfood">
+                        <a href="${pageContext.request.contextPath}"/listfood">
                             <span class="icon">
-                                <ion-icon name="people-outline"></ion-icon>
+                                <ion-icon name="restaurant-outline"></ion-icon>
                             </span>
                             <span class="title">Foods</span>
                         </a>
                     </li>
-
-                    <li>
+                    <li class="hovered">
                         <a href="listblog">
                             <span class="icon">
                                 <ion-icon name="chatbubble-outline"></ion-icon>
@@ -60,16 +56,14 @@
                             <span class="title">Blogs</span>
                         </a>
                     </li>
-
                     <li>
                         <a href="notify">
                             <span class="icon">
-                                <ion-icon name="help-outline"></ion-icon>
+                                <ion-icon name="notifications-outline"></ion-icon>
                             </span>
                             <span class="title">Notification</span>
                         </a>
                     </li>
-
                     <li>
                         <a href="profile">
                             <span class="icon">
@@ -78,7 +72,6 @@
                             <span class="title">Settings</span>
                         </a>
                     </li>
-
                     <li>
                         <a href="changePassword">
                             <span class="icon">
@@ -87,7 +80,6 @@
                             <span class="title">Password</span>
                         </a>
                     </li>
-
                     <li>
                         <a href="logout">
                             <span class="icon">
@@ -99,120 +91,89 @@
                 </ul>
             </div>
 
-            <!-- ========================= Main ==================== -->
-
-            <div class="main">
+            <!-- Main Content -->
+            <div class="main active">
+                <!-- Top Bar -->
                 <div class="topbar">
                     <div class="toggle">
                         <ion-icon name="menu-outline"></ion-icon>
                     </div>
+                    <div class="page-header">
+                        <h1 class="page-title">Blog Management</h1>
+                        <p class="page-subtitle">Manage and organize your blog posts</p>
+                    </div>
                     <div class="user">
-                        <img src="assets/imgs/customer01.jpg" alt="">
+                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face" alt="User">
                     </div>
                 </div>
-                <!-- ===========================================Main content =================================================-->
-                <div class="overview-container">
-                    <div class="status-overview">
-                        <div class="status-chart">
-                            <canvas id="statusChart"
-                                    data-public="${publicCount}"
-                                    data-draft="${draftCount}"
-                                    data-private="${privateCount}">
-                            </canvas>
-                        </div>
-                        <div class="status-legend">
-                            <h3>Thống kê theo trạng thái</h3>
-                            <ul class="legend-list">
-                                <li>
-                                    <span class="legend-color-box" style="background-color: rgba(75, 192, 192, 0.8);"></span>
-                                    <span class="legend-label">Public</span>
-                                    <span class="legend-value">${publicCount}</span>
-                                </li>
-                                <li>
-                                    <span class="legend-color-box" style="background-color: rgba(255, 205, 86, 0.8);"></span>
-                                    <span class="legend-label">Draft</span>
-                                    <span class="legend-value">${draftCount}</span>
-                                </li>
-                                <li>
-                                    <span class="legend-color-box" style="background-color: rgba(255, 99, 132, 0.8);"></span>
-                                    <span class="legend-label">Private</span>
-                                    <span class="legend-value">${privateCount}</span>
-                                </li>
-                                <li>
-                                    <span class="legend-color-box" style="background-color: #6B21A8;;"></span>
-                                    <span class="legend-label">Total</span>
-                                    <span class="legend-value">${privateCount + draftCount+ publicCount}</span>
-                                </li>
-                            </ul>
-                            <div class="chart-name">Biểu đồ: Số bài Blog theo trạng thái</div>
-                        </div>
-                    </div>
 
-                    <div class="bmi-overview">
-                        <div class="bmi-chart">
-                            <canvas id="bmiChart"
-                                    data-labels='[
-                                    <c:forEach var="lbl" items="${typeLabels}" varStatus="st">
-                                        "${lbl}"<c:if test="${!st.last}">,</c:if>
+                <!-- Content -->
+                <div class="content-wrapper">
+                    <!-- Success/Error Messages -->
+                    <c:if test="${not empty mess}">
+                        <div class="create-success-alert success">
+                            ${mess}
+                        </div>
+                        <c:remove var="mess" scope="session" />
+                    </c:if>
+
+                    <c:if test="${empty mess and not empty Errmess}">
+                        <div class="create-success-alert error">
+                            ${Errmess}
+                        </div>
+                        <c:remove var="Errmess" scope="session" />
+                    </c:if>
+
+                    <!-- Content Controls -->
+                    <div class="content-controls">
+                        <a href="createblog" class="create-btn">
+                            <i class="fas fa-plus"></i>
+                            Create New Blog
+                        </a>
+                        <form name="sort" action="listblog" method="POST">
+                            <div class="search-filter-container">
+                                <div class="search-box">
+                                    <i class="fas fa-search search-icon"></i>
+                                    <input type="text" 
+                                           class="search-input" 
+                                           placeholder="Tìm kiếm theo tiêu đề blog..." 
+                                           id="searchInput"
+                                           oninput="this.form.submit()">
+                                </div>
+                                <script>
+                                    let typingTimer;
+                                    function debouncedSubmit() {
+                                        clearTimeout(typingTimer);
+                                        typingTimer = setTimeout(() => {
+                                            document.getElementById('searchInput').form.submit();
+                                        }, 1000);
+                                    }
+                                </script>
+
+                                <select class="filter-select" id="statusFilter" onchange="this.form.submit()">
+                                    <option name="status" value="all" ${ status == null ? 'selected' : ''}>Tất cả trạng thái</option>
+                                    <c:forEach var="st" items="${statusList}">
+                                        <option name="status" value="${st}"  ${ status == st ? 'selected' : ''} >${st}</option>
                                     </c:forEach>
-                                    ]'
-                                    data-counts='[
-                                    <c:forEach var="cnt" items="${typeCounts}" varStatus="st">
-                                        ${cnt}<c:if test="${!st.last}">,</c:if>
-                                    </c:forEach>
-                                    ]'>
-                            </canvas>
-                        </div>
-                        <div class="bmi-legend">
-                            <h3>Thống kê theo loại BMI</h3>
-                            <ul class="legend-list">
-                                <c:forEach var="i" begin="0" end="${fn:length(typeLabels) - 1}">
-                                    <c:set var="colorIdx" value="${i % 6}" />
-                                    <li>
-                                        <span class="legend-color-box"
-                                              style="background-color: var(--bmi-color-${colorIdx});"></span>
-                                        <span class="legend-label">${typeLabels[i]}</span>
-                                        <span class="legend-value">${typeCounts[i]}</span>
-                                    </li>
-                                </c:forEach>
+                                </select>
 
-                            </ul>
-                            <div class="chart-name">Biểu đồ: Số bài Blog theo loại BMI</div>
-                        </div>
+                                <select class="filter-select" id="sortFilter" onchange="this.form.submit()">
+                                    <option value="newest">Mới nhất</option>
+                                    <option value="oldest">Cũ nhất</option>
+                                    <option value="title_asc">Tiêu đề A-Z</option>
+                                    <option value="title_desc">Tiêu đề Z-A</option>
+                                </select>
+                            </div>
+                        </form>
                     </div>
-                </div>
-                <hr>                              
-                <!--=======================List Blog contentner ==============================-->                           
-                <div class="button-message-container">
-                    <a href="createblog" class="button-form">
-                        <button type="submit" class="create-button">
-                            + Create Blog
-                        </button>
-                    </a>
-                </div>
-                <c:if test="${not empty mess}">
-                    <div class="create-success-alert success">
-                        ${mess}
-                    </div>
-                    <c:remove var="mess" scope="session" />
-                </c:if>
-
-                <c:if test="${empty mess and not empty Errmess}">
-                    <div class="create-success-alert error">
-                        ${Errmess}
-                    </div>
-                    <c:remove var="Errmess" scope="session" />
-                </c:if>
-
-                <div class="Blog_box">
-                    <div class="blog-list-container">
+                    <div class="table-container">
                         <c:choose>
                             <c:when test="${not empty lstB}">
                                 <table class="blog-table">
                                     <thead>
                                         <tr>
                                             <th colspan="3">Image</th>
-                                            <th>ID</th>
+                                            <th >ID</th>
                                             <th>Tiêu đề</th>
                                             <th>Trạng thái</th>
                                             <th>Cập nhật gần nhất</th>
@@ -223,14 +184,14 @@
                                         <c:forEach var="blog" items="${lstB}" >
                                             <tr>
                                                 <td colspan="3"><img src="${blog.imageUlr}" name="imageUlr" value="${blog.imageUlr}" alt="Anh blog" style="width: 80px; height: 44px;"></img></td>
-                                                <td>${blog.bID}</td>
-                                                <td>${blog.title}</td>
+                                                <td class="blog-id">${blog.bID}</td>
+                                                <td class="blog-title">${blog.title}</td>
                                                 <td>
                                                     <span class="status status-${blog.status}">
                                                         ${blog.status}
                                                     </span>
                                                 </td>
-                                                <td>
+                                                <td class="date-time">
                                                     <fmt:formatDate
                                                         value="${blog.update_at}"
                                                         pattern="yyyy-MM-dd HH:mm:ss" />
@@ -259,8 +220,10 @@
                                 </c:otherwise>
                             </c:choose>
                         </table>
-                        <!--================================================= End table list blog =========================================-->
-                        <!--================================ Start pagination ================================-->
+                    </div>
+                    <!-- pagnent -->
+                    <div style="display: flex ; justify-content: space-between ; padding: 10px">
+                        <div style="margin: 30px 0 20px">Show 10 of 12 items</div>
                         <c:if test="${totalPages > 1}">
                             <div class="pagination">
                                 <c:if test="${currentPage > 1}">
@@ -283,21 +246,22 @@
                                     <a href="listblog?index=${currentPage + 1}" class="next">Next &raquo;</a>
                                 </c:if>
                             </div>
+
                         </c:if>
                     </div>
-                    <!--================================ End  pagination ================================-->
-                    </div>
-                    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                </div>
+            </div>
+        </div>
 
-                        </div>
-                    </div>
-            <!-- =========== Scripts =========  -->
-            <script src="../JS/Nutritionist/home.js"></script>
-            <script src="../JS/Nutritionist/blog.js"></script>
 
-            <!-- ====== ionicons ======= -->
-            <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-            <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+        <!-- =========== Scripts =========  -->
+        <script src="../JS/Nutritionist/home.js"></script>
+        <script src="../JS/Nutritionist/blog.js"></script>
+
+        <!-- ====== ionicons ======= -->
+        <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+        <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
     </body>
 
 </html>

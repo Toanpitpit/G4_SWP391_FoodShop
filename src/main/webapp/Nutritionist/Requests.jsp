@@ -9,8 +9,9 @@
         <link rel="stylesheet" href="../CSS/Ncss/request.css">
         <link rel="stylesheet" href="../CSS/Ncss/common.css">
         
-        <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-        <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+         <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     </head>
     <body> 
         <div class="container">
@@ -47,7 +48,7 @@
                             <span class="icon">
                                 <ion-icon name="chatbubble-outline"></ion-icon>
                             </span>
-                            <span class="title">My    Blogs</span>
+                            <span class="title">My Blogs</span>
                         </a>
                     </li>
 
@@ -99,51 +100,195 @@
                         <img src="assets/imgs/customer01.jpg" alt="">
                     </div>
                 </div>
-
-                <div class="blog-container">
-                    <main class="main-content">
-                        <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Online Shopping" class="hero-image">
-
-                        <div class="content-wrapper">
-                            <h1 class="blog-title">The Pros And Cons Of Online Shopping: Is It Right For You?</h1>
-
-                            <div class="meta-info">
-                                <div class="author-info">
-                                    <div class="author-avatar">EP</div>
-                                    <span class="author-name">Ezat Popy</span>
-                                </div>
-                                <span class="publish-date">August 9, 2023</span>
-                                <span class="blog-tag">E-commerce</span>
-                            </div>
-
-                            <div class="blog-content">
-                                <p>In a network security system, security flaws are crucial. Fuzzing is a vulnerability detection technique that is extensively utilized to prevent damage before it occurs. Traditional fuzz testing, on the other hand, has a nothin number of difficulties, including how to successfully. Amet minim mollit non deserunt ullamco est sit alique dolor domet consectetur adipiscing elit. With the sequential duo enim velit mollit xercitation. Now that the Covid 19 pandemic lockdown has been lifted from most countries around the world, travelers have been spreading their wings again and going on long-awaited.</p>
-
-                                <p>Amet minim mollit non deserunt ullamco est sit alique altrough dolor domet sint. Velit ther sequat duis enim velit mollit xercitation. Now that the Covid 19 pandemic lockdown has been lifted from.</p>
-                            </div>
-
-                            <div class="quote">
-                                "The goal of a designer is to listen, observe, understand, sympathize, empathize, synthesize, and glean insights that enable him or her to make the invisible evisbile. observe, understand, sympathize."
-                            </div>
-
-                            <div class="blog-content">
-                                <p>In a network security system, security flaws are crucial. Fuzzing is a vulnerability detection technique that is extensively utilized to prevent damage before it occurs. Traditional fuzz testing, on the other hand, has a nothin number of difficulties, including how to the successfully. Amet minim mollit non deserunt ullamco est sit alique altrough</p>
-                            </div>
+                <div class="dashboard-content">
+                <!-- Stats Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-info">
+                            <h3>Draft Foods</h3>
+                            <div class="number">12</div>
                         </div>
-                    </main>
-
-                    <aside class="sidebar">
-                        <h2 class="sidebar-title">Bài viết liên quan</h2>
-
-                        <article class="related-post">
-                            <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Digital Marketing" class="related-image">
-                            <div class="related-content">
-                                <h3 class="related-title">Digital Marketing Strategies for Modern Business</h3>
-                                <span class="related-tag">Marketing</span>
-                            </div>
-                        </article>
-                    </aside>
+                        <div class="stat-icon">
+                            <ion-icon name="document-outline"></ion-icon>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-info">
+                            <h3>Requests</h3>
+                            <div class="number">18</div>
+                        </div>
+                        <div class="stat-icon">
+                            <ion-icon name="people-outline"></ion-icon>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-info">
+                            <h3>Blogs</h3>
+                            <div class="number">9</div>
+                        </div>
+                        <div class="stat-icon">
+                            <ion-icon name="library-outline"></ion-icon>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-info">
+                            <h3>Notifications</h3>
+                            <div class="number">3</div>
+                        </div>
+                        <div class="stat-icon">
+                            <ion-icon name="notifications-outline"></ion-icon>
+                        </div>
+                    </div>
                 </div>
+
+                <!-- Charts -->
+                <div class="charts-grid">
+                    <div class="chart-card">
+                        <h3>Request Status</h3>
+                        <div class="chart-container">
+                            <canvas id="pieChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <h3>Blogs Per Month</h3>
+                        <div class="chart-container">
+                            <canvas id="barChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <h3>Food Draft Trend</h3>
+                        <div class="chart-container">
+                            <canvas id="lineChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Notifications -->
+                <div class="notifications">
+                    <h3>Recent Notifications</h3>
+                    <div class="notification-item">
+                        <div class="notification-icon success">
+                            <ion-icon name="checkmark-circle-outline"></ion-icon>
+                        </div>
+                        <div class="notification-text">
+                            <p>Request #102 was approved</p>
+                            <small>5 mins ago</small>
+                        </div>
+                    </div>
+                    <div class="notification-item">
+                        <div class="notification-icon error">
+                            <ion-icon name="close-circle-outline"></ion-icon>
+                        </div>
+                        <div class="notification-text">
+                            <p>Request #99 was rejected</p>
+                            <small>15 mins ago</small>
+                        </div>
+                    </div>
+                    <div class="notification-item">
+                        <div class="notification-icon warning">
+                            <ion-icon name="warning-outline"></ion-icon>
+                        </div>
+                        <div class="notification-text">
+                            <p>Blog "Healthy Eating" is pending review</p>
+                            <small>1 hour ago</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                <script>
+        // Toggle Navigation
+        function toggleNavigation() {
+            const navigation = document.getElementById('navigation');
+            navigation.classList.toggle('collapsed');
+        }
+
+        // Initialize Charts
+        document.addEventListener('DOMContentLoaded', function() {
+            // Pie Chart - Request Status
+            const pieCtx = document.getElementById('pieChart').getContext('2d');
+            new Chart(pieCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Pending', 'Approved', 'Rejected'],
+                    datasets: [{
+                        data: [45, 35, 20],
+                        backgroundColor: ['#FF9800', '#4CAF50', '#F44336'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+
+            // Bar Chart - Blogs Per Month
+            const barCtx = document.getElementById('barChart').getContext('2d');
+            new Chart(barCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+                    datasets: [{
+                        label: 'Blogs',
+                        data: [1, 2, 3, 1, 2],
+                        backgroundColor: '#2196F3',
+                        borderRadius: 5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 4
+                        }
+                    }
+                }
+            });
+
+            // Line Chart - Food Draft Trend
+            const lineCtx = document.getElementById('lineChart').getContext('2d');
+            new Chart(lineCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                    datasets: [{
+                        label: 'Drafts',
+                        data: [3, 5, 4, 6],
+                        borderColor: '#4CAF50',
+                        backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        });
+    </script>
             </div>
             <div>
                 <script src="../JS/Nutritionist/home.js"></script>

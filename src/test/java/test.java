@@ -35,7 +35,7 @@ public class test {
 //        dis4();
 //        dis6();
 //         dis5();
-dis();
+dis2();
 //dis();
     }
     public static void dis() throws SQLException{
@@ -69,18 +69,16 @@ Blogs b = _dao.getBlogByID (100);
     11, // blogID
     9,  // authorID
     "Nguyễn Văn Dũng", // authorName
-    2,  // bmiId
-    "Test update moi ne truoc deu th ", // title
-    "https://example.com/imascdumay.jpg", // imageUlr
+    3,  // bmiId
+    "Test update moi ne truoc deu th", // title
+    null, // imageUlr
     "Nội dung chi tiết về chế độ ăn theo BMI.", // content
     "Private", // status
     new Timestamp(System.currentTimeMillis()), // create_at
     new Timestamp(System.currentTimeMillis())  // update_at
 );
-
-
-//     _dao.insertBlog(testBlog);
-     _dao.updateBlog(testBlog);
+     _dao.insertBlog(testBlog);
+//     _dao.updateBlog(testBlog);
     
 }
    public static void dis3() throws SQLException {

@@ -54,11 +54,13 @@ public class BlogDetailServerLet extends HttpServlet {
             BlogDAO b_dao = new BlogDAO ();
             try {
                 String ids = request.getParameter ("id");
+                
                 if (ids != null) {
-                    if (ids.trim ().isEmpty ()) {
+                    if (!ids.trim ().isEmpty ()) {
                         int id = Integer.parseInt (ids);
                         Blogs blog = b_dao.getBlogByID (id);
                         request.setAttribute ("blog", blog);
+//                        out.print (blog);
                         request.getRequestDispatcher ("/Nutritionist/BlogDetail.jsp")
                                 .forward (request, response);
                     }

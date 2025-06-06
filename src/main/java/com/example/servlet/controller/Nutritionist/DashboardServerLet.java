@@ -4,20 +4,24 @@
  */
 package com.example.servlet.controller.Nutritionist;
 
+import com.example.servlet.dao.BMIClassificationDAO;
 import com.example.servlet.dao.BlogDAO;
 import com.example.servlet.dao.NotifyDAO;
 import com.example.servlet.dao.RequestDAO;
+import com.example.servlet.model.BMIClassification;
 import com.example.servlet.model.Blogs;
-import com.example.servlet.model.Notifys;
-import com.example.servlet.model.Requests;
+import com.example.servlet.model.MonthlyStat;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -54,25 +58,27 @@ public class DashboardServerLet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-//        HttpSession session = request.getSession(false);
+
+        response.setContentType ("text/html;charset=UTF-8");
+        try (PrintWriter out = response.getWriter ()) {
+            response.setContentType ("text/html;charset=UTF-8");
+            try {
+                //HttpSession session = request.getSession(false);
 //        if (session == null || session.getAttribute("account") == null) {
 //            response.sendRedirect("login.jsp");
 //            return;
 //        }
+                BMIClassificationDAO bi_dao = new BMIClassificationDAO ();
+                RequestDAO r_dao = new RequestDAO ();
+                BlogDAO b_dao = new BlogDAO ();
+                NotifyDAO n_dao = new NotifyDAO ();
 
-        RequestDAO r_dao = new RequestDAO ();
-        BlogDAO b_dao = new BlogDAO ();
-        NotifyDAO n_dao = new NotifyDAO ();
-
-        List<Blogs> lstB = b_dao.getBlogsByFilter (null, -1, true, null);
-        List<Requests> lstR = r_dao.getRequestByFilter (-2, "", "newest");
-        List<Notifys> lstN = n_dao.getNotificationsByFilter (null, "Saler", false, true);
-        request.setAttribute ("lstR", lstR);
-        request.setAttribute ("lstB", lstB);
-        request.setAttribute ("lstN", lstN);
-        request.getRequestDispatcher ("/Nutritionist/DaskbashNutrif.jsp")
-                .forward (request, response);
-
+                request.getRequestDispatcher ("/Nutritionist/DaskbashNutrif.jsp")
+                        .forward (request, response);
+            } catch (Exception ex) {
+                Logger.getLogger (DashboardServerLet.class.getName ()).log (Level.SEVERE, null, ex);
+            }
+        }
     }
 
     @Override

@@ -79,9 +79,7 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response)
         }
         try {
             List<Blogs> lstB =_dao.getBlogsByFilterAndPage (null, -1, true,"" , indexPage, 10);
-            List<Blogs> lstB1 = _dao.getBlogsByFilter ("", -1, true, "Public");
-            List<Blogs> lstB2 = _dao.getBlogsByFilter ("", -1, true, "Private");
-            List<Blogs> lstB3 = _dao.getBlogsByFilter ("", -1, true, "Draft");
+            
             List<String> ststuss = _dao.getAllDistinctStatuses ();
             List<String> typeLables = new ArrayList<> ();
             List<Integer> typeCounts = new ArrayList<> ();
@@ -107,9 +105,7 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response)
             request.setAttribute ("typeLabels", typeLables);
             request.setAttribute ("typeCounts", typeCounts);
             request.setAttribute ("lstB", lstB);
-            request.setAttribute ("publicCount", lstB1.size ());
-            request.setAttribute ("privateCount", lstB2.size ());
-            request.setAttribute ("draftCount", lstB3.size ());
+          
             request.getRequestDispatcher ("/Nutritionist/Blogs.jsp")
                     .forward (request, response);
 

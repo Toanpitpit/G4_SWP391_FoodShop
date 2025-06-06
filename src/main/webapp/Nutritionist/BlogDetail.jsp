@@ -33,120 +33,22 @@
                         </a>
                     </li>
 
-                    <!-- Food Section with Dropdown -->
-                    <li class="dropdown">
-                        <a href="javascript:void(0)" class="dropdown-toggle">
+                    <li>
+                        <a href="listfood">
                             <span class="icon">
                                 <ion-icon name="people-outline"></ion-icon>
                             </span>
                             <span class="title">Foods</span>
-                            <ion-icon name="chevron-down-outline" class="dropdown-icon"></ion-icon>
                         </a>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a href="listfood">
-                                    <span class="icon">
-                                        <ion-icon name="list-outline"></ion-icon>
-                                    </span>
-                                    <span class="title">Food Management</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="fooddetail">
-                                    <span class="icon">
-                                        <ion-icon name="document-text-outline"></ion-icon>
-                                    </span>
-                                    <span class="title">Food Details</span>
-                                </a>
-                            </li>
-                        </ul>
                     </li>
 
-                    <!-- Food Draft Section with Dropdown -->
-                    <li class="dropdown">
-                        <a href="javascript:void(0)" class="dropdown-toggle">
-                            <span class="icon">
-                                <ion-icon name="create-outline"></ion-icon>
-                            </span>
-                            <span class="title">Food Drafts</span>
-                            <ion-icon name="chevron-down-outline" class="dropdown-icon"></ion-icon>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a href="listfooddraft">
-                                    <span class="icon">
-                                        <ion-icon name="list-outline"></ion-icon>
-                                    </span>
-                                    <span class="title">Draft Management</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="fooddraftdetail">
-                                    <span class="icon">
-                                        <ion-icon name="document-text-outline"></ion-icon>
-                                    </span>
-                                    <span class="title">Draft Details</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <!-- Blog Section with Dropdown -->
-                    <li class="dropdown">
-                        <a href="javascript:void(0)" class="dropdown-toggle">
+                    <li>
+                        <a href="/listblog">
                             <span class="icon">
                                 <ion-icon name="chatbubble-outline"></ion-icon>
                             </span>
-                            <span class="title">My Blogs</span>
-                            <ion-icon name="chevron-down-outline" class="dropdown-icon"></ion-icon>
+                            <span class="title">My    Blogs</span>
                         </a>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a href="listblog">
-                                    <span class="icon">
-                                        <ion-icon name="list-outline"></ion-icon>
-                                    </span>
-                                    <span class="title">Blog Management</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="blogdetail">
-                                    <span class="icon">
-                                        <ion-icon name="document-text-outline"></ion-icon>
-                                    </span>
-                                    <span class="title">Blog Details</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <!-- Request Section with Dropdown -->
-                    <li class="dropdown">
-                        <a href="javascript:void(0)" class="dropdown-toggle">
-                            <span class="icon">
-                                <ion-icon name="paper-plane-outline"></ion-icon>
-                            </span>
-                            <span class="title">Requests</span>
-                            <ion-icon name="chevron-down-outline" class="dropdown-icon"></ion-icon>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a href="listrequest">
-                                    <span class="icon">
-                                        <ion-icon name="list-outline"></ion-icon>
-                                    </span>
-                                    <span class="title">Request Management</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="requestdetail">
-                                    <span class="icon">
-                                        <ion-icon name="document-text-outline"></ion-icon>
-                                    </span>
-                                    <span class="title">Request Details</span>
-                                </a>
-                            </li>
-                        </ul>
                     </li>
 
                     <li>
@@ -200,34 +102,24 @@
 
                 <div class="blog-container">
                     <main class="main-content">
-                        <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Online Shopping" class="hero-image">
-
+                        <img src="${blog.imageUlr}" alt="Online Shopping" class="hero-image">
                         <div class="content-wrapper">
-                            <h1 class="blog-title">The Pros And Cons Of Online Shopping: Is It Right For You?</h1>
+                            <h1 class="blog-title">${blog.title}</h1>
 
                             <div class="meta-info">
                                 <div class="author-info">
                                     <div class="author-avatar">EP</div>
-                                    <span class="author-name">Ezat Popy</span>
+                                    <span class="author-name">${blog.authorName}</span>
                                 </div>
-                                <span class="publish-date">August 9, 2023</span>
-                                <span class="blog-tag">E-commerce</span>
+                                <span class="publish-date"><fmt:formatDate
+                                        value="${blog.update_at}"
+                                        pattern="yyyy-MM-dd HH:mm:ss" />
+                                </span>
+                                <span class="blog-tag">Test</span>
                             </div>
-
                             <div class="blog-content">
-                                <p>In a network security system, security flaws are crucial. Fuzzing is a vulnerability detection technique that is extensively utilized to prevent damage before it occurs. Traditional fuzz testing, on the other hand, has a nothin number of difficulties, including how to successfully. Amet minim mollit non deserunt ullamco est sit alique dolor domet consectetur adipiscing elit. With the sequential duo enim velit mollit xercitation. Now that the Covid 19 pandemic lockdown has been lifted from most countries around the world, travelers have been spreading their wings again and going on long-awaited.</p>
-
-                                <p>Amet minim mollit non deserunt ullamco est sit alique altrough dolor domet sint. Velit ther sequat duis enim velit mollit xercitation. Now that the Covid 19 pandemic lockdown has been lifted from.</p>
+                                ${blog.content}
                             </div>
-
-                            <div class="quote">
-                                "The goal of a designer is to listen, observe, understand, sympathize, empathize, synthesize, and glean insights that enable him or her to make the invisible evisbile. observe, understand, sympathize."
-                            </div>
-
-                            <div class="blog-content">
-                                <p>In a network security system, security flaws are crucial. Fuzzing is a vulnerability detection technique that is extensively utilized to prevent damage before it occurs. Traditional fuzz testing, on the other hand, has a nothin number of difficulties, including how to the successfully. Amet minim mollit non deserunt ullamco est sit alique altrough</p>
-                            </div>
-                        </div>
                     </main>
 
                     <aside class="sidebar">
@@ -243,7 +135,7 @@
                     </aside>
                 </div>
             </div>
-            <div>
-                <script src="../JS/Nutritionist/home.js"></script>
-                </body>
-                </html>
+        </div>
+        <script src="../JS/Nutritionist/home.js"></script>
+    </body>
+</html>
