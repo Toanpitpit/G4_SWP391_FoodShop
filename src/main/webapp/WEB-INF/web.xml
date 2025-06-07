@@ -105,6 +105,10 @@
         <servlet-class>com.example.servlet.controller.HomeController</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>ForgotPasswordController</servlet-name>
+        <servlet-class>com.example.servlet.controller.ForgotPasswordController</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>ResetPasswordController</servlet-name>
         <servlet-class>com.example.servlet.controller.ResetPasswordController</servlet-class>
     </servlet>
@@ -127,5 +131,9 @@
     <servlet-mapping>
         <servlet-name>HomeController</servlet-name>
         <url-pattern>/Home</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ForgotPasswordController</servlet-name>
+        <url-pattern>/ForgotPasswordController</url-pattern>
     </servlet-mapping>
 </web-app>
