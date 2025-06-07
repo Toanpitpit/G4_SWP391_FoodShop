@@ -9,92 +9,6 @@ document.querySelector('.toggle').addEventListener('click', function() {
     this.classList.remove('ripple');
   }, 600);
 });
-// 
-
-//document.addEventListener('DOMContentLoaded', function () {
-//    // ===== STATUS CHART =====
-//    const statusCanvas = document.getElementById('statusChart');
-//    const publicCount = parseInt(statusCanvas.dataset.public) || 0;
-//    const draftCount = parseInt(statusCanvas.dataset.draft) || 0;
-//    const privateCount = parseInt(statusCanvas.dataset.private) || 0;
-//
-//    const statusData = {
-//        labels: ['Public', 'Draft', 'Private'],
-//        datasets: [{
-//            data: [publicCount, draftCount, privateCount],
-//            backgroundColor: [
-//                'rgba(75, 192, 192, 0.8)',
-//                'rgba(255, 205, 86, 0.8)',
-//                'rgba(255, 99, 132, 0.8)'
-//            ],
-//            hoverOffset: 4
-//        }]
-//    };
-//
-//    new Chart(statusCanvas.getContext('2d'), {
-//        type: 'pie',
-//        data: statusData,
-//        options: {
-//            responsive: true,
-//            plugins: {
-//                legend: { display: false },
-//                tooltip: {
-//                    callbacks: {
-//                        label: function (context) {
-//                            const label = context.label || '';
-//                            const value = context.parsed || 0;
-//                            return label + ': ' + value;
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    });
-
-    // ===== BMI CHART =====
-//    const bmiCanvas = document.getElementById('bmiChart');
-//    const labelData = JSON.parse(bmiCanvas.dataset.labels || "[]");
-//    const countData = JSON.parse(bmiCanvas.dataset.counts || "[]");
-//
-//    const colorList = [
-//        'rgba(54, 162, 235, 0.8)',
-//        'rgba(255, 99, 132, 0.8)',
-//        'rgba(255, 205, 86, 0.8)',
-//        'rgba(75, 192, 192, 0.8)',
-//        'rgba(153, 102, 255, 0.8)',
-//        'rgba(255, 159, 64, 0.8)'
-//    ];
-//    const backgroundColors = labelData.map((_, idx) => colorList[idx % colorList.length]);
-//
-//    const bmiData = {
-//        labels: labelData,
-//        datasets: [{
-//            data: countData,
-//            backgroundColor: backgroundColors,
-//            hoverOffset: 4
-//        }]
-//    };
-//
-//    new Chart(bmiCanvas.getContext('2d'), {
-//        type: 'pie',
-//        data: bmiData,
-//        options: {
-//            responsive: true,
-//            plugins: {
-//                legend: { display: false },
-//                tooltip: {
-//                    callbacks: {
-//                        label: function (context) {
-//                            const label = context.label || '';
-//                            const value = context.parsed || 0;
-//                            return label + ': ' + value;
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    });
-//});
 
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -103,8 +17,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const counts = JSON.parse(pieCanvas.dataset.counts || "[]");
 
     const backgroundColors = [
-        'rgba(255, 205, 86, 0.8)',   // Pending - Yellow
-        'rgba(75, 192, 192, 0.8)',   // Approved - Green
+        'rgba(255, 205, 86, 0.8)',   
+        'rgba(75, 192, 192, 0.8)',   
         'rgba(255, 99, 132, 0.8)',
         'rgba(153, 102, 255, 0.8)'
     ];
@@ -156,6 +70,15 @@ document.addEventListener('DOMContentLoaded', function () {
             scales: {
                 y: {
                     beginAtZero: true,
+                    ticks: {
+                        stepSize: 1,
+                        callback: function(value) {
+                            if (Number.isInteger(value)) {
+                                return value;
+                            }
+                            return null;
+                        }
+                    },
                     title: {
                         display: true,
                         text: 'Number of Blogs'
@@ -174,6 +97,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 });
+
 
 
 document.addEventListener('DOMContentLoaded', function () {

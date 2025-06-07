@@ -57,10 +57,10 @@ public class BlogDetailServerLet extends HttpServlet {
                 
                 if (ids != null) {
                     if (!ids.trim ().isEmpty ()) {
+                        
                         int id = Integer.parseInt (ids);
                         Blogs blog = b_dao.getBlogByID (id);
                         request.setAttribute ("blog", blog);
-//                        out.print (blog);
                         request.getRequestDispatcher ("/Nutritionist/BlogDetail.jsp")
                                 .forward (request, response);
                     }

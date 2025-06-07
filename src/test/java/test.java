@@ -2,6 +2,7 @@
 //import com.example.servlet.dao.AccountDAO;
 import com.example.servlet.dao.BMIClassificationDAO;
 import com.example.servlet.dao.BlogDAO;
+import com.example.servlet.dao.FoodDraftDAO;
 import com.example.servlet.dao.NotifyDAO;
 import com.example.servlet.dao.RequestDAO;
 import com.example.servlet.model.Account;
@@ -35,11 +36,13 @@ public class test {
 //        dis4();
 //        dis6();
 //         dis5();
-dis2();
+dis();
 //dis();
     }
     public static void dis() throws SQLException{
         BlogDAO _dao = new BlogDAO();
+        List<MonthlyStat> lstMBlog = _dao.getMonthlyBlogStatsByYearAndAuthor (2024,-1);
+        System.out.println (lstMBlog);
 //        List<MonthlyStat> typeStats = new ArrayList<>();
 //       List<Blogs> lstBlog = _dao.getBlogsByFilter("", 5, true,null);
 //       List<Blogs> lstB = _dao.getBlogsByFilterAndPage(null, -1, true, null, 2, 4);
@@ -52,9 +55,9 @@ dis2();
 //        }
 //        } catch (Exception ex) {
 //            Logger.getLogger(test.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-Blogs b = _dao.getBlogByID (100);
-        System.out.println (b);
+////        }
+//Blogs b = _dao.getBlogByID (100);
+//        System.out.println (b);
 //        for(Blogs b : lstB){
 //            System.out.println(b.toString());
 //        }
@@ -86,16 +89,16 @@ Blogs b = _dao.getBlogByID (100);
     boolean check = _dao.deleteBlogByID(41);
        System.out.println (check);
 }
-public static void dis4() {
-    RequestDAO _dao = new RequestDAO();
-    List<Requests> lstR = _dao.getRequestByFilter(-3,"" , null);
-    if(lstR.isEmpty()){
-        System.out.println("deo có du lieu");
-    }
-    for (Requests requests : lstR) {
-        System.out.println(requests.toString());
-    }
-}
+//public static void dis4() {
+//    RequestDAO _dao = new RequestDAO();
+//    List<Requests> lstR = _dao.getRequestByFilter(-3,"" , null);
+//    if(lstR.isEmpty()){
+//        System.out.println("deo có du lieu");
+//    }
+//    for (Requests requests : lstR) {
+//        System.out.println(requests.toString());
+//    }
+//}
 //public static void dis5() throws SQLException {
 //    AccountDAO dao = new AccountDAO();
 //    Account testUser = new Account();
@@ -131,4 +134,20 @@ public static void dis7() throws SQLException {
         System.out.println(bMIClassification.toString());
     }
 }
+
+
+//public static void dis8() throws SQLException {
+//      BMIClassificationDAO bi_dao = new BMIClassificationDAO ();
+//                RequestDAO r_dao = new RequestDAO ();
+//                BlogDAO b_dao = new BlogDAO ();
+//                NotifyDAO n_dao = new NotifyDAO ();
+//                FoodDraftDAO fd_dao = new FoodDraftDAO ();
+//                int totalFdrf = fd_dao.getTotalFooddraft (-1);
+//                int totalBlog  = b_dao.getTotalBlog ();
+//                int totalNotify = n_dao.getTotalNotify (-1,null);
+//                int totalRequest = r_dao.getTotalRequest (-1);
+//                List<MonthlyStat> lstM = r_dao.countRequestsByStatus (-1);
+//                
+//                System.out.println (totalBlog + "+ " + totalFdrf +" +" +  totalNotify + "+" + totalRequest+ " + " + lstM);
+//}
 }

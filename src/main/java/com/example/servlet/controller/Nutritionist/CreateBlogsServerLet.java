@@ -102,11 +102,6 @@ public class CreateBlogsServerLet extends HttpServlet {
                 request.setAttribute ("title", title);
                 request.setAttribute ("bmiId", bmiIdStr);
             }
-
-            out.print (content);
-            out.print (bmiIdStr);
-            out.print (status);
-            out.print (content);
             int bmiId = 0;
             try {
                 bmiId = Integer.parseInt (bmiIdStr);
@@ -153,9 +148,7 @@ public class CreateBlogsServerLet extends HttpServlet {
             String name = "ALodsd";
             Blogs blog = new Blogs (0, authorID, name, bmiId, title, image_ulr, content, status, create_at, update_at);
             BlogDAO _dao = new BlogDAO ();
-//            out.print (blog);
             boolean suscess = _dao.insertBlog (blog);
-            out.print (suscess);
             String mess = null, Errmess = null;
             if (suscess) {
                 mess = "Create sucessfuly";

@@ -11,196 +11,79 @@
         <!-- ======= Styles ====== -->
         <link rel="stylesheet" href="../CSS/Ncss/common.css">
         <link rel="stylesheet" href="../CSS/Ncss/createblog.css">
+        <script src="assets/ckeditor/ckeditor.js"></script>
+
         <!--==============linkJS===========-->
-        <script src="https://cdn.jsdelivr.net/gh/FixitUpOrg/ckeditor5-custom-build-full/ckeditor.js"></script>
 
     </head>
 
     <body>
         <!-- =============== Navigation ================ -->
         <div class="container">
-            <div class="navigation">
-                <ul>
-                    <li>
-                        <a href="/dashboadnutri">
-                            <span class="icon">
-                            </span>
-                            <span class="title">Heathy Foods</span>
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="/dashboadnutri">
-                            <span class="icon">
-                                <ion-icon name="home-outline"></ion-icon>
-                            </span>
-                            <span class="title">Dashboard</span>
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="listfood">
-                            <span class="icon">
-                                <ion-icon name="people-outline"></ion-icon>
-                            </span>
-                            <span class="title">Foods</span>
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="/listblog">
-                            <span class="icon">
-                                <ion-icon name="chatbubble-outline"></ion-icon>
-                            </span>
-                            <span class="title">My Blogs</span>
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="notify">
-                            <span class="icon">
-                                <ion-icon name="help-outline"></ion-icon>
-                            </span>
-                            <span class="title">Notification</span>
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="profile">
-                            <span class="icon">
-                                <ion-icon name="settings-outline"></ion-icon>
-                            </span>
-                            <span class="title">Settings</span>
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="changePassword">
-                            <span class="icon">
-                                <ion-icon name="lock-closed-outline"></ion-icon>
-                            </span>
-                            <span class="title">Password</span>
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="logout">
-                            <span class="icon">
-                                <ion-icon name="log-out-outline"></ion-icon>
-                            </span>
-                            <span class="title">Sign Out</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-
+           <jsp:include page="/Nutritionist/Common.jsp"/>
             <!-- ========================= Main ==================== -->
-            <div class="main">
-                <div class="topbar">
-                    <div class="toggle">
-                        <ion-icon name="menu-outline"></ion-icon>
-                    </div>
-                    <div class="user">
-                        <img src="assets/imgs/customer01.jpg" alt="">
-                    </div>
-                </div>
-
-
-                <div class="form-container">
-                    <h2>Blog Post</h2>
-                    <form action="createblog" method="post" enctype="multipart/form-data">
-                        <div class="form-card">
-                            <div class="form-group image-preview-group">
-                                <label for="imageUrl">Thumbnail Image</label>
-                                <img id="preview" src="#" alt="Preview Image" style="display:none; width:100%; max-height:500px; object-fit:cover; margin-bottom: 10px; border-radius: 10px;" />
-                                <input type="file" id="imageUrl" name="imageUrl" accept="image/*" onchange="previewImage(event)" />
-                            </div>
-
-                            <div class="form-group">
-                                <label for="title">Title</label>
-                                <input type="text" id="title" name="title" value="${title != null ? title : ''}" required />
-                            </div>
-
-                            <div class="form-group">
-                                <label for="bmiId">BMI Category</label>
-                                <select name="bmiId" id="bmiId" required>
-                                    <option value="">-- Select BMI --</option>
-                                    <c:forEach var="bmi" items="${lstBMI}">
-                                        <option value="${bmi.bmiID}" ${bmi.bmiID == selectedBmiId ? 'selected' : ''}>${bmi.classification}</option>
-                                    </c:forEach>
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label>Status</label>
-                                <div class="status-options">
-                                    <label class="radio-inline">
-                                        <input type="radio" name="status" value="Public" ${s == status ? 'checked' : ''} />
-                                        Public
-                                    </label>
-                                    <label class="radio-inline">
-                                        <input type="radio" name="status" value="Draft" ${s == status ? 'checked' : ''} />
-                                        Draft
-                                    </label>
-                                    <label class="radio-inline">
-                                        <input type="radio" name="status" value="Private" ${s == status ? 'checked' : ''} />
-                                        Private
-                                    </label>
+            <div class="main active"> 
+                <jsp:include page="/Nutritionist/topbar.jsp"/> 
+                <h2 class="form-title">🥗 Blog Post</h2>
+                <div class="form_box" >
+                    <div class="form-container">
+                        <h2>Blog Post</h2>
+                        <form action="createblog" method="post" enctype="multipart/form-data">
+                            <div class="form-card">
+                                <div class="form-group image-preview-group">
+                                    <label for="imageUrl">Thumbnail Image</label>
+                                    <img id="preview" src="#" alt="Preview Image" style="display:none; width:100%; max-height:500px; object-fit:cover; margin-bottom: 10px; border-radius: 10px;" />
+                                    <input type="file" id="imageUrl" name="imageUrl" accept="image/*" onchange="previewImage(event)" />
                                 </div>
+
+                                <div class="form-group">
+                                    <label for="title">Title</label>
+                                    <input type="text" id="title" name="title" value="${title != null ? title : ''}" required />
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="bmiId">BMI Category</label>
+                                    <select name="bmiId" id="bmiId" required>
+                                        <option value="">-- Select BMI --</option>
+                                        <c:forEach var="bmi" items="${lstBMI}">
+                                            <option value="${bmi.bmiID}" ${bmi.bmiID == selectedBmiId ? 'selected' : ''}>${bmi.classification}</option>
+                                        </c:forEach>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Status</label>
+                                    <div class="status-options">
+                                        <label class="radio-inline">
+                                            <input type="radio" name="status" value="Public" ${s == status ? 'checked' : ''} />
+                                            Public
+                                        </label>
+                                        <label class="radio-inline">
+                                            <input type="radio" name="status" value="Draft" ${s == status ? 'checked' : ''} />
+                                            Draft
+                                        </label>
+                                        <label class="radio-inline">
+                                            <input type="radio" name="status" value="Private" ${s == status ? 'checked' : ''} />
+                                            Private
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <!-- Content -->
+                                <div class="form-group">
+                                    <label for="editor">Content</label>
+                                    <textarea id="editor" name="content" rows="10">${content != null ? content : ''}</textarea>
+                                </div>
+
+                                <button type="submit" class="btn-submit">Publish</button>
                             </div>
+                        </form>
 
-                            <!-- Content -->
-                            <div class="form-group">
-                                <label for="content">Content</label>
-                                <textarea id="content" name="content" rows="10">${content != null ? content : ''}</textarea>
-                            </div>
-
-                            <button type="submit" class="btn-submit">Publish</button>
-                        </div>
-                    </form>
-
+                    </div>
                 </div>
-
                 <script>
-                    ClassicEditor
-                            .create(document.querySelector('#content'), {
-                                language: 'vi',
-                                toolbar: {
-                                    items: [
-                                        'heading', '|',
-                                        'bold', 'italic', 'strikethrough', 'highlight', 'link', '|',
-                                        'bulletedList', 'numberedList', '|',
-                                        'insertTable', 'tableColumn', 'tableRow', 'mergeTableCells', 'tableProperties', 'tableCellProperties', '|',
-                                        'undo', 'redo'
-                                    ]
-                                },
-                                table: {
-                                    contentToolbar: [
-                                        'tableColumn', 'tableRow', 'mergeTableCells',
-                                        'tableProperties', 'tableCellProperties'
-                                    ]
-                                },
-                                highlight: {
-                                    options: [
-                                        {
-                                            model: 'yellowMarker',
-                                            class: 'marker-yellow',
-                                            title: 'Yellow marker',
-                                            color: 'var(--ck-highlight-marker-yellow)',
-                                            type: 'marker'
-                                        },
-                                                // Bạn có thể thêm các màu khác ở đây
-                                    ]
-                                }
-                            })
-                            .catch(error => {
-                                console.error(error);
-                            });
-
-
+                    CKEDITOR.replace('editor')
                 </script>
-
-
             </div>
         </div>
         <!-- =========== Scripts =========  -->

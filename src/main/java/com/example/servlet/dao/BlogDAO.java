@@ -89,9 +89,7 @@ public List<Blogs> getBlogsByFilter(String keyword, int typeBMI, boolean sortNew
     } catch (SQLException ex) {
         ex.printStackTrace();
     }
-    finally{
-        db.closeConnection ();
-    }
+    
 
     return lstBlog;
 }
@@ -133,8 +131,6 @@ public List<Blogs> getBlogsByFilter(String keyword, int typeBMI, boolean sortNew
 
     } catch (SQLException ex) {
         Logger.getLogger(BlogDAO.class.getName()).log(Level.SEVERE, null, ex);
-    }finally{
-        db.closeConnection ();
     }
 
     return result;
@@ -172,8 +168,6 @@ public List<Blogs> getBlogsByFilter(String keyword, int typeBMI, boolean sortNew
     } catch (SQLException e) {
         e.printStackTrace();
         // Bạn có thể log hoặc throw exception tùy mục đích
-    }finally{
-        db.closeConnection ();
     }
 
     return false;
@@ -193,8 +187,6 @@ public boolean deleteBlogByID(int blogID) {
 
     } catch (SQLException ex) {
         Logger.getLogger(BlogDAO.class.getName()).log(Level.SEVERE, null, ex);
-    }finally{
-        db.closeConnection ();
     }
 
     return false;
@@ -233,8 +225,6 @@ public boolean deleteBlogByID(int blogID) {
 
     } catch (SQLException ex) {
         Logger.getLogger(BlogDAO.class.getName()).log(Level.SEVERE, null, ex);
-    }finally{
-        db.closeConnection ();
     }
 
     return path;
@@ -271,13 +261,47 @@ public boolean deleteBlogByID(int blogID) {
 
     } catch (SQLException ex) {
         Logger.getLogger(BlogDAO.class.getName()).log(Level.SEVERE, null, ex);
-    }finally{
-        db.closeConnection ();
     }
 
     return blog;
 }
+ public List<Blogs> getRelatedBlogByID(int blogID) {
+    List<Blogs> lstreB = new ArrayList<> ();
+     
+    Blogs blogr = getBlogByID (blogID);
+    String sql = "SELECT b.blogID, b.AuthorID, a.name AS authorName, b.typeBMI, b.title, "
+               + "b.image, b.content, b.status, b.create_at, b.update_at "
+               + "FROM Blogs b JOIN Accounts a ON b.AuthorID = a.id WHERE b.typeBMI = ?";
+    DBConnect db = new DBConnect();
 
+    try (Connection conn = db.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+
+        ps.setInt(1, blogr.getBmiId ());
+
+        try (ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                Blogs blog = new Blogs();
+                blog.setbID(rs.getInt("blogID"));
+                blog.setAuthorID(rs.getInt("AuthorID"));
+                blog.setAuthorName(rs.getString("authorName"));
+                blog.setBmiId(rs.getInt("typeBMI"));
+                blog.setTitle(rs.getString("title"));
+                blog.setImageUlr(rs.getString("image"));
+                blog.setContent(rs.getString("content"));
+                blog.setStatus(rs.getString("status"));
+                blog.setCreate_at(rs.getTimestamp("create_at"));
+                blog.setUpdate_at(rs.getTimestamp("update_at"));
+                lstreB.add (blog);
+            }
+        }
+
+    } catch (SQLException ex) {
+        Logger.getLogger(BlogDAO.class.getName()).log(Level.SEVERE, null, ex);
+    }
+
+    return lstreB;
+}
 
 public List<Blogs> getBlogsByFilterAndPage(
         String keyword,
@@ -299,11 +323,10 @@ public List<Blogs> getBlogsByFilterAndPage(
         sql.append(" AND b.typeBMI = ? ");
         params.add(typeBMI);
     }
-    if (keyword != null && !keyword.trim().isEmpty()) {
-        sql.append(" AND (b.title LIKE ? OR a.name LIKE ?) ");
-        String like = "%" + keyword.trim() + "%";
-        params.add(like);
-        params.add(like);
+    if (keyword != null ) {
+        sql.append(" AND (b.title LIKE ? ) ");
+        String like = keyword.trim() + "%";
+        params.add(like); 
     }
     if (status != null && !status.trim().isEmpty()) {
         sql.append(" AND b.status = ? ");
@@ -343,15 +366,12 @@ public List<Blogs> getBlogsByFilterAndPage(
                 lstBlog.add(blog);
             }
         }
-    }finally{
-        db.closeConnection ();
     }
 
     return lstBlog;
 }
 
-
-   public List<String> getAllDistinctStatuses() throws SQLException {
+public List<String> getAllDistinctStatuses() throws SQLException {
     List<String> statuses = new ArrayList<>();
     String sql = "SELECT DISTINCT status FROM Blogs";
     DBConnect db = new DBConnect();
@@ -363,13 +383,10 @@ public List<Blogs> getBlogsByFilterAndPage(
         while (rs.next()) {
             statuses.add(rs.getString(1));
         }
-    }finally{
-        db.closeConnection ();
     }
 
     return statuses;
 }
-
 public int getTotalBlog() {
     int count = 0;
     String sql = "SELECT COUNT(*) FROM Blogs";
@@ -384,11 +401,61 @@ public int getTotalBlog() {
         }
     } catch (SQLException ex) {
         Logger.getLogger(BlogDAO.class.getName()).log(Level.SEVERE, null, ex);
-    }finally{
-        db.closeConnection ();
     }
 
     return count;
 }
+public List<MonthlyStat> getMonthlyBlogStatsByYearAndAuthor(int year, int authorID) {
+    List<MonthlyStat> stats = new ArrayList<>();
+
+    String sql =
+        "WITH Months AS ( " +
+        "    SELECT 1 AS month_num, 'January' AS month_name UNION ALL " +
+        "    SELECT 2, 'February' UNION ALL " +
+        "    SELECT 3, 'March' UNION ALL " +
+        "    SELECT 4, 'April' UNION ALL " +
+        "    SELECT 5, 'May' UNION ALL " +
+        "    SELECT 6, 'June' UNION ALL " +
+        "    SELECT 7, 'July' UNION ALL " +
+        "    SELECT 8, 'August' UNION ALL " +
+        "    SELECT 9, 'September' UNION ALL " +
+        "    SELECT 10, 'October' UNION ALL " +
+        "    SELECT 11, 'November' UNION ALL " +
+        "    SELECT 12, 'December' " +
+        ") " +
+        "SELECT m.month_name AS month, ISNULL(COUNT(b.blogID), 0) AS total " +
+        "FROM Months m " +
+        "LEFT JOIN Blogs b ON MONTH(b.create_at) = m.month_num AND YEAR(b.create_at) = ? " +
+        (authorID > 0 ? " AND b.authorID = ? " : "") +
+        "GROUP BY m.month_num, m.month_name " +
+        "ORDER BY m.month_num";
+
+    DBConnect db = new DBConnect();
+    try (Connection conn = db.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, year);
+        if (authorID > 0) {
+            ps.setInt(2, authorID);
+        }
+
+        try (ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                String month = rs.getString("month");
+                int total = rs.getInt("total");
+                stats.add(new MonthlyStat(month, total));
+            }
+        }
+    } catch (SQLException ex) {
+        Logger.getLogger(BlogDAO.class.getName()).log(Level.SEVERE, null, ex);
+    } finally {
+        db.closeConnection();
+    }
+
+    return stats;
+}
+
+
+
 
 }

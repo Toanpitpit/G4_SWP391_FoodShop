@@ -17,6 +17,7 @@
 
         <!-- Thêm link thẻ <head> -->
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+       
 
 
     </head>
@@ -24,89 +25,18 @@
     <body>
         <div class="container">
             <!-- Navigation -->
-            <div class="navigation active">
-                <ul>
-                    <li>
-                        <a href="${pageContext.request.contextPath}"/dashboadnutri">
-                            <span class="icon"></span>
-                            <span class="title">Healthy Foods</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="${pageContext.request.contextPath}"/dashboadnutri">
-                            <span class="icon">
-                                <ion-icon name="home-outline"></ion-icon>
-                            </span>
-                            <span class="title">Dashboard</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="${pageContext.request.contextPath}"/listfood">
-                            <span class="icon">
-                                <ion-icon name="restaurant-outline"></ion-icon>
-                            </span>
-                            <span class="title">Foods</span>
-                        </a>
-                    </li>
-                    <li class="hovered">
-                        <a href="listblog">
-                            <span class="icon">
-                                <ion-icon name="chatbubble-outline"></ion-icon>
-                            </span>
-                            <span class="title">Blogs</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="notify">
-                            <span class="icon">
-                                <ion-icon name="notifications-outline"></ion-icon>
-                            </span>
-                            <span class="title">Notification</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="profile">
-                            <span class="icon">
-                                <ion-icon name="settings-outline"></ion-icon>
-                            </span>
-                            <span class="title">Settings</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="changePassword">
-                            <span class="icon">
-                                <ion-icon name="lock-closed-outline"></ion-icon>
-                            </span>
-                            <span class="title">Password</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="logout">
-                            <span class="icon">
-                                <ion-icon name="log-out-outline"></ion-icon>
-                            </span>
-                            <span class="title">Sign Out</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
+            <jsp:include page="/Nutritionist/Common.jsp"/>
 
             <!-- Main Content -->
             <div class="main active">
                 <!-- Top Bar -->
-                <div class="topbar">
-                    <div class="toggle">
-                        <ion-icon name="menu-outline"></ion-icon>
-                    </div>
-                    <div class="page-header">
+                <jsp:include page="/Nutritionist/topbar.jsp"/> 
+                
+                  <div class="page-header">
                         <h1 class="page-title">Blog Management</h1>
                         <p class="page-subtitle">Manage and organize your blog posts</p>
-                    </div>
-                    <div class="user">
-                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face" alt="User">
-                    </div>
-                </div>
-
+                  </div>
+                
                 <!-- Content -->
                 <div class="content-wrapper">
                     <!-- Success/Error Messages -->
@@ -126,45 +56,32 @@
 
                     <!-- Content Controls -->
                     <div class="content-controls">
-                        <a href="createblog" class="create-btn">
-                            <i class="fas fa-plus"></i>
-                            Create New Blog
-                        </a>
-                        <form name="sort" action="listblog" method="POST">
+                       
+                        <form name="sort" action="../listblog" method="GET">
                             <div class="search-filter-container">
-                                <div class="search-box">
-                                    <i class="fas fa-search search-icon"></i>
-                                    <input type="text" 
+                                <div class="search-box"> 
+                                    <input type="text" name="input_search"
                                            class="search-input" 
                                            placeholder="Tìm kiếm theo tiêu đề blog..." 
                                            id="searchInput"
-                                           oninput="this.form.submit()">
+                                           >
+                                    <div class="button-submit">
+                                        <input type="submit" name="button" value="🔍"/>
+                                    </div>
                                 </div>
-                                <script>
-                                    let typingTimer;
-                                    function debouncedSubmit() {
-                                        clearTimeout(typingTimer);
-                                        typingTimer = setTimeout(() => {
-                                            document.getElementById('searchInput').form.submit();
-                                        }, 1000);
-                                    }
-                                </script>
-
                                 <select class="filter-select" id="statusFilter" onchange="this.form.submit()">
-                                    <option name="status" value="all" ${ status == null ? 'selected' : ''}>Tất cả trạng thái</option>
+                                    <option name="search_status" value="all" ${ status == null ? 'selected' : ''}>Tất cả trạng thái</option>
                                     <c:forEach var="st" items="${statusList}">
                                         <option name="status" value="${st}"  ${ status == st ? 'selected' : ''} >${st}</option>
                                     </c:forEach>
                                 </select>
-
-                                <select class="filter-select" id="sortFilter" onchange="this.form.submit()">
-                                    <option value="newest">Mới nhất</option>
-                                    <option value="oldest">Cũ nhất</option>
-                                    <option value="title_asc">Tiêu đề A-Z</option>
-                                    <option value="title_desc">Tiêu đề Z-A</option>
-                                </select>
+                           
                             </div>
                         </form>
+                        <a href="createblog" class="create-btn">
+                            <i class="fas fa-plus"></i>
+                            Add new
+                        </a>
                     </div>
                     <div class="table-container">
                         <c:choose>
@@ -223,7 +140,7 @@
                     </div>
                     <!-- pagnent -->
                     <div style="display: flex ; justify-content: space-between ; padding: 10px">
-                        <div style="margin: 30px 0 20px">Show 10 of 12 items</div>
+                        <div style="margin: 30px 0 20px">Show ${lstB.size()} of ${totalBlog} items</div>
                         <c:if test="${totalPages > 1}">
                             <div class="pagination">
                                 <c:if test="${currentPage > 1}">
@@ -252,7 +169,6 @@
                 </div>
             </div>
         </div>
-
 
         <!-- =========== Scripts =========  -->
         <script src="../JS/Nutritionist/home.js"></script>

@@ -14,91 +14,11 @@
     </head>
     <body> 
         <div class="container">
-            <div class="navigation">
-                <ul>
-                    <li>
-                        <a href="/dashboadnutri">
-                            <span class="icon">
-                            </span>
-                            <span class="title">Heathy Foods</span>
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="/dashboadnutri">
-                            <span class="icon">
-                                <ion-icon name="home-outline"></ion-icon>
-                            </span>
-                            <span class="title">Dashboard</span>
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="listfood">
-                            <span class="icon">
-                                <ion-icon name="people-outline"></ion-icon>
-                            </span>
-                            <span class="title">Foods</span>
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="/listblog">
-                            <span class="icon">
-                                <ion-icon name="chatbubble-outline"></ion-icon>
-                            </span>
-                            <span class="title">My    Blogs</span>
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="notify">
-                            <span class="icon">
-                                <ion-icon name="help-outline"></ion-icon>
-                            </span>
-                            <span class="title">Notification</span>
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="profile">
-                            <span class="icon">
-                                <ion-icon name="settings-outline"></ion-icon>
-                            </span>
-                            <span class="title">Settings</span>
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="changePassword">
-                            <span class="icon">
-                                <ion-icon name="lock-closed-outline"></ion-icon>
-                            </span>
-                            <span class="title">Password</span>
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="logout">
-                            <span class="icon">
-                                <ion-icon name="log-out-outline"></ion-icon>
-                            </span>
-                            <span class="title">Sign Out</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
+            <jsp:include page="/Nutritionist/Common.jsp"/>
 
             <!-- ========================= Main ==================== -->
-            <div class="main">
-                <div class="topbar">
-                    <div class="toggle">
-                        <ion-icon name="menu-outline"></ion-icon>
-                    </div>
-                    <div class="user">
-                        <img src="assets/imgs/customer01.jpg" alt="">
-                    </div>
-                </div>
+            <div class="main active">
+              <jsp:include page="/Nutritionist/topbar.jsp"/>   
 
                 <div class="blog-container">
                     <main class="main-content">
@@ -124,13 +44,18 @@
 
                     <aside class="sidebar">
                         <h2 class="sidebar-title">Bài viết liên quan</h2>
-
                         <article class="related-post">
-                            <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Digital Marketing" class="related-image">
-                            <div class="related-content">
-                                <h3 class="related-title">Digital Marketing Strategies for Modern Business</h3>
-                                <span class="related-tag">Marketing</span>
-                            </div>
+                            <c:forEach var="post" items="${relatedBlogs}">
+                                <a href="blog/detail?id=${post.id}" class="related-link">
+                                    <div class="related-item">
+                                        <img src="${post.imageUrl}" alt="${post.title}" class="related-image" />
+                                        <div class="related-content">
+                                            <h3 class="related-title">${post.title}</h3>
+                                            <span class="related-tag">${post.bmiId}</span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </c:forEach>
                         </article>
                     </aside>
                 </div>

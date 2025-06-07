@@ -13,75 +13,85 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author Admin
  */
 public class NotifyDAO {
-    
-    Connection conn;
-    PreparedStatement ps;
-    CallableStatement cs = null;
-    ResultSet rs;
-    DBConnect db = new DBConnect();
-    
-    
-    public List<Notifys> getNotificationsByFilter(Integer receiverID, String roleTarget, Boolean isRead, boolean sortNewestFirst) {
+
+ 
+    DBConnect db = new DBConnect ();
+
+  public List<Notifys> getNotificationsByFilter(Integer receiverID, String roleTarget, Boolean isRead, boolean sortNewestFirst) {
     List<Notifys> lstNoti = new ArrayList<>();
-    DBConnect db = new DBConnect();
-    try {
-        StringBuilder sql = new StringBuilder(
-            "SELECT * " +
-            "FROM Notifications WHERE 1=1 "
-        );
+    StringBuilder sql = new StringBuilder("SELECT * FROM Notifications WHERE 1=1 ");
+    List<Object> params = new ArrayList<>();
 
-        List<Object> params = new ArrayList<>();
+    // Lọc theo receiverID hoặc roleTarget
+    if (receiverID != null) {
+        sql.append("AND receiverID = ? ");
+        params.add(receiverID);
+    } else if (roleTarget != null && !roleTarget.trim().isEmpty()) {
+        sql.append("AND role_target = ? ");
+        params.add(roleTarget);
+    }
+    if (isRead != null) {
+        sql.append("AND isRead = ? ");
+        params.add(isRead);
+    }
+    sql.append("ORDER BY create_at ").append(sortNewestFirst ? "DESC" : "ASC");
 
-        if (receiverID != null) {
-            sql.append("AND receiverID = ? ");
-            params.add(receiverID);
-            
-        } else 
-            if (roleTarget != null && !roleTarget.trim().isEmpty()) {
-            sql.append("AND role_target = ? ");
-            params.add(roleTarget);
-        }
-
-        if (isRead != null) {
-            sql.append("AND isRead = ? ");
-            params.add(isRead);
-        }
-
-        sql.append("ORDER BY create_at ").append(sortNewestFirst ? "DESC" : "ASC");
-
-        conn = db.getConnection();
-        ps = conn.prepareStatement(sql.toString());
+    try (Connection conn = db.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql.toString())) {
 
         for (int i = 0; i < params.size(); i++) {
             ps.setObject(i + 1, params.get(i));
         }
 
-        rs = ps.executeQuery();
-        while (rs.next()) {
-            Notifys noti = new Notifys(
-                rs.getInt(1),
-                rs.getInt(2),
-                rs.getString(3),
-                rs.getString(4),
-                rs.getInt(5),
-                rs.getInt(6),
-                rs.getBoolean(7),
-                rs.getTimestamp(8)
-            );
-            lstNoti.add(noti);
+        try (ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Notifys noti = new Notifys(
+                        rs.getInt("notificationID"),
+                        rs.getInt("receiverID"),
+                        rs.getString("role_target"),
+                        rs.getString("message"),
+                        rs.getInt("senderID"),
+                        rs.getInt("blogID"),
+                        rs.getBoolean("isRead"),
+                        rs.getTimestamp("create_at")
+                );
+                lstNoti.add(noti);
+            }
         }
-        conn.close();;
+
     } catch (Exception ex) {
         ex.printStackTrace();
-    } 
+    }
 
     return lstNoti;
+}
+
+    
+    public int getTotalNotify(int authorID , String role) {
+    int count = 0;
+    String sql = "SELECT COUNT(*) FROM Notifications WHERE Notifications.isRead = 0";
+    try (Connection conn = db.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql);
+         ResultSet rs = ps.executeQuery()) {
+
+        if (rs.next()) {
+            count = rs.getInt(1);
+        }
+    } catch (SQLException ex) {
+        Logger.getLogger(BlogDAO.class.getName()).log(Level.SEVERE, null, ex);
+    }finally{
+        db.closeConnection ();
+    }
+
+    return count;
 }
 
 }
