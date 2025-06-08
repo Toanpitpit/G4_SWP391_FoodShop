@@ -150,7 +150,6 @@ public class CreateBlogsServerLet extends HttpServlet {
                 out.print (image_ulr);
 
             } catch (Exception e) {
-
                 e.printStackTrace ();
             }
             Timestamp create_at = new Timestamp (System.currentTimeMillis ());

@@ -31,7 +31,7 @@ public class AdminController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession(false);
-        Account account = (session != null) ? (Account) session.getAttribute("account") : null;
+        Account account = (session != null) ? (Account) session.getAttribute("Account") : null;
         if (session == null || account == null || !"Admin".equalsIgnoreCase(account.getRole())) {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
             return;

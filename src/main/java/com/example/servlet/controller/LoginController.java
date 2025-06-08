@@ -81,7 +81,9 @@ public class LoginController extends HttpServlet {
             if(user.getRole ().equals ("Nutritionist")){
             response.sendRedirect ("/dashboadnutri");
             }
-            else response.sendRedirect("profile.jsp");
+            else if(user.getRole ().equals ("Admin")){
+                response.sendRedirect ("/adminDashboard");
+            }
         } else {
             request.setAttribute("error", "Invalid email or password");
             request.getRequestDispatcher("login.jsp").forward(request, response);
