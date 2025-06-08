@@ -66,7 +66,7 @@
             <h3 class="mb-0">User Profile</h3>
         </div>
         <div class="card-body p-4">
-            <c:if test="${empty sessionScope.user}">
+            <c:if test="${empty sessionScope.Account}">
                 <div class="alert alert-danger" role="alert">
                     User session not found. Please <a href="login.jsp" class="alert-link">log in</a>.
                 </div>

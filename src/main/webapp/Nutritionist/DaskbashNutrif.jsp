@@ -19,7 +19,7 @@
         <div class="container">
             <jsp:include page="/Nutritionist/Common.jsp"/>
             <!-- ========================= Main ==================== -->
-            <div class="main active">
+            <div class="main">
              <jsp:include page="/Nutritionist/topbar.jsp"/>  
 
                 <!-- ======================= Cards ================== -->

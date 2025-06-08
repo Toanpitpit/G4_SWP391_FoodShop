@@ -33,7 +33,7 @@ public class ProfileController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        Account user = (Account) session.getAttribute("user");
+        Account user = (Account) session.getAttribute("Account");
 
         if (user == null) {
             response.sendRedirect("login.jsp");
@@ -43,7 +43,7 @@ public class ProfileController extends HttpServlet {
         try {
             user = userDAO.findByEmail(user.getEmail());
             if (user != null) {
-                session.setAttribute("user", user);
+                session.setAttribute("Account", user);
             } 
         } catch (SQLException e) {
             request.setAttribute("error", "Error loading user data: " + e.getMessage());

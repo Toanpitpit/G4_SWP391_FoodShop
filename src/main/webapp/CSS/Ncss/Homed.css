@@ -1,349 +1,958 @@
+/* ============= Enhanced Dashboard CSS with Green Theme ============= */
 
-.overview-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr; /* Hai cột bằng nhau */
-    grid-gap: 20px;
-    margin: 20px;
+:root {
+    /* Main Green Theme Colors */
+    --primary-green: #28a745;
+    --secondary-green: #20c997;
+    --light-green: #4fd69c;
+    --dark-green: #1e7e34;
+    --accent-green: #e8f5e8;
+    --glass-green: rgba(40, 167, 69, 0.1);
+    
+    /* Green colors from second file */
+    --green: #2ecc71;
+    --green-hover: #27ae60;
+    
+    /* Neutral Colors */
+    --white: #ffffff;
+    --gray-light: #f8f9fa;
+    --gray: #f1f3f5;
+    --gray-dark: #6c757d;
+    --black1: #1e1e1e;
+    --black2: #666;
+    --shadow-light: rgba(0, 0, 0, 0.05);
+    --shadow-medium: rgba(0, 0, 0, 0.1);
+    --shadow-dark: rgba(0, 0, 0, 0.15);
+    --shadow-heavy: rgba(0, 0, 0, 0.15);
+    
+    /* Chart Colors */
+    --chart-color-1: rgba(40, 167, 69, 0.8);
+    --chart-color-2: rgba(32, 201, 151, 0.8);
+    --chart-color-3: rgba(79, 214, 156, 0.8);
+    --chart-color-4: rgba(30, 126, 52, 0.8);
+    --chart-color-5: rgba(255, 193, 7, 0.8);
+    --chart-color-6: rgba(220, 53, 69, 0.8);
 }
-/* ------------------------------------------------ */
-/* 2) Biểu đồ “Trạng thái” chung */
-/* ------------------------------------------------ */
-/* Bạn có thể giữ nguyên hoặc tinh chỉnh nếu cần */
+
+/* ============= Global Styles ============= */
+* {
+    font-family: "Ubuntu", sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    overflow-x: hidden;
+    background: linear-gradient(135deg, #e8f5e8 0%, #f0f9f0 50%, #e1f7e1 100%);
+    position: relative;
+}
+
+/* Animated Background */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(circle at 20% 80%, rgba(40, 167, 69, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(32, 201, 151, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(79, 214, 156, 0.1) 0%, transparent 50%);
+    animation: float 8s ease-in-out infinite;
+    z-index: -1;
+}
+
+@keyframes float {
+    0%, 100% { 
+        transform: translateY(0px) rotate(0deg); 
+        opacity: 0.8;
+    }
+    50% { 
+        transform: translateY(-20px) rotate(2deg); 
+        opacity: 1;
+    }
+}
+
+.container {
+    position: relative;
+    width: 100%;
+}
+
+/* =============== Navigation ================ */
+.navigation {
+    position: fixed;
+    width: 300px;
+    height: 100%;
+    background: linear-gradient(180deg, var(--green) 0%, var(--green-hover) 100%);
+    border-left: 10px solid var(--green);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+    z-index: 1000;
+    box-shadow: 4px 0 20px var(--shadow-medium);
+}
+
+.navigation.active {
+    width: 80px;
+}
+
+.navigation ul {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding-top: 20px;
+}
+
+.navigation ul li {
+    position: relative;
+    width: 100%;
+    list-style: none;
+    border-top-left-radius: 30px;
+    border-bottom-left-radius: 30px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Dropdown parent items */
+.navigation ul li.dropdown {
+    overflow: hidden;
+}
+
+.navigation ul li:hover,
+.navigation ul li.hovered {
+    background-color: var(--white);
+    transform: translateX(5px);
+}
+
+.navigation ul li:nth-child(1) {
+    margin-bottom: 40px;
+    pointer-events: none;
+}
+
+.navigation ul li a {
+    position: relative;
+    display: block;
+    width: 100%;
+    display: flex;
+    text-decoration: none;
+    color: var(--white);
+    transition: all 0.3s ease;
+}
+
+.navigation ul li:hover a,
+.navigation ul li.hovered a {
+    color: var(--green);
+}
+
+/* Dropdown toggle styles */
+.navigation ul li .dropdown-toggle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navigation ul li .dropdown-icon {
+    margin-right: 15px;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.navigation ul li:hover .dropdown-icon,
+.navigation ul li.hovered .dropdown-icon {
+    transform: rotate(180deg);
+    color: var(--green);
+}
+
+/* Dropdown menu styles */
+.navigation ul li .dropdown-menu {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    background-color: rgba(255, 255, 255, 0.1);
+    margin-left: 20px;
+    border-left: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.navigation ul li:hover .dropdown-menu,
+.navigation ul li.hovered .dropdown-menu {
+    max-height: 500px;
+}
+
+.navigation ul li .dropdown-menu li {
+    background: transparent;
+    border-radius: 0;
+}
+
+.navigation ul li .dropdown-menu li:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.navigation ul li .dropdown-menu li a {
+    padding-left: 20px;
+}
+
+.navigation ul li .dropdown-menu li a .icon {
+    min-width: 40px;
+    height: 40px;
+    line-height: 50px;
+}
+
+.navigation ul li .dropdown-menu li a .title {
+    font-size: 0.9em;
+}
+
+.navigation ul li a .icon {
+    position: relative;
+    display: block;
+    min-width: 60px;
+    height: 60px;
+    line-height: 75px;
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.navigation ul li a .icon ion-icon {
+    font-size: 1.75rem;
+    transition: all 0.3s ease;
+}
+
+.navigation ul li:hover a .icon {
+    transform: scale(1.1);
+}
+
+.navigation ul li a .title {
+    position: relative;
+    display: block;
+    padding: 0 10px;
+    height: 60px;
+    line-height: 60px;
+    text-align: start;
+    white-space: nowrap;
+    transition: all 0.3s ease;
+}
+
+/* --------- curve outside ---------- */
+.navigation ul li:not(.dropdown):hover a::before,
+.navigation ul li:not(.dropdown).hovered a::before {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: -50px;
+    width: 50px;
+    height: 50px;
+    background-color: transparent;
+    border-radius: 50%;
+    box-shadow: 35px 35px 0 10px var(--white);
+    pointer-events: none;
+    animation: slideInTop 0.3s ease;
+}
+
+.navigation ul li:not(.dropdown):hover a::after,
+.navigation ul li:not(.dropdown).hovered a::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    bottom: -50px;
+    width: 50px;
+    height: 50px;
+    background-color: transparent;
+    border-radius: 50%;
+    box-shadow: 35px -35px 0 10px var(--white);
+    pointer-events: none;
+    animation: slideInBottom 0.3s ease;
+}
+
+@keyframes slideInTop {
+    0% { opacity: 0; transform: translateY(-10px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInBottom {
+    0% { opacity: 0; transform: translateY(10px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+/* Active state for dropdown items */
+.navigation ul li .dropdown-menu li.active {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.navigation ul li .dropdown-menu li.active a {
+    color: var(--white);
+    font-weight: bold;
+}
+
+/* ===================== Main ===================== */
+.main {
+    position: absolute;
+    width: calc(100% - 300px);
+    left: 300px;
+    min-height: 100vh;
+    background: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(10px);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: fadeInRight 0.6s ease;
+    padding: 20px;
+}
+
+.main.active {
+    width: calc(100% - 80px);
+    left: 80px;
+}
+
+@keyframes fadeInRight {
+    0% { opacity: 0; transform: translateX(30px); }
+    100% { opacity: 1; transform: translateX(0); }
+}
+
+.topbar {
+    border-radius: 10px;
+    width: 100%;
+    height: 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    background: var(--white);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 2px 20px var(--shadow-light);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    transition: all 0.3s ease;
+    margin-bottom: 20px;
+}
+
+.topbar:hover {
+    box-shadow: 0 4px 30px var(--shadow-medium);
+}
+
+.toggle {
+    position: relative;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2.5rem;
+    cursor: pointer;
+    border-radius: 15px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    color: var(--black1);
+}
+
+.toggle:hover {
+    background: var(--green);
+    color: var(--white);
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
+}
+
+.search {
+    position: relative;
+    width: 400px;
+    margin: 0 10px;
+    transition: all 0.3s ease;
+}
+
+.search:focus-within {
+    transform: scale(1.02);
+}
+
+.search label {
+    position: relative;
+    width: 100%;
+}
+
+.search label input {
+    width: 100%;
+    height: 50px;
+    border-radius: 25px;
+    padding: 5px 20px;
+    padding-left: 45px;
+    font-size: 16px;
+    outline: none;
+    border: 2px solid transparent;
+    background: var(--gray);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 10px var(--shadow-light);
+}
+
+.search label input:focus {
+    border-color: var(--green);
+    background: var(--white);
+    box-shadow: 0 4px 20px rgba(46, 204, 113, 0.2);
+    transform: translateY(-2px);
+}
+
+.search label ion-icon {
+    position: absolute;
+    top: 50%;
+    left: 15px;
+    transform: translateY(-50%);
+    font-size: 1.3rem;
+    color: var(--black2);
+    transition: all 0.3s ease;
+}
+
+.search:focus-within label ion-icon {
+    color: var(--green);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.user {
+    position: relative;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 3px solid transparent;
+    box-shadow: 0 4px 15px var(--shadow-light);
+}
+
+.user:hover {
+    transform: scale(1.1);
+    border-color: var(--green);
+    box-shadow: 0 6px 25px rgba(46, 204, 113, 0.3);
+}
+
+.user img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.user:hover img {
+    transform: scale(1.05);
+}
+
+/* ============= Cards Section (Enhanced Version) ============= */
+.cardBox {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    margin-bottom: 35px;
+    animation: fadeInUp 0.8s ease 0.2s both;
+}
+
+@keyframes fadeInUp {
+    0% { opacity: 0; transform: translateY(30px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    padding: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 
+        0 10px 30px var(--shadow-light),
+        0 0 0 1px rgba(255, 255, 255, 0.2);
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(40, 167, 69, 0.1);
+    cursor: pointer;
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary-green), var(--secondary-green));
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.card:hover::before {
+    transform: scaleX(1);
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 
+        0 20px 40px var(--shadow-medium),
+        0 0 0 1px rgba(40, 167, 69, 0.2);
+    background: rgba(255, 255, 255, 0.95);
+}
+
+.card a {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    width: 100%;
+}
+
+.numbers {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary-green);
+    margin-bottom: 8px;
+    background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.cardName {
+    font-size: 1.1rem;
+    color: var(--black2);
+    font-weight: 500;
+    margin-bottom: 0;
+}
+
+.iconBx {
+    font-size: 3rem;
+    color: var(--primary-green);
+    opacity: 0.7;
+    transition: all 0.3s ease;
+}
+
+.card:hover .iconBx {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+/* ============= Charts Section ============= */
+.charts-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+    margin-bottom: 35px;
+}
+
+.charts-grid-bottom {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+    margin-bottom: 35px;
+}
+
+.chart-card {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(20px);
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 
+        0 10px 30px var(--shadow-light),
+        0 0 0 1px rgba(255, 255, 255, 0.2);
+    transition: all 0.4s ease;
+    border: 1px solid rgba(40, 167, 69, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.chart-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, var(--primary-green), var(--secondary-green));
+}
+
+.chart-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 
+        0 20px 40px var(--shadow-medium),
+        0 0 0 1px rgba(40, 167, 69, 0.2);
+}
+
+.chart-card h3 {
+    margin-bottom: 25px;
+    color: var(--black1);
+    font-size: 1.3rem;
+    font-weight: 600;
+    background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.chart-container {
+    position: relative;
+    height: 280px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+/* ============= Status Overview ============= */
 .status-overview {
     display: grid;
-    grid-template-columns: 1fr 0.8fr; /* Canvas chiếm 2 phần, legend chiếm 1 phần */
-    grid-gap: 20px;
-    background: var(--white);
-    padding: 16px 20px;
-    border-radius: 8px;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+    grid-template-columns: 1fr 0.8fr;
+    grid-gap: 25px;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(20px);
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 
+        0 10px 30px var(--shadow-light),
+        0 0 0 1px rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(40, 167, 69, 0.1);
+    transition: all 0.4s ease;
+}
+
+.status-overview:hover {
+    transform: translateY(-5px);
+    box-shadow: 
+        0 20px 40px var(--shadow-medium),
+        0 0 0 1px rgba(40, 167, 69, 0.2);
 }
 
 .status-chart {
     display: flex;
     align-items: center;
     justify-content: center;
-    max-width: 250px;   /* tùy chọn để giới hạn kích thước */
-    max-height: 250px;
+    max-width: 280px;
+    max-height: 280px;
 }
 
 #statusChart {
     width: 100% !important;
     height: auto !important;
-    max-height: 250px;
+    max-height: 280px;
 }
 
 .status-legend {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    padding: 20px;
+    background: rgba(40, 167, 69, 0.03);
+    border-radius: 15px;
+    border: 1px solid rgba(40, 167, 69, 0.1);
 }
 
 .status-legend h3 {
-    font-size: 1.15rem;
-    margin-bottom: 12px;
+    font-size: 1.2rem;
+    margin-bottom: 20px;
     color: var(--black1);
+    font-weight: 600;
+    background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
-.status-legend .legend-list {
+.legend-list {
     list-style: none;
     padding: 0;
-    margin: 0 0 16px 0;
+    margin: 0 0 20px 0;
 }
 
-.status-legend .legend-list li {
+.legend-list li {
     display: flex;
     align-items: center;
-    margin-bottom: 8px;
+    margin-bottom: 12px;
+    padding: 8px 12px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.5);
+    transition: all 0.3s ease;
 }
 
-.status-legend .legend-color-box {
-    width: 16px;
-    height: 16px;
-    border-radius: 4px;
-    margin-right: 8px;
+.legend-list li:hover {
+    background: rgba(40, 167, 69, 0.1);
+    transform: translateX(5px);
 }
 
-.status-legend .legend-label {
+.legend-color-box {
+    width: 18px;
+    height: 18px;
+    border-radius: 6px;
+    margin-right: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.legend-label {
     flex: 1;
     font-size: 0.95rem;
     color: var(--black1);
+    font-weight: 500;
 }
 
-.status-legend .legend-value {
-    font-weight: 600;
-    font-size: 0.95rem;
-    color: var(--black2);
+.legend-value {
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--primary-green);
+    background: rgba(40, 167, 69, 0.1);
+    padding: 4px 8px;
+    border-radius: 6px;
 }
 
-.status-legend .chart-name {
+.chart-name {
     font-size: 0.9rem;
     color: var(--black2);
     font-style: italic;
-    margin-top: 8px;
-}
-
-/* ------------------------------------------------ */
-/* 3) Biểu đồ “Loại BMI” chung */
-/* ------------------------------------------------ */
-.bmi-overview {
-    display: grid;
-    grid-template-columns: 1fr 0.8fr; /* Canvas chiếm 2 phần, legend chiếm 1 phần */
-    grid-gap: 20px;
-    background: var(--white);
-    padding: 16px 20px;
+    margin-top: 15px;
+    padding: 10px;
+    background: rgba(40, 167, 69, 0.05);
     border-radius: 8px;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+    border-left: 4px solid var(--primary-green);
 }
 
-.bmi-chart {
+/* ============= Chart Header ============= */
+.chart-header {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    justify-content: center;
-    max-width: 250px;   /* giới hạn kích thước nếu muốn */
-    max-height: 250px;
+    margin-bottom: 25px;
+    padding: 15px;
+    background: rgba(40, 167, 69, 0.05);
+    border-radius: 12px;
+    border: 1px solid rgba(40, 167, 69, 0.1);
 }
 
-#bmiChart {
-    width: 100% !important;
-    height: auto !important;
-    max-height: 250px;
-}
-
-.bmi-legend {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.bmi-legend h3 {
-    font-size: 1.15rem;
-    margin-bottom: 12px;
+.chart-header h3 {
+    margin: 0;
     color: var(--black1);
-}
-
-.bmi-legend .legend-list {
-    list-style: none;
-    padding: 0;
-    margin: 0 0 16px 0;
-}
-
-.bmi-legend .legend-list li {
-    display: flex;
-    align-items: center;
-    margin-bottom: 8px;
-}
-
-.bmi-legend .legend-color-box {
-    width: 16px;
-    height: 16px;
-    border-radius: 4px;
-    margin-right: 8px;
-}
-
-.bmi-legend .legend-label {
-    flex: 1;
-    font-size: 0.95rem;
-    color: var(--black1);
-}
-
-.bmi-legend .legend-value {
+    font-size: 1.2rem;
     font-weight: 600;
-    font-size: 0.95rem;
-    color: var(--black2);
 }
 
-.bmi-legend .chart-name {
+.chart-header form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.chart-header label {
     font-size: 0.9rem;
     color: var(--black2);
-    font-style: italic;
-    margin-top: 8px;
+    font-weight: 500;
 }
 
-/* ------------------------------------------------ */
-/* 4) Định nghĩa sẵn màu cho legend BMI (6 màu tuần tự) */
-/* ------------------------------------------------ */
-:root {
-    --bmi-color-0:  rgba(54, 162, 235, 0.8);
-    --bmi-color-1:  rgba(255, 99, 132, 0.8);
-    --bmi-color-2:  rgba(255, 205, 86, 0.8);
-    --bmi-color-3:  rgba(75, 192, 192, 0.8);
-    --bmi-color-4:  rgba(153, 102, 255, 0.8);
-    --bmi-color-5:  rgba(255, 159, 64, 0.8);
-    --white: #ffffff;
-    --gray: #f1f3f5;
-    --black1: #1e1e1e;
-    --black2: #666;
-    --green: #2ecc71;
+.chart-header select {
+    padding: 8px 12px;
+    border: 2px solid rgba(40, 167, 69, 0.2);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--black1);
+    font-weight: 500;
+    transition: all 0.3s ease;
 }
 
-/* ------------------------------------------------ */
-/* 5) Responsive: Khi màn hình <= 800px, xếp cột 1 */
-/* ------------------------------------------------ */
-@media screen and (max-width: 800px) {
-    .overview-container {
-        grid-template-columns: 1fr;  /* Hai biểu đồ xếp dọc */
-        margin: 16px;
+.chart-header select:focus {
+    border-color: var(--primary-green);
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+}
+
+.chart-header button {
+    padding: 8px 16px;
+    background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.chart-header button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+}
+
+/* ============= Notifications ============= */
+.notifications {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(20px);
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 
+        0 10px 30px var(--shadow-light),
+        0 0 0 1px rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(40, 167, 69, 0.1);
+    transition: all 0.4s ease;
+    position: relative;
+}
+
+.notifications::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, var(--primary-green), var(--secondary-green));
+}
+
+.notifications:hover {
+    transform: translateY(-5px);
+    box-shadow: 
+        0 20px 40px var(--shadow-medium),
+        0 0 0 1px rgba(40, 167, 69, 0.2);
+}
+
+.notifications h3 {
+    margin-bottom: 25px;
+    color: var(--black1);
+    font-size: 1.3rem;
+    font-weight: 600;
+    background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.notification-item {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid rgba(40, 167, 69, 0.1);
+    transition: all 0.3s ease;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.notification-item:hover {
+    background: rgba(40, 167, 69, 0.05);
+    transform: translateX(5px);
+}
+
+.notification-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.notification-icon {
+    margin-right: 15px;
+    font-size: 1.4rem;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(40, 167, 69, 0.1);
+    transition: all 0.3s ease;
+}
+
+.notification-icon.success { 
+    color: var(--primary-green);
+    background: rgba(40, 167, 69, 0.1);
+}
+
+.notification-icon.error { 
+    color: #dc3545;
+    background: rgba(220, 53, 69, 0.1);
+}
+
+.notification-icon.warning { 
+    color: #ffc107;
+    background: rgba(255, 193, 7, 0.1);
+}
+
+.notification-text {
+    flex: 1;
+}
+
+.notification-text p {
+    margin: 0;
+    color: var(--black1);
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+.notification-text small {
+    color: var(--black2);
+    font-size: 0.8rem;
+    font-weight: 400;
+}
+
+/* ============= Responsive Design ============= */
+@media (max-width: 1200px) {
+    .charts-grid,
+    .charts-grid-bottom {
+        grid-template-columns: 1fr;
     }
-    .status-overview,
-    .bmi-overview {
-        grid-template-columns: 1fr; /* Canvas và legend xếp dọc */
-        margin: 16px 0;
+    
+    .status-overview {
+        grid-template-columns: 1fr;
+    }
+    
+    .main {
+        width: calc(100% - 300px);
+        left: 300px;
+    }
+    
+    .main.active {
+        width: calc(100% - 80px);
+        left: 80px;
     }
 }
 
- .dashboard-content {
-            padding: 0 30px 30px;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .stat-card {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            transition: transform 0.3s ease;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .stat-card:nth-child(1) { border-left: 5px solid #4CAF50; }
-        .stat-card:nth-child(2) { border-left: 5px solid #2196F3; }
-        .stat-card:nth-child(3) { border-left: 5px solid #FF9800; }
-        .stat-card:nth-child(4) { border-left: 5px solid #F44336; }
-
-        .stat-info h3 {
-            font-size: 14px;
-            color: #666;
-            margin-bottom: 5px;
-        }
-
-        .stat-info .number {
-            font-size: 32px;
-            font-weight: bold;
-            color: #333;
-        }
-
-        .stat-icon {
-            font-size: 40px;
-            opacity: 0.7;
-        }
-
-        .stat-card:nth-child(1) .stat-icon { color: #4CAF50; }
-        .stat-card:nth-child(2) .stat-icon { color: #2196F3; }
-        .stat-card:nth-child(3) .stat-icon { color: #FF9800; }
-        .stat-card:nth-child(4) .stat-icon { color: #F44336; }
-
-        /* Charts Section */
-        .charts-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .charts-grid-bottom {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .chart-card {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        .chart-card h3 {
-            margin-bottom: 20px;
-            color: #333;
-            font-size: 18px;
-        }
-
-        .chart-container {
-            position: relative;
-            height: 250px;
-            display: flex;
-            justify-content: center;
-            gap:  15px;
-        }
-
-        /* Notifications */
-        .notifications {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        .notifications h3 {
-            margin-bottom: 20px;
-            color: #333;
-            font-size: 18px;
-        }
-
-        .notification-item {
-            display: flex;
-            align-items: center;
-            padding: 15px 0;
-            border-bottom: 1px solid #eee;
-        }
-
-        .notification-item:last-child {
-            border-bottom: none;
-        }
-
-        .notification-icon {
-            margin-right: 15px;
-            font-size: 20px;
-        }
-
-        .notification-icon.success { color: #4CAF50; }
-        .notification-icon.error { color: #F44336; }
-        .notification-icon.warning { color: #FF9800; }
-
-        .notification-text {
-            flex: 1;
-        }
-
-        .notification-text p {
-            margin: 0;
-            color: #333;
-        }
-
-        .notification-text small {
-            color: #666;
-            font-size: 12px;
-        }
-
-        @media (max-width: 768px) {
-            .charts-grid,
-            .charts-grid-bottom {
-                grid-template-columns: 1fr;
-            }
-            
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .navigation {
-                width: 80px;
-            }
-            
-            .navigation ul li a .title {
-                display: none;
-            }
-        }
+@media (max-width: 768px) {
+    .cardBox {
+        grid-template-columns: repeat(2, 1fr);
+        grid-gap: 20px;
+    }
+    
+    .main {
+        width: 100%;
+        left: 0;
+        padding: 15px;
+    }
+    
+    .main.active {
+        width: 100%;
+        left: 0;
+    }
+    
+    .navigation {
+        left: -300px;
+    }
+    
+    .navigation.active {
+        left: 0;
+        width: 300px;
+    }
+    
+    .card {
+        padding: 25px;
+    }
+    
+    .chart-card {
+        padding: 20px;
+    }
+    
+    .notifications {
+        padding: 20px;
+    }
+    
+    .chart-container {
+        height: 200px;
+    }
+    
+    .chart-header {
+        flex-direction: column;
+        gap: 15px;
+        align-items: stretch;
+    }
+    
+    .chart-header form {
+        justify-content: center;
+    }
+    
+    .search {
+        width: 250px;
+    }
+}

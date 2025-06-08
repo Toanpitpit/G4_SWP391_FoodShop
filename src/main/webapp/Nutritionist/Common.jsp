@@ -5,7 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-      <div class="navigation active">
+      <div class="navigation">
                 <ul>
                     <li>
                         <a href="dashboadnutri">
@@ -52,7 +52,7 @@
                     </li>
 
                     <li>
-                        <a href="profile">
+                        <a href="/ProfileController">
                             <span class="icon">
                                 <ion-icon name="settings-outline"></ion-icon>
                             </span>
@@ -70,7 +70,7 @@
                     </li>
 
                     <li>
-                        <a href="logout">
+                        <a href="/LogoutController">
                             <span class="icon">
                                 <ion-icon name="log-out-outline"></ion-icon>
                             </span>

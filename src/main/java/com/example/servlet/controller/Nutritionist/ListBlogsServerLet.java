@@ -61,6 +61,10 @@ public class ListBlogsServerLet extends HttpServlet {
         BlogDAO _dao = new BlogDAO ();
         BMIClassificationDAO b_dao = new BMIClassificationDAO ();
         HttpSession session = request.getSession (false);
+        if (session == null || session.getAttribute("Account") == null) {
+            response.sendRedirect("login.jsp");
+            return;
+        }
         if (session != null) {
             String mess = (String) session.getAttribute ("mess");
             String errMess = (String) session.getAttribute ("Errmess");
@@ -72,7 +76,7 @@ public class ListBlogsServerLet extends HttpServlet {
                 request.setAttribute ("Errmess", errMess);
                 session.removeAttribute ("Errmess");
             }
-        }
+        } 
         String index = request.getParameter ("index");
 
         request.setAttribute ("currentPage", index);
@@ -84,6 +88,7 @@ public class ListBlogsServerLet extends HttpServlet {
             String input_search = request.getParameter ("input_search");
             
             int pageSize = 10;
+            
             if (request.getParameter ("pageSize") == null || request.getParameter ("pageSize").trim ().isEmpty ()) {
                 pageSize = 10;
             } else {
@@ -96,7 +101,10 @@ public class ListBlogsServerLet extends HttpServlet {
             List< BMIClassification> lstBMI = b_dao.getAllBMI ();
             List<MonthlyStat> typeStats = _dao.countByTypeBMI (-1);
             int totalBlog = _dao.getTotalBlog ();
-            int totalPages = (totalBlog / 10) + 1;
+              int totalPages = 1;
+            if(totalBlog > 10 ){
+                totalPages = (totalBlog / 10) + 1;
+            }
             BMIClassificationDAO bmiDAO = new BMIClassificationDAO ();
             List<BMIClassification> lstBmi = bmiDAO.getAllBMI ();
             

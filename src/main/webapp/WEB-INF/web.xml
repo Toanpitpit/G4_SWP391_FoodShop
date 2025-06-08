@@ -36,6 +36,23 @@
         <servlet-name>ListRequestServerLet</servlet-name>
         <servlet-class>com.example.servlet.controller.Nutritionist.ListRequestServerLet</servlet-class>
     </servlet>
+       <servlet>
+        <servlet-name>GoogleLoginServlet</servlet-name>
+        <servlet-class>com.example.servlet.controller.GoogleLoginServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>GitHubLoginServlet</servlet-name>
+        <servlet-class>com.example.servlet.controller.GitHubLoginServlet</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>GoogleLoginServlet</servlet-name>
+        <url-pattern>/GoogleLoginServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GitHubLoginServlet</servlet-name>
+        <url-pattern>/GitHubLoginServlet</url-pattern>
+    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ResetPasswordController</servlet-name>
         <url-pattern>/ResetPasswordController</url-pattern>

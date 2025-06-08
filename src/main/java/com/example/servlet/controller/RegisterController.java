@@ -21,61 +21,64 @@ public class RegisterController extends HttpServlet {
 
     @Override
     public void init() {
-        userDAO = new AccountDAO();
+        userDAO = new AccountDAO ();
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("register.jsp").forward(request, response);
+        request.getRequestDispatcher ("register.jsp").forward (request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        String confirmPassword = request.getParameter("confirmPassword");
-        if (!password.equals(confirmPassword)) {
-            request.setAttribute("error", "Passwords do not match!");
-            request.getRequestDispatcher("register.jsp").forward(request, response);
+        String username = request.getParameter ("username");
+        String password = request.getParameter ("password");
+        String confirmPassword = request.getParameter ("confirmPassword");
+        String fullName = request.getParameter ("fullName");
+        String email = request.getParameter ("email");
+        String phone = request.getParameter ("phone");
+        String gender = request.getParameter ("gender");
+        String birthDateStr = request.getParameter ("birthDate");
+        request.setAttribute ("username", username);
+        request.setAttribute ("email", email);
+        request.setAttribute ("phone", phone);
+        request.setAttribute ("gender", gender);
+        request.setAttribute ("fullName", fullName);
+        Date bod =Date.valueOf (birthDateStr);
+        request.setAttribute ("birthDateStr", bod);
+        if (!password.equals (confirmPassword)) {
+            request.setAttribute ("error", "Passwords do not match!");
+            request.getRequestDispatcher ("register.jsp").forward (request, response);
             return;
         }
-
-        String fullName = request.getParameter("fullName");
-        String email = request.getParameter("email");
-        String phone = request.getParameter("phone");
-        String gender = request.getParameter("gender");
-        String birthDateStr = request.getParameter("birthDate");
-
-        //check email existed
-   
-
-                //check email existed
-                try {
-                    if (userDAO.checkEmailExists(email)) {
-                        request.setAttribute("error", "This email existed!");
-                        request.getRequestDispatcher("register.jsp").forward(request, response);
-                    }
-                } catch (SQLException ex) {
-                }
-                Account user = new Account();
-                user.setUsername(username);
-                String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
-                user.setPass(hashedPassword);
-                user.setName(fullName);
-                user.setEmail(email);
-                user.setPhone(phone);
-                user.setGender(gender);
-                user.setRole("USER");
-                user.setBirthDate(birthDateStr != null && !birthDateStr.isEmpty() ? Date.valueOf(birthDateStr) : null);
-
-                try {
-                    userDAO.registerUser(user);
-                    response.sendRedirect("login.jsp?success=Registration successful");
-                } catch (SQLException e) {
-                    request.setAttribute("error", "Registration failed: " + e.getMessage());
-                    request.getRequestDispatcher("register.jsp").forward(request, response);
-                }
+        try {
+            if (userDAO.checkEmailExists (email)) {
+                request.setAttribute ("error", "This email existed!");
+                request.getRequestDispatcher ("register.jsp").forward (request, response);
             }
+        } catch (SQLException ex) {
         }
+        Account user = new Account ();
+        user.setUsername (username);
+        String hashedPassword = BCrypt.hashpw (password, BCrypt.gensalt ());
+        user.setPass (hashedPassword);
+        user.setName (fullName);
+        user.setEmail (email);
+        user.setPhone (phone);
+        user.setGender (gender);
+        /*Customer*/
+        user.setRole ("Saler");
+        user.setStatus ("Active");
+        user.setBirthDate (birthDateStr != null && !birthDateStr.isEmpty () ? Date.valueOf (birthDateStr) : null);
+
+        try {
+            userDAO.registerUser (user);
+            response.sendRedirect ("login.jsp?success=Registration successful");
+        } catch (SQLException e) {
+            request.setAttribute ("error", "Registration failed: " + e.getMessage ());
+            request.getRequestDispatcher ("register.jsp").forward (request, response);
+        }
+    }
+}

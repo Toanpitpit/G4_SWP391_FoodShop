@@ -22,12 +22,11 @@
         <div class="container">
            <jsp:include page="/Nutritionist/Common.jsp"/>
             <!-- ========================= Main ==================== -->
-            <div class="main active"> 
+            <div class="main"> 
                 <jsp:include page="/Nutritionist/topbar.jsp"/> 
                 <h2 class="form-title">🥗 Blog Post</h2>
                 <div class="form_box" >
                     <div class="form-container">
-                        <h2>Blog Post</h2>
                         <form action="createblog" method="post" enctype="multipart/form-data">
                             <div class="form-card">
                                 <div class="form-group image-preview-group">

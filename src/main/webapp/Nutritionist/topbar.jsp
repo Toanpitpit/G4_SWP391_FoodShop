@@ -10,6 +10,6 @@
         <ion-icon name="menu-outline"></ion-icon>
     </div>
     <div class="user">
-        <img src="assets/imgs/customer01.jpg" alt="">
+        <img src="{sessionScope.Account.imageUrl}" alt="">
     </div>
 </div>

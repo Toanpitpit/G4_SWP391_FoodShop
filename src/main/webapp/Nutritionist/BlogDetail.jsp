@@ -17,15 +17,15 @@
             <jsp:include page="/Nutritionist/Common.jsp"/>
 
             <!-- ========================= Main ==================== -->
-            <div class="main active">
+            <div class="main">
               <jsp:include page="/Nutritionist/topbar.jsp"/>   
 
                 <div class="blog-container">
                     <main class="main-content">
-                        <img src="${blog.imageUlr}" alt="Online Shopping" class="hero-image">
+                        
                         <div class="content-wrapper">
                             <h1 class="blog-title">${blog.title}</h1>
-
+                            <img src="${blog.imageUlr}" alt="Online Shopping" class="hero-image">
                             <div class="meta-info">
                                 <div class="author-info">
                                     <div class="author-avatar">EP</div>

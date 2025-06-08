@@ -79,7 +79,7 @@ public class GoogleLoginServlet extends HttpServlet {
                 user.setUsername(userInfo.email);
                 user.setName(userInfo.name);
                 user.setEmail(userInfo.email);
-                user.setRole("USER_OAUTH2");
+                user.setRole("Customer");
                 user.setPass("NoPassOauth2");
                 try {
                     userDAO.registerUser(user);
@@ -93,8 +93,8 @@ public class GoogleLoginServlet extends HttpServlet {
                 }
             }
 
-            req.getSession().setAttribute("user", user);
-            resp.sendRedirect("profile");
+            req.getSession().setAttribute("Account", user);
+            resp.sendRedirect(req.getContextPath() + "/dashboadnutri");
         } else {
             // Chuyển hướng đến Google OAuth
             String authUrl = "https://accounts.google.com/o/oauth2/v2/auth"

@@ -17,7 +17,7 @@
 
         <!-- Thêm link thẻ <head> -->
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-       
+
 
 
     </head>
@@ -28,18 +28,17 @@
             <jsp:include page="/Nutritionist/Common.jsp"/>
 
             <!-- Main Content -->
-            <div class="main active">
+            <div class="main">
                 <!-- Top Bar -->
                 <jsp:include page="/Nutritionist/topbar.jsp"/> 
+
+                <div class="page-header">
+                    <h2 class="page-title">Blog Management</h2>
+                    <p class="page-subtitle">Manage and organize your blog posts</p>
+                </div>
                 
-                  <div class="page-header">
-                        <h1 class="page-title">Blog Management</h1>
-                        <p class="page-subtitle">Manage and organize your blog posts</p>
-                  </div>
                 
-                <!-- Content -->
-                <div class="content-wrapper">
-                    <!-- Success/Error Messages -->
+                        <!-- Success/Error Messages -->
                     <c:if test="${not empty mess}">
                         <div class="create-success-alert success">
                             ${mess}
@@ -53,10 +52,12 @@
                         </div>
                         <c:remove var="Errmess" scope="session" />
                     </c:if>
+                        
 
+                <div class="content-wrapper">
                     <!-- Content Controls -->
                     <div class="content-controls">
-                       
+
                         <form name="sort" action="../listblog" method="GET">
                             <div class="search-filter-container">
                                 <div class="search-box"> 
@@ -75,13 +76,15 @@
                                         <option name="status" value="${st}"  ${ status == st ? 'selected' : ''} >${st}</option>
                                     </c:forEach>
                                 </select>
-                           
+
                             </div>
-                        </form>
+                        </form>          
                         <a href="createblog" class="create-btn">
                             <i class="fas fa-plus"></i>
                             Add new
                         </a>
+                                    
+                                    
                     </div>
                     <div class="table-container">
                         <c:choose>

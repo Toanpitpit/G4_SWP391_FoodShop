@@ -6,6 +6,7 @@ package com.example.servlet.controller.Nutritionist;
 
 import com.example.servlet.dao.BMIClassificationDAO;
 import com.example.servlet.dao.BlogDAO;
+import com.example.servlet.model.Account;
 import com.example.servlet.model.BMIClassification;
 import com.example.servlet.model.Blogs;
 import java.io.File;
@@ -92,7 +93,18 @@ public class CreateBlogsServerLet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType ("text/html;charset=UTF-8");
         request.setCharacterEncoding ("UTF-8");
+        
         try (PrintWriter out = response.getWriter ()) {
+            Account acc = new Account ();
+             HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("Account") == null) {
+            response.sendRedirect("login.jsp");
+            return;
+        }
+        
+        else {
+            acc = (Account) session.getAttribute ("Account");
+        }
             String title = request.getParameter ("title");
             String bmiIdStr = request.getParameter ("bmiId");
             String status = request.getParameter ("status");
@@ -143,9 +155,8 @@ public class CreateBlogsServerLet extends HttpServlet {
             }
             Timestamp create_at = new Timestamp (System.currentTimeMillis ());
             Timestamp update_at = new Timestamp (System.currentTimeMillis ());
-            int authorID = 19;
-
-            String name = "ALodsd";
+            int authorID = acc.getId ();
+            String name = acc.getUsername ();
             Blogs blog = new Blogs (0, authorID, name, bmiId, title, image_ulr, content, status, create_at, update_at);
             BlogDAO _dao = new BlogDAO ();
             boolean suscess = _dao.insertBlog (blog);
@@ -155,7 +166,6 @@ public class CreateBlogsServerLet extends HttpServlet {
             } else {
                 Errmess = "Fail to create";
             }
-            HttpSession session = request.getSession ();
             session.setAttribute ("mess", mess);
             session.setAttribute ("Errmess", Errmess);
             response.sendRedirect ("/listblog");

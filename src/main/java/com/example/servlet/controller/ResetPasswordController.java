@@ -27,7 +27,7 @@ public class ResetPasswordController extends HttpServlet {
         if (storedCode == null || !storedCode.equals(code)) {
             req.setAttribute("error", "Mã xác nhận không hợp lệ!");
             req.setAttribute("email", email);
-            req.getRequestDispatcher("resetPassword.jsp").forward(req, resp);
+            req.getRequestDispatcher("resetpassword.jsp").forward(req, resp);
             return;
         }
 
@@ -39,7 +39,7 @@ public class ResetPasswordController extends HttpServlet {
         } catch (SQLException e) {
             req.setAttribute("error", "Lỗi cập nhật mật khẩu!");
             req.setAttribute("email", email);
-            req.getRequestDispatcher("resetPassword.jsp").forward(req, resp);
+            req.getRequestDispatcher("/resetpassword.jsp").forward(req, resp);
         }
     }
 }

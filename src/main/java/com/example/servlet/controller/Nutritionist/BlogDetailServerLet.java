@@ -13,6 +13,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -51,6 +52,11 @@ public class BlogDetailServerLet extends HttpServlet {
     throws ServletException, IOException {
         response.setContentType ("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter ()) {
+             HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("Account") == null) {
+            response.sendRedirect("login.jsp");
+            return;
+        }
             BlogDAO b_dao = new BlogDAO ();
             try {
                 String ids = request.getParameter ("id");
