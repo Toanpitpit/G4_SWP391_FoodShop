@@ -65,19 +65,12 @@ public class ProfileController extends HttpServlet {
             response.sendRedirect("login.jsp");
             return;
         }
-
+        
         String name = request.getParameter("name");
-        String email = request.getParameter("email");
         String phone = request.getParameter("phone");
         String gender = request.getParameter("gender");
         String birthDateStr = request.getParameter("birthDate");
-
-        // Validate email
-        if (email == null || email.trim().isEmpty()) {
-            request.setAttribute("error", "Email is required and cannot be empty");
-            request.getRequestDispatcher("profile.jsp").forward(request, response);
-            return;
-        }
+     
 
         // Handle file upload
         String imagePath = user.getImage();
@@ -102,7 +95,6 @@ public class ProfileController extends HttpServlet {
 
         // Update user object
         user.setName(name);
-        user.setEmail(email);
         user.setPhone(phone);
         user.setGender(gender);
         user.setBirthDate(birthDateStr != null && !birthDateStr.isEmpty() ? Date.valueOf(birthDateStr) : null);

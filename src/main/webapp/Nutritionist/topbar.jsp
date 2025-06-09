@@ -9,6 +9,10 @@
     <div class="toggle">
         <ion-icon name="menu-outline"></ion-icon>
     </div>
+    <div class="sidebar-brand">
+        <i class="fas fa-leaf"></i>
+        Fresh & Healthy
+    </div>
     <div class="user">
         <img src="{sessionScope.Account.imageUrl}" alt="">
     </div>

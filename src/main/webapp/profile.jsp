@@ -2,583 +2,593 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Profile</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <style>
-       body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #28a745 0%, #20c997 50%, #4fd69c 100%);
-    min-height: 100vh;
-    position: relative;
-    overflow-x: hidden;
-}
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>User Profile</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet">
+        <style>
+            body {
+                background: white;
+                min-height: 100vh;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                padding: 20px 0;
+            }
 
-/* Animated background elements */
-body::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: 
-        radial-gradient(circle at 20% 80%, rgba(40, 167, 69, 0.3) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 40% 40%, rgba(32, 201, 151, 0.2) 0%, transparent 50%);
-    animation: float 6s ease-in-out infinite;
-    z-index: -1;
-}
+            .profile-container {
+                max-width: 1200px;
+                margin: 0 auto;
+                background: white;
+                border-radius: 20px;
+                box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+                overflow: hidden;
+            }
 
-@keyframes float {
-    0%, 100% { transform: translateY(0px) rotate(0deg); }
-    50% { transform: translateY(-20px) rotate(1deg); }
-}
+            .profile-header {
+                background: #3fb918;
+                color: white;
+                text-align: center;
+                padding: 40px 20px;
+                position: relative;
+            }
 
-.profile-container {
-    max-width: 1000px;
-    margin: 40px auto;
-    padding: 0 20px;
-}
+            .profile-header h1 {
+                font-size: 2.5rem;
+                font-weight: 700;
+                margin: 0;
+                text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            }
 
-.card {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(20px);
-    border: none;
-    border-radius: 20px;
-    box-shadow: 
-        0 20px 40px rgba(0, 0, 0, 0.1),
-        0 0 0 1px rgba(255, 255, 255, 0.2);
-    overflow: hidden;
-    transform: translateY(0);
-    transition: all 0.3s ease;
-}
+            .profile-content {
+                display: flex;
+                min-height: 600px;
+            }
 
-.card:hover {
-    transform: translateY(-5px);
-    box-shadow: 
-        0 30px 60px rgba(0, 0, 0, 0.15),
-        0 0 0 1px rgba(255, 255, 255, 0.3);
-}
+            .profile-sidebar {
+                flex: 0 0 350px;
+                background: #f8f9fc;
+                padding: 40px 30px;
+                border-right: 1px solid #e3e6f0;
+            }
 
-.card-header {
-    background: linear-gradient(135deg, #28a745 0%, #20c997 100%) !important;
-    border: none;
-    padding: 30px;
-    position: relative;
-    overflow: hidden;
-}
+            .profile-picture-section {
+                text-align: center;
+                margin-bottom: 30px;
+            }
 
-.card-header::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-    animation: shimmer 3s ease-in-out infinite;
-}
+            .profile-picture {
+                width: 150px;
+                height: 150px;
+                border-radius: 50%;
+                border: 5px solid white;
+                box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+                margin-bottom: 20px;
+                object-fit: cover;
+            }
 
-@keyframes shimmer {
-    0% { left: -100%; }
-    50% { left: 100%; }
-    100% { left: 100%; }
-}
+            .upload-btn {
+                background: linear-gradient(135deg, #4e73df 0%, #224abe 100%);
+                border: none;
+                color: white;
+                padding: 12px 24px;
+                border-radius: 25px;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                transition: all 0.3s ease;
+                cursor: pointer;
+            }
 
-.card-header h3 {
-    font-weight: 700;
-    font-size: 2rem;
-    margin: 0;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
+            .upload-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 20px rgba(78, 115, 223, 0.3);
+            }
 
-.card-body {
-    padding: 40px !important;
-    background: rgba(255, 255, 255, 0.8);
-}
+            .upload-btn:disabled {
+                opacity: 0.6;
+                cursor: not-allowed;
+                transform: none;
+            }
 
-.avatar-container {
-    position: relative;
-    display: inline-block;
-    margin-bottom: 20px;
-}
+            .profile-form-section {
+                flex: 1;
+                padding: 40px;
+            }
 
-.avatar-img {
-    width: 150px;
-    height: 150px;
-    object-fit: cover;
-    border-radius: 50%;
-    border: 4px solid #fff;
-    box-shadow: 
-        0 8px 25px rgba(40, 167, 69, 0.3),
-        0 0 0 3px rgba(40, 167, 69, 0.1);
-    transition: all 0.3s ease;
-}
+            .section-title {
+                font-size: 1.5rem;
+                font-weight: 700;
+                color: #2c3e50;
+                margin-bottom: 30px;
+                padding-bottom: 10px;
+                border-bottom: 2px solid #e3e6f0;
+            }
 
-.avatar-img:hover {
-    transform: scale(1.05);
-    box-shadow: 
-        0 12px 35px rgba(40, 167, 69, 0.4),
-        0 0 0 3px rgba(40, 167, 69, 0.2);
-}
+            .form-row {
+                display: flex;
+                gap: 20px;
+                margin-bottom: 25px;
+            }
 
-.avatar-label {
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-    background: linear-gradient(135deg, #28a745, #20c997);
-    color: white;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.4);
-}
+            .form-group {
+                flex: 1;
+                margin-bottom: 25px;
+            }
 
-.avatar-label:hover {
-    transform: scale(1.1);
-    box-shadow: 0 6px 20px rgba(40, 167, 69, 0.6);
-}
+            .form-label {
+                font-weight: 600;
+                color: #34495e;
+                margin-bottom: 8px;
+                display: block;
+            }
 
-.avatar-input {
-    display: none;
-}
+            .form-control {
+                border: 2px solid #e3e6f0;
+                border-radius: 10px;
+                padding: 12px 16px;
+                font-size: 14px;
+                transition: all 0.3s ease;
+                width: 100%;
+            }
 
-.form-section {
-    padding: 20px;
-}
+            .form-control:focus {
+                border-color: #4e73df;
+                box-shadow: 0 0 0 3px rgba(78, 115, 223, 0.1);
+                outline: none;
+            }
 
-.form-label {
-    color: #333;
-    font-weight: 600;
-    margin-bottom: 8px;
-    font-size: 0.95rem;
-}
+            .form-control:disabled {
+                background-color: #f8f9fa;
+                opacity: 0.8;
+            }
 
-.form-control, .form-select {
-    border: 2px solid #e9ecef;
-    border-radius: 12px;
-    padding: 12px 16px;
-    font-size: 1rem;
-    transition: all 0.3s ease;
-    background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(10px);
-}
+            .form-select {
+                border: 2px solid #e3e6f0;
+                border-radius: 10px;
+                padding: 12px 16px;
+                font-size: 14px;
+                transition: all 0.3s ease;
+                width: 100%;
+                background-color: white;
+            }
 
-.form-control:focus, .form-select:focus {
-    border-color: #28a745;
-    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
-    background: rgba(255, 255, 255, 1);
-}
+            .form-select:focus {
+                border-color: #4e73df;
+                box-shadow: 0 0 0 3px rgba(78, 115, 223, 0.1);
+                outline: none;
+            }
 
-.form-control:disabled, .form-select:disabled {
-    background-color: rgba(248, 249, 250, 0.8);
-    border-color: #dee2e6;
-    color: #6c757d;
-}
+            .form-select:disabled {
+                background-color: #f8f9fa;
+                opacity: 0.8;
+            }
 
-.btn {
-    border-radius: 12px;
-    padding: 12px 24px;
-    font-weight: 600;
-    font-size: 1rem;
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-}
+            .btn-group {
+                display: flex;
+                gap: 15px;
+                justify-content: space-between;
+                margin-top: 40px;
+                flex-wrap: wrap;
+            }
 
-.btn-primary {
-    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-    border: none;
-    color: white;
-}
+            .btn-primary {
+                background: linear-gradient(135deg, #4e73df 0%, #224abe 100%);
+                border: none;
+                color: white;
+                padding: 12px 30px;
+                border-radius: 25px;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                transition: all 0.3s ease;
+                cursor: pointer;
+                min-width: 150px;
+            }
 
-.btn-primary::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    transition: left 0.5s;
-}
+            .btn-primary:hover:not(:disabled) {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 20px rgba(78, 115, 223, 0.3);
+            }
 
-.btn-primary:hover::before {
-    left: 100%;
-}
+            .btn-primary:disabled {
+                opacity: 0.6;
+                cursor: not-allowed;
+                transform: none;
+            }
 
-.btn-primary:hover {
-    background: linear-gradient(135deg, #218838 0%, #1ea080 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(40, 167, 69, 0.4);
-}
+            .btn-warning {
+                background: linear-gradient(135deg, #f6c23e 0%, #dda20a 100%);
+                border: none;
+                color: white;
+                padding: 12px 30px;
+                border-radius: 25px;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                transition: all 0.3s ease;
+                cursor: pointer;
+                min-width: 150px;
+                text-decoration: none;
+            }
 
-.btn-primary:disabled {
-    background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
-    opacity: 0.6;
-}
+            .btn-warning:hover:not(:disabled) {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 20px rgba(246, 194, 62, 0.3);
+                color: white;
+            }
 
-.btn-warning {
-    background: linear-gradient(135deg, #ffc107 0%, #ff8c00 100%);
-    border: none;
-    color: #333;
-}
+            .btn-warning:disabled {
+                opacity: 0.6;
+                cursor: not-allowed;
+                transform: none;
+            }
 
-.btn-warning:hover {
-    background: linear-gradient(135deg, #e0a800 0%, #e67e00 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(255, 193, 7, 0.4);
-    color: #333;
-}
+            .btn-danger {
+                background: linear-gradient(135deg, #e74a3b 0%, #c0392b 100%);
+                border: none;
+                color: white;
+                padding: 12px 30px;
+                border-radius: 25px;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                transition: all 0.3s ease;
+                cursor: pointer;
+                min-width: 150px;
+                text-decoration: none;
+            }
 
-.btn-danger {
-    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
-    border: none;
-    color: white;
-}
+            .btn-danger:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 20px rgba(231, 74, 59, 0.3);
+                color: white;
+            }
 
-.btn-danger:hover {
-    background: linear-gradient(135deg, #c82333 0%, #a71e2a 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(220, 53, 69, 0.4);
-}
+            .file-upload-info {
+                font-size: 12px;
+                color: #6c757d;
+                margin-top: 10px;
+                text-align: center;
+            }
 
-.btn-secondary {
-    background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
-    border: none;
-    color: white;
-}
+            .alert {
+                border-radius: 15px;
+                margin-bottom: 20px;
+            }
 
-.btn-secondary:hover {
-    background: linear-gradient(135deg, #5a6268 0%, #495057 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(108, 117, 125, 0.4);
-}
+            .oauth-notice {
+                background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+                color: white;
+                padding: 15px 20px;
+                border-radius: 15px;
+                margin-bottom: 20px;
+                text-align: center;
+            }
 
-.alert {
-    border-radius: 12px;
-    border: none;
-    padding: 16px 20px;
-    margin-bottom: 20px;
-    backdrop-filter: blur(10px);
-    font-weight: 500;
-}
+            .modal-content {
+                border-radius: 15px;
+                border: none;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            }
 
-.alert-success {
-    background: rgba(25, 135, 84, 0.1);
-    color: #0f5132;
-    border-left: 4px solid #198754;
-}
+            .modal-header {
+                background: linear-gradient(135deg, #4e73df 0%, #224abe 100%);
+                border-radius: 15px 15px 0 0;
+            }
 
-.alert-danger {
-    background: rgba(220, 53, 69, 0.1);
-    color: #721c24;
-    border-left: 4px solid #dc3545;
-}
+            .btn-secondary {
+                background: #6c757d;
+                border: none;
+                color: white;
+                padding: 10px 20px;
+                border-radius: 20px;
+                font-weight: 600;
+                transition: all 0.3s ease;
+            }
 
-.alert-info {
-    background: rgba(13, 110, 253, 0.1);
-    color: #055160;
-    border-left: 4px solid #0dcaf0;
-}
+            .btn-secondary:hover {
+                background: #5a6268;
+                transform: translateY(-1px);
+            }
 
-.modal-content {
-    border-radius: 20px;
-    border: none;
-    backdrop-filter: blur(20px);
-    background: rgba(255, 255, 255, 0.95);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-}
+            @media (max-width: 768px) {
+                .profile-content {
+                    flex-direction: column;
+                }
 
-.modal-header {
-    background: linear-gradient(135deg, #28a745 0%, #20c997 100%) !important;
-    border: none;
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
-    padding: 20px 30px;
-}
+                .profile-sidebar {
+                    flex: none;
+                    border-right: none;
+                    border-bottom: 1px solid #e3e6f0;
+                }
 
-.modal-header h5 {
-    font-weight: 700;
-    margin: 0;
-}
+                .form-row {
+                    flex-direction: column;
+                }
 
-.modal-body {
-    padding: 30px;
-}
+                .btn-group {
+                    justify-content: center;
+                    gap: 10px;
+                }
 
-.btn-close-white {
-    filter: brightness(0) invert(1);
-}
+                .btn-primary,
+                .btn-warning,
+                .btn-danger {
+                    width: 100%;
+                    max-width: 300px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="profile-container">
+            <div class="profile-header">
+                <h1>User Profile</h1>
+            </div>
 
-/* Loading animation */
-.btn.loading {
-    pointer-events: none;
-}
-
-.btn.loading::after {
-    content: '';
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    border: 2px solid transparent;
-    border-top: 2px solid currentColor;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-@keyframes spin {
-    0% { transform: translate(-50%, -50%) rotate(0deg); }
-    100% { transform: translate(-50%, -50%) rotate(360deg); }
-}
-
-/* Responsive design */
-@media (max-width: 768px) {
-    .profile-container {
-        margin: 20px auto;
-        padding: 0 15px;
-    }
-    
-    .card-body {
-        padding: 20px !important;
-    }
-    
-    .form-section {
-        padding: 15px;
-    }
-    
-    .avatar-img {
-        width: 120px;
-        height: 120px;
-    }
-    
-    .card-header h3 {
-        font-size: 1.5rem;
-    }
-    
-    .d-flex.justify-content-between {
-        flex-direction: column;
-        gap: 10px;
-    }
-    
-    .btn {
-        width: 100%;
-    }
-}
-
-@media (max-width: 576px) {
-    .row {
-        flex-direction: column;
-    }
-    
-    .col-md-4, .col-md-8 {
-        flex: 0 0 auto;
-        width: 100%;
-    }
-    
-    .text-center {
-        margin-bottom: 20px;
-    }
-}
-    </style>
-</head>
-<body>
-<div class="profile-container">
-    <div class="card">
-        <div class="card-header bg-primary text-white text-center py-4">
-            <h3 class="mb-0">User Profile</h3>
-        </div>
-        <div class="card-body p-4">
-            <c:if test="${empty sessionScope.Account}">
-                <div class="alert alert-danger" role="alert">
-                    User session not found. Please <a href="login.jsp" class="alert-link">log in</a>.
-                </div>
-            </c:if>
-            <c:if test="${not empty sessionScope.Account}">
-                <c:if test="${not empty param.success}">
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        ${param.success}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                </c:if>
-                <c:if test="${not empty requestScope.error}">
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        ${requestScope.error}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                </c:if>
-
-                <c:choose>
-                    <c:when test="${sessionScope.Account.role == 'USER_OAUTH'}">
-                        <div class="alert alert-info" role="alert">
-                            OAuth users cannot edit profile information.
+            <div class="profile-content">
+                <c:if test="${empty sessionScope.Account}">
+                    <div class="p-4 w-100">
+                        <div class="alert alert-danger text-center" role="alert">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            User session not found. Please <a href="login.jsp" class="alert-link">log in</a>.
                         </div>
-                        <form>
-                            <div class="row">
-                                <div class="col-md-4 text-center form-section">
-                                    <div class="avatar-container">
-                                        <img src="${not empty sessionScope.Account.image ? sessionScope.user.image : 'img/avar/default-avatar.png'}?t=${System.currentTimeMillis()}" alt="Avatar" class="avatar-img">
+                    </div>
+                </c:if>
+
+                <c:if test="${not empty sessionScope.Account}">
+                    <c:choose>
+                        <c:when test="${sessionScope.Account.role == 'USER_OAUTH'}">
+                            <!-- OAuth User - Read Only -->
+                            <div class="profile-sidebar">
+                                <div class="oauth-notice">
+                                    <i class="fas fa-info-circle"></i>
+                                    OAuth users cannot edit profile information.
+                                </div>
+                                <div class="profile-picture-section">
+                                    <img src="${not empty sessionScope.Account.image ? sessionScope.Account.image : 'img/avar/default-avatar.png'}?t=${System.currentTimeMillis()}" 
+                                         alt="Profile Picture" class="profile-picture">
+                                    <div>
+                                        <button class="upload-btn" disabled>
+                                            <i class="fas fa-camera"></i> Upload Disabled
+                                        </button>
+                                        <div class="file-upload-info">
+                                            Image upload not available for OAuth users
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-md-8 form-section">
-                                    <div class="mb-3">
+                            </div>
+
+                            <div class="profile-form-section">
+                                <!-- Success/Error Messages for OAuth users -->
+                                <c:if test="${not empty param.success}">
+                                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                        <i class="fas fa-check-circle"></i> ${param.success}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                </c:if>
+                                <c:if test="${not empty param.changePasswordSuccess}">
+                                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                        <i class="fas fa-check-circle"></i> ${param.changePasswordSuccess}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                </c:if>
+                                <c:if test="${not empty requestScope.error}">
+                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                        <i class="fas fa-exclamation-triangle"></i> ${requestScope.error}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                </c:if>
+
+                                <h2 class="section-title">Account Details</h2>
+
+                                <form>
+                                    <div class="form-group">
                                         <label for="username" class="form-label">Username</label>
                                         <input type="text" class="form-control" id="username" value="${sessionScope.Account.username}" disabled>
                                     </div>
-                                    <div class="mb-3">
+
+                                    <div class="form-group">
                                         <label for="name" class="form-label">Full Name</label>
                                         <input type="text" class="form-control" id="name" value="${sessionScope.Account.name}" disabled>
                                     </div>
-                                    <div class="mb-3">
+
+                                    <div class="form-group">
                                         <label for="email" class="form-label">Email</label>
                                         <input type="email" class="form-control" id="email" value="${sessionScope.Account.email}" disabled>
                                     </div>
-                                    <div class="mb-3">
-                                        <label for="phone" class="form-label">Phone</label>
-                                        <input type="text" class="form-control" id="phone" value="${sessionScope.Account.phone}" disabled>
+
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label for="phone" class="form-label">Phone</label>
+                                            <input type="tel" class="form-control" id="phone" value="${sessionScope.Account.phone}" disabled>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="gender" class="form-label">Gender</label>
+                                            <select class="form-select" id="gender" disabled>
+                                                <option value="" ${empty sessionScope.Account.gender ? 'selected' : ''}>Select Gender</option>
+                                                <option value="Male" ${sessionScope.Account.gender == 'Male' ? 'selected' : ''}>Male</option>
+                                                <option value="Female" ${sessionScope.Account.gender == 'Female' ? 'selected' : ''}>Female</option>
+                                                <option value="Other" ${sessionScope.Account.gender == 'Other' ? 'selected' : ''}>Other</option>
+                                            </select>
+                                        </div>
                                     </div>
-                                    <div class="mb-3">
-                                        <label for="gender" class="form-label">Gender</label>
-                                        <select class="form-select" id="gender" disabled>
-                                            <option value="" ${empty sessionScope.Account.gender ? 'selected' : ''}>Select Gender</option>
-                                            <option value="Male" ${sessionScope.Account.gender == 'Male' ? 'selected' : ''}>Male</option>
-                                            <option value="Female" ${sessionScope.Account.gender == 'Female' ? 'selected' : ''}>Female</option>
-                                            <option value="Other" ${sessionScope.Account.gender == 'Other' ? 'selected' : ''}>Other</option>
-                                        </select>
-                                    </div>
-                                    <div class="mb-3">
+
+                                    <div class="form-group">
                                         <label for="birthDate" class="form-label">Birth Date</label>
                                         <input type="date" class="form-control" id="birthDate" value="${sessionScope.Account.birthDate}" disabled>
                                     </div>
-                                </div>
+
+                                    <div class="btn-group">
+                                        <button type="button" class="btn-primary" disabled>
+                                            <i class="fas fa-save"></i> Update Profile
+                                        </button>
+                                        <a href="logout" class="btn-danger">
+                                            <i class="fas fa-sign-out-alt"></i> Logout
+                                        </a>
+                                    </div>
+                                </form>
                             </div>
-                            <div class="d-flex justify-content-between flex-wrap gap-2 p-3">
-                                <button type="button" class="btn btn-primary" disabled>Update Profile</button>
-                                <a href="logout" class="btn btn-danger">Logout</a>
-                            </div>
-                        </form>
-                    </c:when>
-                    <c:otherwise>
-                        <form action="profile" method="post" enctype="multipart/form-data">
-                            <div class="row">
-                                <div class="col-md-4 text-center form-section">
-                                    <div class="avatar-container">
-                                        <img src="${not empty sessionScope.Account.image ? sessionScope.Account.image : 'img/avar/default-avatar.png'}?t=${System.currentTimeMillis()}" alt="Avatar" class="avatar-img">
-                                        <label for="image" class="avatar-label"><i class="fas fa-camera"></i></label>
-                                        <input type="file" class="avatar-input" id="image" name="image" accept="image/*">
+                        </c:when>
+                            
+                        <c:otherwise>
+                            <!-- Regular User - Editable -->
+                            <div class="profile-sidebar">
+                                <div class="profile-picture-section">
+                                    <img src="${not empty sessionScope.Account.image ? sessionScope.Account.image : 'img/avar/default-avatar.png'}?t=${System.currentTimeMillis()}" 
+                                         alt="Profile Picture" class="profile-picture" id="profileImg">
+                                    <div>
+                                        <button class="upload-btn" onclick="document.getElementById('fileInput').click()">
+                                            <i class="fas fa-camera"></i> Upload New Image
+                                        </button>
+                                        <div class="file-upload-info">
+                                            JPG or PNG no larger than 5 MB
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-md-8 form-section">
-                                    <div class="mb-3">
+                            </div>
+
+                            <div class="profile-form-section">
+                                <!-- Success/Error Messages for regular users -->
+                                <c:if test="${not empty param.success}">
+                                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                        <i class="fas fa-check-circle"></i> ${param.success}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                </c:if>
+                                <c:if test="${not empty param.changePasswordSuccess}">
+                                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                        <i class="fas fa-check-circle"></i> ${param.changePasswordSuccess}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                </c:if>
+                                <c:if test="${not empty requestScope.error}">
+                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                        <i class="fas fa-exclamation-triangle"></i> ${requestScope.error}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                </c:if>
+
+                                <h2 class="section-title">Account Details</h2>
+
+                                <form action="profile" method="post" enctype="multipart/form-data">
+                                    <input type="file" id="fileInput" name="image" accept="image/*" style="display: none;" onchange="previewImage(event)">
+
+                                    <div class="form-group">
                                         <label for="username" class="form-label">Username</label>
                                         <input type="text" class="form-control" id="username" value="${sessionScope.Account.username}" disabled>
                                     </div>
-                                    <div class="mb-3">
+
+                                    <div class="form-group">
                                         <label for="name" class="form-label">Full Name</label>
                                         <input type="text" class="form-control" id="name" name="name" value="${sessionScope.Account.name}">
                                     </div>
-                                    <div class="mb-3">
+
+                                    <div class="form-group">
                                         <label for="email" class="form-label">Email</label>
-                                        <input type="email" class="form-control" id="email" name="email" value="${sessionScope.Account.email}" required>
+                                        <input type="email" class="form-control" id="email" name="email" value="${sessionScope.Account.email}" required disabled>
                                     </div>
-                                    <div class="mb-3">
-                                        <label for="phone" class="form-label">Phone</label>
-                                        <input type="text" class="form-control" id="phone" name="phone" value="${sessionScope.Account.phone}">
+
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label for="phone" class="form-label">Phone</label>
+                                            <input type="tel" class="form-control" id="phone" name="phone" value="${sessionScope.Account.phone}">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="gender" class="form-label">Gender</label>
+                                            <select class="form-select" id="gender" name="gender">
+                                                <option value="" ${empty sessionScope.Account.gender ? 'selected' : ''}>Select Gender</option>
+                                                <option value="Male" ${sessionScope.Account.gender == 'Male' ? 'selected' : ''}>Male</option>
+                                                <option value="Female" ${sessionScope.Account.gender == 'Female' ? 'selected' : ''}>Female</option>
+                                                <option value="Other" ${sessionScope.Account.gender == 'Other' ? 'selected' : ''}>Other</option>
+                                            </select>
+                                        </div>
                                     </div>
-                                    <div class="mb-3">
-                                        <label for="gender" class="form-label">Gender</label>
-                                        <select class="form-select" id="gender" name="gender">
-                                            <option value="" ${empty sessionScope.Account.gender ? 'selected' : ''}>Select Gender</option>
-                                            <option value="Male" ${sessionScope.Account.gender == 'Male' ? 'selected' : ''}>Male</option>
-                                            <option value="Female" ${sessionScope.Account.gender == 'Female' ? 'selected' : ''}>Female</option>
-                                            <option value="Other" ${sessionScope.Account.gender == 'Other' ? 'selected' : ''}>Other</option>
-                                        </select>
-                                    </div>
-                                    <div class="mb-3">
+
+                                    <div class="form-group">
                                         <label for="birthDate" class="form-label">Birth Date</label>
                                         <input type="date" class="form-control" id="birthDate" name="birthDate" value="${sessionScope.Account.birthDate}">
                                     </div>
-                                </div>
-                            </div>
-                            <div class="d-flex justify-content-between flex-wrap gap-2 p-3">
-                                <button type="submit" class="btn btn-primary">Update Profile</button>
-                                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#changePasswordModal">Change Password</button>
-                                <a href="logout" class="btn btn-danger">Logout</a>
-                            </div>
-                        </form>
-                    </c:otherwise>
-                </c:choose>
-            </c:if>
-        </div>
-    </div>
-</div>
 
-<!-- Change Password Modal (Chỉ hiển thị nếu không phải USER_OAUTH) -->
-<c:if test="${sessionScope.Account.role != 'USER_OAUTH'}">
-    <div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" ariainità
-
--hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title" id="changePasswordModalLabel">Change Password</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form action="changePassword" method="post">
-                        <div class="mb-3">
-                            <label for="oldPassword" class="form-label">Old Password</label>
-                            <input type="password" class="form-control" id="oldPassword" name="oldPassword" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="newPassword" class="form-label">New Password</label>
-                            <input type="password" class="form-control" id="newPassword" name="newPassword" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="confirmPassword" class="form-label">Confirm New Password</label>
-                            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
-                        </div>
-                        <div class="d-flex justify-content-end gap-2">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                            <button type="submit" class="btn btn-warning">Change Password</button>
-                        </div>
-                    </form>
-                </div>
+                                    <div class="btn-group">
+                                        <button type="submit" class="btn-primary">
+                                            <i class="fas fa-save"></i> Update Profile
+                                        </button>
+                                        <button type="button" class="btn-warning" data-bs-toggle="modal" data-bs-target="#changePasswordModal">
+                                            <i class="fas fa-key"></i> Change Password
+                                        </button>
+                                        <a href="logout" class="btn-danger">
+                                            <i class="fas fa-sign-out-alt"></i> Logout
+                                        </a>
+                                    </div>
+                                </form>
+                            </div>
+                        </c:otherwise>
+                    </c:choose>
+                </c:if>
             </div>
         </div>
-    </div>
-</c:if>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-    document.getElementById('image')?.addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                document.querySelector('.avatar-img').src = e.target.result;
-            };
-            reader.readAsDataURL(file);
-        }
-    });
+        <!-- Change Password Modal -->
+        <c:if test="${sessionScope.user.role != 'USER_OAUTH'}">
+            <div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title text-white" id="changePasswordModalLabel">
+                                <i class="fas fa-key"></i> Change Password
+                            </h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="changePassword" method="post">
+                                <div class="mb-3">
+                                    <label for="oldPassword" class="form-label">Old Password</label>
+                                    <input type="password" class="form-control" id="oldPassword" name="oldPassword" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="newPassword" class="form-label">New Password</label>
+                                    <input type="password" class="form-control" id="newPassword" name="newPassword" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="confirmPassword" class="form-label">Confirm New Password</label>
+                                    <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
+                                </div>
+                                <div class="d-flex justify-content-end gap-2">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <button type="submit" class="btn-warning">
+                                        <i class="fas fa-key"></i> Change Password
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </c:if>
 
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('showChangePassword') === 'true') {
-        const changePasswordModal = new bootstrap.Modal(document.getElementById('changePasswordModal'));
-        changePasswordModal?.show();
-    }
-</script>
-</body>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+                                        function previewImage(event) {
+                                            const file = event.target.files[0];
+                                            if (file) {
+                                                const reader = new FileReader();
+                                                reader.onload = function (e) {
+                                                    document.getElementById('profileImg').src = e.target.result;
+                                                };
+                                                reader.readAsDataURL(file);
+                                            }
+                                        }
+
+                                        // Show change password modal if URL parameter exists
+                                        const urlParams = new URLSearchParams(window.location.search);
+                                        if (urlParams.get('showChangePassword') === 'true') {
+                                            const changePasswordModal = new bootstrap.Modal(document.getElementById('changePasswordModal'));
+                                            changePasswordModal?.show();
+                                        }
+        </script>
+    </body>
 </html>

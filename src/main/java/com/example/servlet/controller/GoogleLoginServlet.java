@@ -92,9 +92,16 @@ public class GoogleLoginServlet extends HttpServlet {
                     Logger.getLogger(GoogleLoginServlet.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-
-            req.getSession().setAttribute("Account", user);
-            resp.sendRedirect(req.getContextPath() + "/dashboadnutri");
+            
+            if(user.getStatus ().equals ("Active")){
+                req.getSession().setAttribute("Account", user);
+                resp.sendRedirect(req.getContextPath() + "/dashboadnutri");
+            }
+            else {
+                req.setAttribute("error", " Your Account is Inactive");
+                   req.getRequestDispatcher("login.jsp").forward(req, resp);
+            }
+            
         } else {
             // Chuyển hướng đến Google OAuth
             String authUrl = "https://accounts.google.com/o/oauth2/v2/auth"

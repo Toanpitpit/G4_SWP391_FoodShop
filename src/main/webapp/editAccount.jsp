@@ -6,7 +6,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        /* Reset default styles */
         * {
             margin: 0;
             padding: 0;
@@ -19,7 +18,6 @@
             color: #333;
         }
 
-        /* Navbar */
         .navbar {
             background-color: #28a745;
             padding: 15px 0;
@@ -52,7 +50,6 @@
             color: #f1f1f1;
         }
 
-        /* User Dropdown */
         .user-menu {
             position: relative;
             display: inline-block;
@@ -106,7 +103,6 @@
             display: block;
         }
 
-        /* Main Content */
         .container {
             max-width: 600px;
             margin: 30px auto;
@@ -120,7 +116,6 @@
             text-align: center;
         }
 
-        /* Form Styling */
         form {
             background-color: #fff;
             padding: 20px;
@@ -128,9 +123,13 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
+        .form-group {
+            margin-bottom: 15px;
+        }
+
         label {
             display: block;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
             font-weight: 500;
         }
 
@@ -138,10 +137,10 @@
         input[type="password"],
         input[type="email"],
         input[type="date"],
-        select {
+        select,
+        input[type="file"] {
             width: 100%;
             padding: 10px;
-            margin-top: 5px;
             border: 1px solid #ddd;
             border-radius: 5px;
             font-size: 16px;
@@ -151,7 +150,8 @@
         input[type="password"]:focus,
         input[type="email"]:focus,
         input[type="date"]:focus,
-        select:focus {
+        select:focus,
+        input[type="file"]:focus {
             border-color: #28a745;
             outline: none;
             box-shadow: 0 0 5px rgba(40, 167, 69, 0.3);
@@ -163,7 +163,6 @@
         }
 
         button[type="submit"] {
-            display: block;
             width: 100%;
             padding: 12px;
             background-color: #28a745;
@@ -173,17 +172,16 @@
             font-size: 16px;
             cursor: pointer;
             transition: background-color 0.3s;
-            margin-top: 20px;
+            margin-top: 10px;
         }
 
         button[type="submit"]:hover {
             background-color: #218838;
         }
 
-        /* Back Link */
         .back-link {
             display: inline-block;
-            margin-top: 20px;
+            margin-top: 15px;
             text-decoration: none;
             color: #28a745;
             font-size: 16px;
@@ -193,7 +191,6 @@
             color: #218838;
         }
 
-        /* Responsive Design */
         @media (max-width: 768px) {
             .navbar .container {
                 flex-direction: column;
@@ -228,7 +225,6 @@
     </style>
 </head>
 <body>
-    <!-- Navbar -->
     <div class="navbar">
         <div class="container">
             <a href="${pageContext.request.contextPath}/" class="logo">Healthy Food</a>
@@ -248,34 +244,68 @@
         </div>
     </div>
 
-    <!-- Main Content -->
     <div class="container">
         <h1>Edit Account</h1>
         <c:if test="${not empty error}">
             <p style="color: red; margin-bottom: 15px;">${error}</p>
         </c:if>
-        <form action="${pageContext.request.contextPath}/adminDashboard" method="post">
+        <form action="${pageContext.request.contextPath}/adminDashboard" method="post" enctype="multipart/form-data">
             <input type="hidden" name="action" value="update">
             <input type="hidden" name="id" value="${user.id}">
-            <label>Username: <input type="text" name="username" value="${user.username}" required></label>
-            <label>Password: <input type="password" name="pass" value="${user.pass}" placeholder="Leave blank to keep current password"></label>
-            <label>Name: <input type="text" name="name" value="${user.name}" required></label>
-            <label>Email: <input type="email" name="email" value="${user.email}" required></label>
-            <label>Phone: <input type="text" name="phone" value="${user.phone}" required></label>
-            <label>Giới tính:
-                <select name="gender" required>
+            <div class="form-group">
+                <label for="username">Tên đăng nhập:</label>
+                <input type="text" id="username" name="username" value="${user.username}" required>
+            </div>
+            <div class="form-group">
+                <label for="pass">Mật khẩu:</label>
+                <input type="password" id="pass" name="pass" placeholder="Để trống để giữ mật khẩu hiện tại">
+            </div>
+            <div class="form-group">
+                <label for="name">Họ tên:</label>
+                <input type="text" id="name" name="name" value="${user.name}" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" value="${user.email}" required>
+            </div>
+            <div class="form-group">
+                <label for="phone">Số điện thoại:</label>
+                <input type="text" id="phone" name="phone" value="${user.phone}" required>
+            </div>
+            <div class="form-group">
+                <label for="gender">Giới tính:</label>
+                <select id="gender" name="gender" required>
                     <option value="">Chọn giới tính</option>
                     <option value="Male" ${user.gender == 'Male' ? 'selected' : ''}>Male</option>
                     <option value="Female" ${user.gender == 'Female' ? 'selected' : ''}>Female</option>
                 </select>
-            </label>
-            <label>Birth Date: <input type="date" name="birthDate" value="${user.birthDate}" required></label>
-            <label>Role: <input type="text" name="role" value="${user.role}" required></label>
-            <label>Status: <input type="text" name="status" value="${user.status}" readonly></label>
-            <label>Image: <input type="text" name="image" value="${user.image}" required></label>
-            <button type="submit">Update Account</button>
+            </div>
+            <div class="form-group">
+                <label for="birthDate">Ngày sinh:</label>
+                <input type="date" id="birthDate" name="birthDate" value="${user.birthDate}" required>
+            </div>
+            <div class="form-group">
+                <label for="role">Vai trò:</label>
+                <input type="text" id="role" name="role" value="${user.role}" required readonly>
+            </div>
+            <div class="form-group">
+                <label for="status">Trạng thái:</label>
+                <input type="text" id="status" name="status" value="${user.status}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="currentImage">Hình ảnh hiện tại:</label>
+                <input type="text" id="currentImage" name="currentImage" value="${user.image}" readonly>
+                <c:if test="${not empty user.image}">
+                    <img src="${pageContext.request.contextPath}/${user.image}" alt="Current Avatar" style="max-width: 100px; margin-top: 10px;">
+                </c:if>
+            </div>
+            <div class="form-group">
+                <label for="image">Tải lên ảnh mới:</label>
+                <input type="file" id="image" name="image" accept="image/jpeg,image/png,image/jpg">
+            </div>
+            <button type="submit">Cập nhật tài khoản</button>
         </form>
-        <a href="${pageContext.request.contextPath}/adminDashboard" class="back-link">Back to Dashboard</a>
+        <a href="${pageContext.request.contextPath}/adminDashboard" class="back-link">Quay lại Dashboard</a>
     </div>
 
     <script>
@@ -283,7 +313,6 @@
             document.getElementById("userDropdown").classList.toggle("show");
         }
 
-        // Close dropdown when clicking outside
         window.onclick = function(event) {
             if (!event.target.matches('.user-btn')) {
                 var dropdowns = document.getElementsByClassName("dropdown-menu");
@@ -296,12 +325,11 @@
             }
         }
 
-        // Set max date to yesterday (11:36 AM +07, 27/05/2025)
         document.addEventListener("DOMContentLoaded", function() {
             const today = new Date();
-            today.setDate(today.getDate() - 1); // Set to yesterday
+            today.setDate(today.getDate() - 1);
             const maxDate = today.toISOString().split("T")[0];
-            document.querySelector("input[name='birthDate']").setAttribute("max", maxDate);
+            document.getElementById("birthDate").setAttribute("max", maxDate);
         });
     </script>
 </body>

@@ -56,8 +56,11 @@ public class LoginController extends HttpServlet {
         } catch (SQLException ex) {
             Logger.getLogger (LoginController.class.getName()).log (Level.SEVERE, null, ex);
         }
-       if (user != null) {
-           HttpSession session = request.getSession ();
+       if (user != null && user.getStatus() != null) {
+            if(user.getStatus().equals ("Inactive")){
+                request.setAttribute("error", "Account is Inactive");
+            } else {
+                HttpSession session = request.getSession ();
            session.setAttribute ("Account", user);
            Cookie u = new Cookie ("userC", username);
            Cookie p = new Cookie ("passC", password);
@@ -84,7 +87,10 @@ public class LoginController extends HttpServlet {
             else if(user.getRole ().equals ("Admin")){
                 response.sendRedirect ("/adminDashboard");
             }
+            }
+           
         } else {
+ 
             request.setAttribute("error", "Invalid email or password");
             request.getRequestDispatcher("login.jsp").forward(request, response);
         }

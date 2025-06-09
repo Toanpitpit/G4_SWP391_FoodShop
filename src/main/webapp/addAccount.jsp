@@ -18,7 +18,6 @@
             color: #333;
         }
 
-        /* Navbar */
         .navbar {
             background-color: #28a745;
             padding: 15px 0;
@@ -104,7 +103,6 @@
             display: block;
         }
 
-        /* Main Content */
         .container {
             max-width: 600px;
             margin: 30px auto;
@@ -117,6 +115,7 @@
             color: #28a745;
             text-align: center;
         }
+
         form {
             background-color: #fff;
             padding: 20px;
@@ -134,7 +133,8 @@
         input[type="password"],
         input[type="email"],
         input[type="date"],
-        select {
+        select,
+        input[type="file"] {
             width: 100%;
             padding: 10px;
             margin-top: 5px;
@@ -147,7 +147,8 @@
         input[type="password"]:focus,
         input[type="email"]:focus,
         input[type="date"]:focus,
-        select:focus {
+        select:focus,
+        input[type="file"]:focus {
             border-color: #28a745;
             outline: none;
             box-shadow: 0 0 5px rgba(40, 167, 69, 0.3);
@@ -159,7 +160,6 @@
         }
 
         button[type="submit"] {
-            display: block;
             width: 100%;
             padding: 12px;
             background-color: #28a745;
@@ -175,6 +175,7 @@
         button[type="submit"]:hover {
             background-color: #218838;
         }
+
         .back-link {
             display: inline-block;
             margin-top: 20px;
@@ -186,6 +187,7 @@
         .back-link:hover {
             color: #218838;
         }
+
         @media (max-width: 768px) {
             .navbar .container {
                 flex-direction: column;
@@ -244,24 +246,52 @@
         <c:if test="${not empty error}">
             <p style="color: red; margin-bottom: 15px;">${error}</p>
         </c:if>
-        <form action="${pageContext.request.contextPath}/adminDashboard" method="post">
+        <form action="${pageContext.request.contextPath}/adminDashboard" method="post" enctype="multipart/form-data">
             <input type="hidden" name="action" value="add">
-            <label>Tên đăng nhập: <input type="text" name="username" required></label>
-            <label>Mật khẩu: <input type="password" name="pass" required></label>
-            <label>Họ tên: <input type="text" name="name" required></label>
-            <label>Email: <input type="email" name="email" required></label>
-            <label>Số điện thoại: <input type="text" name="phone" required></label>
-            <label>Giới tính:
-                <select name="gender" required>
+            <div>
+                <label for="username">Tên đăng nhập:</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div>
+                <label for="pass">Mật khẩu:</label>
+                <input type="password" id="pass" name="pass" required>
+            </div>
+            <div>
+                <label for="name">Họ tên:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div>
+                <label for="phone">Số điện thoại:</label>
+                <input type="text" id="phone" name="phone" required>
+            </div>
+            <div>
+                <label for="gender">Giới tính:</label>
+                <select id="gender" name="gender" required>
                     <option value="">Chọn giới tính</option>
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
                 </select>
-            </label>
-            <label>Ngày sinh: <input type="date" name="birthDate" required></label>
-            <label>Vai trò: <input type="text" name="role" value="Member" required></label>
-            <label>Trạng thái: <input type="text" name="status" value="Active" readonly></label>
-            <label>Hình ảnh: <input type="text" name="image" required></label>
+            </div>
+            <div>
+                <label for="birthDate">Ngày sinh:</label>
+                <input type="date" id="birthDate" name="birthDate" required>
+            </div>
+            <div>
+                <label for="role">Vai trò:</label>
+                <input type="text" id="role" name="role" value="Member" required readonly>
+            </div>
+            <div>
+                <label for="status">Trạng thái:</label>
+                <input type="text" id="status" name="status" value="Active" readonly>
+            </div>
+            <div>
+                <label for="image">Hình ảnh:</label>
+                <input type="file" id="image" name="image" accept="image/jpeg,image/png,image/jpg" required>
+            </div>
             <button type="submit">Thêm tài khoản</button>
         </form>
         <a href="${pageContext.request.contextPath}/adminDashboard" class="back-link">Quay lại Dashboard</a>
@@ -272,7 +302,6 @@
             document.getElementById("userDropdown").classList.toggle("show");
         }
 
-        // Close dropdown when clicking outside
         window.onclick = function(event) {
             if (!event.target.matches('.user-btn')) {
                 var dropdowns = document.getElementsByClassName("dropdown-menu");
@@ -285,12 +314,11 @@
             }
         }
 
-        // Set max date to yesterday 
         document.addEventListener("DOMContentLoaded", function() {
             const today = new Date();
-            today.setDate(today.getDate() - 1); // Set to yesterday
+            today.setDate(today.getDate() - 1);
             const maxDate = today.toISOString().split("T")[0];
-            document.querySelector("input[name='birthDate']").setAttribute("max", maxDate);
+            document.getElementById("birthDate").setAttribute("max", maxDate);
         });
     </script>
 </body>
