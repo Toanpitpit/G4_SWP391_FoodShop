@@ -47,13 +47,18 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
+// Lấy contextPath từ biến toàn cục (phải được set trong JSP)
+const contextPath = window.contextPath || '';
 
-document.addEventListener('DOMContentLoaded', function () {
+let blogChart;
+
+document.addEventListener('DOMContentLoaded', () => {
     const barCanvas = document.getElementById('barChart');
-    const labels = JSON.parse(barCanvas.dataset.labels || "[]");
-    const counts = JSON.parse(barCanvas.dataset.counts || "[]");
+    const labels = JSON.parse(barCanvas.dataset.labels || '[]');
+    const counts = JSON.parse(barCanvas.dataset.counts || '[]');
 
-    new Chart(barCanvas, {
+    const ctx = barCanvas.getContext('2d');
+    blogChart = new Chart(ctx, {
         type: 'bar',
         data: {
             labels: labels,
@@ -72,30 +77,37 @@ document.addEventListener('DOMContentLoaded', function () {
                     beginAtZero: true,
                     ticks: {
                         stepSize: 1,
-                        callback: function(value) {
-                            if (Number.isInteger(value)) {
-                                return value;
-                            }
-                            return null;
-                        }
+                        callback: v => Number.isInteger(v) ? v : null
                     },
-                    title: {
-                        display: true,
-                        text: 'Number of Blogs'
-                    }
+                    title: { display: true, text: 'Number of Blogs' }
                 },
                 x: {
-                    title: {
-                        display: true,
-                        text: 'Month'
-                    }
+                    title: { display: true, text: 'Month' }
                 }
             },
-            plugins: {
-                legend: { display: false }
-            }
+            plugins: { legend: { display: false } }
         }
     });
+
+    // Bắt sự kiện onchange của dropdown năm
+    const yearDropdown = document.getElementById('yearDropdown');
+    if (yearDropdown) {
+        yearDropdown.addEventListener('change', async () => {
+            const year = yearDropdown.value;
+            try {
+                const response = await fetch(`${contextPath}/dashboadnutri?year=${year}&json=true`);
+                if (!response.ok) throw new Error('Network response was not ok');
+                const data = await response.json();
+
+                // Cập nhật dữ liệu chart
+                blogChart.data.labels = data.labels;
+                blogChart.data.datasets[0].data = data.counts;
+                blogChart.update();
+            } catch (error) {
+                console.error('Error fetching chart data:', error);
+            }
+        });
+    }
 });
 
 

@@ -17,7 +17,9 @@
 
         <!-- Thêm link thẻ <head> -->
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-
+        <script>
+            window.contextPath = '${pageContext.request.contextPath}';
+        </script>
 
 
     </head>
@@ -32,60 +34,52 @@
                 <!-- Top Bar -->
                 <jsp:include page="/Nutritionist/topbar.jsp"/> 
 
-                <div class="page-header">
-                    <h2 class="page-title">Blog Management</h2>
-                    <p class="page-subtitle">Manage and organize your blog posts</p>
-                </div>
-                
-                
-                        <!-- Success/Error Messages -->
-                    <c:if test="${not empty mess}">
-                        <div class="create-success-alert success">
-                            ${mess}
-                        </div>
-                        <c:remove var="mess" scope="session" />
-                    </c:if>
 
-                    <c:if test="${empty mess and not empty Errmess}">
-                        <div class="create-success-alert error">
-                            ${Errmess}
-                        </div>
-                        <c:remove var="Errmess" scope="session" />
-                    </c:if>
-                        
+                <c:if test="${not empty mess}">
+                    <div class="create-success-alert success">
+                        ${mess}
+                    </div>
+                    <c:remove var="mess" scope="session" />
+                </c:if>
+
+                <c:if test="${empty mess and not empty Errmess}">
+                    <div class="create-success-alert error">
+                        ${Errmess}
+                    </div>
+                    <c:remove var="Errmess" scope="session" />
+                </c:if>
+
 
                 <div class="content-wrapper">
                     <!-- Content Controls -->
                     <div class="content-controls">
-
-                        <form name="sort" action="../listblog" method="GET">
+                        <form name="sort" id="searchFilterForm">
                             <div class="search-filter-container">
                                 <div class="search-box"> 
                                     <input type="text" name="input_search"
                                            class="search-input" 
                                            placeholder="Tìm kiếm theo tiêu đề blog..." 
                                            id="searchInput"
-                                           >
+                                           value="${param.input_search != null ? param.input_search : ''}">
                                     <div class="button-submit">
                                         <input type="submit" name="button" value="🔍"/>
                                     </div>
                                 </div>
-                                <select class="filter-select" id="statusFilter" onchange="this.form.submit()">
-                                    <option name="search_status" value="all" ${ status == null ? 'selected' : ''}>Tất cả trạng thái</option>
+                                <select class="filter-select" id="statusFilter" name="status">
+                                    <option value="all" ${param.status == null || param.status == 'all' ? 'selected' : ''}>Tất cả trạng thái</option>
                                     <c:forEach var="st" items="${statusList}">
-                                        <option name="status" value="${st}"  ${ status == st ? 'selected' : ''} >${st}</option>
+                                        <option value="${st}" ${param.status == st ? 'selected' : ''}>${st}</option>
                                     </c:forEach>
                                 </select>
-
                             </div>
-                        </form>          
+                        </form>
                         <a href="createblog" class="create-btn">
                             <i class="fas fa-plus"></i>
                             Add new
                         </a>
-                                    
-                                    
                     </div>
+
+                    <!-- Table Container -->
                     <div class="table-container">
                         <c:choose>
                             <c:when test="${not empty lstB}">
@@ -93,17 +87,19 @@
                                     <thead>
                                         <tr>
                                             <th colspan="3">Image</th>
-                                            <th >ID</th>
+                                            <th>ID</th>
                                             <th>Tiêu đề</th>
                                             <th>Trạng thái</th>
                                             <th>Cập nhật gần nhất</th>
                                             <th style="text-align: center;" colspan="3">Hành động</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <c:forEach var="blog" items="${lstB}" >
+                                    <tbody id="blogTableBody">
+                                        <c:forEach var="blog" items="${lstB}">
                                             <tr>
-                                                <td colspan="3"><img src="${blog.imageUlr}" name="imageUlr" value="${blog.imageUlr}" alt="Anh blog" style="width: 80px; height: 44px;"></img></td>
+                                                <td colspan="3">
+                                                    <img src="${blog.imageUlr}" alt="Anh blog" style="width: 80px; height: 44px; object-fit: cover;">
+                                                </td>
                                                 <td class="blog-id">${blog.bID}</td>
                                                 <td class="blog-title">${blog.title}</td>
                                                 <td>
@@ -112,9 +108,7 @@
                                                     </span>
                                                 </td>
                                                 <td class="date-time">
-                                                    <fmt:formatDate
-                                                        value="${blog.update_at}"
-                                                        pattern="yyyy-MM-dd HH:mm:ss" />
+                                                    <fmt:formatDate value="${blog.update_at}" pattern="yyyy-MM-dd HH:mm:ss" />
                                                 </td>
                                                 <td class="action-cell" style="text-align: center;">
                                                     <a href="blogdetail?id=${blog.bID}" title="View">
@@ -123,8 +117,7 @@
                                                     <a href="editBlog.do?id=${blog.bID}" title="Edit">
                                                         <ion-icon name="pencil-outline"></ion-icon>
                                                     </a>
-                                                    <a href="deleteblog?id=${blog.bID}"
-                                                       title="Delete"
+                                                    <a href="deleteblog?id=${blog.bID}" title="Delete"
                                                        onclick="return confirm('Bạn có chắc chắn muốn xóa bài viết này?');">
                                                         <ion-icon name="trash-outline" style="color: red"></ion-icon>
                                                     </a>
@@ -132,22 +125,23 @@
                                             </tr>
                                         </c:forEach>
                                     </tbody>
-                                </c:when>
-                                <c:otherwise>
-                                    <p style="text-align: center; font-style: italic; color: #555;">
-                                        Không có bài viết nào.
-                                    </p>
-                                </c:otherwise>
-                            </c:choose>
-                        </table>
+                                </table>
+                            </c:when>
+                            <c:otherwise>
+                                <p style="text-align: center; font-style: italic; color: #555; padding: 40px;">
+                                    Không có bài viết nào.
+                                </p>
+                            </c:otherwise>
+                        </c:choose>
                     </div>
-                    <!-- pagnent -->
-                    <div style="display: flex ; justify-content: space-between ; padding: 10px">
+
+                    <!-- Pagination Container -->
+                    <div class="pagination-container" style="display: flex; justify-content: space-between; padding: 10px;">
                         <div style="margin: 30px 0 20px">Show ${lstB.size()} of ${totalBlog} items</div>
                         <c:if test="${totalPages > 1}">
                             <div class="pagination">
                                 <c:if test="${currentPage > 1}">
-                                    <a href="?page=${currentPage - 1}" class="prev">&laquo; Previous</a>
+                                    <a href="#" class="prev pagination-link" data-page="${currentPage - 1}">&laquo; Previous</a>
                                 </c:if>
                                 <c:forEach var="i" begin="1" end="${totalPages}" varStatus="status">
                                     <c:choose>
@@ -155,7 +149,7 @@
                                             <span class="current">${i}</span>
                                         </c:when>
                                         <c:when test="${i <= currentPage + 2 && i >= currentPage - 2}">
-                                            <a href="listblog?index=${i}">${i}</a>
+                                            <a href="#" class="pagination-link" data-page="${i}">${i}</a>
                                         </c:when>
                                         <c:when test="${i == currentPage - 3 || i == currentPage + 3}">
                                             <span class="ellipsis">...</span>
@@ -163,13 +157,17 @@
                                     </c:choose>
                                 </c:forEach>
                                 <c:if test="${currentPage < totalPages}">
-                                    <a href="listblog?index=${currentPage + 1}" class="next">Next &raquo;</a>
+                                    <a href="#" class="next pagination-link" data-page="${currentPage + 1}">Next &raquo;</a>
                                 </c:if>
                             </div>
-
                         </c:if>
                     </div>
                 </div>
+
+                <!-- Add this script tag before closing body tag -->
+                <script>
+                    window.contextPath = '${pageContext.request.contextPath}';
+                </script>
             </div>
         </div>
 

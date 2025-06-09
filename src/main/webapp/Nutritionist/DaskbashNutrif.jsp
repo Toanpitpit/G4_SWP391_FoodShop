@@ -21,7 +21,7 @@
             <jsp:include page="/Nutritionist/Common.jsp"/>
             <!-- ========================= Main ==================== -->
             <div class="main">
-             <jsp:include page="/Nutritionist/topbar.jsp"/>  
+                <jsp:include page="/Nutritionist/topbar.jsp"/>  
 
                 <!-- ======================= Cards ================== -->
                 <div class="cardBox">
@@ -109,19 +109,20 @@
                             </div>
                         </div>
                     </div>
+                    <script>
+                          window.contextPath = '${pageContext.request.contextPath}';
+                    </script>
+
                     <div class="chart-card">
                         <div class="chart-header" style="display: flex; justify-content: space-between; align-items: center;">
                             <h3>Blogs Per Month</h3>
-                            <form method="get" action="${pageContext.request.contextPath}/dashboadnutri">
-                                <label for="yearDropdown">Select Year:</label>
+                            <label for="yearDropdown">Select Year:</label>
 
-                                <select id="yearDropdown" name="year">
-                                            <c:forEach var="year" items="${years}">
-                                                <option value="${year}" ${year == selectedYear ? 'selected' : ''}>${year}</option>
-                                            </c:forEach>
-                                </select>
-                                <button type="submit">Filter</button>
-                            </form>
+                            <select id="yearDropdown" name="year">
+                                <c:forEach var="year" items="${years}">
+                                    <option value="${year}" ${year == selectedYear ? 'selected' : ''}>${year}</option>
+                                </c:forEach>
+                            </select>
                         </div>
 
                         <div class="chart-container">
@@ -131,6 +132,7 @@
                             </canvas>
                         </div>
                     </div>
+
                 </div>
 
                 <!-- ================= New Customers ================ -->

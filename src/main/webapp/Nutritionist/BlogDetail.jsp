@@ -6,7 +6,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Blog_Detail</title>
-        <link rel="stylesheet" href="../CSS/Ncss/request.css">
+        <link rel="stylesheet" href="../CSS/Ncss/blogdetail.css">
         <link rel="stylesheet" href="../CSS/Ncss/common.css">
 
         <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>

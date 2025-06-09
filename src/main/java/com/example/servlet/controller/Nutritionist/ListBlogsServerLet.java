@@ -17,7 +17,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -140,5 +139,69 @@ public class ListBlogsServerLet extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+    
+    private void handleJsonRequest(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException, SQLException {
+    BlogDAO _dao = new BlogDAO();
+
+    String input_search = request.getParameter("input_search");
+    String status = request.getParameter("status");
+    int indexPage = 1;
+    if (request.getParameter("index") != null) {
+        indexPage = Integer.parseInt(request.getParameter("index"));
+    }
+    int pageSize = 10;
+    if (request.getParameter("pageSize") != null && !request.getParameter("pageSize").trim().isEmpty()) {
+        pageSize = Integer.parseInt(request.getParameter("pageSize"));
+    }
+
+    List<Blogs> lstB = _dao.getBlogsByFilterAndPage(input_search, -1 ,true,status, indexPage, pageSize);
+    int totalBlog = _dao.getTotalBlog ();
+              int totalPages = 1;
+            if(totalBlog > 10 ){
+                totalPages = (totalBlog / 10) + 1;
+    }      
+    response.setContentType("application/json;charset=UTF-8");
+    PrintWriter out = response.getWriter();
+
+    com.google.gson.Gson gson = new com.google.gson.Gson();
+
+    String json = gson.toJson(lstB);
+    out.print("{\"blogs\":" + json + ", \"totalPages\":" + totalPages + "}");
+    out.flush();
+}
+  
+    
+    private void handleNormalRequest(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException, SQLException {
+    BlogDAO _dao = new BlogDAO();
+
+    String input_search = request.getParameter("input_search");
+    String status = request.getParameter("status");
+    int indexPage = 1;
+    if (request.getParameter("index") != null) {
+        indexPage = Integer.parseInt(request.getParameter("index"));
+    }
+    int pageSize = 10;
+    if (request.getParameter("pageSize") != null && !request.getParameter("pageSize").trim().isEmpty()) {
+        pageSize = Integer.parseInt(request.getParameter("pageSize"));
+    }
+
+    List<String> statusList = _dao.getAllDistinctStatuses();
+    List<Blogs> lstB = _dao.getBlogsByFilterAndPage (input_search, -1, true, "", indexPage, pageSize);
+        int totalBlog = _dao.getTotalBlog ();
+        int totalPages = 1;
+        if (totalBlog > 10) {
+            totalPages = (totalBlog / 10) + 1;
+        }
+    request.setAttribute("currentPage", indexPage);
+    request.setAttribute("totalPages", totalPages);
+    request.setAttribute("lstB", lstB);
+    request.setAttribute("statusList", statusList);
+    request.setAttribute("input_search", input_search);
+    request.setAttribute("status", status);
+
+    request.getRequestDispatcher("/Nutritionist/Blogs.jsp").forward(request, response);
+}
 
 }
