@@ -33,7 +33,7 @@
                             </div>
 
                             <div class="iconBx">
-                                <ion-icon name="nutrition-outline"></ion-icon>
+                                <ion-icon name="document-text-outline"></ion-icon>
                             </div>
                         </div>
                     </a>
@@ -42,7 +42,7 @@
                         <div class="card">
                             <div>
                                 <div class="numbers">${totalFdrf}</div>
-                                <div class="cardName">Your Fooddraft</div>
+                                <div class="cardName">Your Food draft</div>
                             </div> 
 
                             <div class="iconBx">
@@ -71,7 +71,7 @@
                             </div>
 
                             <div class="iconBx">
-                                <ion-icon name="document-text-outline"></ion-icon>
+                                <ion-icon name="notifications-outline"></ion-icon>
                             </div>
                         </div> 
                     </a>

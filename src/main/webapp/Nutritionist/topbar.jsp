@@ -14,6 +14,13 @@
         Fresh & Healthy
     </div>
     <div class="user">
-        <img src="{sessionScope.Account.imageUrl}" alt="">
+        <c:choose>
+            <c:when test="${not empty sessionScope.Account}">
+                <img src="${sessionScope.Account.image}" alt="">
+            </c:when>
+            <c:otherwise>
+                <img src="${pageContext.request.contextPath}/default-avatar.png" alt="avt">
+            </c:otherwise>
+        </c:choose>
     </div>
 </div>

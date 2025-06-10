@@ -2,10 +2,7 @@
     <ul>
         <li>
             <a href="dashboadnutri">
-                <span class="icon">
-                    <ion-icon name="restaurant-outline"></ion-icon>
-                </span>
-                <span class="title">Heathy Foods</span>
+                <span class="title">Nutritionist Panel</span>
             </a>
         </li>
 
@@ -26,7 +23,14 @@
                 <span class="title">Foods</span>
             </a>
         </li>
-
+         <li>
+            <a href="listfooddraft">
+                <span class="icon">
+                    <ion-icon name="fast-food-outline"></ion-icon>
+                </span>
+                <span class="title">Food Draft</span>
+            </a>
+        </li>
         <li>
             <a href="listblog">
                 <span class="icon">
@@ -53,16 +57,6 @@
                 <span class="title">Settings</span>
             </a>
         </li>
-
-        <li>
-            <a href="changePassword">
-                <span class="icon">
-                    <ion-icon name="key-outline"></ion-icon>
-                </span>
-                <span class="title">Password</span>
-            </a>
-        </li>
-
         <li>
             <a href="/LogoutController">
                 <span class="icon">

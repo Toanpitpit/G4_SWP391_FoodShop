@@ -33,7 +33,20 @@
             <div class="main">
                 <!-- Top Bar -->
                 <jsp:include page="/Nutritionist/topbar.jsp"/> 
-
+                    <!-- Breadcrumb -->
+                    
+                 <div class="breadcrumb-section">
+                    <div class="page-header">
+                        
+                        <nav class="breadcrumb-nav">
+                            <a href="${pageContext.request.contextPath}/dashboadnutri" class="breadcrumb-link">Trang chủ</a>
+                            <span class="separator">/</span>
+                            <a href="${pageContext.request.contextPath}/listblog" class="breadcrumb-link">Blog</a>
+                            <span class="separator">/</span>
+                            <span class="breadcrumb-current">Quản lý bài viết</span>
+                        </nav>
+                    </div>
+                </div>
 
                 <c:if test="${not empty mess}">
                     <div class="create-success-alert success">
@@ -51,7 +64,6 @@
 
 
                 <div class="content-wrapper">
-                    <!-- Content Controls -->
                     <div class="content-controls">
                         <form name="sort" id="searchFilterForm">
                             <div class="search-filter-container">
@@ -61,14 +73,20 @@
                                            placeholder="Tìm kiếm theo tiêu đề blog..." 
                                            id="searchInput"
                                            value="${param.input_search != null ? param.input_search : ''}">
-                                    <div class="button-submit">
-                                        <input type="submit" name="button" value="🔍"/>
-                                    </div>
+                                    <button type="submit" class="search-button">
+                                        <i class="fas fa-search"></i>
+                                    </button>
                                 </div>
                                 <select class="filter-select" id="statusFilter" name="status">
-                                    <option value="all" ${param.status == null || param.status == 'all' ? 'selected' : ''}>Tất cả trạng thái</option>
+                                    <option value="" ${param.status == null || param.status == 'all' ? 'selected' : ''}>Tất cả trạng thái</option>
                                     <c:forEach var="st" items="${statusList}">
                                         <option value="${st}" ${param.status == st ? 'selected' : ''}>${st}</option>
+                                    </c:forEach>
+                                </select> 
+                                    <select class="filter-select" id="BmitypeFilter" name="typebmi">
+                                    <option value="" ${param.bmiID == null ? 'selected' : ''}>All</option>
+                                    <c:forEach var="st" items="${lstBMItype}">
+                                        <option value="${st.bmiID}" ${param.bmiId == st.bmiID ? 'selected' : ''}>${st.classification}</option>
                                     </c:forEach>
                                 </select>
                             </div>
@@ -79,7 +97,7 @@
                         </a>
                     </div>
 
-                    <!-- Table Container -->
+                  
                     <div class="table-container">
                         <c:choose>
                             <c:when test="${not empty lstB}">
@@ -117,8 +135,8 @@
                                                     <a href="editBlog.do?id=${blog.bID}" title="Edit">
                                                         <ion-icon name="pencil-outline"></ion-icon>
                                                     </a>
-                                                    <a href="deleteblog?id=${blog.bID}" title="Delete"
-                                                       onclick="return confirm('Bạn có chắc chắn muốn xóa bài viết này?');">
+                                                    <a href="#" title="Delete"
+                                                       onclick="showDeletePopup('deleteblog?id=${blog.bID}', '${blog.title}'); return false;">
                                                         <ion-icon name="trash-outline" style="color: red"></ion-icon>
                                                     </a>
                                                 </td>
@@ -136,8 +154,8 @@
                     </div>
 
                     <!-- Pagination Container -->
-                    <div class="pagination-container" style="display: flex; justify-content: space-between; padding: 10px;">
-                        <div style="margin: 30px 0 20px">Show ${lstB.size()} of ${totalBlog} items</div>
+                    <div  id="paginationWrapper" class="pagination-container" style="display: flex; justify-content: space-between; padding: 10px;">
+                        <div style="padding: 10px">Show ${lstB.size()} of ${totalBlog} items</div>
                         <c:if test="${totalPages > 1}">
                             <div class="pagination">
                                 <c:if test="${currentPage > 1}">
@@ -164,7 +182,7 @@
                     </div>
                 </div>
 
-                <!-- Add this script tag before closing body tag -->
+ 
                 <script>
                     window.contextPath = '${pageContext.request.contextPath}';
                 </script>
@@ -178,7 +196,97 @@
         <!-- ====== ionicons ======= -->
         <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
         <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+        <script>
+        let deleteUrl = '';
+        let blogTitle = '';
 
+        // Function to show delete popup
+        function showDeletePopup(url, title = '') {
+            deleteUrl = url;
+            blogTitle = title;
+            
+            // Update popup content
+            const messageElement = document.getElementById('popupMessage');
+            if (title) {
+                messageElement.innerHTML = `Bạn có chắc chắn muốn xóa bài viết:<br><strong>"${title}"</strong>?`;
+            } else {
+                messageElement.innerHTML = 'Bạn có chắc chắn muốn xóa bài viết này?';
+            }
+            
+            // Set delete URL
+            document.getElementById('confirmDeleteBtn').href = deleteUrl;
+            
+            // Show popup with animation
+            const popup = document.getElementById('deletePopup');
+            popup.classList.add('show');
+            
+            // Prevent body scrolling
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Function to close delete popup
+        function closeDeletePopup() {
+            const popup = document.getElementById('deletePopup');
+            popup.classList.remove('show');
+            
+            // Restore body scrolling
+            document.body.style.overflow = 'auto';
+            
+            // Clear variables
+            deleteUrl = '';
+            blogTitle = '';
+        }
+
+        // Close popup when clicking outside
+        document.getElementById('deletePopup').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeDeletePopup();
+            }
+        });
+
+        // Close popup with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeDeletePopup();
+            }
+        });
+
+        // Prevent popup from closing when clicking inside
+        document.querySelector('.popup-container').addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+    </script>
+        <div id="deletePopup" class="popup-overlay">
+    <div class="popup-container">
+        <div class="popup-header">
+            <div class="popup-icon">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <div class="popup-title">Xác nhận xóa</div>
+            <div class="popup-subtitle">Thao tác này không thể hoàn tác</div>
+        </div>
+        
+        <div class="popup-body">
+            <div class="popup-message" id="popupMessage">
+                Bạn có chắc chắn muốn xóa bài viết này?
+            </div>
+            <div class="popup-warning">
+                Dữ liệu sẽ bị xóa vĩnh viễn và không thể khôi phục.
+            </div>
+        </div>
+        
+        <div class="popup-actions">
+            <button class="popup-btn popup-btn-cancel" onclick="closeDeletePopup()">
+                <i class="fas fa-times"></i>
+                Hủy bỏ
+            </button>
+            <a id="confirmDeleteBtn" href="#" class="popup-btn popup-btn-delete">
+                <i class="fas fa-trash-alt"></i>
+                Xóa ngay
+            </a>
+        </div>
+    </div>
+</div>
     </body>
 
 </html>
