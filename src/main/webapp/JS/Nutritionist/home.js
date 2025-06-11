@@ -1,15 +1,90 @@
+function toggleNavigation() {
+    const navigation = document.querySelector('.navigation');
+    const toggle = document.querySelector('.toggle');
+    
+    // Toggle collapsed class
+    navigation.classList.toggle('collapsed');
+    
+    // Add ripple effect to toggle button
+    toggle.classList.add('ripple');
+    setTimeout(() => {
+        toggle.classList.remove('ripple');
+    }, 600);
+}
 
-// Toggle navigation
-document.querySelector('.toggle').addEventListener('click', function() {
-  document.querySelector('.navigation').classList.toggle('active');
-  document.querySelector('.main').classList.toggle('active');
-  this.classList.add('ripple');
-  
-  setTimeout(() => {
-    this.classList.remove('ripple');
-  }, 600);
+// Toggle Submenu Function
+function toggleSubmenu(element) {
+    const parentLi = element.parentElement;
+    const submenu = parentLi.querySelector('ul');
+    
+    // Close other open submenus
+//    const otherSubmenus = document.querySelectorAll('.navigation ul li.has-submenu.active');
+//    otherSubmenus.forEach(item => {
+//        if (item !== parentLi) {
+//            item.classList.remove('active');
+//        }
+//    });
+    
+    // Toggle current submenu
+    parentLi.classList.toggle('active');
+}
+
+// Initialize Navigation
+document.addEventListener('DOMContentLoaded', function() {
+    // Add event listener to toggle button
+    const toggleBtn = document.querySelector('.toggle');
+    if (toggleBtn) {
+        toggleBtn.addEventListener('click', toggleNavigation);
+    }
+    
+    // Set active menu item based on current page
+    const currentPath = window.location.pathname;
+    const menuLinks = document.querySelectorAll('.navigation ul li a');
+    
+    menuLinks.forEach(link => {
+        if (link.getAttribute('href') === currentPath) {
+            link.parentElement.classList.add('active');
+        }
+    });
+    
+    // Handle mobile menu
+    const navigation = document.querySelector('.navigation');
+    const main = document.querySelector('.main');
+    
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', function(event) {
+        if (window.innerWidth <= 768) {
+            if (!navigation.contains(event.target) && navigation.classList.contains('mobile-open')) {
+                navigation.classList.remove('mobile-open');
+            }
+        }
+    });
+    
+    // Handle window resize
+    window.addEventListener('resize', function() {
+        if (window.innerWidth > 768) {
+            navigation.classList.remove('mobile-open');
+        }
+    });
 });
 
+// Add smooth scrolling for better UX
+document.addEventListener('DOMContentLoaded', function() {
+    // Smooth scroll for anchor links
+    const links = document.querySelectorAll('a[href^="#"]');
+    links.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+});
 
 document.addEventListener('DOMContentLoaded', function () {
     const pieCanvas = document.getElementById('pieChart');
@@ -17,8 +92,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const counts = JSON.parse(pieCanvas.dataset.counts || "[]");
 
     const backgroundColors = [
-        'rgba(255, 205, 86, 0.8)',   
-        'rgba(75, 192, 192, 0.8)',   
+        'rgba(255, 205, 86, 0.8)',
+        'rgba(75, 192, 192, 0.8)',
         'rgba(255, 99, 132, 0.8)',
         'rgba(153, 102, 255, 0.8)'
     ];
@@ -28,15 +103,15 @@ document.addEventListener('DOMContentLoaded', function () {
         data: {
             labels: labels,
             datasets: [{
-                data: counts,
-                backgroundColor: backgroundColors,
-                hoverOffset: 4
-            }]
+                    data: counts,
+                    backgroundColor: backgroundColors,
+                    hoverOffset: 4
+                }]
         },
         options: {
             responsive: true,
             plugins: {
-                legend: { display: false  },
+                legend: {display: false},
                 tooltip: {
                     callbacks: {
                         label: (context) => `${context.label}: ${context.parsed}`
@@ -47,7 +122,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-// Lấy contextPath từ biến toàn cục (phải được set trong JSP)
 const contextPath = window.contextPath || '';
 
 let blogChart;
@@ -63,12 +137,12 @@ document.addEventListener('DOMContentLoaded', () => {
         data: {
             labels: labels,
             datasets: [{
-                label: 'Blogs',
-                data: counts,
-                backgroundColor: 'rgba(54, 162, 235, 0.8)',
-                borderColor: 'rgba(54, 162, 235, 1)',
-                borderWidth: 1
-            }]
+                    label: 'Blogs',
+                    data: counts,
+                    backgroundColor: 'rgba(54, 162, 235, 0.8)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
         },
         options: {
             responsive: true,
@@ -79,13 +153,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         stepSize: 1,
                         callback: v => Number.isInteger(v) ? v : null
                     },
-                    title: { display: true, text: 'Number of Blogs' }
+                    title: {display: true, text: 'Number of Blogs'}
                 },
                 x: {
-                    title: { display: true, text: 'Month' }
+                    title: {display: true, text: 'Month'}
                 }
             },
-            plugins: { legend: { display: false } }
+            plugins: {legend: {display: false}}
         }
     });
 
@@ -96,7 +170,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const year = yearDropdown.value;
             try {
                 const response = await fetch(`${contextPath}/dashboadnutri?year=${year}&json=true`);
-                if (!response.ok) throw new Error('Network response was not ok');
+                if (!response.ok)
+                    throw new Error('Network response was not ok');
                 const data = await response.json();
 
                 // Cập nhật dữ liệu chart
@@ -122,16 +197,16 @@ document.addEventListener('DOMContentLoaded', function () {
         data: {
             labels: labels,
             datasets: [{
-                label: 'Food Drafts Created',
-                data: counts,
-                borderColor: 'rgba(54, 162, 235, 0.8)',
-                backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                fill: true,
-                tension: 0.4,
-                pointRadius: 5,
-                pointBackgroundColor: 'rgba(54, 162, 235, 1)',
-                pointBorderWidth: 1
-            }]
+                    label: 'Food Drafts Created',
+                    data: counts,
+                    borderColor: 'rgba(54, 162, 235, 0.8)',
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 5,
+                    pointBackgroundColor: 'rgba(54, 162, 235, 1)',
+                    pointBorderWidth: 1
+                }]
         },
         options: {
             responsive: true,

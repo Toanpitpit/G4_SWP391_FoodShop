@@ -136,11 +136,15 @@ public class BlogDAO {
         DBConnect db = new DBConnect ();
 
         try (Connection conn = db.getConnection (); CallableStatement cs = conn.prepareCall (sql)) {
-
+            if(blog.getImageUlr () == null){
+                cs.setString (4, null);
+            }else {
+                cs.setString (4, blog.getImageUlr ());
+            }
             cs.setInt (1, blog.getAuthorID ());
             cs.setInt (2, blog.getBmiId ());
             cs.setString (3, blog.getTitle ());
-            cs.setString (4, blog.getImageUlr ());
+            
             cs.setString (5, blog.getContent ());
             cs.setString (6, blog.getStatus ());
 
@@ -153,16 +157,12 @@ public class BlogDAO {
                     }
                 }
             } else {
-                // Nếu procedure không trả resultset, bạn có thể check update count
                 int updateCount = cs.getUpdateCount ();
                 return updateCount > 0;
             }
-
         } catch (SQLException e) {
-            e.printStackTrace ();
-            // Bạn có thể log hoặc throw exception tùy mục đích
+            e.printStackTrace ();  
         }
-
         return false;
     }
 

@@ -35,7 +35,7 @@ import org.apache.taglibs.standard.functions.Functions;
  *
  * @author Admin
  */
-@MultipartConfig(fileSizeThreshold = 1024 * 1024, maxFileSize = 1024 * 1024 * 10, maxRequestSize = 1024 * 1024 * 50)
+@MultipartConfig(fileSizeThreshold = 1024 * 1024, maxFileSize = 1024 * 1024 * 5, maxRequestSize = 1024 * 1024 * 5)
 public class CreateBlogsServerLet extends HttpServlet {
 
     /**
@@ -88,89 +88,115 @@ public class CreateBlogsServerLet extends HttpServlet {
 
     }
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType ("text/html;charset=UTF-8");
-        request.setCharacterEncoding ("UTF-8");
-        
-        try (PrintWriter out = response.getWriter ()) {
-            Account acc = new Account ();
-             HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("Account") == null) {
-            response.sendRedirect("login.jsp");
+
+protected void doPost(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+    
+    response.setContentType("text/html;charset=UTF-8");
+    request.setCharacterEncoding("UTF-8");
+
+    HttpSession session = request.getSession(false);
+    if (session == null || session.getAttribute("Account") == null) {
+        response.sendRedirect("login.jsp");
+        return;
+    }
+
+    Account acc = (Account) session.getAttribute("Account");
+
+    String title = request.getParameter("title");
+    String bmiIdStr = request.getParameter("bmiId");
+    String status = request.getParameter("status");
+    String content = request.getParameter("content");
+    request.setAttribute ("title", title);
+    request.setAttribute ("status", status);
+    request.setAttribute ("content", content);
+    Part imagePart = request.getPart("imageUrl");
+    if(bmiIdStr != null){
+        request.setAttribute ("selectedBmiId", Integer.parseInt(bmiIdStr));
+    }
+    if (title == null || title.trim().isEmpty() ||
+        content == null || content.trim().isEmpty() ||
+        bmiIdStr == null || bmiIdStr.isEmpty()|| status ==null || imagePart == null || imagePart.getSize() == 0 || imagePart.getSubmittedFileName().isEmpty()) {
+        request.setAttribute("Errmess", "Vui lòng nhập đầy đủ tiêu đề, nội dung , ảnh và chọn BMI.");
+        doGet (request, response);
+        return;
+    }
+
+    int bmiId;
+    try {
+        bmiId = Integer.parseInt(bmiIdStr);
+    } catch (NumberFormatException e) {
+        request.setAttribute("Errmess", "Giá trị BMI không hợp lệ.");
+        doGet (request, response);
+        return;
+    }
+
+    // Handle file upload
+    String image_url = null;
+    try {
+        Part filePart = request.getPart("imageUrl");
+
+        if (filePart.getSize() > 5 * 1024 * 1024) {
+            request.setAttribute("Errmess", "Ảnh vượt quá dung lượng cho phép (5MB).");
+            doGet (request, response);
             return;
         }
-        
-        else {
-            acc = (Account) session.getAttribute ("Account");
+
+        String fileName = filePart.getSubmittedFileName();
+        if (fileName != null && !fileName.isEmpty()) {
+            String fileExtension = "";
+            int dotIndex = fileName.lastIndexOf('.');
+            if (dotIndex >= 0) {
+                fileExtension = fileName.substring(dotIndex);
+            }
+
+            String uniqueFileName = UUID.randomUUID().toString() + fileExtension;
+            File uploadDir = new File(UPLOAD_DIRECTORY);
+            if (!uploadDir.exists()) {
+                uploadDir.mkdirs();
+            }
+
+            String filePath = UPLOAD_DIRECTORY + File.separator + uniqueFileName;
+            filePart.write(filePath);
+
+            File sourceFile = new File(filePath);
+            File targetFile = new File(TAGET_DIRECTORY + File.separator + uniqueFileName);
+            Files.copy(sourceFile.toPath(), targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+            image_url = "img/blog/" + uniqueFileName;
         }
-            String title = request.getParameter ("title");
-            String bmiIdStr = request.getParameter ("bmiId");
-            String status = request.getParameter ("status");
-            String content = request.getParameter ("content");
-            if (content.trim ().isEmpty () || content == null) {
-                request.setAttribute ("status", status);
-                request.setAttribute ("title", title);
-                request.setAttribute ("bmiId", bmiIdStr);
-            }
-            int bmiId = 0;
-            try {
-                bmiId = Integer.parseInt (bmiIdStr);
-            } catch (NumberFormatException e) {
-                e.printStackTrace ();
-            }
-            String image_ulr = null;
 
-            try {
-                Part filePart = request.getPart ("imageUrl");
-                String fileName = filePart.getSubmittedFileName ();
-                out.print (fileName);
-
-                if (fileName != null && !fileName.isEmpty ()) {
-                    String fileExtension = "";
-                    int dotIndex = fileName.lastIndexOf ('.');
-                    if (dotIndex >= 0) {
-                        fileExtension = fileName.substring (dotIndex);
-                    }
-                    String uniqueFileName = UUID.randomUUID ().toString () + fileExtension;
-                    File uploadDir = new File (UPLOAD_DIRECTORY);
-                    if (!uploadDir.exists ()) {
-                        uploadDir.mkdirs ();
-                    }
-                    String filePath = UPLOAD_DIRECTORY + File.separator + uniqueFileName;
-                    filePart.write (filePath);
-                    File sourceFile = new File (filePath);
-                    File targetFile = new File (TAGET_DIRECTORY + File.separator + uniqueFileName);
-                    Files.copy (sourceFile.toPath (), targetFile.toPath (), StandardCopyOption.REPLACE_EXISTING);
-
-                    Thread.sleep (1000);
-                    image_ulr = "img/blog/" + uniqueFileName;
-                }
-                out.print (image_ulr);
-
-            } catch (Exception e) {
-                e.printStackTrace ();
-            }
-            Timestamp create_at = new Timestamp (System.currentTimeMillis ());
-            Timestamp update_at = new Timestamp (System.currentTimeMillis ());
-            int authorID = acc.getId ();
-            String name = acc.getUsername ();
-            Blogs blog = new Blogs (0, authorID, name, bmiId, title, image_ulr, content, status, create_at, update_at);
-            BlogDAO _dao = new BlogDAO ();
-            boolean suscess = _dao.insertBlog (blog);
-            String mess = null, Errmess = null;
-            if (suscess) {
-                mess = "Create sucessfuly";
-            } else {
-                Errmess = "Fail to create";
-            }
-            session.setAttribute ("mess", mess);
-            session.setAttribute ("Errmess", Errmess);
-            response.sendRedirect ("/listblog");
-
-        }
+    } catch (IllegalStateException e) {
+        request.setAttribute("Errmess", "Tổng dung lượng dữ liệu gửi lên vượt giới hạn 5MB.");
+        doGet (request, response);
+        return;
+    } catch (Exception e) {
+        e.printStackTrace();
+        request.setAttribute("Errmess", "Đã xảy ra lỗi khi tải ảnh.");
+        doGet (request, response);
+        return;
     }
+
+    // Tạo blog object
+    Timestamp now = new Timestamp(System.currentTimeMillis());
+    Blogs blog = new Blogs(
+        0, acc.getId(), acc.getUsername(), bmiId,
+        title, image_url, content, status, now, now
+    );
+
+    // Lưu blog vào DB
+    BlogDAO blogDAO = new BlogDAO();
+    boolean success = blogDAO.insertBlog(blog);
+
+    if (success) {
+        session.setAttribute("mess", "Tạo bài viết thành công.");
+        response.sendRedirect("listblog");
+    } else {
+        request.setAttribute("Errmess", "Không thể tạo bài viết. Vui lòng thử lại.");
+        doGet (request, response);
+    }
+}
+
 
     @Override
     public String getServletInfo() {

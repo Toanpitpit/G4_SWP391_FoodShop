@@ -70,8 +70,7 @@ public class DashboardServerLet extends HttpServlet {
                 response.sendRedirect ("login.jsp");
                 return;
             }
-            /*End validate session*/
- /* checked Json requset , ressponse ajax*/
+
             String isJsonRequest = request.getParameter ("json");
             if ("true".equals (request.getParameter ("json"))) {
                 handleBarChartJson (request, response, out);

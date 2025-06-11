@@ -14,18 +14,15 @@
         <link rel="stylesheet" href="../CSS/Ncss/common.css">
         <link rel="stylesheet" href="../CSS/Ncss/blogs.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-
-        <!-- Thêm link thẻ <head> -->
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+        
         <script>
             window.contextPath = '${pageContext.request.contextPath}';
         </script>
-
-
     </head>
 
     <body>
-        <div class="container">
+        <div class="content">
             <!-- Navigation -->
             <jsp:include page="/Nutritionist/Common.jsp"/>
 
@@ -33,11 +30,11 @@
             <div class="main">
                 <!-- Top Bar -->
                 <jsp:include page="/Nutritionist/topbar.jsp"/> 
-                    <!-- Breadcrumb -->
-                    
-                 <div class="breadcrumb-section">
+                <!-- Breadcrumb -->
+
+                <div class="breadcrumb-section">
                     <div class="page-header">
-                        
+
                         <nav class="breadcrumb-nav">
                             <a href="${pageContext.request.contextPath}/dashboadnutri" class="breadcrumb-link">Trang chủ</a>
                             <span class="separator">/</span>
@@ -48,18 +45,20 @@
                     </div>
                 </div>
 
-                <c:if test="${not empty mess}">
-                    <div class="create-success-alert success">
-                        ${mess}
-                    </div>
-                    <c:remove var="mess" scope="session" />
+                <c:if test="${not empty Errmess}">
+                    <div class="alert alert-danger" style="display: none;">${Errmess}</div>
                 </c:if>
 
-                <c:if test="${empty mess and not empty Errmess}">
-                    <div class="create-success-alert error">
-                        ${Errmess}
-                    </div>
-                    <c:remove var="Errmess" scope="session" />
+                <c:if test="${not empty successMessage}">
+                    <div class="alert alert-success" style="display: none;">${successMessage}</div>
+                </c:if>
+
+                <c:if test="${not empty warningMessage}">
+                    <div class="alert alert-warning" style="display: none;">${warningMessage}</div>
+                </c:if>
+
+                <c:if test="${not empty infoMessage}">
+                    <div class="alert alert-info" style="display: none;">${infoMessage}</div>
                 </c:if>
 
 
@@ -83,7 +82,7 @@
                                         <option value="${st}" ${param.status == st ? 'selected' : ''}>${st}</option>
                                     </c:forEach>
                                 </select> 
-                                    <select class="filter-select" id="BmitypeFilter" name="typebmi">
+                                <select class="filter-select" id="BmitypeFilter" name="typebmi">
                                     <option value="" ${param.bmiID == null ? 'selected' : ''}>All</option>
                                     <c:forEach var="st" items="${lstBMItype}">
                                         <option value="${st.bmiID}" ${param.bmiId == st.bmiID ? 'selected' : ''}>${st.classification}</option>
@@ -97,7 +96,7 @@
                         </a>
                     </div>
 
-                  
+
                     <div class="table-container">
                         <c:choose>
                             <c:when test="${not empty lstB}">
@@ -182,7 +181,7 @@
                     </div>
                 </div>
 
- 
+
                 <script>
                     window.contextPath = '${pageContext.request.contextPath}';
                 </script>
@@ -196,97 +195,39 @@
         <!-- ====== ionicons ======= -->
         <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
         <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
-        <script>
-        let deleteUrl = '';
-        let blogTitle = '';
 
-        // Function to show delete popup
-        function showDeletePopup(url, title = '') {
-            deleteUrl = url;
-            blogTitle = title;
-            
-            // Update popup content
-            const messageElement = document.getElementById('popupMessage');
-            if (title) {
-                messageElement.innerHTML = `Bạn có chắc chắn muốn xóa bài viết:<br><strong>"${title}"</strong>?`;
-            } else {
-                messageElement.innerHTML = 'Bạn có chắc chắn muốn xóa bài viết này?';
-            }
-            
-            // Set delete URL
-            document.getElementById('confirmDeleteBtn').href = deleteUrl;
-            
-            // Show popup with animation
-            const popup = document.getElementById('deletePopup');
-            popup.classList.add('show');
-            
-            // Prevent body scrolling
-            document.body.style.overflow = 'hidden';
-        }
-
-        // Function to close delete popup
-        function closeDeletePopup() {
-            const popup = document.getElementById('deletePopup');
-            popup.classList.remove('show');
-            
-            // Restore body scrolling
-            document.body.style.overflow = 'auto';
-            
-            // Clear variables
-            deleteUrl = '';
-            blogTitle = '';
-        }
-
-        // Close popup when clicking outside
-        document.getElementById('deletePopup').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeDeletePopup();
-            }
-        });
-
-        // Close popup with Escape key
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                closeDeletePopup();
-            }
-        });
-
-        // Prevent popup from closing when clicking inside
-        document.querySelector('.popup-container').addEventListener('click', function(e) {
-            e.stopPropagation();
-        });
-    </script>
         <div id="deletePopup" class="popup-overlay">
-    <div class="popup-container">
-        <div class="popup-header">
-            <div class="popup-icon">
-                <i class="fas fa-exclamation-triangle"></i>
+            <div class="popup-container">
+                <div class="popup-header">
+                    <div class="popup-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="popup-title">Xác nhận xóa</div>
+                    <div class="popup-subtitle">Thao tác này không thể hoàn tác</div>
+                </div>
+
+                <div class="popup-body">
+                    <div class="popup-message" id="popupMessage">
+                        Bạn có chắc chắn muốn xóa bài viết này?
+                    </div>
+                    <div class="popup-warning">
+                        Dữ liệu sẽ bị xóa vĩnh viễn và không thể khôi phục.
+                    </div>
+                </div>
+
+                <div class="popup-actions">
+                    <button class="popup-btn popup-btn-cancel" onclick="closeDeletePopup()">
+                        <i class="fas fa-times"></i>
+                        Hủy bỏ
+                    </button>
+                    <a id="confirmDeleteBtn" href="#" class="popup-btn popup-btn-delete">
+                        <i class="fas fa-trash-alt"></i>
+                        Xóa ngay
+                    </a>
+                </div>
             </div>
-            <div class="popup-title">Xác nhận xóa</div>
-            <div class="popup-subtitle">Thao tác này không thể hoàn tác</div>
         </div>
-        
-        <div class="popup-body">
-            <div class="popup-message" id="popupMessage">
-                Bạn có chắc chắn muốn xóa bài viết này?
-            </div>
-            <div class="popup-warning">
-                Dữ liệu sẽ bị xóa vĩnh viễn và không thể khôi phục.
-            </div>
-        </div>
-        
-        <div class="popup-actions">
-            <button class="popup-btn popup-btn-cancel" onclick="closeDeletePopup()">
-                <i class="fas fa-times"></i>
-                Hủy bỏ
-            </button>
-            <a id="confirmDeleteBtn" href="#" class="popup-btn popup-btn-delete">
-                <i class="fas fa-trash-alt"></i>
-                Xóa ngay
-            </a>
-        </div>
-    </div>
-</div>
+        <script src="../JS/Nutritionist/home.js"></script>
     </body>
 
 </html>

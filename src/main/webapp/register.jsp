@@ -471,7 +471,7 @@
                     <div class="form-group">
                         <div class="input-group">
                             <i class="fas fa-user"></i>
-                            <input type="text"  value= ${username} class="form-control" id="username" name="username" placeholder="Username" required>
+                            <input type="text"  value= "${username}" class="form-control" id="username" name="username" placeholder="Username" required>
                         </div>
                     </div>
                     
@@ -485,28 +485,28 @@
                     <div class="form-group">
                         <div class="input-group">
                             <i class="fas fa-lock"></i>
-                            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" required>
+                            <input type="password"; class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" required>
                         </div>
                     </div>
                     
                     <div class="form-group">
                         <div class="input-group">
                             <i class="fas fa-id-card"></i>
-                            <input type="text" value= ${fullName} class="form-control" id="fullName" name="fullName" placeholder="Full Name">
+                            <input type="text" value= "${fullName}" class="form-control" id="fullName" name="fullName" placeholder="Full Name">
                         </div>
                     </div>
                     
                     <div class="form-group">
                         <div class="input-group">
                             <i class="fas fa-envelope"></i>
-                            <input type="email" value= ${email} class="form-control" id="email" name="email" placeholder="Email Address">
+                            <input type="email" value= "${email}" class="form-control" id="email" name="email" placeholder="Email Address">
                         </div>
                     </div>
                     
                     <div class="form-group">
                         <div class="input-group">
                             <i class="fas fa-phone"></i>
-                            <input type="text" value= ${phone} class="form-control" id="phone" name="phone" placeholder="Phone Number">
+                            <input type="text" value= "${phone}" class="form-control" id="phone" name="phone" placeholder="Phone Number">
                         </div>
                     </div>
                     

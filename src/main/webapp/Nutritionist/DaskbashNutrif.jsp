@@ -13,6 +13,7 @@
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet">
         <link rel="stylesheet" href="../CSS/Ncss/Homed.css">
         <link rel="stylesheet" href="../CSS/Ncss/common.css">
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     </head>
 
     <body>
@@ -160,15 +161,82 @@
                         </div>
                     </div>
                 </div>
+                <jsp:include page="/Nutritionist/footer.jsp"/>  
             </div>
         </div>
     </div>
 
+     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const navigation = document.getElementById('navigation');
+            const toggle = document.getElementById('toggle');
+            const submenuItems = document.querySelectorAll('.li_has_submenu');
+            
+            submenuItems.forEach(item => {
+                const menuItem = item.querySelector('.menu-item');
+                
+                menuItem.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    item.classList.toggle('active');
 
+                    submenuItems.forEach(otherItem => {
+                        if (otherItem !== item) {
+                            otherItem.classList.remove('active');
+                        }
+                    });
+                });
+            });
+            
+            const regularMenuItems = document.querySelectorAll('.navigation ul li:not(.li_has_submenu) a');
+            regularMenuItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    submenuItems.forEach(submenuItem => {
+                        submenuItem.classList.remove('active');
+                    });
+                });
+            });
+            
+            // Handle submenu item clicks
+            const submenuLinks = document.querySelectorAll('.li_has_submenu ul li a');
+            submenuLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    // Remove active class from all submenu items
+                    submenuLinks.forEach(l => l.parentElement.classList.remove('active'));
+                    // Add active class to clicked item
+                    this.parentElement.classList.add('active');
+                });
+            });
+            
+            // Close submenus when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.navigation')) {
+                    submenuItems.forEach(item => {
+                        item.classList.remove('active');
+                    });
+                }
+            });
+            
+            // Mobile responsive handling
+            function handleResize() {
+                if (window.innerWidth <= 1024) {
+                    navigation.classList.add('active');
+                } else {
+                    navigation.classList.remove('active');
+                }
+            }
+            
+            window.addEventListener('resize', handleResize);
+            handleResize(); // Initial check
+        });
+    </script>
 
 
     <!-- =========== Scripts =========  -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     <script src="../JS/Nutritionist/home.js"></script>
 
     <!-- ====== ionicons ======= -->

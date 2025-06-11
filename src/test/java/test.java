@@ -36,7 +36,7 @@ public class test {
 //        dis4();
 //        dis6();
 //         dis5();
-dis();
+dis2();
 //dis();
     }
     public static void dis() throws SQLException{
