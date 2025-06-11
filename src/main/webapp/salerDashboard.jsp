@@ -5,10 +5,10 @@
 <html>
 <head>
     <title>Dashboard</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css"/>
+     <link rel="stylesheet" href="${pageContext.request.contextPath}/CSS/Ncss/style.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-    <style>
+   <style>
     body {
         margin: 0;
         padding: 0;
@@ -123,6 +123,35 @@
         z-index: 1;
         pointer-events: none;
     }
+    
+    .dashboard-header {
+    position: relative;
+    justify-content: space-between;
+}
+
+.home-button {
+    position: absolute;
+    right: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: white;
+    color: #4CAF50;
+    padding: 10px 18px;
+    border-radius: 20px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: 0.3s ease;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.home-button:hover {
+    background-color: #4CAF50;
+    color: white;
+}
+
 </style>
 
 </head>
@@ -131,10 +160,13 @@
 <div class="overlay">
 
     <div class="dashboard-header">
-        <a href="home.jsp">
+        <a href="Homedemo.jsp">
             <img src="${pageContext.request.contextPath}/img/logo/logo.png" alt="Logo" width="80">
         </a>
-        <h2>Dashboard Saler</h2>
+       <h2 > <i class="fas fa-leaf" ></i> Dashboard Saler</h2>
+        <a href="Homedemo.jsp" class="home-button">
+            <i class="fas fa-home"></i> Home
+        </a>
     </div>
 
    <div class="circle-container">

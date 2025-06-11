@@ -1,65 +1,81 @@
 package com.yourpackage.dao;
 
+import com.example.servlet.utils.DBConnect;
 import com.yourpackage.model.Order;
-import com.example.servlet.utils.DBConnect; // đường dẫn chính xác tới DBConnect
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
 public class OrderDAO {
 
-    private static final String SELECT_ALL_ORDERS = "SELECT * FROM Orders";
-    private static final String UPDATE_ORDER_STATUS = "UPDATE Orders SET status = ? WHERE id = ?";
-
-    // Lấy danh sách tất cả đơn hàng
+    // Lấy danh sách đơn hàng
     public List<Order> getAllOrders() {
         List<Order> orders = new ArrayList<>();
-        DBConnect db = new DBConnect(); // tạo đối tượng DBConnect
-        try (Connection connection = db.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_ORDERS)) {
+        String sql = "SELECT " +
+                "o.oID AS OrderID, " +
+                "a.name AS CustomerName, " +
+                "a.phone AS Phone, " +
+                "o.adress AS Address, " +  // chú ý nếu DB bạn sai chính tả "adress" thì phải giữ nguyên
+                "f.pName AS Food, " +
+                "od.quantity AS Quantity, " +
+                "f.price AS Price, " +
+                "o.status AS Status " +
+                "FROM Orders o " +
+                "JOIN Accounts a ON o.acID = a.id " +
+                "JOIN OrderDetail od ON o.oID = od.oID " +
+                "JOIN Foods f ON od.pId = f.pID " +
+                "ORDER BY o.oID";
 
-            ResultSet rs = preparedStatement.executeQuery();
+        DBConnect db = new DBConnect();
+        try (Connection conn = db.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
             while (rs.next()) {
-                int id = rs.getInt("id");
-                String customerName = rs.getString("customerName");
-                String address = rs.getString("address");
-                String phone = rs.getString("phone");
-                String food = rs.getString("food");
-                int quantity = rs.getInt("quantity");
-                double price = rs.getDouble("price");
-                String status = rs.getString("status");
+                Order order = new Order();
+                order.setId(rs.getInt("OrderID"));
+                order.setCustomerName(rs.getString("CustomerName"));
+                order.setPhone(rs.getString("Phone"));
+                order.setAddress(rs.getString("Address"));
+                order.setFood(rs.getString("Food"));
+                order.setQuantity(rs.getInt("Quantity"));
+                order.setPrice(rs.getDouble("Price"));
+                order.setStatus(rs.getString("Status"));
+               
 
-                Order order = new Order(id, customerName, address, phone, food, quantity, price, status);
                 orders.add(order);
             }
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            db.closeConnection(); // đóng kết nối sau khi dùng
+            db.closeConnection(); // đóng connection
         }
 
         return orders;
     }
 
     // Cập nhật trạng thái đơn hàng
-    public boolean updateOrderStatus(int orderId, String status) {
-        boolean rowUpdated = false;
+    public boolean updateOrderStatus(int orderId, String newStatus) {
+        String sql = "UPDATE Orders SET status = ? WHERE oID = ?";
         DBConnect db = new DBConnect();
-        try (Connection connection = db.getConnection();
-             PreparedStatement statement = connection.prepareStatement(UPDATE_ORDER_STATUS)) {
+        try (Connection conn = db.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            statement.setString(1, status);
-            statement.setInt(2, orderId);
-            rowUpdated = statement.executeUpdate() > 0;
+            ps.setString(1, newStatus);
+            ps.setInt(2, orderId);
 
-        } catch (SQLException e) {
+            int affected = ps.executeUpdate();
+            return affected > 0;
+
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             db.closeConnection();
         }
-
-        return rowUpdated;
+        return false;
     }
 }

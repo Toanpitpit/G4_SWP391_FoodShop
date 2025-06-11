@@ -9,7 +9,7 @@ public class Order {
     private int quantity;
     private double price;
     private String status;
-
+    private double totalPrice;
     public Order() {
     }
 
@@ -89,4 +89,8 @@ public class Order {
     public void setStatus(String status) {
         this.status = status;
     }
+    public double getTotalPrice() {
+    return this.quantity * this.price;
+}
+
 }
