@@ -127,6 +127,37 @@
         .action-button:hover {
             opacity: 0.8;
         }
+        .form-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+}
+
+.input-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-icon i {
+    position: absolute;
+    left: 10px;
+    color: #888;
+    z-index: 1;
+}
+
+.input-icon input,
+.input-icon select {
+    padding: 8px 12px 8px 35px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    width: 200px;
+    box-sizing: border-box;
+    appearance: none;
+}
+
     </style>
 </head>
 <body>
@@ -146,13 +177,45 @@
 
 <!-- SEARCH FORM -->
 <form method="get" action="ManageOrderServlet" class="search-form">
-    <input type="text" name="orderId" placeholder="🔢 Order ID" value="${param.orderId}" />
-    <input type="text" name="customerName" placeholder="👤 Customer Name" value="${param.customerName}" />
-    <input type="text" name="category" placeholder="🗂️ Food Category" value="${param.category}" />
-    <input type="text" name="phone" placeholder="📞 Phone Number" value="${param.phone}" />
-    <input type="text" name="food" placeholder="🍽️ Food Name" value="${param.food}" />
-    <button type="submit"><i class="fas fa-search" style="margin-right: 5px;"></i> Search</button>
+    <div class="form-group">
+        <div class="input-icon">
+            
+            <input type="text" name="orderId" placeholder="🔢  Order ID" value="${param.orderId}" />
+        </div>
+
+        <div class="input-icon">
+            
+            <input type="text" name="customerName" placeholder="👤  Customer Name" value="${param.customerName}" />
+        </div>
+
+        <div class="input-icon">
+         
+            <select name="category">
+                <option value="">📂 All Categories</option>
+                <option value="Đồ uống" ${param.category == 'Đồ uống' ? 'selected' : ''}>🥤 Đồ uống</option>
+                <option value="Healthy Food" ${param.category == 'Healthy Food' ? 'selected' : ''}>🥗 Healthy Food</option>
+                <option value="Món Chính" ${param.category == 'Món Chính' ? 'selected' : ''}>🍛 Món Chính</option>
+                <option value="Món Khai Vị" ${param.category == 'Món Khai Vị' ? 'selected' : ''}>🥟 Món Khai Vị</option>
+                <option value="Món Tráng Miệng" ${param.category == 'Món Tráng Miệng' ? 'selected' : ''}>🍰 Món Tráng Miệng</option>
+            </select>
+        </div>
+
+        <div class="input-icon">
+      
+            <input type="text" name="phone" placeholder="📞  Phone Number" value="${param.phone}" />
+        </div>
+
+        <div class="input-icon">
+           
+            <input type="text" name="food" placeholder="🍽️  Food Name" value="${param.food}" />
+        </div>
+
+        <button type="submit">
+            <i class="fas fa-search" style="margin-right: 5px;"></i> Search
+        </button>
+    </div>
 </form>
+
 
 <!-- ORDER TABLE -->
 <table>
@@ -162,6 +225,7 @@
         <th>Address</th>
         <th>Phone Number</th>
         <th>Order Food</th>
+        <th>Category</th>
         <th>Quantity</th>
         <th>Price</th>
         <th>Total Price</th>
@@ -176,6 +240,7 @@
             <td>${order.address}</td>
             <td>${order.phone}</td>
             <td>${order.food}</td>
+            <td>${order.category}</td>
             <td>${order.quantity}</td>
             <td>${order.price}</td>
             <td>${order.totalPrice}</td>

@@ -20,6 +20,7 @@ public class OrderDAO {
                 "a.phone AS Phone, " +
                 "o.adress AS Address, " +  // chú ý nếu DB bạn sai chính tả "adress" thì phải giữ nguyên
                 "f.pName AS Food, " +
+                "c.caName AS Category, " +
                 "od.quantity AS Quantity, " +
                 "f.price AS Price, " +
                 "o.status AS Status " +
@@ -27,6 +28,7 @@ public class OrderDAO {
                 "JOIN Accounts a ON o.acID = a.id " +
                 "JOIN OrderDetail od ON o.oID = od.oID " +
                 "JOIN Foods f ON od.pId = f.pID " +
+                "LEFT JOIN Category c ON f.catID = c.catID " +
                 "ORDER BY o.oID";
 
         DBConnect db = new DBConnect();
@@ -41,6 +43,7 @@ public class OrderDAO {
                 order.setPhone(rs.getString("Phone"));
                 order.setAddress(rs.getString("Address"));
                 order.setFood(rs.getString("Food"));
+                order.setCategory(rs.getString("Category"));
                 order.setQuantity(rs.getInt("Quantity"));
                 order.setPrice(rs.getDouble("Price"));
                 order.setStatus(rs.getString("Status"));

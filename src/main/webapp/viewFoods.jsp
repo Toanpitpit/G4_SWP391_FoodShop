@@ -4,6 +4,8 @@
 <html>
 <head>
     <title>Food List</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
     <style>
         body {
             font-family: "Segoe UI", sans-serif;
@@ -119,8 +121,8 @@
     <div class="logo">
         <img src="img/logo/logo.png" alt="Logo">
     </div>
-    <div class="title">Food List</div>
-    <a href="ManageFoodsServlet" class="back-button">Back</a>
+    <div class="title"><i class="fas fa-seedling"></i>Food List</div>
+    <a href="manageFoods.jsp" class="back-button">Back</a>
 </div>
 
 <!-- Thanh tìm kiếm -->

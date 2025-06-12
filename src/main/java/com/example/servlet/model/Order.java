@@ -6,6 +6,7 @@ public class Order {
     private String address;
     private String phone;
     private String food;
+    private String category;
     private int quantity;
     private double price;
     private String status;
@@ -13,12 +14,13 @@ public class Order {
     public Order() {
     }
 
-    public Order(int id, String customerName, String address, String phone, String food, int quantity, double price, String status) {
+    public Order(int id, String customerName, String address, String phone, String food, String category,int quantity, double price, String status) {
         this.id = id;
         this.customerName = customerName;
         this.address = address;
         this.phone = phone;
         this.food = food;
+        this.category = category;
         this.quantity = quantity;
         this.price = price;
         this.status = status;
@@ -66,6 +68,15 @@ public class Order {
         this.food = food;
     }
 
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+    
+    
     public int getQuantity() {
         return quantity;
     }

@@ -172,7 +172,7 @@
    <div class="circle-container">
     <img src="${pageContext.request.contextPath}/img/logo/icon-1.png" alt="Center" class="center-image">
 
-    <a href="order.jsp" class="circle-button top">
+    <a href="order" class="circle-button top">
         <i class="fas fa-clipboard-list"></i>
         Order
     </a>
