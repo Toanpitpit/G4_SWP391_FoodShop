@@ -1,0 +1,169 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : 12 thg 6, 2025, 19:37:03
+    Author     : User
+*/
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f6f6f6;
+}
+
+.order-header {
+    background: linear-gradient(to right, #6AAF70, #5DA463);
+    color: white;
+    padding: 30px 50px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    border-radius: 20px;
+    box-sizing: border-box;
+    margin: 20px auto;
+    position: relative;
+    overflow: hidden;
+}
+
+.order-header h2 {
+    font-size: 32px;
+    font-weight: bold;
+    margin: 0;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.order-buttons {
+    margin-left: auto;
+    display: flex;
+    gap: 10px;
+}
+
+.nav-button {
+    background-color: white;
+    color: #56ab2f;
+    border: 2px solid #56ab2f;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.nav-button:hover {
+    background-color: #56ab2f;
+    color: white;
+}
+
+.search-form {
+    width: 95%;
+    margin: 20px auto;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-form input {
+    padding: 10px;
+    width: 180px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+.search-form button {
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+table {
+    width: 95%;
+    margin: 30px auto;
+    text-align: center;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 12px;
+    overflow: hidden;
+    background: white;
+}
+
+th {
+    background-color: #28a745;
+    color: white;
+    font-weight: bold;
+    padding: 10px;
+}
+
+td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.action-button {
+    padding: 6px 10px;
+    border: none;
+    border-radius: 6px;
+    margin: 2px;
+    cursor: pointer;
+}
+
+.accept {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.reject {
+    background-color: #f44336;
+    color: white;
+}
+
+.cancel {
+    background-color: #ff9800;
+    color: white;
+}
+
+.action-button:hover {
+    opacity: 0.8;
+}
+
+.form-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+}
+
+.input-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-icon i {
+    position: absolute;
+    left: 10px;
+    color: #888;
+    z-index: 1;
+}
+
+.input-icon input,
+.input-icon select {
+    padding: 8px 12px 8px 35px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    width: 200px;
+    box-sizing: border-box;
+    appearance: none;
+}
+
