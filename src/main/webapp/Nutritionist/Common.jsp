@@ -3,13 +3,9 @@
 
 <div class="navigation">
     <div class="nav-header">
-       <div class="sidebar-brand">
-        <i class="fas fa-leaf"></i>
-        Fresh & Healthy
+        <div class="sidebar-brand">
+            <span>NUTRITIONIST PANEL</span>
         </div>
-        <button class="toggle">
-            <ion-icon name="menu-outline"></ion-icon>
-        </button>
     </div>
 
     <ul>
@@ -22,7 +18,7 @@
             </a>
         </li>
         <li>
-            <a href="listfood">
+            <a href="">
                 <span class="icon">
                     <ion-icon name="restaurant-outline"></ion-icon>
                 </span>
@@ -38,12 +34,12 @@
             </div>
             <ul>
                 <li>
-                    <a href="listfooft">
+                    <a href="">
                         <span>Food draft List</span>
                     </a>
                 </li>
                 <li>
-                    <a href="listfooddraft">
+                    <a href="">
                         <span>New Food Draft</span>
                     </a>
                 </li>
@@ -58,19 +54,19 @@
             </div>
             <ul>
                 <li>
-                    <a href="listblog">
+                    <a href="nutricontrol?action=displayblog">
                         <span>Blogs List</span>
                     </a>
                 </li>
                 <li>
-                    <a href="createblog">
+                    <a href="nutricontrol?action=createblog">
                         <span>New Blogs</span>
                     </a>
                 </li>
             </ul>
         </li>
         <li>
-            <a href="notify">
+            <a href="">
                 <span class="icon">
                     <ion-icon name="notifications-outline"></ion-icon>
                 </span>

@@ -242,3 +242,124 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
+
+
+
+//
+
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function(event) {
+            const notificationDropdown = document.getElementById('notificationDropdown');
+            const userDropdown = document.getElementById('userDropdown');
+            
+            if (!event.target.closest('.user-menu')) {
+                notificationDropdown.classList.remove('show');
+                userDropdown.classList.remove('show');
+            }
+        });
+
+        function toggleNotifications() {
+            const dropdown = document.getElementById('notificationDropdown');
+            const userDropdown = document.getElementById('userDropdown');
+            
+            userDropdown.classList.remove('show');
+            dropdown.classList.toggle('show');
+        }
+
+        function toggleUserMenu() {
+            const dropdown = document.getElementById('userDropdown');
+            const notificationDropdown = document.getElementById('notificationDropdown');
+            
+            notificationDropdown.classList.remove('show');
+            dropdown.classList.toggle('show');
+        }
+
+        function toggleTheme() {
+            // Theme toggle functionality
+            console.log('Toggle theme clicked');
+            // Bạn có thể thêm logic chuyển đổi theme ở đây
+        }
+
+        function markAllAsRead() {
+            // AJAX call để đánh dấu tất cả thông báo đã đọc
+            // Bạn có thể thay đổi URL servlet theo ý muốn
+            fetch('/your-servlet-url/mark-all-read', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    action: 'markAllAsRead'
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Xóa class unread từ tất cả notification items
+                    document.querySelectorAll('.notification-item.unread').forEach(item => {
+                        item.classList.remove('unread');
+                    });
+                    
+                    // Cập nhật badge số
+                    const badge = document.querySelector('.notification-badge');
+                    badge.textContent = '0';
+                    badge.style.display = 'none';
+                    
+                    console.log('Đã đánh dấu tất cả thông báo là đã đọc');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        function logout() {
+            if (confirm('Bạn có chắc chắn muốn đăng xuất?')) {
+                // AJAX call để đăng xuất
+                fetch('/your-servlet-url/logout', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        window.location.href = '/login';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            }
+        }
+
+        // Smooth scroll behavior when clicking on navigation
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Remove active class from all items
+                document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                
+                // Add active class to clicked item
+                this.classList.add('active');
+            });
+        });
+
+        // Animation for notification badge
+        function animateNotificationBadge() {
+            const badge = document.querySelector('.notification-badge');
+            badge.style.animation = 'pulse 1s infinite';
+        }
+
+        // CSS animation for badge
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes pulse {
+                0% { transform: scale(1); }
+                50% { transform: scale(1.1); }
+                100% { transform: scale(1); }
+            }
+        `;
+        document.head.appendChild(style);

@@ -5,19 +5,6 @@
 
 
 
-function previewImage(event) {
-    const input = event.target;
-    const preview = document.getElementById("preview");
-    if (input.files && input.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            preview.src = e.target.result;
-            preview.style.display = "block";
-        };
-        reader.readAsDataURL(input.files[0]);
-    }
-}
-
 // Alert Notification System
 class AlertNotification {
     constructor() {
@@ -211,6 +198,29 @@ function newPreviewImage(event) {
         reader.readAsDataURL(file);
     }
 }
+function previewImageEdit(event) {
+    const file = event.target.files[0];
+    const preview = document.getElementById('new-preview-edit');
+    const placeholder = document.getElementById('newUploadPlaceholder');
+    const container = document.querySelector('.new-image-preview-container');
+
+    if (file) {
+        if (file.size > 5 * 1024 * 1024) {
+            showAlert("Ảnh vượt quá 5MB.", 'danger', 5000);
+            event.target.value = '';
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            preview.src = e.target.result + "?t=" + new Date().getTime();
+            preview.style.display = 'block';
+            placeholder.style.display = 'none';
+            container.classList.add('has-image');
+        };
+        reader.readAsDataURL(file);
+    }
+}
 
 document.getElementById('newBlogForm').addEventListener('submit', function (e) {
     const titleInput = document.getElementById('title');
@@ -232,8 +242,6 @@ document.getElementById('newBlogForm').addEventListener('submit', function (e) {
 
         return;
     }
-
-    // Nếu hợp lệ thì mới loading
     button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang xử lý...';
     form.classList.add('loading');
 });

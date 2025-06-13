@@ -137,10 +137,6 @@
     
 }
 
-.new-blog-form .new-form-card:hover {
-    
-}
-
 .new-blog-form .new-form-card:hover::before {
     opacity: 1;
 }
@@ -225,6 +221,10 @@
     border-style: solid;
     padding: 0;
 }
+.new-image-preview-container.has-image .new-upload-placeholder {
+    display: none;
+}
+
 
 .new-blog-form #new-preview {
      width: 100%;

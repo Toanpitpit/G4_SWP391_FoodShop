@@ -82,7 +82,7 @@ public class LoginController extends HttpServlet {
             response.addCookie (p);
            
             if(user.getRole ().equals ("Nutritionist")){
-            response.sendRedirect ("/dashboadnutri");
+            response.sendRedirect ("/nutricontrol?action=dashboard");
             }
             else if(user.getRole ().equals ("Admin")){
                 response.sendRedirect ("/adminDashboard");

@@ -18,12 +18,28 @@
 
     <body>
         <!-- =============== Navigation ================ -->
+        <jsp:include page="/Nutritionist/topbar.jsp"/>  
         <div class="container">
             <jsp:include page="/Nutritionist/Common.jsp"/>
             <!-- ========================= Main ==================== -->
             <div class="main">
-                <jsp:include page="/Nutritionist/topbar.jsp"/>  
+                <div style="display: flex; margin-bottom: 20px">
+                    <button class="toggle">
+                    <ion-icon name="menu-outline"></ion-icon>
+                </button>
+                <div class="breadcrumb-section">
+                    <div class="page-header">
 
+                        <nav class="breadcrumb-nav">
+                            <a href="${pageContext.request.contextPath}/dashboadnutri" class="breadcrumb-link">Trang chủ</a>
+                            <span class="separator">/</span>
+                            <a href="${pageContext.request.contextPath}/listblog" class="breadcrumb-link">Blog</a>
+                            <span class="separator">/</span>
+                            <span class="breadcrumb-current">Quản lý bài viết</span>
+                        </nav>
+                    </div>
+                </div>
+                </div>
                 <!-- ======================= Cards ================== -->
                 <div class="cardBox">
                     <a href="listblog">

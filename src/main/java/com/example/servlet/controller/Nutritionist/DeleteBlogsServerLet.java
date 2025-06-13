@@ -55,9 +55,9 @@ public class DeleteBlogsServerLet extends HttpServlet {
         response.setContentType ("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter ()) {
             HttpSession session = request.getSession (false);
-//        if(session == null){
-//            response.sendRedirect("login.jsp");
-//        }
+            if (session == null) {
+                response.sendRedirect ("login.jsp");
+            }
             int id = Integer.parseInt (request.getParameter ("id"));
             BlogDAO b_dao = new BlogDAO ();
             String path = b_dao.getPathBlogByID (id);
@@ -69,7 +69,7 @@ public class DeleteBlogsServerLet extends HttpServlet {
                 session.setAttribute ("mess", "Delete Sucsessfuly");
             } else {
                 session.setAttribute ("Errmess", "Fail to detele");
-                
+
             }
             response.sendRedirect ("listblog");
         }

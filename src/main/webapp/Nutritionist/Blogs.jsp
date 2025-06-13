@@ -9,27 +9,143 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title></title>
+        <title>Quản lý bài viết</title>
         <!-- ======= Styles ====== -->
         <link rel="stylesheet" href="../CSS/Ncss/common.css">
         <link rel="stylesheet" href="../CSS/Ncss/blogs.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-        
+
+        <style>
+            /* CSS cho popup xóa */
+            .popup-overlay {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.5);
+                z-index: 1000;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .popup-overlay.show {
+                display: flex;
+            }
+
+            .popup-container {
+                background-color: white;
+                border-radius: 8px;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+                width: 400px;
+                max-width: 90%;
+                overflow: hidden;
+            }
+
+            .popup-header {
+                background-color: #f8f9fa;
+                padding: 20px;
+                text-align: center;
+                border-bottom: 1px solid #e9ecef;
+            }
+
+            .popup-icon {
+                font-size: 48px;
+                color: #dc3545;
+                margin-bottom: 10px;
+            }
+
+            .popup-title {
+                font-size: 20px;
+                font-weight: 600;
+                margin-bottom: 5px;
+            }
+
+            .popup-subtitle {
+                color: #6c757d;
+                font-size: 14px;
+            }
+
+            .popup-body {
+                padding: 20px;
+                text-align: center;
+            }
+
+            .popup-message {
+                margin-bottom: 15px;
+                font-size: 16px;
+                line-height: 1.5;
+            }
+
+            .popup-warning {
+                background-color: #fff8f9;
+                border-radius: 4px;
+                padding: 10px;
+                color: #dc3545;
+                font-size: 14px;
+                margin-top: 15px;
+            }
+
+            .popup-actions {
+                display: flex;
+                justify-content: center;
+                padding: 20px;
+                background-color: #f8f9fa;
+                border-top: 1px solid #e9ecef;
+            }
+
+            .popup-btn {
+                padding: 10px 20px;
+                border-radius: 4px;
+                font-weight: 500;
+                cursor: pointer;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                transition: all 0.2s;
+                margin: 0 10px;
+            }
+
+            .popup-btn i {
+                margin-right: 8px;
+            }
+
+            .popup-btn-cancel {
+                background-color: #e9ecef;
+                color: #495057;
+                border: 1px solid #ced4da;
+            }
+
+            .popup-btn-cancel:hover {
+                background-color: #dee2e6;
+            }
+
+            .popup-btn-delete {
+                background-color: #dc3545;
+                color: white;
+                border: 1px solid #dc3545;
+            }
+
+            .popup-btn-delete:hover {
+                background-color: #c82333;
+                border-color: #bd2130;
+            }
+        </style>
+
         <script>
             window.contextPath = '${pageContext.request.contextPath}';
         </script>
     </head>
 
     <body>
-        <div class="content">
-            <!-- Navigation -->
-            <jsp:include page="/Nutritionist/Common.jsp"/>
-
-            <!-- Main Content -->
+        <jsp:include page="/Nutritionist/topbar.jsp"/> 
+        <div class="container">
+            <jsp:include page="/Nutritionist/Common.jsp"/>            <!-- Main Content -->
             <div class="main">
                 <!-- Top Bar -->
-                <jsp:include page="/Nutritionist/topbar.jsp"/> 
+
                 <!-- Breadcrumb -->
 
                 <div class="breadcrumb-section">
@@ -45,20 +161,18 @@
                     </div>
                 </div>
 
-                <c:if test="${not empty Errmess}">
-                    <div class="alert alert-danger" style="display: none;">${Errmess}</div>
+                <c:if test="${not empty mess}">
+                    <div class="create-success-alert success">
+                        ${mess}
+                    </div>
+                    <c:remove var="mess" scope="session" />
                 </c:if>
 
-                <c:if test="${not empty successMessage}">
-                    <div class="alert alert-success" style="display: none;">${successMessage}</div>
-                </c:if>
-
-                <c:if test="${not empty warningMessage}">
-                    <div class="alert alert-warning" style="display: none;">${warningMessage}</div>
-                </c:if>
-
-                <c:if test="${not empty infoMessage}">
-                    <div class="alert alert-info" style="display: none;">${infoMessage}</div>
+                <c:if test="${empty mess and not empty Errmess}">
+                    <div class="create-success-alert error">
+                        ${Errmess}
+                    </div>
+                    <c:remove var="Errmess" scope="session" />
                 </c:if>
 
 
@@ -90,7 +204,7 @@
                                 </select>
                             </div>
                         </form>
-                        <a href="createblog" class="create-btn">
+                        <a href="nutricontrol?action=createblog" class="create-btn">
                             <i class="fas fa-plus"></i>
                             Add new
                         </a>
@@ -128,14 +242,14 @@
                                                     <fmt:formatDate value="${blog.update_at}" pattern="yyyy-MM-dd HH:mm:ss" />
                                                 </td>
                                                 <td class="action-cell" style="text-align: center;">
-                                                    <a href="blogdetail?id=${blog.bID}" title="View">
+                                                    <a href="nutricontrol?action=displayblogdetail?id=${blog.bID}" title="View">
                                                         <ion-icon name="eye-outline"></ion-icon>
                                                     </a>
-                                                    <a href="editBlog.do?id=${blog.bID}" title="Edit">
+                                                    <a href="nutricontrol?action=updateblog&id=${blog.bID}" title="Edit">
                                                         <ion-icon name="pencil-outline"></ion-icon>
                                                     </a>
                                                     <a href="#" title="Delete"
-                                                       onclick="showDeletePopup('deleteblog?id=${blog.bID}', '${blog.title}'); return false;">
+                                                       onclick="showDeletePopup('nutricontrol?action=deleteblog&id=${blog.bID}', '${blog.title}'); return false;">
                                                         <ion-icon name="trash-outline" style="color: red"></ion-icon>
                                                     </a>
                                                 </td>
@@ -195,7 +309,69 @@
         <!-- ====== ionicons ======= -->
         <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
         <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+        <script>
+                    let deleteUrl = '';
+                    let blogTitle = '';
 
+                    // Function to show delete popup
+                    function showDeletePopup(url, title = '') {
+                        deleteUrl = url;
+                        blogTitle = title;
+
+                        // Update popup content
+                        const messageElement = document.getElementById('popupMessage');
+                        if (title) {
+                            messageElement.innerHTML = `Bạn có chắc chắn muốn xóa bài viết:<br><strong>"${title}"</strong>?`;
+                        } else {
+                            messageElement.innerHTML = 'Bạn có chắc chắn muốn xóa bài viết này?';
+                        }
+
+                        // Show popup with animation
+                        const popup = document.getElementById('deletePopup');
+                        popup.classList.add('show');
+
+                        // Prevent body scrolling
+                        document.body.style.overflow = 'hidden';
+                    }
+
+                    // Function to handle delete action
+                    function handleDelete() {
+                        if (deleteUrl) {
+                            window.location.href = deleteUrl;
+                        } else {
+                            console.error("Delete URL is not set");
+                            closeDeletePopup();
+                        }
+                    }
+
+                    // Function to close delete popup
+                    function closeDeletePopup() {
+                        const popup = document.getElementById('deletePopup');
+                        popup.classList.remove('show');
+                        document.body.style.overflow = 'auto';
+                        deleteUrl = '';
+                        blogTitle = '';
+                    }
+
+                    // Close popup when clicking outside
+                    document.getElementById('deletePopup').addEventListener('click', function (e) {
+                        if (e.target === this) {
+                            closeDeletePopup();
+                        }
+                    });
+
+                    // Close popup with Escape key
+                    document.addEventListener('keydown', function (e) {
+                        if (e.key === 'Escape') {
+                            closeDeletePopup();
+                        }
+                    });
+
+                    // Prevent popup from closing when clicking inside
+                    document.querySelector('.popup-container').addEventListener('click', function (e) {
+                        e.stopPropagation();
+                    });
+        </script>
         <div id="deletePopup" class="popup-overlay">
             <div class="popup-container">
                 <div class="popup-header">
@@ -220,14 +396,13 @@
                         <i class="fas fa-times"></i>
                         Hủy bỏ
                     </button>
-                    <a id="confirmDeleteBtn" href="#" class="popup-btn popup-btn-delete">
+                    <button class="popup-btn popup-btn-delete" onclick="handleDelete()">
                         <i class="fas fa-trash-alt"></i>
                         Xóa ngay
-                    </a>
+                    </button>
                 </div>
             </div>
         </div>
-        <script src="../JS/Nutritionist/home.js"></script>
     </body>
 
 </html>

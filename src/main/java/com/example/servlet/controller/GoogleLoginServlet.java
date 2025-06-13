@@ -95,7 +95,7 @@ public class GoogleLoginServlet extends HttpServlet {
             
             if(user.getStatus ().equals ("Active")){
                 req.getSession().setAttribute("Account", user);
-                resp.sendRedirect(req.getContextPath() + "/dashboadnutri");
+                resp.sendRedirect(req.getContextPath() + "/nutricontrol?action=dashboard");
             }
             else {
                 req.setAttribute("error", " Your Account is Inactive");
