@@ -159,7 +159,7 @@
                                                         <textarea id="editor" name="content" rows="10" placeholder="Nhập nội dung bài viết của bạn...&#10;&#10;Gợi ý:&#10;- Giới thiệu chủ đề&#10;- Phân tích vấn đề&#10;- Đưa ra lời khuyên&#10;- Kết luận">${content != null ? content : ''}</textarea>
                                                         <small class="new-note">
                                                             <i class="fas fa-lightbulb"></i>
-                                                            Sử dụng CKEditor để định dạng văn bản đẹp hơn
+                                                            Chúng tôi khuyến khích khôgn nên copy-paste cả dạng media.
                                                         </small>
                                                     </div>
                                                 </div>

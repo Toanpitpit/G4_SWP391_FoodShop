@@ -574,12 +574,16 @@ public class NutritionistControlServerLet extends HttpServlet {
                     if (!ids.trim ().isEmpty ()) {
                         
                         int id = Integer.parseInt (ids);
+                        
                         Blogs blog = b_dao.getBlogByID (id);
-                        List<Blogs> relesteBlog = b_dao.getRelatedBlogByID (blog.getBmiId (),acc.getId());
+                 
+                        List<Blogs> relesteBlog = b_dao.getRelatedBlogByID (blog.getbID (),acc.getId());
+
                         request.setAttribute ("blog", blog);
                         request.setAttribute ("relblog", relesteBlog);
+                        
                         request.getRequestDispatcher ("/Nutritionist/BlogDetail.jsp")
-                                .forward (request, response);
+                                .forward (request, response);  
                     }
                 }
                 Logger.getLogger ("Wrong");
@@ -756,7 +760,7 @@ public class NutritionistControlServerLet extends HttpServlet {
         List<Blogs> lstB = _dao.getBlogsByFilterAndPage (input_search, typeBmiId, true, status, indexPage, pageSize,acc.getId ());
         int totalBlog = _dao.getToatalBlogsByFilter (input_search, typeBmiId, true, status,acc.getId ());
         int totalPages = 1;
-        if (totalBlog > 7) {
+        if (totalBlog > 10) {
             totalPages = (totalBlog / 10) + (totalBlog % 10 == 0 ? 0 : 1);
         }
         // Chuẩn bị map để trả json nhiều dữ liệu

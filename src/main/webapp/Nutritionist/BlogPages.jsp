@@ -18,7 +18,7 @@
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
         
         <link rel="stylesheet" href="${pageContext.request.contextPath}/CSS/Ncss/dashboard.css" >
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/CSS/Ncss/blogs.css" >
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/CSS/Ncss/Blogs.css" >
         <link rel="stylesheet" href="${pageContext.request.contextPath}/CSS/Ncss/common.css" >
 
 
@@ -450,7 +450,7 @@
             window.contextPath = '${pageContext.request.contextPath}';
         </script>
         <script src="../JS/Nutritionist/common.js"></script>
-        <script src="../JS/Nutritionist/blog.js"></script>
+        <script src="${pageContext.request.contextPath}/JS/Nutritionist/Blog.js"></script>
         <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
         <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

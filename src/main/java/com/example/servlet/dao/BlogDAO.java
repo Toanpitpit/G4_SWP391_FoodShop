@@ -294,7 +294,7 @@ public class BlogDAO {
             ps.setInt (2, authorID);
 
             try (ResultSet rs = ps.executeQuery ()) {
-                if (rs.next ()) {
+                while (rs.next ()) {
                     Blogs blog = new Blogs ();
                     blog.setbID (rs.getInt ("blogID"));
                     blog.setAuthorID (rs.getInt ("AuthorID"));

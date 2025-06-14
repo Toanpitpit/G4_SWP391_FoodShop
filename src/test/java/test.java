@@ -61,9 +61,13 @@ dis();
 //        for(Blogs b : lstB){
 //            System.out.println(b.toString());
 //        }
-        FoodDraftDAO dao= new FoodDraftDAO ();
-        System.out.println (dao.getTotalFooddraft (19)); 
-        System.out.println (_dao.getTotalBlogbyAuthor (21));
+    List<Blogs> relesteBlog = _dao.getRelatedBlogByID (143,21);
+        for (Blogs blogs : relesteBlog) {
+            System.out.println (blogs.toString ());
+        }
+//        FoodDraftDAO dao= new FoodDraftDAO ();
+//        System.out.println (dao.getTotalFooddraft (19)); 
+//        System.out.println (_dao.getTotalBlogbyAuthor (21));
 //        typeStats = _dao.countByTypeBMI(-3);
 //        for (MonthlyStat typeStat : typeStats) {
 //            System.out.println(typeStat.toString());

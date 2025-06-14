@@ -269,7 +269,7 @@
             }
 
             .category-list a:hover {
-                background: #667eea;
+                 background: linear-gradient(135deg, var(--primary-green), #3b82f6);
                 color: white;
             }
 
@@ -299,7 +299,7 @@
             }
 
             .tag-cloud a:hover {
-                background: #667eea;
+                background: linear-gradient(135deg, var(--primary-green), #3b82f6);
                 color: white;
             }
 
@@ -317,6 +317,9 @@
                     grid-template-columns: 1fr;
                 }
             }
+            .sidebar-right {
+    overflow: visible !important;
+}
         </style>
     </head>
     <body>
@@ -329,7 +332,7 @@
 
             <div class="breadcrumb-section">
                 <div class="breadcrumb-container">
-                    <h1 class="page-title" style="padding-left: 32px">Welcome to Nutritionist Admin Dashboard</h1>
+                    <h1 class="page-title" style="padding-left: 32px">Blog Posts</h1>
                     <nav class="breadcrumb-nav">
                         <a href="${pageContext.request.contextPath}/nutricontrol?action=dashboard" class="breadcrumb-item"> 
                             <i class="fas fa-home"></i>Home
@@ -412,15 +415,16 @@
                             <!-- Popular Posts -->
                             <div class="popular-posts">
                                 <h3 class="sidebar-right-title">Bài viết phổ biến</h3>
-                                <c:forEach var="post" items="${relblog}">
+                                <c:forEach var="post" items="${relblog}" varStatus="loop">
                                     <div class="popular-post">
                                         <img src="${post.imageUlr}" alt="Popular Post">
                                         <div class="popular-post-content">
-                                            <h6><a href="#">${post.title}</a></h6>
-                                            <div class="post-time" data-created="${post.Update_at}"></div>
+                                            <h6><a href="nutricontrol?action=showdetail&id=${post.bID}">${post.title}</a></h6>
+                                            <div class="post-time" data-created="${post.update_at}"></div>
                                         </div>
                                     </div>
                                 </c:forEach>
+
 
                             </div>
 

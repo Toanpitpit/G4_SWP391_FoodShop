@@ -45,7 +45,6 @@
                 <div class="submenu">
                     <a href="${pageContext.request.contextPath}/nutricontrol?action=displaycreateblog" class="menu-link">Design Blog</a>
                     <a href="${pageContext.request.contextPath}/nutricontrol?action=displayblog" class="menu-link">Blogs List</a>
-                    <a href="${pageContext.request.contextPath}/nutricontrol?action=blogdetail&id=null" class="menu-link">Blog Detail</a>
                 </div>
             </div>
 
