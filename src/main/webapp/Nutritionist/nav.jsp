@@ -27,7 +27,6 @@
                         <i class="bi bi-grid"></i>
                     </div>
                     <span class="menu-text">Dashboard</span>
-                    <i class="menu-arrow bi bi-chevron-right"></i>
                 </a>
             </div>
         </div>
@@ -44,7 +43,7 @@
                     <i class="menu-arrow bi bi-chevron-right"></i>
                 </a>
                 <div class="submenu">
-                    <a href="${pageContext.request.contextPath}/nutricontrol?action=createblog" class="menu-link">Design new Blog</a>
+                    <a href="${pageContext.request.contextPath}/nutricontrol?action=displaycreateblog" class="menu-link">Design Blog</a>
                     <a href="${pageContext.request.contextPath}/nutricontrol?action=displayblog" class="menu-link">Blogs List</a>
                     <a href="${pageContext.request.contextPath}/nutricontrol?action=blogdetail&id=null" class="menu-link">Blog Detail</a>
                 </div>
@@ -80,7 +79,7 @@
             <div class="menu-item">
                 <a href="#" class="menu-link" data-tooltip="Sugess Food" onclick="toggleSubmenu(this)">
                     <div class="menu-icon">
-                        <i class="bi bi-file-text"></i>
+                       <i class="bi bi-lightbulb-fill fs-4"></i>
                     </div>
                     <span class="menu-text">Food Suggestion</span>
                     <i class="menu-arrow bi bi-chevron-right"></i>

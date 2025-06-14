@@ -128,7 +128,7 @@ public List<MonthlyStat> countRequestsByStatus(Integer authorID) {
     
     boolean filterByAuthor = (authorID != null && authorID >= 0);
     if (filterByAuthor) {
-        sql.append(" WHERE authorID = ?");
+        sql.append(" WHERE nutritionistID = ?");
     }
     sql.append(" GROUP BY status ORDER BY status");
 
@@ -154,10 +154,7 @@ public List<MonthlyStat> countRequestsByStatus(Integer authorID) {
 
     } catch (SQLException ex) {
         Logger.getLogger(RequestDAO.class.getName()).log(Level.SEVERE, null, ex);
-    } finally {
-        db.closeConnection();
-    }
-
+    } 
     return result;
 }
 

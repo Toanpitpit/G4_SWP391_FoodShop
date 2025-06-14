@@ -36,16 +36,16 @@ public class test {
 //        dis4();
 //        dis6();
 //         dis5();
-dis2();
+dis();
 //dis();
     }
     public static void dis() throws SQLException{
         BlogDAO _dao = new BlogDAO();
-        List<MonthlyStat> lstMBlog = _dao.getMonthlyBlogStatsByYearAndAuthor (2024,-1);
-        System.out.println (lstMBlog);
+        List<MonthlyStat> lstMBlog = _dao.getMonthlyBlogStatsByYearAndAuthor (2025,21);
+//        System.out.println (lstMBlog);
 //        List<MonthlyStat> typeStats = new ArrayList<>();
 //       List<Blogs> lstBlog = _dao.getBlogsByFilter("", 5, true,null);
-//       List<Blogs> lstB = _dao.getBlogsByFilterAndPage(null, -1, true, null, 2, 4);
+       List<Blogs> lstB = _dao.getBlogsByFilterAndPage(null, -1, true, null, 1,10, 21);
 //          System.out.println (_dao.getTotalBlog());
 //        List<String> ststuss;
 //        try {
@@ -61,6 +61,9 @@ dis2();
 //        for(Blogs b : lstB){
 //            System.out.println(b.toString());
 //        }
+        FoodDraftDAO dao= new FoodDraftDAO ();
+        System.out.println (dao.getTotalFooddraft (19)); 
+        System.out.println (_dao.getTotalBlogbyAuthor (21));
 //        typeStats = _dao.countByTypeBMI(-3);
 //        for (MonthlyStat typeStat : typeStats) {
 //            System.out.println(typeStat.toString());
@@ -69,19 +72,19 @@ dis2();
    public static void dis2() {
     BlogDAO _dao = new BlogDAO();
     Blogs testBlog = new Blogs(
-    11, // blogID
+    1, // blogID
     9,  // authorID
     "Nguyễn Văn Dũng", // authorName
     3,  // bmiId
     "Test update moi ne truoc deu th", // title
-    null, // imageUlr
+    "sdasd", // imageUlr
     "Nội dung chi tiết về chế độ ăn theo BMI.", // content
     "Private", // status
-    new Timestamp(System.currentTimeMillis()), // create_at
+    null, // create_at
     new Timestamp(System.currentTimeMillis())  // update_at
 );
-     _dao.insertBlog(testBlog);
-//     _dao.updateBlog(testBlog);
+//     _dao.insertBlog(testBlog);
+     _dao.updateBlog(testBlog);
     
 }
    public static void dis3() throws SQLException {
@@ -128,7 +131,7 @@ public static void dis6() {
 
 public static void dis7() throws SQLException {
     BMIClassificationDAO dao = new BMIClassificationDAO();
-    BMIClassification b = dao.getBMIByID(2);
+   
     List<BMIClassification> lstBMI = dao.getAllBMI();
     for (BMIClassification bMIClassification : lstBMI) {
         System.out.println(bMIClassification.toString());

@@ -57,7 +57,7 @@ public class BMIClassificationDAO {
             conn = db.getConnection();
             
            
-            String sql = "SELECT * FROM bmi_classification ";
+            String sql = "SELECT DISTINCT* FROM bmi_classification ";
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
                 while (rs.next()) {

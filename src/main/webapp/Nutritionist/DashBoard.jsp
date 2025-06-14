@@ -1,40 +1,32 @@
-<%-- 
-    Document   : DashBoard
-    Created on : Jun 13, 2025, 9:00:38 PM
-    Author     : Admin
---%>
-
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="vi">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Nutritionist Dashboard</title>
-        <!-- Bootstrap CSS -->
         <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-        <!-- Bootstrap Icons -->
         <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&family=Rubik:wght@500&family=Nunito:wght@600&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
         <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700&display=swap" rel="stylesheet">
-
-
-
-        <link rel="stylesheet" href="../CSS/Ncss/defauld.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/CSS/Ncss/dashboard.css" >
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/CSS/Ncss/defauld.css">
     </head>
     <body>
         <!-- Sidebar -->
         <jsp:include page="/Nutritionist/nav.jsp"/>  
         <!-- Main Header -->
         <jsp:include page="/Nutritionist/main-header.jsp"/>  
+        
         <!-- Main Content -->
         <main class="main-content" id="mainContent">
             <!-- Breadcrumb Section -->
             <div class="breadcrumb-section">
                 <div class="breadcrumb-container">
-                    <h1 class="page-title"> Home DashBoard</h1>
+                    <h1 class="page-title" style="padding-left: 32px">Welcome to Nutritionist Admin Dashboard</h1>
                     <nav class="breadcrumb-nav">
                         <a href="${pageContext.request.contextPath}/nutricontrol?action=dashboard" class="breadcrumb-item">Home</a>
                         <span class="breadcrumb-separator">
@@ -50,12 +42,11 @@
                 <div class="content-card">
                     <div class="row mb-4">
                         <div class="col-12">
-                            <h2 class="mb-3">Welcome to Nutritionist Admin Dashboard</h2>
                             <p class="text-muted">Manage your task store with powerful tools and analytics.</p>
                         </div>
                     </div>
 
-                    <!-- Stats Cards Row -->
+                    <!-- Stats Cards -->
                     <div class="row mb-4">
                         <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card border-0 shadow-sm h-100">
@@ -65,11 +56,10 @@
                                             <div class="flex-shrink-0">
                                                 <div class="bg-primary bg-gradient text-white rounded-3 p-3">
                                                     <i class="bi bi-lightbulb-fill fs-4"></i>
-
                                                 </div>
                                             </div>
                                             <div class="flex-grow-1 ms-3">
-                                                <h6 class="text-muted mb-1">Food Suggestion </h6>
+                                                <h6 class="text-muted mb-1">Food Suggestion</h6>
                                                 <h3 class="mb-0">${totalFdrf}</h3>
                                                 <small class="text-success">
                                                     <i class="bi bi-arrow-up"></i> +12% from last month
@@ -84,20 +74,20 @@
                         <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card border-0 shadow-sm h-100">
                                 <div class="card-body">
-                                    <div class="d-flex align-items-center">
-                                        <div class="flex-shrink-0">
-                                            <div class="bg-success bg-gradient text-white rounded-3 p-3">
-                                                <i class="bi bi-currency-dollar fs-4"></i>
+                                    <a href="">
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-shrink-0">
+                                                <div class="bg-success bg-gradient text-white rounded-3 p-3">
+                                                    <i class="bi bi-journal-text"></i>
+                                                </div>
+                                            </div>
+                                            <div class="flex-grow-1 ms-3">
+                                                <h6 class="text-muted mb-1">Blogs Post</h6>
+                                                <h3 class="mb-0">${totalBlog}</h3>
+                                                <small class="text-success">+3 new from last month</small>
                                             </div>
                                         </div>
-                                        <div class="flex-grow-1 ms-3">
-                                            <h6 class="text-muted mb-1">Revenue</h6>
-                                            <h3 class="mb-0">$45,678</h3>
-                                            <small class="text-success">
-                                                <i class="bi bi-arrow-up"></i> +8% from last month
-                                            </small>
-                                        </div>
-                                    </div>
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -108,14 +98,14 @@
                                     <div class="d-flex align-items-center">
                                         <div class="flex-shrink-0">
                                             <div class="bg-info bg-gradient text-white rounded-3 p-3">
-                                                <i class="bi bi-people-fill fs-4"></i>
+                                                <i class="bi bi-envelope-paper-fill fs-4"></i>
                                             </div>
                                         </div>
                                         <div class="flex-grow-1 ms-3">
-                                            <h6 class="text-muted mb-1">Customers</h6>
-                                            <h3 class="mb-0">892</h3>
+                                            <h6 class="text-muted mb-1">Your Request</h6>
+                                            <h3 class="mb-0">${totalRequest}</h3>
                                             <small class="text-success">
-                                                <i class="bi bi-arrow-up"></i> +15% from last month
+                                                <i class="bi bi-arrow-up"></i> +3 from last week
                                             </small>
                                         </div>
                                     </div>
@@ -134,9 +124,9 @@
                                         </div>
                                         <div class="flex-grow-1 ms-3">
                                             <h6 class="text-muted mb-1">Products</h6>
-                                            <h3 class="mb-0">567</h3>
+                                            <h3 class="mb-0">${totalFood}</h3>
                                             <small class="text-danger">
-                                                <i class="bi bi-arrow-down"></i> -3% from last month
+                                                <i class="bi bi-arrow-up"></i> 3 new from last month
                                             </small>
                                         </div>
                                     </div>
@@ -145,214 +135,140 @@
                         </div>
                     </div>
 
-                    <!-- Main Content Area -->
-                    <div class="placeholder-content">
-                        <div class="placeholder-icon">
-                            <i class="bi bi-plus-circle-dotted"></i>
+                    <!-- Charts Section -->
+                    <div class="container-fluid">
+                        <!-- Row 1: Pie Chart & Bar Chart -->
+                        <div class="row mb-4">
+                            <!-- Pie Chart -->
+                            <div class="col-xl-6 col-lg-12 mb-4">
+                                <div class="card shadow-sm h-100 p-4">
+                                    <c:choose>
+                                        <c:when test="${empty pieChart_data_labelsJson or empty pieChart_data_totalsJson or 
+                                                        fn:length(pieChart_data_labels) == 0 or fn:length(pieChart_data_totals) == 0}">
+                                            <div class="d-flex align-items-center justify-content-center" style="height: 300px;">
+                                                <p class="text-muted">No data available for pie chart</p>
+                                            </div>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <div class="d-flex align-items-center justify-content-around flex-wrap flex-lg-nowrap gap-3">
+                                                <!-- Chart Container -->
+                                                <div class="chart-container flex-grow-1" style="position: relative; height: 300px;">
+                                                    <canvas id="pieChart"
+                                                            data-labels='${pieChart_data_labelsJson}'
+                                                            data-counts='${pieChart_data_totalsJson}'>
+                                                    </canvas>
+                                                </div>
+
+                                                <!-- Legend -->
+                                                <div class="status-legend flex-shrink-0">
+                                                    <h5>Thống kê theo trạng thái</h5>
+                                                    <ul class="legend-list">
+                                                        <c:set var="colorString" value="rgba(255,205,86,0.8)|rgba(75,192,192,0.8)|rgba(255,99,132,0.8)|rgba(153,102,255,0.8)" />
+                                                        <c:set var="backgroundColors" value="${fn:split(colorString, '|')}" />
+                                                        <c:forEach var="i" begin="0" end="${fn:length(pieChart_data_labels) - 1}">
+                                                            <li>
+                                                                <span class="legend-color-box" style="background-color: ${backgroundColors[i]};"></span>
+                                                                <span class="legend-label">${pieChart_data_labels[i]}</span>
+                                                                <span class="legend-value">${pieChart_data_totals[i]}</span>
+                                                            </li>
+                                                        </c:forEach>
+                                                        <li>
+                                                            <span class="legend-color-box" style="background-color: #6B21A8;"></span>
+                                                            <span class="legend-label">Total</span>
+                                                            <span class="legend-value">${totalRequest}</span>
+                                                        </li>
+                                                    </ul>
+                                                    <div class="chart-name">Biểu đồ: Số Requests theo trạng thái</div>
+                                                </div>
+                                            </div>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </div>
+                            </div>
+
+                            <!-- Bar Chart -->
+                            <div class="col-xl-6 col-lg-12 mb-4">
+                                <div class="card shadow-sm h-100 p-4">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <h4>Blogs Per Month</h4>
+                                        <select id="yearDropdown" name="year" class="form-select w-auto">
+                                            <c:forEach var="year" items="${years}">
+                                                <option value="${year}" ${year == selectedYear ? 'selected' : ''}>${year}</option>
+                                            </c:forEach>
+                                        </select>
+                                    </div>
+                                    <div style="position: relative; height: 300px;">
+                                        <canvas id="barChart"
+                                                data-labels='${barChart_data_labelsJson}'
+                                                data-counts='${barChart_data_totalsJson}'>
+                                        </canvas>
+                                    </div>
+                                </div>  
+                            </div>
                         </div>
-                        <div class="placeholder-title">Add Your Custom Content Here</div>
-                        <div class="placeholder-text">This is where you can add charts, tables, forms, or any other content for your dashboard.</div>
+
+                        <!-- Row 2: Line Chart & Notifications -->
+                        <div class="row">
+                            <!-- Line Chart -->
+                            <div class="col-xl-6 col-lg-12 mb-4">
+                                <div class="card shadow-sm h-100 p-4">
+                                    <h4 class="mb-3">Food Draft Trend</h4>
+                                    <div style="position: relative; height: 300px;">
+                                        <canvas id="lineChart"
+                                                data-labels='["Week 1", "Week 2", "Week 3", "Week 4"]'
+                                                data-counts='[2, 4, 5, 3]'>
+                                        </canvas>
+                                    </div>
+                                </div> 
+                            </div>
+                            
+                            <!-- Notifications -->
+                            <div class="col-xl-6 col-lg-12 mb-4">
+                                <div class="card shadow-sm h-100 p-4">
+                                    <h4 class="mb-3">Recent Notifications</h4>
+                                    <div class="notification-item d-flex align-items-start mb-3">
+                                        <div class="notification-icon text-success fs-4 me-3">
+                                            <i class="bi bi-check-circle"></i>
+                                        </div>
+                                        <div class="notification-text">
+                                            <p class="mb-0">Request #102 was approved</p>
+                                            <small class="text-muted">5 mins ago</small>
+                                        </div>
+                                    </div>
+                                    <div class="notification-item d-flex align-items-start mb-3">
+                                        <div class="notification-icon text-info fs-4 me-3">
+                                            <i class="bi bi-info-circle"></i>
+                                        </div>
+                                        <div class="notification-text">
+                                            <p class="mb-0">New blog post created</p>
+                                            <small class="text-muted">1 hour ago</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-             <jsp:include page="/Nutritionist/footer.jsp"/>  
+            
+            <jsp:include page="/Nutritionist/footer.jsp"/>  
         </main>
 
-        <!-- Bootstrap JS -->
+        <!-- Scripts - Đúng thứ tự load -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <!-- Load common.js trước -->
+        <script src="${pageContext.request.contextPath}/JS/Nutritionist/common.js"></script>
+        <!-- Load home.js sau cùng -->
+        <script src="${pageContext.request.contextPath}/JS/Nutritionist/home.js"></script>
+        
+        <!-- Debug script để kiểm tra dữ liệu -->
         <script>
-                        // Toggle Sidebar Function
-                        function toggleSidebar() {
-                            const sidebar = document.getElementById('sidebar');
-                            const mainHeader = document.getElementById('mainHeader');
-                            const mainContent = document.getElementById('mainContent');
-
-                            if (window.innerWidth > 768) {
-                                // Desktop: collapse/expand sidebar
-                                sidebar.classList.toggle('collapsed');
-                                mainHeader.classList.toggle('collapsed');
-                                mainContent.classList.toggle('collapsed');
-
-                                // Close all submenus when collapsing
-                                if (sidebar.classList.contains('collapsed')) {
-                                    const submenus = document.querySelectorAll('.submenu');
-                                    submenus.forEach(submenu => {
-                                        submenu.classList.remove('active');
-                                    });
-
-                                    const arrows = document.querySelectorAll('.menu-arrow');
-                                    arrows.forEach(arrow => {
-                                        arrow.style.transform = 'rotate(0deg)';
-                                    });
-                                }
-                            } else {
-                                // Mobile: show/hide sidebar
-                                sidebar.classList.toggle('show');
-                            }
-                        }
-
-                        // Expand sidebar when clicked while collapsed
-                        function expandSidebarOnClick() {
-                            const sidebar = document.getElementById('sidebar');
-                            const mainHeader = document.getElementById('mainHeader');
-                            const mainContent = document.getElementById('mainContent');
-
-                            if (sidebar.classList.contains('collapsed')) {
-                                sidebar.classList.remove('collapsed');
-                                mainHeader.classList.remove('collapsed');
-                                mainContent.classList.remove('collapsed');
-                            }
-                        }
-
-                        // Toggle Submenu Function
-                        function toggleSubmenu(element) {
-                            const submenu = element.parentElement.querySelector('.submenu');
-                            const arrow = element.querySelector('.menu-arrow');
-                            const sidebar = document.getElementById('sidebar');
-
-                            if (submenu && !sidebar.classList.contains('collapsed')) {
-                                event.preventDefault();
-
-                                // Close other submenus
-                                const allSubmenus = document.querySelectorAll('.submenu');
-                                const allArrows = document.querySelectorAll('.menu-arrow');
-
-                                allSubmenus.forEach(sub => {
-                                    if (sub !== submenu) {
-                                        sub.classList.remove('active');
-                                    }
-                                });
-
-                                allArrows.forEach(arr => {
-                                    if (arr !== arrow) {
-                                        arr.style.transform = 'rotate(0deg)';
-                                    }
-                                });
-
-                                // Toggle current submenu
-                                submenu.classList.toggle('active');
-
-                                if (submenu.classList.contains('active')) {
-                                    arrow.style.transform = 'rotate(90deg)';
-                                } else {
-                                    arrow.style.transform = 'rotate(0deg)';
-                                }
-                            }
-                        }
-
-                        // Close sidebar on mobile when clicking outside
-                        document.addEventListener('click', function (event) {
-                            if (window.innerWidth <= 768) {
-                                const sidebar = document.getElementById('sidebar');
-                                const toggleBtn = document.querySelector('.mobile-toggle');
-
-                                if (!sidebar.contains(event.target) && !toggleBtn.contains(event.target)) {
-                                    sidebar.classList.remove('show');
-                                }
-                            }
-                        });
-
-                        // Handle window resize
-                        window.addEventListener('resize', function () {
-                            const sidebar = document.getElementById('sidebar');
-                            const mainHeader = document.getElementById('mainHeader');
-                            const mainContent = document.getElementById('mainContent');
-
-                            if (window.innerWidth > 768) {
-                                sidebar.classList.remove('show');
-                            } else {
-                                sidebar.classList.remove('collapsed');
-                                mainHeader.classList.remove('collapsed');
-                                mainContent.classList.remove('collapsed');
-                            }
-                        });
-
-                        // Active menu item handling
-                        document.querySelectorAll('.menu-link').forEach(link => {
-                            link.addEventListener('click', function (e) {
-                                // Don't prevent default for items with submenus
-                                const hasSubmenu = this.parentElement.querySelector('.submenu');
-                                if (!hasSubmenu) {
-                                    // Remove active class from all menu items
-                                    document.querySelectorAll('.menu-link').forEach(item => {
-                                        item.classList.remove('active');
-                                    });
-
-                                    // Add active class to clicked item
-                                    this.classList.add('active');
-                                }
-                            });
-                        });
-                        // Fullscreen toggle
-                        document.querySelector('[title="Fullscreen"]').addEventListener('click', function () {
-                            if (!document.fullscreenElement) {
-                                document.documentElement.requestFullscreen();
-                                this.innerHTML = '<i class="bi bi-fullscreen-exit"></i>';
-                            } else {
-                                document.exitFullscreen();
-                                this.innerHTML = '<i class="bi bi-arrows-fullscreen"></i>';
-                            }
-                        });
-
-                        // Initialize tooltips for collapsed sidebar
-                        function initTooltips() {
-                            const sidebar = document.getElementById('sidebar');
-                            const menuLinks = document.querySelectorAll('.menu-link[data-tooltip]');
-
-                            menuLinks.forEach(link => {
-                                link.addEventListener('mouseenter', function () {
-                                    if (sidebar.classList.contains('collapsed')) {
-                                        // Tooltip is handled by CSS
-                                    }
-                                });
-                            });
-                        }
-
-                        // Initialize on page load
-                        document.addEventListener('DOMContentLoaded', function () {
-                            initTooltips();
-
-                            // Set initial submenu state for active dashboard
-                            const dashboardSubmenu = document.getElementById('dashboard-submenu');
-                            if (dashboardSubmenu) {
-                                dashboardSubmenu.classList.add('active');
-                                const dashboardArrow = document.querySelector('.menu-link.active .menu-arrow');
-                                if (dashboardArrow) {
-                                    dashboardArrow.style.transform = 'rotate(90deg)';
-                                }
-                            }
-
-                            // Add click listener to sidebar for expanding when collapsed
-                            const sidebar = document.getElementById('sidebar');
-                            if (sidebar) {
-                                sidebar.addEventListener('click', function (e) {
-                                    // Only expand if sidebar is collapsed and we're on desktop
-                                    if (sidebar.classList.contains('collapsed') && window.innerWidth > 768) {
-                                        // Check if click is not on toggle button or submenu elements
-                                        const isToggleButton = e.target.closest('.mobile-toggle') || e.target.closest('[onclick*="toggleSidebar"]');
-                                        const isSubmenuClick = e.target.closest('.submenu');
-
-                                        if (!isToggleButton && !isSubmenuClick) {
-                                            expandSidebarOnClick();
-                                        }
-                                    }
-                                });
-                            }
-                        });
-
-                        // Smooth scrolling for internal links
-                        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                            anchor.addEventListener('click', function (e) {
-                                e.preventDefault();
-                                const target = document.querySelector(this.getAttribute('href'));
-                                if (target) {
-                                    target.scrollIntoView({
-                                        behavior: 'smooth',
-                                        block: 'start'
-                                    });
-                                }
-                            });
-                        });
+            console.log('Page loaded, checking data availability...');
+            console.log('Pie chart labels:', '${pieChart_data_labelsJson}');
+            console.log('Pie chart totals:', '${pieChart_data_totalsJson}');
+            console.log('Bar chart labels:', '${barChart_data_labelsJson}');
+            console.log('Bar chart totals:', '${barChart_data_totalsJson}');
         </script>
     </body>
 </html>

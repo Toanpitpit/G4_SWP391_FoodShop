@@ -192,13 +192,14 @@ body {
 }
 
 .menu-link:hover {
-    background: var(--sidebar-hover);
+    background: linear-gradient(135deg, var(--primary-green), #3b82f6);
+/*    background: var(--sidebar-hover);*/
     color: white;
     transform: translateX(2px);
 }
 
 .menu-link.active {
-    background: linear-gradient(135deg, var(--primary-blue), #3b82f6);
+    background: linear-gradient(135deg, var(--primary-green), #3b82f6);
     color: white;
     box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
 }
@@ -450,6 +451,100 @@ body {
     font-weight: 600;
 }
 
+.notification-dropdown {
+    position: absolute;
+    top: 120%; /* nằm dưới icon */
+    right: 0;
+    width: 330px;
+    background: #fff;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    display: none;
+    z-index: 1000;
+    padding: 15px 0;
+    animation: dropdownFade 0.3s ease;
+}
+
+@keyframes dropdownFade {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.dropdown-header {
+    font-weight: bold;
+    padding: 0 20px 10px;
+    border-bottom: 1px solid #e2e8f0;
+    font-size: 16px;
+}
+
+.notification-list {
+    list-style: none;
+    padding: 10px 0;
+    margin: 0;
+}
+
+.notification-list li {
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    gap: 10px;
+    transition: background 0.2s;
+}
+
+.notification-list li:hover {
+    background: #f1f5f9;
+}
+
+.notification-list img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.notification-list .text {
+    flex: 1;
+}
+
+.notification-list .text strong {
+    display: block;
+    font-size: 14px;
+    color: #0f172a;
+}
+
+.notification-list .text p {
+    font-size: 13px;
+    color: #64748b;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.notification-list .time {
+    font-size: 12px;
+    color: #94a3b8;
+}
+
+.view-all {
+    text-align: center;
+    padding: 10px 20px 0;
+}
+
+.view-all a {
+    display: inline-block;
+    padding: 8px 16px;
+    background-color: #2563eb;
+    color: white;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s;
+}
+
+.view-all a:hover {
+    background-color: #1e40af;
+}
 .user-profile {
     display: flex;
     align-items: center;
@@ -500,7 +595,58 @@ body {
     color: #64738b;
     font-size: 12px;
     margin-left: 4px;
+} 
+
+/* Dropdown menu */
+.account-dropdown {
+    position: absolute;
+    top: 60px;
+    right: 0;
+    width: 220px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    display: none; /* Toggle this to block when active */
+    z-index: 999;
 }
+
+.account-dropdown ul {
+    list-style: none;
+    margin: 0;
+    padding: 10px 0;
+}
+
+.account-dropdown li a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 20px;
+    color: #1e293b;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background 0.2s ease;
+}
+
+.account-dropdown li a i {
+    font-size: 18px;
+    color: #64748b;
+}
+
+.account-dropdown li a:hover {
+    background-color: #f1f5f9;
+    color: #0f172a;
+}
+
+.account-dropdown .badge {
+    background-color: #d1fae5;
+    color: #059669;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    margin-left: auto;
+}
+
 
 /* ============ MAIN CONTENT STYLES ============ */
 .main-content {
@@ -576,6 +722,10 @@ body {
     border: 1px solid #e2e8f0;
     min-height: 600px;
     animation: slideIn 0.3s ease;
+}
+.content-card a{
+    text-decoration: none !important;
+    color: inherit;   
 }
 
 .placeholder-content {
@@ -704,7 +854,7 @@ body {
         align-items: flex-start;
         gap: 12px;
     }
-
+    
     .content-wrapper {
         padding: 16px;
     }
@@ -734,20 +884,30 @@ body {
     .page-title {
         font-size: 20px;
     }
-
+    
+    .content-card .card-body a {
+        text-decoration: none !important;
+        color: inherit;
+    }
     .content-card {
         padding: 16px;
     }
+}
+  .admin-footer {
+    background-color: #f5f5f5;
+    border-top: 1px solid #ddd;
+    text-align: center;
+    font-size: 14px;
+    color: #666;
+    width: 100%;
+}
 
-    .footer-content {
-        flex-direction: column;
-        gap: 12px;
-        text-align: center;
-    }
-
-    .footer-right {
-        margin-left: 0;
-    }
+.footer-content {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: center;
+    justify-content: center;
 }
 
 /* ============ ANIMATIONS ============ */
@@ -759,6 +919,187 @@ body {
     to {
         opacity: 1;
         transform: translateY(0);
+    }
+}
+
+* Alert Notification Styles - Fixed position for any page */
+.alert-container {
+    position: fixed;
+    z-index: 99999;
+    max-width: 500px;
+    width: 90%;
+    pointer-events: none;
+}
+.alert-container {
+    top: 80px;
+    right: 20px;
+    left: auto;
+    transform: none;
+}
+
+.custom-alert {
+    background: #fff;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+    position: relative;
+    overflow: hidden;
+    pointer-events: auto;
+    transform: translateY(-100px);
+    opacity: 0;
+    transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.custom-alert.show {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.custom-alert.hide {
+    transform: translateY(-100px);
+    opacity: 0;
+}
+
+/* Alert Content */
+.alert-content {
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+}
+
+.alert-icon {
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.alert-message {
+    flex: 1;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+.alert-close {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+    padding: 4px;
+    border-radius: 4px;
+}
+
+.alert-close:hover {
+    opacity: 1;
+    background: rgba(0, 0, 0, 0.1);
+}
+
+/* Alert Types */
+.custom-alert.alert-danger {
+    background: linear-gradient(135deg, #fee2e2, #fecaca);
+    color: #991b1b;
+    border-left: 4px solid #dc2626;
+}
+
+.custom-alert.alert-danger .alert-icon {
+    color: #dc2626;
+}
+
+.custom-alert.alert-danger .alert-close {
+    color: #991b1b;
+}
+
+.custom-alert.alert-success {
+    background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+    color: #166534;
+    border-left: 4px solid #16a34a;
+}
+
+.custom-alert.alert-success .alert-icon {
+    color: #16a34a;
+}
+
+.custom-alert.alert-success .alert-close {
+    color: #166534;
+}
+
+.custom-alert.alert-warning {
+    background: linear-gradient(135deg, #fef3c7, #fde68a);
+    color: #92400e;
+    border-left: 4px solid #f59e0b;
+}
+
+.custom-alert.alert-warning .alert-icon {
+    color: #f59e0b;
+}
+
+.custom-alert.alert-warning .alert-close {
+    color: #92400e;
+}
+
+.custom-alert.alert-info {
+    background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+    color: #1e40af;
+    border-left: 4px solid #3b82f6;
+}
+
+.custom-alert.alert-info .alert-icon {
+    color: #3b82f6;
+}
+
+.custom-alert.alert-info .alert-close {
+    color: #1e40af;
+}
+
+/* Progress Bar */
+.alert-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    background: currentColor;
+    opacity: 0.3;
+    transition: width linear;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .alert-container {
+        top: 10px;
+        width: 95%;
+        max-width: none;
+    }
+    
+    .alert-content {
+        padding: 14px 16px;
+    }
+    
+    .alert-message {
+        font-size: 13px;
+    }
+    
+    .alert-icon {
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .alert-container {
+        top: 5px;
+        width: 98%;
+    }
+    
+    .alert-content {
+        padding: 12px 14px;
+        gap: 10px;
     }
 }
 

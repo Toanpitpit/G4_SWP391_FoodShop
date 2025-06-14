@@ -23,25 +23,19 @@ import java.util.logging.Logger;
  * @author Admin
  */
 public class BlogDAO {
-//
-//    Connection conn;
-//    PreparedStatement ps;
-//    CallableStatement cs = null;
-//    ResultSet rs;
-//    DBConnect db = new DBConnect ();
 
-    public int getToatalBlogsByFilter(String keyword, int typeBMI, boolean sortNewestFirst, String status) {
+    public int getToatalBlogsByFilter(String keyword, int typeBMI, boolean sortNewestFirst, String status,int authorID) {
         List<Blogs> lstBlog = new ArrayList<> ();
         DBConnect db = new DBConnect ();
 
         StringBuilder sql = new StringBuilder (
                 "SELECT b.blogID, b.AuthorID, a.name AS authorName, b.typeBMI, b.title, "
                 + "b.image, b.content, b.status, b.create_at, b.update_at "
-                + "FROM Blogs b JOIN Accounts a ON b.AuthorID = a.id WHERE 1=1 "
+                + "FROM Blogs b JOIN Accounts a ON b.AuthorID = a.id WHERE a.id=? "
         );
 
         List<Object> params = new ArrayList<> ();
-
+        params.add(authorID);
         if (typeBMI != -1) {
             sql.append ("AND b.typeBMI = ? ");
             params.add (typeBMI);
@@ -96,8 +90,6 @@ public class BlogDAO {
         StringBuilder sql = new StringBuilder (
                 "SELECT typeBMI, COUNT(*) AS cnt FROM Blogs "
         );
-
-        // Chỉ thêm WHERE khi authorId > 0
         if (authorId > 0) {
             sql.append ("WHERE AuthorID = ? ");
         }
@@ -287,18 +279,19 @@ public class BlogDAO {
         return blog;
     }
 
-    public List<Blogs> getRelatedBlogByID(int blogID) {
+    public List<Blogs> getRelatedBlogByID(int blogID ,int authorID) {
         List<Blogs> lstreB = new ArrayList<> ();
 
         Blogs blogr = getBlogByID (blogID);
         String sql = "SELECT b.blogID, b.AuthorID, a.name AS authorName, b.typeBMI, b.title, "
                 + "b.image, b.content, b.status, b.create_at, b.update_at "
-                + "FROM Blogs b JOIN Accounts a ON b.AuthorID = a.id WHERE b.typeBMI = ?";
+                + "FROM Blogs b JOIN Accounts a ON b.AuthorID = a.id WHERE b.typeBMI = ? AND a.id =?";
         DBConnect db = new DBConnect ();
 
         try (Connection conn = db.getConnection (); PreparedStatement ps = conn.prepareStatement (sql)) {
 
             ps.setInt (1, blogr.getBmiId ());
+            ps.setInt (2, authorID);
 
             try (ResultSet rs = ps.executeQuery ()) {
                 if (rs.next ()) {
@@ -330,16 +323,18 @@ public class BlogDAO {
             boolean sortNewestFirst,
             String status,
             int pageIndex,
-            int pageSize
+            int pageSize,
+            int authorID
     ) throws SQLException {
         List<Blogs> lstBlog = new ArrayList<> ();
         StringBuilder sql = new StringBuilder (
                 "SELECT b.blogID, b.AuthorID, a.name AS authorName, b.typeBMI, "
                 + "b.title, b.image, b.content, b.status, b.create_at, b.update_at "
-                + "FROM Blogs b JOIN Accounts a ON b.AuthorID = a.id WHERE 1=1 "
+                + "FROM Blogs b JOIN Accounts a ON b.AuthorID = a.id WHERE a.id = ? "
         );
 
         List<Object> params = new ArrayList<> ();
+        params.add (authorID);
         if (typeBMI != -1) {
             sql.append (" AND b.typeBMI = ? ");
             params.add (typeBMI);
@@ -406,22 +401,28 @@ public class BlogDAO {
         return statuses;
     }
 
-    public int getTotalBlog() {
-        int count = 0;
-        String sql = "SELECT COUNT(*) FROM Blogs";
-        DBConnect db = new DBConnect ();
+   public int getTotalBlogbyAuthor(int id) {
+    int count = 0;
+    String sql = "SELECT COUNT(*) FROM Blogs b JOIN Accounts a ON a.id = b.AuthorId WHERE a.id = ?";
+    DBConnect db = new DBConnect();
 
-        try (Connection conn = db.getConnection (); PreparedStatement ps = conn.prepareStatement (sql); ResultSet rs = ps.executeQuery ()) {
-
-            if (rs.next ()) {
-                count = rs.getInt (1);
+    try (Connection conn = db.getConnection(); 
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+         
+        ps.setInt(1, id); 
+        try (ResultSet rs = ps.executeQuery()) { 
+            if (rs.next()) {
+                count = rs.getInt(1);
             }
-        } catch (SQLException ex) {
-            Logger.getLogger (BlogDAO.class.getName ()).log (Level.SEVERE, null, ex);
         }
 
-        return count;
+    } catch (SQLException ex) {
+        Logger.getLogger(BlogDAO.class.getName()).log(Level.SEVERE, null, ex);
     }
+
+    return count;
+}
+
 
     public List<MonthlyStat> getMonthlyBlogStatsByYearAndAuthor(int year, int authorID) {
         List<MonthlyStat> stats = new ArrayList<> ();
