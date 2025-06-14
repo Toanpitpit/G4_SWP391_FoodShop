@@ -184,8 +184,9 @@ public class ListBlogsServerLet extends HttpServlet {
         request.setAttribute ("lstB", lstB);
         request.setAttribute ("statusList", statusList);
         response.setContentType ("text/html;charset=UTF-8");
-   
-        request.getRequestDispatcher ("/Nutritionist/Blogs.jsp").forward (request, response);
+        response.setContentType ("text/html;charset=UTF-8");
+       
+        request.getRequestDispatcher ("/Nutritionist/BlogPages.jsp").forward (request, response);
     }
 
 }

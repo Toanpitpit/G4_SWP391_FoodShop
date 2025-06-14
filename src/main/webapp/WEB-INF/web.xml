@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="6.0" xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
     <servlet>
-        <servlet-name>CreateBlogsServerLet</servlet-name>
-        <servlet-class>com.example.servlet.controller.Nutritionist.CreateBlogsServerLet</servlet-class>
+        <servlet-name>ManageBlogsServerLet</servlet-name>
+        <servlet-class>com.example.servlet.controller.Nutritionist.ManageBlogsServerLet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>UpdateBlogsServerLet</servlet-name>
@@ -36,7 +36,7 @@
         <servlet-name>ListRequestServerLet</servlet-name>
         <servlet-class>com.example.servlet.controller.Nutritionist.ListRequestServerLet</servlet-class>
     </servlet>
-       <servlet>
+    <servlet>
         <servlet-name>GoogleLoginServlet</servlet-name>
         <servlet-class>com.example.servlet.controller.GoogleLoginServlet</servlet-class>
     </servlet>
@@ -44,7 +44,10 @@
         <servlet-name>GitHubLoginServlet</servlet-name>
         <servlet-class>com.example.servlet.controller.GitHubLoginServlet</servlet-class>
     </servlet>
-    
+    <servlet>
+        <servlet-name>NutritionistControlServerLet</servlet-name>
+        <servlet-class>com.example.servlet.controller.Nutritionist.NutritionistControlServerLet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>GoogleLoginServlet</servlet-name>
         <url-pattern>/GoogleLoginServlet</url-pattern>
@@ -58,7 +61,7 @@
         <url-pattern>/ResetPasswordController</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>CreateBlogsServerLet</servlet-name>
+        <servlet-name>ManageBlogsServerLet</servlet-name>
         <url-pattern>/createblog</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
@@ -92,6 +95,10 @@
     <servlet-mapping>
         <servlet-name>ListRequestServerLet</servlet-name>
         <url-pattern>/lstreq</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>NutritionistControlServerLet</servlet-name>
+        <url-pattern>/nutricontrol</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

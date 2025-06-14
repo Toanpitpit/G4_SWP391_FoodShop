@@ -48,7 +48,7 @@ public class AdminController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession(false); // Lấy session mà không tạo mới
-        Account account = (session != null) ? (Account) session.getAttribute("Account") : null;
+        Account account = (session != null) ? (Account) session.getAttribute("account") : null;
 
         // Kiểm tra quyền Admin, nếu không phải redirect về login
         if (session == null || account == null || !"Admin".equalsIgnoreCase(account.getRole())) {
@@ -60,7 +60,7 @@ public class AdminController extends HttpServlet {
         String search = request.getParameter("search");
         String role = request.getParameter("role");
         String status = request.getParameter("status");
-        
+
         try {
             if ("detail".equals(action)) {
                 int id = Integer.parseInt(request.getParameter("id")); // Lấy ID từ URL
@@ -135,6 +135,7 @@ public class AdminController extends HttpServlet {
             try {
                 String username = request.getParameter("username").trim();
                 String password = request.getParameter("pass");
+                LOGGER.info("Password received from form: " + password);
                 String name = request.getParameter("name");
                 String email = request.getParameter("email").trim();
                 String phone = request.getParameter("phone");
@@ -254,6 +255,7 @@ public class AdminController extends HttpServlet {
                 int id = Integer.parseInt(request.getParameter("id"));
                 String username = request.getParameter("username").trim();
                 String password = request.getParameter("pass");
+                LOGGER.info("Password received from form: " + password);
                 String name = request.getParameter("name");
                 String email = request.getParameter("email").trim();
                 String phone = request.getParameter("phone");

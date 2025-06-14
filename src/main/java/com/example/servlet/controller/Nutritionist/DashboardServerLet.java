@@ -186,7 +186,7 @@ public class DashboardServerLet extends HttpServlet {
         request.setAttribute ("totalNotify", totalNotify);
         request.setAttribute ("totalRequest", totalRequest);
 
-        request.getRequestDispatcher ("/Nutritionist/DaskbashNutrif.jsp").forward (request, response);
+        request.getRequestDispatcher ("/Nutritionist/Dashboard.jsp").forward (request, response);
     }
 
 }

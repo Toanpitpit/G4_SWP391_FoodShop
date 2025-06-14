@@ -165,6 +165,39 @@ public class BlogDAO {
         }
         return false;
     }
+    
+    public boolean updateBlog(Blogs blog) {
+    String sql = "{call UpdateBlog(?, ?, ?, ?, ?, ?)}";
+    DBConnect db = new DBConnect();
+
+    try (Connection conn = db.getConnection(); CallableStatement cs = conn.prepareCall(sql)) {
+        cs.setInt(1, blog.getbID()); 
+        cs.setInt(2, blog.getBmiId()); 
+        cs.setString(3, blog.getTitle()); 
+        cs.setString(4, blog.getImageUlr());
+        cs.setString(5, blog.getContent()); 
+        cs.setString(6, blog.getStatus()); 
+        boolean hasResultSet = cs.execute();
+
+        if (hasResultSet) {
+            try (ResultSet rs = cs.getResultSet()) {
+                if (rs.next()) {
+                    int rowsAffected = rs.getInt("RowsAffected");
+                    return rowsAffected > 0;
+                }
+            }
+        } else {
+            int updateCount = cs.getUpdateCount();
+            return updateCount > 0;
+        }
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+    return false;
+}
+
 
     public boolean deleteBlogByID(int blogID) {
         String sql = "DELETE FROM Blogs WHERE blogID = ?";
