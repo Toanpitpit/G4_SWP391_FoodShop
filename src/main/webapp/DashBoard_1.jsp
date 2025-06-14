@@ -5,7 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <html lang="vi">
     <head>
@@ -17,7 +17,6 @@
         <!-- Bootstrap Icons -->
         <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
         <link rel="stylesheet" href="CSS/defauld.css">
-        
     </head>
     <body>
         <!-- Sidebar -->
@@ -107,7 +106,7 @@
                             <i class="menu-arrow bi bi-chevron-right"></i>
                         </a>
                         <div class="submenu">
-                            <a href="#" class="menu-link">Order List</a>
+                            <a href="order" class="menu-link">Order List</a>
                             <a href="#" class="menu-link">Order Detail</a>
                             <a href="#" class="menu-link">Order Tracking</a>
                             <a href="#" class="menu-link">Order Reports</a>
@@ -356,138 +355,16 @@
                         </div>
                     </div>
 
-                 <!-- Thay thế placeholder bằng Order Management Section -->
-        <div class="order-management-section">
-            <!-- Search Form -->
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h5 class="mb-0">Order Management</h5>
-                </div>
-                <div class="card-body">
-                    <form method="get" action="ManageOrderServlet" class="search-form">
-                        <div class="row g-3">
-                            <div class="col-md-6 col-lg-4">
-                                <div class="input-group">
-                                    <span class="input-group-text"><i class="bi bi-hash"></i></span>
-                                    <input type="text" name="orderId" class="form-control" placeholder="Order ID" value="${param.orderId}" />
-                                </div>
-                            </div>
-                            
-                            <div class="col-md-6 col-lg-4">
-                                <div class="input-group">
-                                    <span class="input-group-text"><i class="bi bi-person"></i></span>
-                                    <input type="text" name="customerName" class="form-control" placeholder="Customer Name" value="${param.customerName}" />
-                                </div>
-                            </div>
-                            
-                            <div class="col-md-6 col-lg-4">
-                                <div class="input-group">
-                                    <span class="input-group-text"><i class="bi bi-folder"></i></span>
-                                    <select name="category" class="form-select">
-                                        <option value="">All Categories</option>
-                                        <option value="Đồ uống" ${param.category == 'Đồ uống' ? 'selected' : ''}>🥤 Đồ uống</option>
-                                        <option value="Healthy Food" ${param.category == 'Healthy Food' ? 'selected' : ''}>🥗 Healthy Food</option>
-                                        <option value="Món Chính" ${param.category == 'Món Chính' ? 'selected' : ''}>🍛 Món Chính</option>
-                                        <option value="Món Khai Vị" ${param.category == 'Món Khai Vị' ? 'selected' : ''}>🥟 Món Khai Vị</option>
-                                        <option value="Món Tráng Miệng" ${param.category == 'Món Tráng Miệng' ? 'selected' : ''}>🍰 Món Tráng Miệng</option>
-                                    </select>
-                                </div>
-                            </div>
-                            
-                            <div class="col-md-6 col-lg-4">
-                                <div class="input-group">
-                                    <span class="input-group-text"><i class="bi bi-telephone"></i></span>
-                                    <input type="text" name="phone" class="form-control" placeholder="Phone Number" value="${param.phone}" />
-                                </div>
-                            </div>
-                            
-                            <div class="col-md-6 col-lg-4">
-                                <div class="input-group">
-                                    <span class="input-group-text"><i class="bi bi-basket"></i></span>
-                                    <input type="text" name="food" class="form-control" placeholder="Food Name" value="${param.food}" />
-                                </div>
-                            </div>
-                            
-                            <div class="col-md-6 col-lg-4">
-                                <button type="submit" class="btn btn-primary w-100">
-                                    <i class="bi bi-search me-2"></i> Search
-                                </button>
-                            </div>
+                    <!-- Main Content Area -->
+                    <div class="placeholder-content">
+                        <div class="placeholder-icon">
+                            <i class="bi bi-plus-circle-dotted"></i>
                         </div>
-                    </form>
-                </div>
-            </div>
-
-            <!-- Order Table -->
-            <div class="card">
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-striped table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Order ID</th>
-                                    <th>Name Customer</th>
-                                    <th>Address</th>
-                                    <th>Phone Number</th>
-                                    <th>Order Food</th>
-                                    <th>Category</th>
-                                    <th>Quantity</th>
-                                    <th>Price</th>
-                                    <th>Total Price</th>
-                                    <th>Status</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <c:forEach var="order" items="${orderList}">
-                                    <tr>
-                                        <td>${order.id}</td>
-                                        <td>${order.customerName}</td>
-                                        <td>${order.address}</td>
-                                        <td>${order.phone}</td>
-                                        <td>${order.food}</td>
-                                        <td>${order.category}</td>
-                                        <td>${order.quantity}</td>
-                                        <td>${order.price}</td>
-                                        <td>${order.totalPrice}</td>
-                                        <td>
-                                            <span class="badge 
-                                                ${order.status == 'Pending' ? 'bg-warning' : 
-                                                  order.status == 'Accepted' ? 'bg-success' : 
-                                                  order.status == 'Rejected' ? 'bg-danger' : 
-                                                  order.status == 'Cancelled' ? 'bg-secondary' : 'bg-info'}">
-                                                ${order.status}
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <form method="post" class="d-flex gap-1">
-                                                <input type="hidden" name="orderId" value="${order.id}" />
-                                                <button type="submit" class="btn btn-success btn-sm" name="action" value="accept"
-                                                        onclick="return confirm('Accept order ${order.id}?');">
-                                                    <i class="bi bi-check-circle"></i>
-                                                </button>
-                                                <button type="submit" class="btn btn-danger btn-sm" name="action" value="reject"
-                                                        onclick="return confirm('Reject order ${order.id}?');">
-                                                    <i class="bi bi-x-circle"></i>
-                                                </button>
-                                                <button type="submit" class="btn btn-secondary btn-sm" name="action" value="cancel"
-                                                        onclick="return confirm('Cancel order ${order.id}?');">
-                                                    <i class="bi bi-slash-circle"></i>
-                                                </button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                </c:forEach>
-                            </tbody>
-                        </table>
+                        <div class="placeholder-title">Add Your Custom Content Here</div>
+                        <div class="placeholder-text">This is where you can add charts, tables, forms, or any other content for your dashboard.</div>
                     </div>
                 </div>
             </div>
-        </div>
-        <!-- End of Order Management Section -->
-
-    </div>
-</div>
 
             <!-- Footer -->
             <footer class="main-footer">
