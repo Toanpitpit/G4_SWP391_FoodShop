@@ -8,8 +8,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
-import java.util.regex.Pattern;
 import org.mindrot.jbcrypt.BCrypt;
 
 public class AccountDAO {
@@ -46,16 +46,11 @@ public class AccountDAO {
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 String hashedPassword = rs.getString("pass");
-                // Kiểm tra mật khẩu bằng BCrypt123 = >abc   abc 
-                // register 123 => abc (DB)
-                // userName:admin
-                
-                
                 if (BCrypt.checkpw(password, hashedPassword)) {
                     return new Account(
                             rs.getInt("id"),
                             rs.getString("username"),
-                            hashedPassword, // Lưu ý: Có thể không cần lưu mật khẩu
+                            hashedPassword,
                             rs.getString("name"),
                             rs.getString("email"),
                             rs.getString("phone"),
@@ -190,7 +185,7 @@ public class AccountDAO {
         DBConnect dbConnect = new DBConnect();
         try (Connection conn = dbConnect.getConnection();
              PreparedStatement ps = conn.prepareStatement(query)) {
-            String hashedPassword = BCrypt.hashpw(account.getPass(), BCrypt.gensalt()); // Băm mật khẩu khi thêm mới
+            String hashedPassword = BCrypt.hashpw(account.getPass(), BCrypt.gensalt());
             ps.setString(1, account.getUsername());
             ps.setString(2, hashedPassword);
             ps.setString(3, account.getName());
@@ -218,7 +213,6 @@ public class AccountDAO {
             if (existingUser == null) {
                 throw new SQLException("User not found with ID: " + account.getId());
             }
-
 
             String passwordToSet = account.getPass() != null && !account.getPass().isEmpty() 
                 ? BCrypt.hashpw(account.getPass(), BCrypt.gensalt()) 
@@ -365,12 +359,11 @@ public class AccountDAO {
         }
     }
 
-
     public List<Account> getAllAccounts(String search, String role, String status) throws SQLException {
         List<Account> accounts = new ArrayList<>();
         String query = "SELECT * FROM Accounts WHERE 1=1";
         if (search != null && !search.trim().isEmpty()) {
-            search = search.trim().replaceAll("\\s+", " "); // Loại bỏ khoảng trắng thừa
+            search = search.trim().replaceAll("\\s+", " ");
             query += " AND (name LIKE ? OR email LIKE ?)";
         }
         if (role != null && !role.isEmpty()) {
@@ -419,7 +412,6 @@ public class AccountDAO {
         return accounts;
     }
 
-
     public void updateUserStatus(int id, String status) throws SQLException {
         DBConnect dbConnect = new DBConnect();
         Connection conn = dbConnect.getConnection();
@@ -434,21 +426,42 @@ public class AccountDAO {
         }
     }
 
-    // Validate mật khẩu
-    public boolean isValidPassword(String password) {
-        if (password == null || password.length() < 8) return false;
-        boolean hasUppercase = !password.equals(password.toLowerCase());
-        boolean hasSpecial = Pattern.compile("[!@#$%^&*(),.?\":{}|<>]").matcher(password).find();
-        return hasUppercase && hasSpecial;
+    // Validate số điện thoại (10 chữ số, bắt đầu bằng 03x, 05x, 07x, 08x, 09x)
+    public boolean isValidPhoneNumber(String phone) {
+        if (phone == null) {
+            return false;
+        }
+        String cleanedPhone = phone.replaceAll("[^0-9]", "");
+        if (cleanedPhone.length() != 10) {
+            return false;
+        }
+        String validPrefixes = "^(03[2-9]|05[6-9]|07[0|6-9]|08[1-9]|09[0-4|6-9])[0-9]{7}$";
+        return cleanedPhone.matches(validPrefixes);
     }
 
-    // Validate ngày sinh
+    // Validate ngày sinh (trước ngày hiện tại, tuổi >= 15, tuổi <= 100)
     public boolean validateBirthDate(Date birthDate) {
-        java.util.Date today = new java.util.Date(); // Ngày hiện tại
-        today.setHours(0);
-        today.setMinutes(0);
-        today.setSeconds(0);
-        today.setDate(today.getDate()); // Ngày hiện tại
-        return birthDate != null && birthDate.before(new java.sql.Date(today.getTime()));
+        if (birthDate == null) {
+            return false;
+        }
+        java.util.Date today = new java.util.Date();
+        Calendar todayCal = Calendar.getInstance();
+        todayCal.setTime(today);
+        todayCal.set(Calendar.HOUR_OF_DAY, 0);
+        todayCal.set(Calendar.MINUTE, 0);
+        todayCal.set(Calendar.SECOND, 0);
+        todayCal.set(Calendar.MILLISECOND, 0);
+
+        if (!birthDate.before(new java.sql.Date(todayCal.getTimeInMillis()))) {
+            return false; // Ngày sinh phải trước ngày hiện tại
+        }
+
+        Calendar birthCal = Calendar.getInstance();
+        birthCal.setTime(birthDate);
+        int age = todayCal.get(Calendar.YEAR) - birthCal.get(Calendar.YEAR);
+        if (todayCal.get(Calendar.DAY_OF_YEAR) < birthCal.get(Calendar.DAY_OF_YEAR)) {
+            age--;
+        }
+        return age >= 15 && age <= 65; // Tuổi từ 15 đến 65
     }
 }
