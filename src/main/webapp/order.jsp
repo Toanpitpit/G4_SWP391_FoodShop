@@ -466,59 +466,83 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <c:forEach var="order" items="${orderList}">
-                                    <tr>
-                                        <td>${order.id}</td>
-                                        <td>${order.customerName}</td>
-                                        <td>${order.address}</td>
-                                        <td>${order.phone}</td>
-                                        <td>${order.food}</td>
-                                        <td>${order.category}</td>
-                                        <td>${order.quantity}</td>
-                                        <td>${order.price}</td>
-                                        <td>${order.totalPrice}</td>
-                                        <td>
-                                            <span class="badge 
-                                                ${order.status == 'Pending' ? 'bg-warning' : 
-                                                  order.status == 'Accepted' ? 'bg-success' : 
-                                                  order.status == 'Rejected' ? 'bg-danger' : 
-                                                  order.status == 'Cancelled' ? 'bg-secondary' : 'bg-info'}">
-                                                ${order.status}
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <form method="post" class="d-flex gap-1">
-                                                <input type="hidden" name="orderId" value="${order.id}" />
-                                                <button type="submit" class="btn btn-success btn-sm" name="action" value="accept"
-                                                        onclick="return confirm('Accept order ${order.id}?');">
-                                                    <i class="bi bi-check-circle"></i>
-                                                </button>
-                                                <button type="submit" class="btn btn-danger btn-sm" name="action" value="reject"
-                                                        onclick="return confirm('Reject order ${order.id}?');">
-                                                    <i class="bi bi-x-circle"></i>
-                                                </button>
-                                                <button type="submit" class="btn btn-secondary btn-sm" name="action" value="cancel"
-                                                        onclick="return confirm('Cancel order ${order.id}?');">
-                                                    <i class="bi bi-slash-circle"></i>
-                                                </button>
-                                                        <a href="ordertracking.jsp?orderId=${order.id}
-                                                           &customerName=${order.customerName}
-                                                           &address=${order.address}
-                                                           &phone=${order.phone}
-                                                           &food=${order.food}
-                                                           &category=${order.category}
-                                                           &quantity=${order.quantity}
-                                                           &price=${order.price}
-                                                           &totalPrice=${order.totalPrice}
-                                                           " class="btn btn-info btn-sm">
-                                                            <i class="bi bi-truck"></i> Track
-                                                        </a>
+    <c:choose>
+        <c:when test="${not empty orderList}">
+            <c:forEach var="order" items="${orderList}">
+                <tr>
+                    <td>${order.id}</td>
+                    <td>${order.customerName}</td>
+                    <td>${order.address}</td>
+                    <td>${order.phone}</td>
+                    <td>${order.food}</td>
+                    <td>${order.category}</td>
+                    <td>${order.quantity}</td>
+                    <td>${order.price}</td>
+                    <td>${order.getTotalPrice()}</td>
+                    <td>
+                        <span class="badge 
+                            ${order.status == 'Pending' ? 'bg-warning' : 
+                              order.status == 'Accepted' ? 'bg-success' : 
+                              order.status == 'Rejected' ? 'bg-danger' : 
+                              order.status == 'Cancelled' ? 'bg-secondary' : 'bg-info'}">
+                            ${order.status}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="d-flex gap-1">
+                            <!-- Form cho các nút chức năng -->
+                            <form method="post" action="order" class="d-flex gap-1">
+                                <input type="hidden" name="orderId" value="${order.id}" />
 
-                                            </form>
-                                        </td>
-                                    </tr>
-                                </c:forEach>
-                            </tbody>
+                                <!-- Truyền các tham số tìm kiếm hiện tại -->
+                                <input type="hidden" name="searchOrderId" value="${param.orderId}" />
+                                <input type="hidden" name="searchCustomerName" value="${param.customerName}" />
+                                <input type="hidden" name="searchCategory" value="${param.category}" />
+                                <input type="hidden" name="searchPhone" value="${param.phone}" />
+                                <input type="hidden" name="searchFood" value="${param.food}" />
+                                <input type="hidden" name="searchStatus" value="${param.status}" />
+
+                                <button type="submit" class="btn btn-success btn-sm" name="action" value="accept"
+                                        onclick="return confirm('Accept order ${order.id}?');">
+                                    <i class="bi bi-check-circle"></i>
+                                </button>
+                                <button type="submit" class="btn btn-danger btn-sm" name="action" value="reject"
+                                        onclick="return confirm('Reject order ${order.id}?');">
+                                    <i class="bi bi-x-circle"></i>
+                                </button>
+                                <button type="submit" class="btn btn-secondary btn-sm" name="action" value="cancel"
+                                        onclick="return confirm('Cancel order ${order.id}?');">
+                                    <i class="bi bi-slash-circle"></i>
+                                </button>
+                            </form>
+
+                            <!-- Nút Track riêng biệt -->
+                            <c:url var="trackUrl" value="ordertracking.jsp">
+                                <c:param name="orderId" value="${order.id}"/>
+                                <c:param name="food" value="${order.food}"/>
+                                <c:param name="category" value="${order.category}"/>
+                                <c:param name="quantity" value="${order.quantity}"/>
+                                <c:param name="customerName" value="${order.customerName}"/>
+                                <c:param name="phone" value="${order.phone}"/>
+                                <c:param name="address" value="${order.address}"/>
+                            </c:url>
+                            <a href="${trackUrl}" class="btn btn-info btn-sm">
+                                <i class="bi bi-truck"></i> Track
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            </c:forEach>
+        </c:when>
+        <c:otherwise>
+            <tr>
+                <td colspan="11" class="text-center text-muted py-4">
+                    <i class="bi bi-search me-2"></i>Không tìm thấy đơn hàng nào
+                </td>
+            </tr>
+        </c:otherwise>
+    </c:choose>
+</tbody>
                         </table>
                     </div>
                 </div>

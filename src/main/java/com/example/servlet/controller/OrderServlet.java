@@ -27,14 +27,15 @@ public class OrderServlet extends HttpServlet {
         String category = request.getParameter("category");
         String phone = request.getParameter("phone");
         String food = request.getParameter("food");
+        String price = request.getParameter("price");
         String status = request.getParameter("status");
         
         List<Order> orders;
         
         // Check if any search parameters are provided
-        if (hasSearchParameters(orderId, customerName, category, phone, food, status)) {
+        if (hasSearchParameters(orderId, customerName, category, phone, food,price, status)) {
             // Perform search with filters
-            orders = orderDAO.searchOrders(orderId, customerName, category, phone, food, status);
+            orders = orderDAO.searchOrders(orderId, customerName, category, phone, food, price, status);
         } else {
             // Get all orders if no search parameters
             orders = orderDAO.getAllOrders();
@@ -48,6 +49,7 @@ public class OrderServlet extends HttpServlet {
         request.setAttribute("searchPhone", phone);
         request.setAttribute("searchFood", food);
         request.setAttribute("searchStatus", status);
+        
         
         request.getRequestDispatcher("order.jsp").forward(request, response);
     }
@@ -79,18 +81,15 @@ public class OrderServlet extends HttpServlet {
                         return;
                 }
                 
+                
                 if (newStatus != null) {
-                    boolean updated = orderDAO.updateOrderStatus(orderId, newStatus);
-                    if (updated && "Accepted".equals(newStatus)) {
-                        // Redirect to tracking page after accepting order
-                        response.sendRedirect("ordertracking.jsp?orderId=" + orderId);
-                        return;
-                    } else if (!updated) {
-                        request.setAttribute("error", "Failed to update order status");
-                        request.getRequestDispatcher("error.jsp").forward(request, response);
-                        return;
-                    }
+                boolean updated = orderDAO.updateOrderStatus(orderId, newStatus);
+                if (!updated) {
+                    request.setAttribute("error", "Failed to update order status");
+                    request.getRequestDispatcher("error.jsp").forward(request, response);
+                    return;
                 }
+            }
                 
             } catch (NumberFormatException e) {
                 e.printStackTrace();
@@ -120,4 +119,5 @@ public class OrderServlet extends HttpServlet {
         }
         return false;
     }
+    
 }

@@ -59,7 +59,7 @@ public class OrderDAO {
     
     // Tìm kiếm đơn hàng với các điều kiện
     public List<Order> searchOrders(String orderId, String customerName, String category, 
-                                   String phone, String food, String status) {
+                                   String phone, String food,String price, String status) {
         List<Order> orders = new ArrayList<>();
         
         // Build dynamic SQL query
@@ -196,4 +196,5 @@ public class OrderDAO {
         
         return status;
     }
+    
 }
