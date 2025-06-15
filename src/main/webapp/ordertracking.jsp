@@ -10,7 +10,18 @@
     String orderId = request.getParameter("orderId");
     // Xử lý dữ liệu tương ứng...
 %>
+<%@ page import="java.util.Date, java.text.SimpleDateFormat" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
+<%
+// Lấy thời gian hiện tại
+Date now = new Date();
+SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+%>
+
+<c:set var="currentDate" value="<%= dateFormat.format(now) %>" />
+<c:set var="currentTime" value="<%= timeFormat.format(now) %>" />
 <!DOCTYPE html>
 <html lang="vi">
     <head>
@@ -705,118 +716,112 @@
                                 </ul>
                             </div>
                             
-                            <!-- order-track -->
-                            <div class="wg-box mb-20">
-                                <div class="order-track">
-                                    <div class="image">
-                                        <img src="images/images-section/track-oder-1.png" alt="Pouch Pocket Hoodie Orange">
-                                    </div>
-                                    <div class="content">
-                                        <h5 class="mb-20">${order.food}</h5>
-                                        <div class="infor mb-10">
-                                            <div class="body-text">Order ID</div>
-                                            <div class="body-title-2">#${order.id}</div>
-                                        </div>
-                                        <div class="infor mb-10">
-                                            <div class="body-text">Category:</div>
-                                            <div class="body-title-2">${order.category}</div>
-                                        </div>
-                                        <div class="infor mb-10">
-                                            <div class="body-text">Order Placed:</div>
-                                            <div class="body-title-2">${order.orderDate}</div>
-                                        </div>
-                                        <div class="infor mb-20">
-                                            <div class="body-text">Quantity:</div>
-                                            <div class="body-title-2">${order.quantity}</div>
-                                        </div>
-                                        <div class="flex gap10 flex-wrap">
-                                            <a class="tf-button style-1 w230" href="product-list.html">View shop</a>
-                                            <a class="tf-button w230" href="product-list.html">View product</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- /order-track -->
-                            
-                            <!-- Full width detail section -->
-                            <div class="full-width-section">
-                                <div class="inner-container">
-                                    <div class="wg-box">
-                                        <div>
-                                            <h6 class="mb-10">Detail</h6>
-                                            <div class="body-text">Your items is on the way. Tracking information will be available within 24 hours.</div>
-                                        </div>
-                                        <div class="road-map">
-                                            <div class="road-map-item active">
-                                                <div class="icon"><i class="bi bi-check-lg"></i></div>
-                                                <h6>Receiving orders</h6>
-                                                <div class="body-text">${order.orderTime}</div>
-                                            </div>
-                                            <div class="road-map-item active">
-                                                <div class="icon"><i class="bi bi-check-lg"></i></div>
-                                                <h6>Order processing</h6>
-                                                <div class="body-text">${order.processTime}</div>
-                                            </div>
-                                            <div class="road-map-item active">
-                                                <div class="icon"><i class="bi bi-check-lg"></i></div>
-                                                <h6>Being delivered</h6>
-                                                <div class="body-text">Processing</div>
-                                            </div>
-                                            <div class="road-map-item">
-                                                <div class="icon"><i class="bi bi-check-lg"></i></div>
-                                                <h6>Delivered</h6>
-                                                <div class="body-text">Pending</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- /detail -->
-                            
-                            <!-- Full width table section -->
-                            <div class="full-width-section">
-                                <div class="inner-container">
-                                    <div class="wg-box">
-                                        <div class="wg-table table-order-track">
-                                            <ul class="table-title flex mb-24 gap20">
-                                                <li>
-                                                    <div class="body-title">Date</div>
-                                                </li>    
-                                                <li>
-                                                    <div class="body-title">Time</div>
-                                                </li>    
-                                                <li>
-                                                    <div class="body-title">Customer Name</div>
-                                                </li>   
-                                                <li>
-                                                    <div class="body-title">Phone Number</div>
-                                                </li>   
-                                                <li>
-                                                    <div class="body-title">Location</div>
-                                                </li>   
-                                            </ul>
-                                            <ul class="flex flex-column gap14">
-                                                <c:forEach var="tracking" items="${orderTracking}">
-                                                    <li class="cart-totals-item">
-                                                        <div class="body-text">${tracking.date}</div>
-                                                        <div class="body-text">${tracking.time}</div>
-                                                        <div class="body-text">${order.customerName}</div>
-                                                        <div class="body-text">${order.phone}</div>
-                                                        <div class="body-text">${tracking.location}</div>
-                                                    </li>
-                                                    <li class="divider"></li>
-                                                </c:forEach>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- /table -->
-                        </div>
-                    </div>
+                           
+<!-- Order Track Section -->
+<div class="wg-box mb-20">
+    <div class="order-track">
+        <div class="image">
+            <img src="images/images-section/track-oder-1.png" alt="${param.food}">
+        </div>
+        <div class="content">
+            <h5 class="mb-20">${param.food}</h5>
+            <div class="infor mb-10">
+                <div class="body-text">Order ID</div>
+                <div class="body-title-2">#${param.orderId}</div>
+            </div>
+            <div class="infor mb-10">
+                <div class="body-text">Category:</div>
+                <div class="body-title-2">${param.category}</div>
+            </div>
+            <div class="infor mb-10">
+                <div class="body-text">Order Placed:</div>
+                <div class="body-title-2">${param.address}</div>
+            </div>
+            <div class="infor mb-20">
+                <div class="body-text">Quantity:</div>
+                <div class="body-title-2">${param.quantity}</div>
+            </div>
+            <div class="flex gap10 flex-wrap">
+                <a class="tf-button style-1 w230" href="product-list.html">View shop</a>
+                <a class="tf-button w230" href="product-list.html">View product</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /order-track -->
+
+<!-- Full width detail section -->
+<div class="full-width-section">
+    <div class="inner-container">
+        <div class="wg-box">
+            <div>
+                <h6 class="mb-10">Detail</h6>
+                <div class="body-text">Your items is on the way. Tracking information will be available within 24 hours.</div>
+            </div>
+            <div class="road-map">
+                <div class="road-map-item active">
+                    <div class="icon"><i class="bi bi-check-lg"></i></div>
+                    <h6>Receiving orders</h6>
+                    <div class="body-text">${currentDate} ${currentTime}</div>
+                </div>
+                <div class="road-map-item">
+                    <div class="icon"><i class="bi bi-check-lg"></i></div>
+                    <h6>Order processing</h6>
+                    <div class="body-text">Processing</div>
+                </div>
+                <div class="road-map-item">
+                    <div class="icon"><i class="bi bi-check-lg"></i></div>
+                    <h6>Being delivered</h6>
+                    <div class="body-text">Pending</div>
+                </div>
+                <div class="road-map-item">
+                    <div class="icon"><i class="bi bi-check-lg"></i></div>
+                    <h6>Delivered</h6>
+                    <div class="body-text">Pending</div>
                 </div>
             </div>
-        </main>
+        </div>
+    </div>
+</div>
+<!-- /detail -->
+
+<!-- Full width table section -->
+<div class="full-width-section">
+    <div class="inner-container">
+        <div class="wg-box">
+            <div class="wg-table table-order-track">
+                <ul class="table-title flex mb-24 gap20">
+                    <li>
+                        <div class="body-title">Date</div>
+                    </li>    
+                    <li>
+                        <div class="body-title">Time</div>
+                    </li>    
+                    <li>
+                        <div class="body-title">Customer Name</div>
+                    </li>   
+                    <li>
+                        <div class="body-title">Phone Number</div>
+                    </li>   
+                    <li>
+                        <div class="body-title">Location</div>
+                    </li>   
+                </ul>
+                <ul class="flex flex-column gap14">
+                    <li class="cart-totals-item">
+                        <div class="body-text">${currentDate}</div>
+                        <div class="body-text">${currentTime}</div>
+                        <div class="body-text">${param.customerName}</div>
+                        <div class="body-text">${param.phone}</div>
+                        <div class="body-text">${param.address}</div>
+                    </li>
+                    <li class="divider"></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /table -->
 
             <!-- Footer -->
             <footer class="main-footer">

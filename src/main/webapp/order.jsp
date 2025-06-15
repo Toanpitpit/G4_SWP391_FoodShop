@@ -364,58 +364,85 @@
                     <h5 class="mb-0">Order Management</h5>
                 </div>
                 <div class="card-body">
-                    <form method="get" action="ManageOrderServlet" class="search-form">
-                        <div class="row g-3">
-                            <div class="col-md-6 col-lg-4">
-                                <div class="input-group">
-                                    <span class="input-group-text"><i class="bi bi-hash"></i></span>
-                                    <input type="text" name="orderId" class="form-control" placeholder="Order ID" value="${param.orderId}" />
-                                </div>
-                            </div>
-                            
-                            <div class="col-md-6 col-lg-4">
-                                <div class="input-group">
-                                    <span class="input-group-text"><i class="bi bi-person"></i></span>
-                                    <input type="text" name="customerName" class="form-control" placeholder="Customer Name" value="${param.customerName}" />
-                                </div>
-                            </div>
-                            
-                            <div class="col-md-6 col-lg-4">
-                                <div class="input-group">
-                                    <span class="input-group-text"><i class="bi bi-folder"></i></span>
-                                    <select name="category" class="form-select">
-                                        <option value="">All Categories</option>
-                                        <option value="Đồ uống" ${param.category == 'Đồ uống' ? 'selected' : ''}>🥤 Đồ uống</option>
-                                        <option value="Healthy Food" ${param.category == 'Healthy Food' ? 'selected' : ''}>🥗 Healthy Food</option>
-                                        <option value="Món Chính" ${param.category == 'Món Chính' ? 'selected' : ''}>🍛 Món Chính</option>
-                                        <option value="Món Khai Vị" ${param.category == 'Món Khai Vị' ? 'selected' : ''}>🥟 Món Khai Vị</option>
-                                        <option value="Món Tráng Miệng" ${param.category == 'Món Tráng Miệng' ? 'selected' : ''}>🍰 Món Tráng Miệng</option>
-                                    </select>
-                                </div>
-                            </div>
-                            
-                            <div class="col-md-6 col-lg-4">
-                                <div class="input-group">
-                                    <span class="input-group-text"><i class="bi bi-telephone"></i></span>
-                                    <input type="text" name="phone" class="form-control" placeholder="Phone Number" value="${param.phone}" />
-                                </div>
-                            </div>
-                            
-                            <div class="col-md-6 col-lg-4">
-                                <div class="input-group">
-                                    <span class="input-group-text"><i class="bi bi-basket"></i></span>
-                                    <input type="text" name="food" class="form-control" placeholder="Food Name" value="${param.food}" />
-                                </div>
-                            </div>
-                            
-                            <div class="col-md-6 col-lg-4">
-                                <button type="submit" class="btn btn-primary w-100">
-                                    <i class="bi bi-search me-2"></i> Search
-                                </button>
-                            </div>
-                        </div>
-                    </form>
+    <form method="get" action="order" class="search-form">
+        <div class="row g-3">
+            <!-- Search by Order ID -->
+            <div class="col-md-6 col-lg-3">
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-hash"></i></span>
+                    <input type="text" name="orderId" class="form-control" placeholder="Order ID" value="${param.orderId}" />
                 </div>
+            </div>
+            
+            <!-- Search by Customer Name -->
+            <div class="col-md-6 col-lg-3">
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-person"></i></span>
+                    <input type="text" name="customerName" class="form-control" placeholder="Customer Name" value="${param.customerName}" />
+                </div>
+            </div>
+            
+            <!-- Search by Category -->
+            <div class="col-md-6 col-lg-3">
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-folder"></i></span>
+                    <select name="category" class="form-select">
+                        <option value="">All Categories</option>
+                        <option value="Đồ uống" ${param.category == 'Đồ uống' ? 'selected' : ''}>🥤 Đồ uống</option>
+                        <option value="Healthy Food" ${param.category == 'Healthy Food' ? 'selected' : ''}>🥗 Healthy Food</option>
+                        <option value="Món Chính" ${param.category == 'Món Chính' ? 'selected' : ''}>🍛 Món Chính</option>
+                        <option value="Món Khai Vị" ${param.category == 'Món Khai Vị' ? 'selected' : ''}>🥟 Món Khai Vị</option>
+                        <option value="Món Tráng Miệng" ${param.category == 'Món Tráng Miệng' ? 'selected' : ''}>🍰 Món Tráng Miệng</option>
+                    </select>
+                </div>
+            </div>
+            
+            <!-- Search by Phone Number -->
+            <div class="col-md-6 col-lg-3">
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-telephone"></i></span>
+                    <input type="text" name="phone" class="form-control" placeholder="Phone Number" value="${param.phone}" />
+                </div>
+            </div>
+            
+            <!-- Search by Food Name -->
+            <div class="col-md-6 col-lg-3">
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-basket"></i></span>
+                    <input type="text" name="food" class="form-control" placeholder="Food Name" value="${param.food}" />
+                </div>
+            </div>
+            
+            <!-- Search by Status -->
+            <div class="col-md-6 col-lg-3">
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-info-circle"></i></span>
+                    <select name="status" class="form-select">
+                        <option value="">All Statuses</option>
+                        <option value="Pending" ${param.status == 'Pending' ? 'selected' : ''}>Pending</option>
+                        <option value="Accepted" ${param.status == 'Accepted' ? 'selected' : ''}>Accepted</option>
+                        <option value="Rejected" ${param.status == 'Rejected' ? 'selected' : ''}>Rejected</option>
+                        <option value="Cancelled" ${param.status == 'Cancelled' ? 'selected' : ''}>Cancelled</option>
+                    </select>
+                </div>
+            </div>
+            
+            <!-- Search Button -->
+            <div class="col-md-6 col-lg-3">
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="bi bi-search me-2"></i> Search
+                </button>
+            </div>
+            
+            <!-- Reset Button -->
+            <div class="col-md-6 col-lg-3">
+                <a href="ManageOrderServlet" class="btn btn-outline-secondary w-100">
+                    <i class="bi bi-arrow-counterclockwise me-2"></i> Reset
+                </a>
+            </div>
+        </div>
+    </form>
+</div>
             </div>
 
             <!-- Order Table -->
@@ -474,7 +501,16 @@
                                                         onclick="return confirm('Cancel order ${order.id}?');">
                                                     <i class="bi bi-slash-circle"></i>
                                                 </button>
-                                                        <a href="ordertracking.jsp?orderId=${order.id}" class="btn btn-info btn-sm">
+                                                        <a href="ordertracking.jsp?orderId=${order.id}
+                                                           &customerName=${order.customerName}
+                                                           &address=${order.address}
+                                                           &phone=${order.phone}
+                                                           &food=${order.food}
+                                                           &category=${order.category}
+                                                           &quantity=${order.quantity}
+                                                           &price=${order.price}
+                                                           &totalPrice=${order.totalPrice}
+                                                           " class="btn btn-info btn-sm">
                                                             <i class="bi bi-truck"></i> Track
                                                         </a>
 
