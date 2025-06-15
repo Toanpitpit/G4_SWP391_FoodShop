@@ -756,3 +756,18 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
         .content-wrapper::-webkit-scrollbar-thumb:hover {
             background: #94a3b8;
         }
+.food-image {
+    width: 100px;   /* Giảm kích thước cực nhỏ */
+    height: 100px;  /* Giảm kích thước cực nhỏ */
+    object-fit: cover;
+    border-radius: 2px;
+    border: 1px solid #ccc;
+    transition: transform 0.2s ease-in-out;
+}
+
+/* Giảm hiệu ứng phóng to khi hover */
+.food-image:hover {
+    transform: scale(1.05); /* Chỉ tăng nhẹ 5% để tránh quá lớn */
+    z-index: 50;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}

@@ -19,6 +19,7 @@ public class OrderDAO {
                 "a.phone AS Phone, " +
                 "o.adress AS Address, " +  // chú ý nếu DB bạn sai chính tả "adress" thì phải giữ nguyên
                 "f.pName AS Food, " +
+                "f.p_image AS Image, " + // Lấy đường dẫn ảnh
                 "c.caName AS Category, " +
                 "od.quantity AS Quantity, " +
                 "f.price AS Price, " +
@@ -42,6 +43,7 @@ public class OrderDAO {
                 order.setPhone(rs.getString("Phone"));
                 order.setAddress(rs.getString("Address"));
                 order.setFood(rs.getString("Food"));
+                order.setImage(rs.getString("Image"));
                 order.setCategory(rs.getString("Category"));
                 order.setQuantity(rs.getInt("Quantity"));
                 order.setPrice(rs.getDouble("Price"));

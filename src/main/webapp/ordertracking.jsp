@@ -721,7 +721,17 @@ SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
 <div class="wg-box mb-20">
     <div class="order-track">
         <div class="image">
-            <img src="images/images-section/track-oder-1.png" alt="${param.food}">
+            <c:choose>
+                <c:when test="${not empty param.image}">
+                    <img src="${pageContext.request.contextPath}/${param.image}" 
+                         alt="${param.food}" 
+                         class="food-image">
+                </c:when>
+                <c:otherwise>
+                    <img src="${pageContext.request.contextPath}/images/default-food.png" 
+                         alt="Default food image">
+                </c:otherwise>
+            </c:choose>
         </div>
         <div class="content">
             <h5 class="mb-20">${param.food}</h5>

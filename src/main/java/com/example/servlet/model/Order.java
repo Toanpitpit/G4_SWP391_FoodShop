@@ -11,10 +11,11 @@ public class Order {
     private double price;
     private String status;
     private double totalPrice;
+    private String image;
     public Order() {
     }
 
-    public Order(int id, String customerName, String address, String phone, String food, String category,int quantity, double price, String status) {
+    public Order(int id, String customerName, String address, String phone, String food,String image, String category,int quantity, double price, String status) {
         this.id = id;
         this.customerName = customerName;
         this.address = address;
@@ -24,6 +25,15 @@ public class Order {
         this.quantity = quantity;
         this.price = price;
         this.status = status;
+        this.image = image;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     // Getter và Setter

@@ -457,6 +457,7 @@
                                     <th>Address</th>
                                     <th>Phone Number</th>
                                     <th>Order Food</th>
+                                    <th>Image</th> <!-- Thêm cột ảnh -->
                                     <th>Category</th>
                                     <th>Quantity</th>
                                     <th>Price</th>
@@ -475,6 +476,21 @@
                     <td>${order.address}</td>
                     <td>${order.phone}</td>
                     <td>${order.food}</td>
+                    <td>
+                <c:choose>
+                    <c:when test="${not empty order.image}">
+                        <img src="${pageContext.request.contextPath}/${order.image}" 
+                             alt="${order.food}" 
+                             class="food-image"
+                             onerror="this.onerror=null; this.src='${pageContext.request.contextPath}/img/food'">
+                    </c:when>
+                    <c:otherwise>
+                        <div class="no-image-placeholder">
+                            <i class="bi bi-image"></i>
+                        </div>
+                    </c:otherwise>
+                </c:choose>
+            </td>
                     <td>${order.category}</td>
                     <td>${order.quantity}</td>
                     <td>${order.price}</td>
@@ -525,6 +541,7 @@
                                 <c:param name="customerName" value="${order.customerName}"/>
                                 <c:param name="phone" value="${order.phone}"/>
                                 <c:param name="address" value="${order.address}"/>
+                                <c:param name="image" value="${order.image}"/> <!-- Thêm dòng này -->
                             </c:url>
                             <a href="${trackUrl}" class="btn btn-info btn-sm">
                                 <i class="bi bi-truck"></i> Track
