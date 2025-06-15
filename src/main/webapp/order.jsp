@@ -230,8 +230,8 @@
                     <div class="user-profile">
                         <div class="user-avatar">KW</div>
                         <div class="user-info">
-                            <div class="user-name">Kristin Watson</div>
-                            <div class="user-role">Administrator</div>
+                            <div class="user-name">Trung Anh</div>
+                            <div class="user-role">Saler</div>
                         </div>
                         <i class="dropdown-arrow bi bi-chevron-down"></i>
                     </div>
@@ -474,6 +474,10 @@
                                                         onclick="return confirm('Cancel order ${order.id}?');">
                                                     <i class="bi bi-slash-circle"></i>
                                                 </button>
+                                                        <a href="ordertracking.jsp?orderId=${order.id}" class="btn btn-info btn-sm">
+                                                            <i class="bi bi-truck"></i> Track
+                                                        </a>
+
                                             </form>
                                         </td>
                                     </tr>
