@@ -27,7 +27,7 @@
                     <div class="brand-icon">
                         <i class="bi bi-grid-3x3-gap-fill"></i>
                     </div>
-                    <span class="brand-text">Remos</span>
+                    <span class="brand-text">Feash & Healthy</span>
                 </a>
                 <button class="sidebar-toggle" onclick="toggleSidebar()">
                     <i class="bi bi-list"></i>
@@ -109,7 +109,7 @@
                         <div class="submenu">
                             <a href="#" class="menu-link">Order List</a>
                             <a href="#" class="menu-link">Order Detail</a>
-                            <a href="#" class="menu-link">Order Tracking</a>
+                            <a href="ordertracking.jsp" class="menu-link">Order Tracking</a>
                             <a href="#" class="menu-link">Order Reports</a>
                         </div>
                     </div>

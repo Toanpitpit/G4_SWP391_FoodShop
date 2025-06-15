@@ -5,7 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="vi">
     <head>
@@ -17,6 +17,422 @@
         <!-- Bootstrap Icons -->
         <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
         <link rel="stylesheet" href="CSS/defauld.css">
+<style>
+    /* CSS chung */
+    .main-content {
+        padding: 20px;
+        margin-left: 280px;
+        transition: margin-left 0.3s ease;
+    }
+    
+    .collapsed ~ .main-content {
+        margin-left: 80px;
+    }
+    
+    .breadcrumb-section {
+        margin-bottom: 20px;
+    }
+    
+    .breadcrumb-container {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .page-title {
+        font-size: 24px;
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+    
+    .breadcrumb-nav {
+        display: flex;
+        align-items: center;
+        color: #6c757d;
+        font-size: 14px;
+    }
+    
+    .breadcrumb-item {
+        color: #6c757d;
+        text-decoration: none;
+    }
+    
+    .breadcrumb-item:hover {
+        color: #0d6efd;
+        text-decoration: underline;
+    }
+    
+    .breadcrumb-item.active {
+        color: #495057;
+        font-weight: 500;
+    }
+    
+    .breadcrumb-separator {
+        margin: 0 8px;
+        color: #adb5bd;
+    }
+    
+    /* CSS cho breadcrumb trong nội dung */
+    .main-content-wrap .breadcrumbs {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    
+    .main-content-wrap .breadcrumbs li {
+        display: flex;
+        align-items: center;
+    }
+    
+    .main-content-wrap .breadcrumbs .text-tiny {
+        font-size: 14px;
+        color: #6c757d;
+    }
+    
+    .main-content-wrap .breadcrumbs a .text-tiny {
+        color: #6c757d;
+        text-decoration: none;
+    }
+    
+    .main-content-wrap .breadcrumbs a:hover .text-tiny {
+        color: #0d6efd;
+        text-decoration: underline;
+    }
+    
+    .main-content-wrap .breadcrumbs .icon-chevron-right {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 10px;
+        color: #adb5bd;
+        font-size: 12px;
+    }
+    
+    /* Sử dụng biểu tượng từ Bootstrap Icons cho dấu phân cách */
+    .main-content-wrap .breadcrumbs .icon-chevron-right::before {
+        content: "\f285"; /* Mã Unicode của biểu tượng chevron-right trong Bootstrap Icons */
+        font-family: "bootstrap-icons";
+    }
+    
+    /* Track Order Page */
+    .track-order-page {
+        background-color: #f8f9fa;
+        border-radius: 12px;
+        padding: 25px;
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    }
+    
+    .track-order-content {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    
+    .main-content-inner {
+        background: white;
+        border-radius: 12px;
+        padding: 25px;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05);
+    }
+    
+    .flex {
+        display: flex;
+    }
+    
+    .items-center {
+        align-items: center;
+    }
+    
+    .flex-wrap {
+        flex-wrap: wrap;
+    }
+    
+    .justify-between {
+        justify-content: space-between;
+    }
+    
+    .gap20 {
+        gap: 20px;
+    }
+    
+    .gap10 {
+        gap: 10px;
+    }
+    
+    .mb-27 {
+        margin-bottom: 27px;
+    }
+    
+    .wg-box {
+        background: white;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        margin-bottom: 25px;
+    }
+    
+    .order-track {
+        display: flex;
+        gap: 30px;
+        align-items: center;
+    }
+    
+    .order-track .image {
+        flex: 0 0 200px;
+    }
+    
+    .order-track .image img {
+        width: 100%;
+        border-radius: 8px;
+        box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.1);
+    }
+    
+    .order-track .content {
+        flex: 1;
+    }
+    
+    .order-track .content h5 {
+        font-size: 22px;
+        font-weight: 600;
+        color: #212529;
+        margin-bottom: 20px;
+    }
+    
+    .infor {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+        border-bottom: 1px solid #e9ecef;
+    }
+    
+    .infor:last-child {
+        border-bottom: none;
+    }
+    
+    .body-text {
+        font-size: 15px;
+        color: #6c757d;
+    }
+    
+    .body-title-2 {
+        font-size: 16px;
+        font-weight: 500;
+        color: #212529;
+    }
+    
+    .tf-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px 20px;
+        border-radius: 6px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        font-size: 15px;
+    }
+    
+    .tf-button.style-1 {
+        background-color: #6c757d;
+        color: white;
+        border: none;
+    }
+    
+    .tf-button.style-1:hover {
+        background-color: #5c636a;
+    }
+    
+    .tf-button {
+        background-color: #0d6efd;
+        color: white;
+        border: none;
+    }
+    
+    .tf-button:hover {
+        background-color: #0b5ed7;
+    }
+    
+    .w230 {
+        width: 230px;
+    }
+    
+    /* Road Map */
+    .road-map {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 15px;
+        margin-top: 30px;
+        position: relative;
+    }
+    
+    .road-map::before {
+        content: '';
+        position: absolute;
+        top: 30px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background-color: #e9ecef;
+        z-index: 1;
+    }
+    
+    .road-map-item {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+        padding: 0 10px;
+    }
+    
+    .road-map-item .icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background-color: #f1f2f6;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 15px;
+        font-size: 24px;
+        color: #adb5bd;
+    }
+    
+    .road-map-item.active .icon {
+        background-color: #0d6efd;
+        color: white;
+    }
+    
+    .road-map-item h6 {
+        font-size: 16px;
+        font-weight: 500;
+        margin-bottom: 8px;
+        color: #212529;
+    }
+    
+    /* Table */
+    .table-title {
+        display: flex;
+        background-color: #f8f9fa;
+        padding: 15px 20px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+    }
+    
+    .table-title li {
+        flex: 1;
+        font-weight: 600;
+        color: #495057;
+    }
+    
+    .cart-totals-item {
+        display: flex;
+        padding: 15px 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        margin-bottom: 10px;
+        transition: transform 0.2s;
+    }
+    
+    .cart-totals-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .cart-totals-item > div {
+        flex: 1;
+        font-size: 14px;
+        color: #495057;
+    }
+    
+    .divider {
+        height: 1px;
+        background-color: #e9ecef;
+        margin: 10px 0;
+    }
+    
+    /* Responsive */
+    @media (max-width: 992px) {
+        .order-track {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        
+        .order-track .image {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        
+        .road-map {
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+        
+        .road-map::before {
+            display: none;
+        }
+        
+        .road-map-item {
+            display: flex;
+            align-items: center;
+            text-align: left;
+        }
+        
+        .road-map-item .icon {
+            margin: 0 15px 0 0;
+        }
+        
+        .table-title {
+            display: none;
+        }
+        
+        .cart-totals-item {
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .cart-totals-item > div {
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .cart-totals-item > div::before {
+            content: attr(data-label);
+            font-weight: 600;
+            color: #495057;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .main-content {
+            margin-left: 0;
+        }
+        
+        .collapsed ~ .main-content {
+            margin-left: 0;
+        }
+        
+        .flex.items-center.flex-wrap.justify-between.gap20.mb-27 {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        
+        .tf-button {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        
+        .main-content-wrap .breadcrumbs {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        
+        .main-content-wrap .breadcrumbs .icon-chevron-right {
+            transform: rotate(90deg);
+            margin: 5px 0;
+        }
+    }
+</style>
     </head>
     <body>
         <!-- Sidebar -->
@@ -108,7 +524,7 @@
                         <div class="submenu">
                             <a href="order" class="menu-link">Order List</a>
                             <a href="#" class="menu-link">Order Detail</a>
-                            <a href="#" class="menu-link">Order Tracking</a>
+                            <a href="ordertracking.jsp" class="menu-link">Order Tracking</a>
                             <a href="#" class="menu-link">Order Reports</a>
                         </div>
                     </div>
@@ -243,128 +659,159 @@
             <!-- Breadcrumb Section -->
             <div class="breadcrumb-section">
                 <div class="breadcrumb-container">
-                    <h1 class="page-title">Dashboard</h1>
+                    <h1 class="page-title">Track Order</h1>
                     <nav class="breadcrumb-nav">
                         <a href="#" class="breadcrumb-item">Home</a>
                         <span class="breadcrumb-separator">
                             <i class="bi bi-chevron-right"></i>
                         </span>
-                        <a href="#" class="breadcrumb-item">Pages</a>
+                        <a href="#" class="breadcrumb-item">Order</a>
                         <span class="breadcrumb-separator">
                             <i class="bi bi-chevron-right"></i>
                         </span>
-                        <span class="breadcrumb-item active">Dashboard</span>
+                        <span class="breadcrumb-item active">Track Order</span>
                     </nav>
                 </div>
             </div>
 
-            <!-- Content Wrapper -->
-            <div class="content-wrapper">
-                <div class="content-card">
-                    <div class="row mb-4">
-                        <div class="col-12">
-                            <h2 class="mb-3">Welcome to Remos Admin Dashboard</h2>
-                            <p class="text-muted">Manage your eCommerce store with powerful tools and analytics.</p>
-                        </div>
-                    </div>
-
-                    <!-- Stats Cards Row -->
-                    <div class="row mb-4">
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-0 shadow-sm h-100">
-                                <div class="card-body">
-                                    <div class="d-flex align-items-center">
-                                        <div class="flex-shrink-0">
-                                            <div class="bg-primary bg-gradient text-white rounded-3 p-3">
-                                                <i class="bi bi-cart-fill fs-4"></i>
-                                            </div>
+            <!-- Full Width Track Order Section -->
+            <div class="full-width-container track-order-page">
+                <div class="track-order-content">
+                    <div class="main-content-inner">
+                        <div class="main-content-wrap">
+                            <div class="flex items-center flex-wrap justify-between gap20 mb-27">
+                                <h3>Track Order</h3>
+                                <ul class="breadcrumbs flex items-center flex-wrap justify-start gap10">
+                                    <li>
+                                        <a href="index.html"><div class="text-tiny">Dashboard</div></a>
+                                    </li>
+                                    <li>
+                                        <i class="icon-chevron-right"></i>
+                                    </li>
+                                    <li>
+                                        <a href="#"><div class="text-tiny">Order</div></a>
+                                    </li>
+                                    <li>
+                                        <i class="icon-chevron-right"></i>
+                                    </li>
+                                    <li>
+                                        <div class="text-tiny">Track Order</div>
+                                    </li>
+                                </ul>
+                            </div>
+                            
+                            <!-- order-track -->
+                            <div class="wg-box mb-20">
+                                <div class="order-track">
+                                    <div class="image">
+                                        <img src="images/images-section/track-oder-1.png" alt="Pouch Pocket Hoodie Orange">
+                                    </div>
+                                    <div class="content">
+                                        <h5 class="mb-20">${order.food}</h5>
+                                        <div class="infor mb-10">
+                                            <div class="body-text">Order ID</div>
+                                            <div class="body-title-2">#${order.id}</div>
                                         </div>
-                                        <div class="flex-grow-1 ms-3">
-                                            <h6 class="text-muted mb-1">Total Orders</h6>
-                                            <h3 class="mb-0">1,234</h3>
-                                            <small class="text-success">
-                                                <i class="bi bi-arrow-up"></i> +12% from last month
-                                            </small>
+                                        <div class="infor mb-10">
+                                            <div class="body-text">Category:</div>
+                                            <div class="body-title-2">${order.category}</div>
+                                        </div>
+                                        <div class="infor mb-10">
+                                            <div class="body-text">Order Placed:</div>
+                                            <div class="body-title-2">${order.orderDate}</div>
+                                        </div>
+                                        <div class="infor mb-20">
+                                            <div class="body-text">Quantity:</div>
+                                            <div class="body-title-2">${order.quantity}</div>
+                                        </div>
+                                        <div class="flex gap10 flex-wrap">
+                                            <a class="tf-button style-1 w230" href="product-list.html">View shop</a>
+                                            <a class="tf-button w230" href="product-list.html">View product</a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-0 shadow-sm h-100">
-                                <div class="card-body">
-                                    <div class="d-flex align-items-center">
-                                        <div class="flex-shrink-0">
-                                            <div class="bg-success bg-gradient text-white rounded-3 p-3">
-                                                <i class="bi bi-currency-dollar fs-4"></i>
-                                            </div>
+                            <!-- /order-track -->
+                            
+                            <!-- Full width detail section -->
+                            <div class="full-width-section">
+                                <div class="inner-container">
+                                    <div class="wg-box">
+                                        <div>
+                                            <h6 class="mb-10">Detail</h6>
+                                            <div class="body-text">Your items is on the way. Tracking information will be available within 24 hours.</div>
                                         </div>
-                                        <div class="flex-grow-1 ms-3">
-                                            <h6 class="text-muted mb-1">Revenue</h6>
-                                            <h3 class="mb-0">$45,678</h3>
-                                            <small class="text-success">
-                                                <i class="bi bi-arrow-up"></i> +8% from last month
-                                            </small>
+                                        <div class="road-map">
+                                            <div class="road-map-item active">
+                                                <div class="icon"><i class="bi bi-check-lg"></i></div>
+                                                <h6>Receiving orders</h6>
+                                                <div class="body-text">${order.orderTime}</div>
+                                            </div>
+                                            <div class="road-map-item active">
+                                                <div class="icon"><i class="bi bi-check-lg"></i></div>
+                                                <h6>Order processing</h6>
+                                                <div class="body-text">${order.processTime}</div>
+                                            </div>
+                                            <div class="road-map-item active">
+                                                <div class="icon"><i class="bi bi-check-lg"></i></div>
+                                                <h6>Being delivered</h6>
+                                                <div class="body-text">Processing</div>
+                                            </div>
+                                            <div class="road-map-item">
+                                                <div class="icon"><i class="bi bi-check-lg"></i></div>
+                                                <h6>Delivered</h6>
+                                                <div class="body-text">Pending</div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-0 shadow-sm h-100">
-                                <div class="card-body">
-                                    <div class="d-flex align-items-center">
-                                        <div class="flex-shrink-0">
-                                            <div class="bg-info bg-gradient text-white rounded-3 p-3">
-                                                <i class="bi bi-people-fill fs-4"></i>
-                                            </div>
-                                        </div>
-                                        <div class="flex-grow-1 ms-3">
-                                            <h6 class="text-muted mb-1">Customers</h6>
-                                            <h3 class="mb-0">892</h3>
-                                            <small class="text-success">
-                                                <i class="bi bi-arrow-up"></i> +15% from last month
-                                            </small>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-0 shadow-sm h-100">
-                                <div class="card-body">
-                                    <div class="d-flex align-items-center">
-                                        <div class="flex-shrink-0">
-                                            <div class="bg-warning bg-gradient text-white rounded-3 p-3">
-                                                <i class="bi bi-box-seam fs-4"></i>
-                                            </div>
-                                        </div>
-                                        <div class="flex-grow-1 ms-3">
-                                            <h6 class="text-muted mb-1">Products</h6>
-                                            <h3 class="mb-0">567</h3>
-                                            <small class="text-danger">
-                                                <i class="bi bi-arrow-down"></i> -3% from last month
-                                            </small>
+                            <!-- /detail -->
+                            
+                            <!-- Full width table section -->
+                            <div class="full-width-section">
+                                <div class="inner-container">
+                                    <div class="wg-box">
+                                        <div class="wg-table table-order-track">
+                                            <ul class="table-title flex mb-24 gap20">
+                                                <li>
+                                                    <div class="body-title">Date</div>
+                                                </li>    
+                                                <li>
+                                                    <div class="body-title">Time</div>
+                                                </li>    
+                                                <li>
+                                                    <div class="body-title">Customer Name</div>
+                                                </li>   
+                                                <li>
+                                                    <div class="body-title">Phone Number</div>
+                                                </li>   
+                                                <li>
+                                                    <div class="body-title">Location</div>
+                                                </li>   
+                                            </ul>
+                                            <ul class="flex flex-column gap14">
+                                                <c:forEach var="tracking" items="${orderTracking}">
+                                                    <li class="cart-totals-item">
+                                                        <div class="body-text">${tracking.date}</div>
+                                                        <div class="body-text">${tracking.time}</div>
+                                                        <div class="body-text">${order.customerName}</div>
+                                                        <div class="body-text">${order.phone}</div>
+                                                        <div class="body-text">${tracking.location}</div>
+                                                    </li>
+                                                    <li class="divider"></li>
+                                                </c:forEach>
+                                            </ul>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            <!-- /table -->
                         </div>
-                    </div>
-
-                    <!-- Main Content Area -->
-                    <div class="placeholder-content">
-                        <div class="placeholder-icon">
-                            <i class="bi bi-plus-circle-dotted"></i>
-                        </div>
-                        <div class="placeholder-title">Add Your Custom Content Here</div>
-                        <div class="placeholder-text">This is where you can add charts, tables, forms, or any other content for your dashboard.</div>
                     </div>
                 </div>
             </div>
+        </main>
 
             <!-- Footer -->
             <footer class="main-footer">
