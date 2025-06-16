@@ -6,12 +6,16 @@ package com.example.servlet.controller.Nutritionist;
 
 import com.example.servlet.dao.BMIClassificationDAO;
 import com.example.servlet.dao.BlogDAO;
+import com.example.servlet.dao.CategoryDAO;
+import com.example.servlet.dao.FoodDAO;
 import com.example.servlet.dao.FoodDraftDAO;
 import com.example.servlet.dao.NotifyDAO;
 import com.example.servlet.dao.RequestDAO;
 import com.example.servlet.model.Account;
 import com.example.servlet.model.BMIClassification;
 import com.example.servlet.model.Blogs;
+import com.example.servlet.model.Category;
+import com.example.servlet.model.Food;
 import com.example.servlet.model.MonthlyStat;
 import com.google.gson.Gson;
 import java.io.IOException;
@@ -62,14 +66,22 @@ public class NutritionistControlServerLet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        
+            throws ServletException, IOException{
+        HttpSession sesssion = request.getSession (false);
+//        if(sesssion == null ){
+//            request.getRequestDispatcher ("login.jsp").forward (request, response);
+//            return;
+//        }
         String action = request.getParameter ("action");
-        
+//        
         if (action == null) {
             response.sendRedirect ("login.jsp");
             return;
         }
+//                try(PrintWriter out  = response.getWriter ()){
+//                  out.print ( action +"da xư lsy tra ve sẻver let");
+//                  
+//
         switch (action) {
             // BLOG
             case "dashboard":                
@@ -102,6 +114,22 @@ public class NutritionistControlServerLet extends HttpServlet {
             case "showdetail":
                 displayBlogDetail (request, response);
                 break;
+            case "displayBMI":
+                handleBMISearrch (request, response);
+                break;
+            case "showBMI":
+                prepareBMIdata (request, response);
+                break;
+            case "CreateBMI":
+                displayBlogDetail (request, response);
+                break;
+            case "showfood":
+                ShowFood (request, response);
+                break;
+            case "displaysortfood":
+                
+                ShowFoodSortFilter (request, response);
+                break;
             default:
         }
     }
@@ -122,108 +150,6 @@ public class NutritionistControlServerLet extends HttpServlet {
         return "Short description";
     }// 
 
-//    protected void createBlog(HttpServletRequest request, HttpServletResponse response)
-//            throws ServletException, IOException {
-//        HttpSession session = request.getSession (false);
-//        if (session == null || session.getAttribute ("Account") == null) {
-//            response.sendRedirect ("login.jsp");
-//            return;
-//        }
-//        
-//        Account acc = (Account) session.getAttribute ("Account");
-//        
-//        String title = request.getParameter ("title");
-//        String bmiIdStr = request.getParameter ("bmiId");
-//        String status = request.getParameter ("status");
-//        String content = request.getParameter ("content");
-//        request.setAttribute ("title", title);
-//        request.setAttribute ("status", status);
-//        request.setAttribute ("content", content);
-//        Part imagePart = request.getPart ("imageUrl");
-//        
-//        if (bmiIdStr != null) {
-//            request.setAttribute ("selectedBmiId", Integer.parseInt (bmiIdStr));
-//        }
-//        if (title == null || title.trim ().isEmpty ()
-//                || content == null || content.trim ().isEmpty ()
-//                || bmiIdStr == null || bmiIdStr.isEmpty ()
-//                || status == null || imagePart == null
-//                || imagePart.getSize () == 0
-//                || imagePart.getSubmittedFileName ().isEmpty ()) {
-//            request.setAttribute ("Errmess", "Vui lòng nhập đầy đủ tiêu đề, nội dung , ảnh và chọn BMI.");
-//            DisplayCreateBlog (request, response);
-//            return;
-//        }
-//        
-//        int bmiId;
-//        try {
-//            bmiId = Integer.parseInt (bmiIdStr);
-//        } catch (NumberFormatException e) {
-//            request.setAttribute ("Errmess", "Giá trị BMI không hợp lệ.");
-//            DisplayCreateBlog (request, response);
-//            return;
-//        }
-//        String image_url = null;
-//        try {
-//            Part filePart = request.getPart ("imageUrl");
-//            
-//            if (filePart.getSize () > 5 * 1024 * 1024) {
-//                request.setAttribute ("Errmess", "Ảnh vượt quá dung lượng cho phép (5MB).");
-//                DisplayCreateBlog (request, response);
-//                return;
-//            }
-//            
-//            String fileName = filePart.getSubmittedFileName ();
-//            if (fileName != null && !fileName.isEmpty ()) {
-//                String fileExtension = "";
-//                int dotIndex = fileName.lastIndexOf ('.');
-//                if (dotIndex >= 0) {
-//                    fileExtension = fileName.substring (dotIndex);
-//                }
-//                
-//                String uniqueFileName = UUID.randomUUID ().toString () + fileExtension;
-//                File uploadDir = new File (UPLOAD_DIRECTORY);
-//                if (!uploadDir.exists ()) {
-//                    uploadDir.mkdirs ();
-//                }
-//                
-//                String filePath = UPLOAD_DIRECTORY + File.separator + uniqueFileName;
-//                filePart.write (filePath);
-//                
-//                File sourceFile = new File (filePath);
-//                File targetFile = new File (TAGET_DIRECTORY + File.separator + uniqueFileName);
-//                Files.copy (sourceFile.toPath (), targetFile.toPath (), StandardCopyOption.REPLACE_EXISTING);
-//                
-//                image_url = "img/blog/" + uniqueFileName;
-//            }
-//            
-//        } catch (IllegalStateException e) {
-//            request.setAttribute ("Errmess", "Tổng dung lượng dữ liệu gửi lên vượt giới hạn 5MB.");
-//            DisplayCreateBlog (request, response);
-//            return;
-//        } catch (Exception e) {
-//            e.printStackTrace ();
-//            request.setAttribute ("Errmess", "Đã xảy ra lỗi khi tải ảnh.");
-//            DisplayCreateBlog (request, response);
-//            return;
-//        }
-//        Timestamp now = new Timestamp (System.currentTimeMillis ());
-//        Blogs blog = new Blogs (
-//                0, acc.getId (), acc.getUsername (), bmiId,
-//                title, image_url, content, status, now, now
-//        );
-//        BlogDAO blogDAO = new BlogDAO ();
-//        boolean success = blogDAO.insertBlog (blog);
-//        
-//        if (success) {
-//            session.setAttribute ("successMessage", "Tạo bài viết thành công.");
-//            DisplayBlog (request, response);
-//        } else {
-//            request.setAttribute ("Errmess", "Không thể tạo bài viết. Vui lòng thử lại.");
-//           DisplayCreateBlog (request, response);
-//        }
-//        
-//    }
     protected void createBlog(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
 
@@ -247,7 +173,7 @@ public class NutritionistControlServerLet extends HttpServlet {
     if (bmiIdStr != null) request.setAttribute("selectedBmiId", Integer.parseInt(bmiIdStr));
 
     if (isNotValidInput(title, content, bmiIdStr, status, imagePart)) {
-        request.setAttribute("Errmess", "Vui lòng nhập đầy đủ tiêu đề, nội dung , ảnh và chọn BMI.");
+        request.setAttribute("Errmess", "Vui lòng chọn ảnh");
         DisplayCreateBlog(request, response);
         return;
     }
@@ -408,7 +334,7 @@ public class NutritionistControlServerLet extends HttpServlet {
             
             
         } catch (IllegalStateException e) {
-            request.setAttribute ("Errmess", "Tổng dung lượng dữ liệu gửi lên vượt giới hạn 5MB.");
+            request.setAttribute ("warningMessage", "Tổng dung lượng dữ liệu gửi lên vượt giới hạn 5MB.");
             DisplayCreateBlog (request, response);
             return;
         } catch (Exception e) {
@@ -568,6 +494,7 @@ public class NutritionistControlServerLet extends HttpServlet {
             }
             Account acc = (Account) session.getAttribute ("Account");
             BlogDAO b_dao = new BlogDAO ();
+            BMIClassificationDAO bi_dao = new BMIClassificationDAO();
             try {
                 String ids = request.getParameter ("id");
                 if (ids != null) {
@@ -576,10 +503,12 @@ public class NutritionistControlServerLet extends HttpServlet {
                         int id = Integer.parseInt (ids);
                         
                         Blogs blog = b_dao.getBlogByID (id);
-                 
-                        List<Blogs> relesteBlog = b_dao.getRelatedBlogByID (blog.getbID (),acc.getId());
-
+                        BMIClassification bmi = bi_dao.getBMIByID (blog.getBmiId ());
+                        
+                        List<Blogs> relesteBlog = b_dao.getRelatedBlogByID (blog.getbID ());
+                        List<BMIClassification> lstBMI = bi_dao.getAllBMI ();
                         request.setAttribute ("blog", blog);
+                        request.setAttribute ("bmi", bmi);
                         request.setAttribute ("relblog", relesteBlog);
                         
                         request.getRequestDispatcher ("/Nutritionist/BlogDetail.jsp")
@@ -609,7 +538,8 @@ public class NutritionistControlServerLet extends HttpServlet {
             }            
             prepareDashboardData (request, response);
         } catch (Exception ex) {
-            
+            ex.printStackTrace ();
+            return;
         }
     }
     
@@ -668,7 +598,7 @@ public class NutritionistControlServerLet extends HttpServlet {
         List<Integer> pieChart_data_totals = new ArrayList<> ();
         if(lstM == null || lstM.isEmpty ()){
             pieChart_data_lables.add("No data ");
-            pieChart_data_totals.add (0);
+            pieChart_data_totals.add (1);
         } else {
         for (MonthlyStat monthlyStat : lstM) {
             pieChart_data_lables.add (monthlyStat.getMonthlName ());
@@ -706,29 +636,14 @@ public class NutritionistControlServerLet extends HttpServlet {
         request.setAttribute ("selectedYear", selectedYear);
         request.setAttribute ("pieChart_data_labelsJson", pieChart_data_labelsJson);
         request.setAttribute ("pieChart_data_totalsJson", pieChart_data_totalsJson);
-        request.setAttribute ("barChart_data_lablesJson", barChart_data_lablesJson);
+        request.setAttribute ("barChart_data_labelsJson", barChart_data_lablesJson);
         request.setAttribute ("barChart_data_totalsJson", barChart_data_totalsJson);
-        request.setAttribute ("pieChart_data_lables", pieChart_data_lables);
+        request.setAttribute ("pieChart_data_labels", pieChart_data_lables);
         request.setAttribute ("pieChart_data_totals", pieChart_data_totals);
         request.setAttribute ("totalBlog", totalBlog);
         request.setAttribute ("totalFdrf", totalFdrf);
         request.setAttribute ("totalNotify", totalNotify);
         request.setAttribute ("totalRequest", totalRequest);
-        response.setContentType("text/plain;charset=UTF-8");
-        PrintWriter out = response.getWriter();
-        out.println("years: " + request.getAttribute("years"));
-        out.println("currentYear: " + request.getAttribute("currentYear"));
-        out.println("selectedYear: " + request.getAttribute("selectedYear"));
-        out.println("pieChart_data_labelsJson: " + request.getAttribute("pieChart_data_labelsJson"));
-        out.println("pieChart_data_totalsJson: " + request.getAttribute("pieChart_data_totalsJson"));
-        out.println("barChart_data_lablesJson: " + request.getAttribute("barChart_data_lablesJson"));
-        out.println("barChart_data_totalsJson: " + request.getAttribute("barChart_data_totalsJson"));
-        out.println("pieChart_data_lables: " + request.getAttribute("pieChart_data_lables"));
-        out.println("pieChart_data_totals: " + request.getAttribute("pieChart_data_totals"));
-        out.println("totalBlog: " + request.getAttribute("totalBlog"));
-        out.println("totalFdrf: " + request.getAttribute("totalFdrf"));
-        out.println("totalNotify: " + request.getAttribute("totalNotify"));
-        out.println("totalRequest: " + request.getAttribute("totalRequest"));
         request.getRequestDispatcher ("/Nutritionist/DashBoard.jsp").forward (request, response);
     }
 
@@ -763,7 +678,7 @@ public class NutritionistControlServerLet extends HttpServlet {
         if (totalBlog > 10) {
             totalPages = (totalBlog / 10) + (totalBlog % 10 == 0 ? 0 : 1);
         }
-        // Chuẩn bị map để trả json nhiều dữ liệu
+        
         Map<String, Object> jsonData = new HashMap<> ();
         jsonData.put ("blogs", lstB);
         jsonData.put ("totalPages", totalPages);
@@ -819,5 +734,187 @@ public class NutritionistControlServerLet extends HttpServlet {
         request.setAttribute ("statusList", statusList);
         request.getRequestDispatcher ("/Nutritionist/BlogPages.jsp").forward (request, response);
     }
+
+
+
+    private void prepareBMIdata(HttpServletRequest request, HttpServletResponse response){
+    HttpSession session = request.getSession(false);
+    Account acc = (Account) session.getAttribute("Account");
+    int page = 1;
+    int limit = 5;
+    int offset = (page - 1) * limit;
     
+    try {
+        BMIClassificationDAO dao = new BMIClassificationDAO();
+        List<BMIClassification> lstBMI = dao.getBMIWithPagination(offset, limit);
+        int totalCount = dao.countAllBMI ();
+        request.setAttribute("totalCount", totalCount);
+        int totalPages = (int) Math.ceil((double) totalCount / limit);
+        request.setAttribute("lstBMI", lstBMI);
+        request.setAttribute("currentPage", page);
+        request.setAttribute("totalPages", totalPages);
+        
+//        try(PrintWriter out = response.getWriter ()){
+//            out.print ("+" + page);
+//            out.print ("+" + totalCount);
+//            out.print (totalPages);
+//        }
+        request.getRequestDispatcher("/Nutritionist/BMIPage.jsp").forward(request, response);
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
 }
+
+
+protected void handleBMISearrch(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    try {
+        HttpSession session = request.getSession(false);
+        Account acc = (Account) session.getAttribute("Account");
+
+        String input_search = request.getParameter("search");
+        String sortTarget = request.getParameter("sortOrderTarget");
+        String sortId = request.getParameter("sortOrderID");
+
+        int page = Integer.parseInt(request.getParameter("page"));
+        int limit = Integer.parseInt(request.getParameter("limitpage"));
+        int offset = (page - 1) * limit;
+
+        BMIClassificationDAO dao = new BMIClassificationDAO();
+        List<BMIClassification> lstBMI = dao.getBMIWithFilterAndSort(input_search, sortId, sortTarget, offset, limit);
+        int totalBMI = dao.gettotalBMIWithFilterAndSort(input_search, sortId, sortTarget);
+        int totalPages = (int) Math.ceil((double) totalBMI / limit);
+
+        // Gửi dữ liệu cho JSP
+        request.setAttribute("lstBMI", lstBMI);
+        request.setAttribute("totalPages", totalPages);
+        request.setAttribute("totalSize", totalBMI);
+        request.setAttribute("currentSize", lstBMI.size());
+        request.setAttribute("currentPage", page);
+        request.setAttribute("limitpage", limit);
+
+        // Giữ lại filter để điền lại vào input/select
+        request.setAttribute("search", input_search == null ? "" : input_search);
+        request.setAttribute("sortOrderTarget", sortTarget == null ? "" : sortTarget);
+        request.setAttribute("sortOrderID", sortId == null ? "" : sortId);
+
+        // Điều hướng về JSP để hiển thị lại
+        request.getRequestDispatcher("/Nutritionist/BMIPage.jsp").forward(request, response);
+    } catch (Exception ex) {
+        ex.printStackTrace();
+        request.setAttribute("error", "Đã xảy ra lỗi khi tải dữ liệu.");
+        request.getRequestDispatcher("/Nutritionist/BMIPage.jsp").forward(request, response);
+    }
+}
+
+
+    protected void ShowFood(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            CategoryDAO c_dao = new CategoryDAO ();
+            FoodDAO dao= new FoodDAO ();
+            BMIClassificationDAO bidao=  new BMIClassificationDAO ();
+            List<BMIClassification> lstBMI = bidao.getAllBMI ();
+            int pageSize = 8;
+            int currentPage = 1;
+            List<Category> lstC = c_dao.getListCategoriesNoP (null, null, null);
+            List<Food> lstF =  dao.getListFoods (null, null, null, null,null,null, null,currentPage, pageSize);
+            int totalFood = dao.getListFoodsTotal (null, null, null, null, null, null, null);
+            int totalPages = (int) Math.ceil((double) totalFood / pageSize);
+            request.setAttribute ("lstBMI", lstBMI);
+            request.setAttribute ("lstFood", lstF);
+            request.setAttribute ("lstC", lstC);
+            request.setAttribute ("totalFood", totalFood);
+            request.setAttribute("totalPages", totalPages);
+            request.setAttribute("currentPage", currentPage);
+            request.getRequestDispatcher ("/Nutritionist/FoodList.jsp").forward (request, response);
+        } catch (SQLException e) {
+            e.printStackTrace ();
+        }
+        
+    }
+    protected void ShowFoodSortFilter(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+    FoodDAO dao = new FoodDAO();
+    CategoryDAO c_dao = new CategoryDAO();
+    try {
+        String searchKey = request.getParameter("searchKey");
+        String category = request.getParameter("category");
+        String status = request.getParameter("status");
+        String searchPrice = request.getParameter("searchPrice");  
+        String priceRank = request.getParameter("priceRank");      
+        String bmiId = request.getParameter("bmiId");          
+
+        Map<String, String> sortFields = new HashMap<>();
+        String sortPrice = request.getParameter("sortPrice");
+        String sortTime = request.getParameter("sortTime");
+        String sortID = request.getParameter("sortID");
+
+      
+        if (sortID != null && !sortID.isEmpty()) {
+            sortFields.put("sortID", sortID);
+        }
+        if (sortPrice != null && !sortPrice.isEmpty()) {
+            sortFields.put("sortPrice", sortPrice);
+        }
+        if (sortTime != null && !sortTime.isEmpty()) {
+            sortFields.put("sortTime", sortTime);
+        }
+
+        int pageSize = 6;
+        int currentPage = 1;
+        String pageParam = request.getParameter("page");
+        if (pageParam != null && !pageParam.isEmpty()) {
+            try {
+                currentPage = Integer.parseInt(pageParam);
+            } catch (NumberFormatException e) {
+                currentPage = 1;
+            }
+        }
+
+     
+        List<Food> lstFood = dao.getListFoods(
+            searchKey,     
+            category,      
+            status,         
+            searchPrice,    
+            priceRank,      
+            bmiId,          
+            sortFields,     
+            currentPage,    
+            pageSize        
+        );
+
+       
+        int totalFoods = dao.getListFoodsTotal(
+            searchKey, category, status, searchPrice, priceRank, bmiId, sortFields
+        );
+        
+        int totalPages = (int) Math.ceil((double) totalFoods / pageSize);
+
+       
+        List<Category> lstC = c_dao.getListCategoriesNoP(null, null, null);
+        BMIClassificationDAO bidao = new BMIClassificationDAO();
+        List<BMIClassification> lstBMI = bidao.getAllBMI();
+
+       
+        request.setAttribute("lstBMI", lstBMI);
+        request.setAttribute("lstC", lstC);
+        request.setAttribute("lstFood", lstFood);
+        
+        request.setAttribute("totalFood", totalFoods);
+        request.setAttribute("totalPages", totalPages);
+        request.setAttribute("currentPage", currentPage);
+//        request.setAttribute("category", category);
+
+        request.getRequestDispatcher("/Nutritionist/FoodList.jsp").forward(request, response);
+        
+    } catch (Exception e) {
+        e.printStackTrace();
+        request.setAttribute("error", "Lỗi khi xử lý danh sách món ăn: " + e.getMessage());
+        request.getRequestDispatcher("error.jsp").forward(request, response);
+    }
+}
+    }
+
+
+ 

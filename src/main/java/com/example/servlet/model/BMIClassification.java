@@ -11,19 +11,21 @@ package com.example.servlet.model;
 public class BMIClassification {
     private int bmiID;
     private String classification;
-    private String bmiRange;
+    private float min_bmi;
+    private float max_bmi;
+
+    public BMIClassification() {
+    }
     private String decription;
     private String tagetAudience;
 
-    public BMIClassification(int bmiID, String classification, String bmiRange, String decription, String tagetAudience) {
+    public BMIClassification(int bmiID, String classification, float min_bmi, float max_bmi, String decription, String tagetAudience) {
         this.bmiID = bmiID;
         this.classification = classification;
-        this.bmiRange = bmiRange;
+        this.min_bmi = min_bmi;
+        this.max_bmi = max_bmi;
         this.decription = decription;
         this.tagetAudience = tagetAudience;
-    }
-
-    public BMIClassification() {
     }
 
     public int getBmiID() {
@@ -42,12 +44,20 @@ public class BMIClassification {
         this.classification = classification;
     }
 
-    public String getBmiRange() {
-        return bmiRange;
+    public float getMin_bmi() {
+        return min_bmi;
     }
 
-    public void setBmiRange(String bmiRange) {
-        this.bmiRange = bmiRange;
+    public void setMin_bmi(float min_bmi) {
+        this.min_bmi = min_bmi;
+    }
+
+    public double getMax_bmi() {
+        return max_bmi;
+    }
+
+    public void setMax_bmi(float max_bmi) {
+        this.max_bmi = max_bmi;
     }
 
     public String getDecription() {
@@ -65,10 +75,12 @@ public class BMIClassification {
     public void setTagetAudience(String tagetAudience) {
         this.tagetAudience = tagetAudience;
     }
-    
+
     @Override
     public String toString() {
-        return "BMIClassificattion{" + "bmiID=" + bmiID + ", classification=" + classification + ", bmiRange=" + bmiRange + ", decription=" + decription + ", tagetAudience=" + tagetAudience + '}';
+        return "BMIClassification{" + "bmiID=" + bmiID + ", classification=" + classification + ", min_bmi=" + min_bmi + ", max_bmi=" + max_bmi + ", decription=" + decription + ", tagetAudience=" + tagetAudience + '}';
     }
+
+    
     
 }

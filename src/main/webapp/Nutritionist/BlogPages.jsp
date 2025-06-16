@@ -277,7 +277,6 @@
             <!-- Breadcrumb Section -->
             <div class="breadcrumb-section">
                 <div class="breadcrumb-container">
-                    <h1 class="page-title" style="padding-left: 32px">Blog Management – Kiến Thức Dinh Dưỡng</h1>
                     <nav class="breadcrumb-nav">
                         <a href="${pageContext.request.contextPath}/nutricontrol?action=dashboard" class="breadcrumb-item">Home</a>
                         <span class="breadcrumb-separator">
@@ -289,6 +288,7 @@
                         </span>
                         <span class="breadcrumb-item active">Blog List</span>
                     </nav>
+                    <h1 class="page-title" style="padding-left: 32px">Blog Management – Kiến Thức Dinh Dưỡng</h1>
                 </div>
             </div>
             <div class="content-wrapper">
@@ -380,11 +380,10 @@
                         </c:otherwise>
                     </c:choose>
                 </div>
-
-                <!-- Pagination Container -->
+                              
                 <div  id="paginationWrapper" class="pagination-container" style="display: flex; justify-content: space-between; padding: 10px;">
                     <div style="padding: 10px">Show ${lstB.size()} of ${totalBlog} items</div>
-                    <c:if test="${totalPages > 1}">
+                    <c:if test="${totalPages >= 1}">
                         <div class="pagination">
                             <c:if test="${currentPage > 1}">
                                 <a href="#" class="prev pagination-link" data-page="${currentPage - 1}">&laquo; Previous</a>
@@ -465,7 +464,7 @@
          deleteUrl = url;
          blogTitle = title;
             
-         // Update popup content
+     
          const messageElement = document.getElementById('popupMessage');
          if (title) {
              messageElement.innerHTML = `Bạn có chắc chắn muốn xóa bài viết:<br><strong>"${title}"</strong>?`;
@@ -473,7 +472,6 @@
              messageElement.innerHTML = 'Bạn có chắc chắn muốn xóa bài viết này?';
          }
             
-         // Set delete URL
          document.getElementById('confirmDeleteBtn').href = deleteUrl;
             
          // Show popup with animation

@@ -36,7 +36,7 @@
                         <!-- Breadcrumb -->
                         <div class="breadcrumb-section">
                             <div class="breadcrumb-container">
-                                <h1 class="page-title" style="padding-left: 32px">Welcome to Nutritionist Admin Dashboard</h1>
+                                <h1 class="page-title" style="padding-left: 32px">🍀 Chia Sẻ Để Khỏe Mỗi Ngày</h1>
                                 <nav class="breadcrumb-nav">
                                     <a href="${pageContext.request.contextPath}/nutricontrol?action=dashboard" class="breadcrumb-item"> 
                                         <i class="fas fa-home"></i>Home
@@ -70,7 +70,7 @@
                                             </div>
                                             <div class="new-form-group">
                                                 <label for="title">
-                                                    <i class="fas fa-heading"></i> Tiêu đề bài viết
+                                                    <i class="fas fa-heading"></i> Tiêu đề bài viết <i style="color:red">*</i>
                                                 </label>
                                                 <input type="text" id="title" name="title" placeholder="Nhập tiêu đề bài viết..."  value="${not empty param.title ? param.title : (not empty blogU ? blogU.title : '')}" required />
                                                 <small class="new-note">
@@ -82,7 +82,7 @@
 
                                             <div class="new-form-group">
                                                 <label for="bmiId">
-                                                    <i class="fas fa-weight"></i> Danh mục BMI
+                                                    <i class="fas fa-weight"></i> Danh mục BMI <i style="color:red">*</i>
                                                 </label>
                                                 <c:set var="selectedBmiId" value="${empty selectedBmiId ? blogU.bmiId : selectedBmiId}" />
                                                 <select name="bmiId" id="bmiId" required>
@@ -95,7 +95,7 @@
 
                                             <div class="new-form-group">
                                                 <label>
-                                                    <i class="fas fa-eye"></i> Trạng thái hiển thị
+                                                    <i class="fas fa-eye"></i> Trạng thái hiển thị <i style="color:red">*</i>
                                                 </label>
                                                 <div class="new-status-options">
                                                     <c:set var="status" value="${empty status ? blogU.status : status}" />
@@ -122,7 +122,7 @@
                                             <div class="new-form-group new-image-preview-group">
 
                                                 <label for="imageUrl">
-                                                    <i class="fas fa-image"></i> Ảnh Thumbnail
+                                                    <i class="fas fa-image"></i> Ảnh Thumbnail <i style="color:red">*</i>
                                                 </label>
                                                 <div class="new-image-preview-container" onclick="document.getElementById('imageEdit').click();">
                                                     <img id="new-preview-edit"
@@ -143,6 +143,9 @@
                                                     Kích thước tối đa 5MB. Tỷ lệ khuyến nghị 16:9
                                                 </small>
                                             </div>
+                                            <small class="new-note">
+                                                <i style="color:red">*</i> Trường Bát buộc phải nhập 
+                                            </small>
                                         </div>
 
                                         <!-- Column 2: BMI Category & Status -->
@@ -150,7 +153,7 @@
 
                                             <div class="new-form-row full-width">
                                                 <div class="new-form-card">
-                                                    <h3><i class="fas fa-file-alt"></i> Nội dung bài viết</h3>
+                                                    <h3><i class="fas fa-file-alt"></i> Nội dung bài viết </h3>
                                                     <div class="new-form-group">
                                                         <c:set var="content" value="${not empty blogU.content ? blogU.content : param.content}" />
                                                         <label for="editor">
@@ -168,6 +171,12 @@
                                                         <i class="fas fa-check"></i>
                                                         Save Change
                                                     </button>
+<!--                                                    <button id="view" type="button" class="new-btn-submit">
+                                                        <i class="fas fa-eye"></i>
+                                                        View
+                                                    </button>-->
+<!--                                                    <button type="button" class="new-btn-preview" data-bs-toggle="modal" data-bs-target="#previewModal"><i class="fas fa-eye">View</i></button>-->
+
                                                 </div>
                                             </div>
                                         </div>
@@ -182,7 +191,7 @@
                         <!-- Breadcrumb -->
                         <div class="breadcrumb-section">
                             <div class="breadcrumb-container">
-                                <h1 class="page-title" style="padding-left: 32px">Welcome to Nutritionist Admin Dashboard</h1>
+                                <h1 class="page-title" style="padding-left: 32px">🍀 Chia Sẻ Để Khỏe Mỗi Ngày</h1>
                                 <nav class="breadcrumb-nav">
                                     <a href="${pageContext.request.contextPath}/nutricontrol?action=dashboard" class="breadcrumb-item"> 
                                         <i class="fas fa-home"></i>Home
@@ -212,7 +221,7 @@
 
                                             <div class="new-form-group">
                                                 <label for="title">
-                                                    <i class="fas fa-heading"></i> Tiêu đề bài viết
+                                                    <i class="fas fa-heading"></i> Tiêu đề bài viết <i style="color:red">*</i>
                                                 </label>
                                                 <input type="text" id="title" name="title" placeholder="Nhập tiêu đề bài viết..." value="${title != null ? title : ''}" required />
                                                 <small class="new-note">
@@ -224,7 +233,7 @@
 
                                             <div class="new-form-group">
                                                 <label for="bmiId">
-                                                    <i class="fas fa-weight"></i> Danh mục BMI
+                                                    <i class="fas fa-weight"></i> Danh mục BMI <i style="color:red">*</i>
                                                 </label>
                                                 <select name="bmiId" id="bmiId" required>
                                                     <option value="">-- Chọn danh mục BMI --</option>
@@ -236,7 +245,7 @@
 
                                             <div class="new-form-group">
                                                 <label>
-                                                    <i class="fas fa-eye"></i> Trạng thái hiển thị
+                                                    <i class="fas fa-eye"></i> Trạng thái hiển thị <i style="color:red">*</i>
                                                 </label>
                                                 <div class="new-status-options">
                                                     <label class="new-radio-option">
@@ -261,7 +270,7 @@
                                             </div>
                                             <div class="new-form-group new-image-preview-group">
                                                 <label for="imageUrl">
-                                                    <i class="fas fa-image"></i> Ảnh Thumbnail
+                                                    <i class="fas fa-image"></i> Ảnh Thumbnail <i style="color:red">*</i>
                                                 </label>
                                                 <div class="new-image-preview-container" onclick="document.getElementById('imageUrl').click();">
                                                     <img id="new-preview" src="#" alt="Preview Image" />
@@ -277,6 +286,9 @@
                                                     Kích thước tối đa 5MB. Tỷ lệ khuyến nghị 16:9
                                                 </small>
                                             </div>
+                                            <small class="new-note">
+                                                <i style="color:red">*</i> Trường Bát buộc phải nhập 
+                                            </small>
                                         </div>
 
                                         <!-- Column 2: BMI Category & Status -->
@@ -284,7 +296,7 @@
 
                                             <div class="new-form-row full-width">
                                                 <div class="new-form-card">
-                                                    <h3><i class="fas fa-file-alt"></i> Nội dung bài viết</h3>
+                                                    <h3><i class="fas fa-file-alt"></i> Nội dung bài viết </h3>
                                                     <div class="new-form-group">
                                                         <label for="editor">
                                                             <i class="fas fa-pen"></i> Nội dung chi tiết
@@ -292,15 +304,19 @@
                                                         <textarea id="editor" name="content" rows="10" required placeholder="Nhập nội dung bài viết của bạn...&#10;&#10;Gợi ý:&#10;- Giới thiệu chủ đề&#10;- Phân tích vấn đề&#10;- Đưa ra lời khuyên&#10;- Kết luận">${content != null ? content : ''}</textarea>
                                                         <small class="new-note">
                                                             <i class="fas fa-lightbulb"></i>
-                                                            Sử dụng CKEditor để định dạng văn bản đẹp hơn
+                                                            Sử dụng CKEditor để định dạng văn bản đẹp hơn <i style="color:red">*</i>
                                                         </small>
                                                     </div>
                                                 </div>
                                                 <div class="new-submit-container">
                                                     <button type="submit" class="new-btn-submit">
                                                         <i class="fas fa-check"></i>
-                                                        Xuất bản bài viết
+                                                        Tạo mới
                                                     </button>
+<!--                                                    <button type="button" id="view" class="new-btn-submit">
+                                                        <i class="fas fa-eye"></i>
+                                                        View
+                                                    </button>-->
                                                 </div>
                                             </div>
                                         </div>
@@ -314,6 +330,7 @@
              </div>
              <jsp:include page="/Nutritionist/footer.jsp"/>  
         </main>
+        
         <c:if test="${not empty Errmess}">
             <div class="alert alert-danger" style="display: none;">${Errmess}</div>
         </c:if>
@@ -331,7 +348,8 @@
         </c:if>
         <script>
             CKEDITOR.replace('editor', {
-                versionCheck: false
+                versionCheck: false,
+                height: 400
             });
 
             document.getElementById('newBlogForm').addEventListener('submit', function () {
@@ -344,10 +362,11 @@
             if (textarea) {
                 textarea.addEventListener('input', function () {
                     this.style.height = 'auto';
-                    this.style.height = Math.max(this.scrollHeight, 300) + 'px';
+                    this.style.height = Math.max(this.scrollHeight, 500) + 'px';
                 });
-            }
+            }          
         </script>
+        
         <!-- =========== Scripts =========  -->
        
         <script src="../JS/Nutritionist/common.js"></script>

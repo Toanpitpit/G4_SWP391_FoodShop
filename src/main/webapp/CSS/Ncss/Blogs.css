@@ -836,12 +836,12 @@ table, th, td {
     transition: all 0.3s ease;
 }
 
-.blog-table tbody tr:hover {
-    /*    background: linear-gradient(135deg, var(--primary-light) 0%, rgba(39, 167, 70, 0.08) 100%);*/
+/*.blog-table tbody tr:hover {
+        background: linear-gradient(135deg, var(--primary-light) 0%, rgba(39, 167, 70, 0.08) 100%);
     transform: translateX(4px);
     box-shadow:0 4px 6px -1px rgba(39, 167, 70, 0.15), 0 2px 4px -1px rgba(39, 167, 70, 0.1);
     border: 1px solid rgba(39, 167, 70, 0.2);
-}
+}*/
 
 .blog-image {
     width: 80px;
@@ -953,13 +953,13 @@ table, th, td {
 }
 
 .pagination a:hover {
-    background: var(--green);
+    background: linear-gradient(135deg, var(--primary-green), #3b82f6);
     color: var(--white);
     transform: translateY(-2px);
 }
 
 .pagination .current {
-    background: var(--green);
+    background: linear-gradient(135deg, var(--primary-green), #3b82f6);
     color: var(--white);
     border-color: var(--green);
 }

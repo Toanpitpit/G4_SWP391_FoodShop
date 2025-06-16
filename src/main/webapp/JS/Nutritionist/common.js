@@ -365,7 +365,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
-function showAlert(message, type = 'danger', duration = 5000) {
+function showAlert(message, type = 'danger', duration = 1000000) {
     return alertSystem.show(message, type, duration);
 }
 
@@ -384,3 +384,5 @@ function showWarning(message, duration = 5000) {
 function showInfo(message, duration = 4000) {
     return alertSystem.info(message, duration);
 }
+
+

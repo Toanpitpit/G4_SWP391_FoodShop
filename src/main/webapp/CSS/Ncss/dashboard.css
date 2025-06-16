@@ -29,8 +29,8 @@
 
 /* === Pie Chart kích thước hợp lý hơn === */
 #pieChart {
-     max-width: 300px;
-    max-height: 400px;
+     max-width: 350px;
+    max-height: 350px;
     margin: 0 auto;
     display: block;
 }
@@ -109,15 +109,15 @@
     border-radius: 6px;
     border-left: 4px solid var(--primary-green);
 }
-.chart-container {
+/*.chart-container {
     flex: 1;
     min-width: 220px;
     max-width: 360px;
-    height: 400px auto;
+    height: 35000px;
     display: flex;
     justify-content: center;
     align-items: center;
-}
+}*/
 
 .status-legend {
     min-width: 260px;

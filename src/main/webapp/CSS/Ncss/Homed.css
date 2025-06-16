@@ -1,4 +1,4 @@
-/* ============= Enhanced Dashboard CSS with Green Theme ============= */
+/* =chart-container============ Enhanced Dashboard CSS with Green Theme ============= */
 
 :root {
     /* Main Green Theme Colors */
@@ -323,7 +323,7 @@ body::before {
 
 .chart-container {
     position: relative;
-    height: 280px;
+    height: 400px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -674,7 +674,7 @@ body::before {
     }
     
     .chart-container {
-        height: 200px;
+        height: 400px;
     }
     
     .chart-header {

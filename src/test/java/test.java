@@ -1,24 +1,24 @@
 
 //import com.example.servlet.dao.AccountDAO;
+import com.example.servlet.dao.AccountDAO;
 import com.example.servlet.dao.BMIClassificationDAO;
 import com.example.servlet.dao.BlogDAO;
-import com.example.servlet.dao.FoodDraftDAO;
+import com.example.servlet.dao.FoodDAO;
 import com.example.servlet.dao.NotifyDAO;
 import com.example.servlet.dao.RequestDAO;
 import com.example.servlet.model.Account;
 import com.example.servlet.model.BMIClassification;
 import com.example.servlet.model.Blogs;
+import com.example.servlet.model.Food;
 import com.example.servlet.model.MonthlyStat;
 import com.example.servlet.model.Notifys;
-import com.example.servlet.model.Requests;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Map;
 import org.mindrot.jbcrypt.BCrypt;
 
 /*
@@ -36,16 +36,45 @@ public class test {
 //        dis4();
 //        dis6();
 //         dis5();
-dis();
+dis8();
 //dis();
+ try {
+           FoodDAO dao = new FoodDAO();
+            String name = "";               // lọc theo tên, null nếu không cần
+            String category = null;        // lọc theo danh mục, null nếu không cần
+            String status = "Active";      // "Active", "Inactive", hoặc null
+            // Map chứa các trường sắp xếp và hướng sắp xếp
+            Map<String, String> sortFields = new HashMap<>();
+            sortFields.put("id", "DESC");
+            sortFields.put("create_at", "ASC");
+            int page = 1;
+            int pageSize = 10;
+
+//            List<Food> foodList = dao.getListFoods(name, category, status,"20000", null,null, page, pageSize);
+//
+//            System.out.println("===== KẾT QUẢ =====");
+//            for (Food food : foodList) {
+//                System.out.printf("ID: %d | Tên: %s | Giá: %.2f | Tạo lúc: %s | Trạng thái: %s%n",
+//                        food.getFoodId(), food.getFoodname(), food.getPrice(), food.getCreate_at(), food.getStatus());
+//            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     public static void dis() throws SQLException{
         BlogDAO _dao = new BlogDAO();
+        RequestDAO r_dao  = new RequestDAO ();
         List<MonthlyStat> lstMBlog = _dao.getMonthlyBlogStatsByYearAndAuthor (2025,21);
+         List<MonthlyStat> lstM = r_dao.countRequestsByStatus (21);
+         for (MonthlyStat monthlyStat : lstM) {
+             System.out.println (monthlyStat);
+        }
+    
 //        System.out.println (lstMBlog);
 //        List<MonthlyStat> typeStats = new ArrayList<>();
 //       List<Blogs> lstBlog = _dao.getBlogsByFilter("", 5, true,null);
-       List<Blogs> lstB = _dao.getBlogsByFilterAndPage(null, -1, true, null, 1,10, 21);
+//       List<Blogs> lstB = _dao.getBlogsByFilterAndPage(null, -1, true, null, 1,10, 21);
 //          System.out.println (_dao.getTotalBlog());
 //        List<String> ststuss;
 //        try {
@@ -61,10 +90,10 @@ dis();
 //        for(Blogs b : lstB){
 //            System.out.println(b.toString());
 //        }
-    List<Blogs> relesteBlog = _dao.getRelatedBlogByID (143,21);
-        for (Blogs blogs : relesteBlog) {
-            System.out.println (blogs.toString ());
-        }
+//    List<Blogs> relesteBlog = _dao.getRelatedBlogByID (237);
+//        for (Blogs blogs : relesteBlog) {
+//            System.out.println (blogs.toString ());
+//        }
 //        FoodDraftDAO dao= new FoodDraftDAO ();
 //        System.out.println (dao.getTotalFooddraft (19)); 
 //        System.out.println (_dao.getTotalBlogbyAuthor (21));
@@ -96,9 +125,10 @@ dis();
     boolean check = _dao.deleteBlogByID(41);
        System.out.println (check);
 }
-//public static void dis4() {
-//    RequestDAO _dao = new RequestDAO();
-//    List<Requests> lstR = _dao.getRequestByFilter(-3,"" , null);
+public static void dis4() {
+    RequestDAO _dao = new RequestDAO();
+    int lstR = _dao.getTotalRequest (21);
+    System.out.println (lstR);
 //    if(lstR.isEmpty()){
 //        System.out.println("deo có du lieu");
 //    }
@@ -106,23 +136,24 @@ dis();
 //        System.out.println(requests.toString());
 //    }
 //}
-//public static void dis5() throws SQLException {
-//    AccountDAO dao = new AccountDAO();
-//    Account testUser = new Account();
-//            testUser.setUsername("ToanAdmin");
-//            String pass = "Tatoan@123";
-//            String hashedPassword = BCrypt.hashpw(pass, BCrypt.gensalt());
-//            testUser.setPass(hashedPassword);
-//            testUser.setName("Tạ Văn Toàn");
-//            testUser.setEmail("he187337tavantoan@gmail.com");
-//            testUser.setPhone("0707408906");
-//            testUser.setGender("Male");
-//            testUser.setBirthDate(Date.valueOf(LocalDate.of(2004, 10, 04))); // yyyy-MM-dd
-//            testUser.setRole("Nutritonist");
-//            testUser.setStatus("Active");
-//            testUser.setImage("default.png");
-//            dao.registerUser(testUser);
-//}
+}
+public static void dis5() throws SQLException {
+    AccountDAO dao = new AccountDAO();
+    Account testUser = new Account();
+            testUser.setUsername("ToanAdmin");
+            String pass = "Tatoan@123";
+            String hashedPassword = BCrypt.hashpw(pass, BCrypt.gensalt());
+            testUser.setPass(hashedPassword);
+            testUser.setName("Tạ Văn Toàn");
+            testUser.setEmail("he187337tavantoan@gmail.com");
+            testUser.setPhone("0707408906");
+            testUser.setGender("Male");
+            testUser.setBirthDate(Date.valueOf(LocalDate.of(2004, 10, 04))); // yyyy-MM-dd
+            testUser.setRole("Nutritonist");
+            testUser.setStatus("Active");
+            testUser.setImage("default.png");
+            dao.registerUser(testUser);
+}
 
 public static void dis6() {
     NotifyDAO n_dao = new NotifyDAO();
@@ -135,11 +166,30 @@ public static void dis6() {
 
 public static void dis7() throws SQLException {
     BMIClassificationDAO dao = new BMIClassificationDAO();
-   
-    List<BMIClassification> lstBMI = dao.getAllBMI();
+    System.out.println (dao.countAllBMI ());
+    List<BMIClassification> lstBMI = dao.getBMIWithFilterAndSort("Người","type_id",null,0,7);
+    int totl = dao.gettotalBMIWithFilterAndSort ("Người", "type_id", null);
+//    List<BMIClassification> lstBMI = dao.getAllBMI();
     for (BMIClassification bMIClassification : lstBMI) {
         System.out.println(bMIClassification.toString());
     }
+    System.out.println (totl);
+    
+    
+    
+}
+public static void dis8() throws SQLException {
+    FoodDAO dao= new FoodDAO();
+    Map<String , String> map = new HashMap<>();
+    map.put ("pID", "desc");
+    
+    List<Food> lstF = dao.getListFoods (null, null, null,null,null,null, map, 1, 5);
+    for (Food o : lstF) {
+        System.out.println (o.toString ());
+             
+    }
+    
+    
 }
 
 

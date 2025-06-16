@@ -20,7 +20,7 @@
         <jsp:include page="/Nutritionist/nav.jsp"/>  
         <!-- Main Header -->
         <jsp:include page="/Nutritionist/main-header.jsp"/>  
-        
+
         <!-- Main Content -->
         <main class="main-content" id="mainContent">
             <!-- Breadcrumb Section -->
@@ -134,141 +134,111 @@
                             </div>
                         </div>
                     </div>
+                </div>                          
+                <!-- Charts Section -->
+                <div class="container-fluid">
+                    <!-- Row 1 -->
+                    <div class="row mb-4 flex-nowrap overflow-auto " style="height: 400px;">
+                        <!-- Cột 1 -->
+                        <div class="col-md-6">
+                            <div class="h-100 border rounded p-3">
+                                <div class="d-flex" style="height: 100%;">
+                                    <!-- Biểu đồ -->
+                                    <div class="flex-fill me-3">
+                                        <canvas id="pieChart"
+                                                data-labels='${pieChart_data_labelsJson}'
+                                                data-counts='${pieChart_data_totalsJson}'
+                                                style="max-height: 300px; width: 300px;">
+                                        </canvas>
+                                    </div>
 
-                    <!-- Charts Section -->
-                    <div class="container-fluid">
-                        <!-- Row 1: Pie Chart & Bar Chart -->
-                        <div class="row mb-4">
-                            <!-- Pie Chart -->
-                            <div class="col-xl-6 col-lg-12 mb-4">
-                                <div class="card shadow-sm h-100 p-4">
-                                    <c:choose>
-                                        <c:when test="${empty pieChart_data_labelsJson or empty pieChart_data_totalsJson or 
-                                                        fn:length(pieChart_data_labels) == 0 or fn:length(pieChart_data_totals) == 0}">
-                                            <div class="d-flex align-items-center justify-content-center" style="height: 300px;">
-                                                <p class="text-muted">No data available for pie chart</p>
-                                            </div>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <div class="d-flex align-items-center justify-content-around flex-wrap flex-lg-nowrap gap-3">
-                                                <!-- Chart Container -->
-                                                <div class="chart-container flex-grow-1" style="position: relative; height: 300px;">
-                                                    <canvas id="pieChart"
-                                                            data-labels='${pieChart_data_labelsJson}'
-                                                            data-counts='${pieChart_data_totalsJson}'>
-                                                    </canvas>
-                                                </div>
-
-                                                <!-- Legend -->
-                                                <div class="status-legend flex-shrink-0">
-                                                    <h5>Thống kê theo trạng thái</h5>
-                                                    <ul class="legend-list">
-                                                        <c:set var="colorString" value="rgba(255,205,86,0.8)|rgba(75,192,192,0.8)|rgba(255,99,132,0.8)|rgba(153,102,255,0.8)" />
-                                                        <c:set var="backgroundColors" value="${fn:split(colorString, '|')}" />
-                                                        <c:forEach var="i" begin="0" end="${fn:length(pieChart_data_labels) - 1}">
-                                                            <li>
-                                                                <span class="legend-color-box" style="background-color: ${backgroundColors[i]};"></span>
-                                                                <span class="legend-label">${pieChart_data_labels[i]}</span>
-                                                                <span class="legend-value">${pieChart_data_totals[i]}</span>
-                                                            </li>
-                                                        </c:forEach>
-                                                        <li>
-                                                            <span class="legend-color-box" style="background-color: #6B21A8;"></span>
-                                                            <span class="legend-label">Total</span>
-                                                            <span class="legend-value">${totalRequest}</span>
-                                                        </li>
-                                                    </ul>
-                                                    <div class="chart-name">Biểu đồ: Số Requests theo trạng thái</div>
-                                                </div>
-                                            </div>
-                                        </c:otherwise>
-                                    </c:choose>
+                                    <!-- Thống kê -->
+                                    <div class="flex-fill overflow-auto">
+                                        <h5>Thống kê theo trạng thái</h5>
+                                        <ul class="legend-list">
+                                            <c:set var="colorString" value="rgba(255,205,86,0.8)|rgba(75,192,192,0.8)|rgba(255,99,132,0.8)|rgba(153,102,255,0.8)" />
+                                            <c:set var="backgroundColors" value="${fn:split(colorString, '|')}" />
+                                            <c:forEach var="i" begin="0" end="${fn:length(pieChart_data_labels) - 1}">
+                                                <li>
+                                                    <span class="legend-color-box" style="background-color: ${backgroundColors[i]};"></span>
+                                                    <span class="legend-label">${pieChart_data_labels[i]}</span>
+                                                    <span class="legend-value">${pieChart_data_totals[i]}</span>
+                                                </li>
+                                            </c:forEach>
+                                            <li>
+                                                <span class="legend-color-box" style="background-color: #6B21A8;"></span>
+                                                <span class="legend-label">Total</span>
+                                                <span class="legend-value">${totalRequest}</span>
+                                            </li>
+                                        </ul>
+                                         <div class="chart-name">Biểu đồ: Số Requests theo trạng thái</div>
+                                    </div>
                                 </div>
                             </div>
+                        </div>
 
-                            <!-- Bar Chart -->
-                            <div class="col-xl-6 col-lg-12 mb-4">
-                                <div class="card shadow-sm h-100 p-4">
-                                    <div class="d-flex justify-content-between align-items-center mb-3">
-                                        <h4>Blogs Per Month</h4>
-                                        <select id="yearDropdown" name="year" class="form-select w-auto">
+                        <!-- Cột 2 -->
+                        <div class="col-md-6">
+                            <div class="h-100 border rounded p-3">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h5 class="mb-0">Blogs Per Month</h5>
+                                    <div class="d-flex align-items-center">
+                                        <label for="yearDropdown" class="me-2 mb-0">Year:</label>
+                                        <select id="yearDropdown" name="year" class="form-select form-select-sm w-auto">
                                             <c:forEach var="year" items="${years}">
                                                 <option value="${year}" ${year == selectedYear ? 'selected' : ''}>${year}</option>
                                             </c:forEach>
                                         </select>
                                     </div>
-                                    <div style="position: relative; height: 300px;">
-                                        <canvas id="barChart"
-                                                data-labels='${barChart_data_labelsJson}'
-                                                data-counts='${barChart_data_totalsJson}'>
-                                        </canvas>
-                                    </div>
-                                </div>  
+                                </div>
+                                <canvas id="barChart"
+                                        data-labels='${barChart_data_labelsJson}'
+                                        data-counts='${barChart_data_totalsJson}'
+                                        height="300px" with="500px">
+                                </canvas>
                             </div>
                         </div>
+                    </div>
 
-                        <!-- Row 2: Line Chart & Notifications -->
-                        <div class="row">
-                            <!-- Line Chart -->
-                            <div class="col-xl-6 col-lg-12 mb-4">
-                                <div class="card shadow-sm h-100 p-4">
-                                    <h4 class="mb-3">Food Draft Trend</h4>
-                                    <div style="position: relative; height: 300px;">
-                                        <canvas id="lineChart"
-                                                data-labels='["Week 1", "Week 2", "Week 3", "Week 4"]'
-                                                data-counts='[2, 4, 5, 3]'>
-                                        </canvas>
-                                    </div>
-                                </div> 
+                    <!-- Row 2 -->
+                    <div class="row" style="height: 400px;">
+                        <div class="col-md-6">
+                            <div class="h-100 border rounded p-3">
+                                <!-- Nội dung cột 1 hàng 2 -->
+                                <h5>Biểu đồ / Nội dung 3</h5>
                             </div>
-                            
-                            <!-- Notifications -->
-                            <div class="col-xl-6 col-lg-12 mb-4">
-                                <div class="card shadow-sm h-100 p-4">
-                                    <h4 class="mb-3">Recent Notifications</h4>
-                                    <div class="notification-item d-flex align-items-start mb-3">
-                                        <div class="notification-icon text-success fs-4 me-3">
-                                            <i class="bi bi-check-circle"></i>
-                                        </div>
-                                        <div class="notification-text">
-                                            <p class="mb-0">Request #102 was approved</p>
-                                            <small class="text-muted">5 mins ago</small>
-                                        </div>
-                                    </div>
-                                    <div class="notification-item d-flex align-items-start mb-3">
-                                        <div class="notification-icon text-info fs-4 me-3">
-                                            <i class="bi bi-info-circle"></i>
-                                        </div>
-                                        <div class="notification-text">
-                                            <p class="mb-0">New blog post created</p>
-                                            <small class="text-muted">1 hour ago</small>
-                                        </div>
-                                    </div>
-                                </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="h-100 border rounded p-3">
+                                <!-- Nội dung cột 2 hàng 2 -->
+                                <h5>Biểu đồ / Nội dung 4</h5>
                             </div>
                         </div>
                     </div>
                 </div>
+
             </div>
-            
+
             <jsp:include page="/Nutritionist/footer.jsp"/>  
         </main>
 
-        <!-- Scripts - Đúng thứ tự load -->
+
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <!-- Load common.js trước -->
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
+  
         <script src="${pageContext.request.contextPath}/JS/Nutritionist/common.js"></script>
-        <!-- Load home.js sau cùng -->
+       
         <script src="${pageContext.request.contextPath}/JS/Nutritionist/home.js"></script>
-        
-        <!-- Debug script để kiểm tra dữ liệu -->
-        <script>
+<!--        <script>
             console.log('Page loaded, checking data availability...');
+            console.log(document.getElementById('pieChart')); // phải != null
+console.log(document.getElementById('barChart')); // phải != null
+
             console.log('Pie chart labels:', '${pieChart_data_labelsJson}');
             console.log('Pie chart totals:', '${pieChart_data_totalsJson}');
             console.log('Bar chart labels:', '${barChart_data_labelsJson}');
             console.log('Bar chart totals:', '${barChart_data_totalsJson}');
-        </script>
+        </script>-->
     </body>
 </html>

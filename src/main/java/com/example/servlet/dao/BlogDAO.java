@@ -57,7 +57,6 @@ public class BlogDAO {
 
         try (Connection conn = db.getConnection (); PreparedStatement ps = conn.prepareStatement (sql.toString ())) {
 
-            // Set parameters
             for (int i = 0; i < params.size (); i++) {
                 ps.setObject (i + 1, params.get (i));
             }
@@ -279,19 +278,20 @@ public class BlogDAO {
         return blog;
     }
 
-    public List<Blogs> getRelatedBlogByID(int blogID ,int authorID) {
+    public List<Blogs> getRelatedBlogByID(int blogID) {
         List<Blogs> lstreB = new ArrayList<> ();
 
         Blogs blogr = getBlogByID (blogID);
         String sql = "SELECT b.blogID, b.AuthorID, a.name AS authorName, b.typeBMI, b.title, "
                 + "b.image, b.content, b.status, b.create_at, b.update_at "
-                + "FROM Blogs b JOIN Accounts a ON b.AuthorID = a.id WHERE b.typeBMI = ? AND a.id =?";
+                + "FROM Blogs b JOIN Accounts a ON b.AuthorID = a.id WHERE b.typeBMI = ? AND a.id =? AND blogID != ?";
         DBConnect db = new DBConnect ();
 
         try (Connection conn = db.getConnection (); PreparedStatement ps = conn.prepareStatement (sql)) {
 
             ps.setInt (1, blogr.getBmiId ());
-            ps.setInt (2, authorID);
+            ps.setInt (2, blogr.getAuthorID ());
+            ps.setInt (3, blogID);
 
             try (ResultSet rs = ps.executeQuery ()) {
                 while (rs.next ()) {

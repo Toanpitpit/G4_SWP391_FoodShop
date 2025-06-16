@@ -1,6 +1,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html lang="vi">
     <head>
@@ -18,6 +19,7 @@
             .blog-container {
                 margin: 10px;
                 padding: 20px;
+                overflow: visible;
             }
             .blog-post {
                 background: white;
@@ -67,7 +69,7 @@
             }
 
             .tag {
-                background: linear-gradient(135deg, #667eea, #764ba2);
+                background: linear-gradient(135deg, var(--primary-green), #3b82f6);
                 color: white;
                 padding: 5px 15px;
                 border-radius: 20px;
@@ -81,14 +83,75 @@
                 color: white;
             }
 
-            .blog-image {
+            .blog-image-wrapper {
+                position: relative;
                 width: 100%;
                 height: 400px;
-                object-fit: cover;
             }
+
+            .blog-image {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                display: block;
+            }
+
+            .image-placeholder {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: #f2f2f2;
+                border: 2px dashed #ccc;
+                color: #666;
+                display: none;
+                align-items: center;
+                justify-content: center;
+                font-size: 16px;
+                text-align: center;
+                padding: 20px;
+                box-sizing: border-box;
+                cursor: not-allowed;
+                transition: border-color 0.3s;
+            }
+
+            .image-placeholder:hover {
+                border-color: #999;
+            }
+
 
             .blog-content {
                 padding: 30px;
+                max-height: 1200px;
+                overflow: hidden;
+                position: relative;
+                transition: max-height 0.3s ease;
+            }
+
+            .blog-content::after {
+                content: "";
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                height: 60px;
+                background: linear-gradient(to bottom, rgba(255,255,255,0), white);
+                pointer-events: none;
+            }
+
+            .blog-content.expanded {
+                max-height: none;
+            }
+
+            .blog-content.expanded::after {
+                display: none;
+            }
+
+            .blog-content.collapsed {
+                max-height: 500px;
+                overflow: hidden;
+                position: relative;
             }
 
             .blog-content p {
@@ -128,6 +191,34 @@
                 box-shadow: 0 10px 30px rgba(0,0,0,0.1);
                 padding: 30px;
                 height: fit-content;
+                position: sticky;
+                top: 130px;
+                z-index: 10;
+                /* Thêm khả năng cuộn khi nội dung quá cao */
+                max-height: calc(100vh - 150px);
+                overflow-y: auto;
+                overflow-x: hidden;
+                scroll-behavior: smooth;
+                /* Custom scrollbar */
+                scrollbar-width: thin;
+                scrollbar-color: rgba(0,0,0,0.2) transparent;
+            }
+
+            /* Custom scrollbar cho webkit browsers */
+            .sidebar-right::-webkit-scrollbar {
+                width: 6px;
+            }
+            .sidebar-right::-webkit-scrollbar-track {
+                background: transparent;
+                border-radius: 10px;
+            }
+            .sidebar-right::-webkit-scrollbar-thumb {
+                background: rgba(0,0,0,0.2);
+                border-radius: 10px;
+                transition: background 0.3s ease;
+            }
+            .sidebar-right::-webkit-scrollbar-thumb:hover {
+                background: rgba(0,0,0,0.4);
             }
 
             .sidebar-right-title {
@@ -137,63 +228,6 @@
                 margin-bottom: 20px;
                 padding-bottom: 10px;
                 border-bottom: 2px solid #667eea;
-            }
-
-            .author-widget {
-                text-align: center;
-                margin-bottom: 30px;
-            }
-
-            .author-avatar {
-                width: 80px;
-                height: 80px;
-                border-radius: 50%;
-                margin: 0 auto 15px;
-                background: linear-gradient(135deg, #667eea, #764ba2);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                color: white;
-                font-size: 1.5rem;
-                font-weight: 600;
-            }
-
-            .author-name {
-                font-size: 1.2rem;
-                font-weight: 600;
-                color: #2c3e50;
-                margin-bottom: 5px;
-            }
-
-            .author-role {
-                color: #6c757d;
-                margin-bottom: 15px;
-            }
-
-            .social-links {
-                display: flex;
-                justify-content: center;
-                gap: 10px;
-                margin-bottom: 15px;
-            }
-
-            .social-links a {
-                width: 40px;
-                height: 40px;
-                border-radius: 50%;
-                background: #f8f9fa;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                color: #667eea;
-                text-decoration: none;
-                transition: all 0.3s;
-            }
-
-            .social-links a:hover {
-                background: #667eea;
-                color: white;
-                transform: translateY(-2px);
             }
 
             .popular-posts {
@@ -269,7 +303,7 @@
             }
 
             .category-list a:hover {
-                 background: linear-gradient(135deg, var(--primary-green), #3b82f6);
+                background: linear-gradient(135deg, var(--primary-green), #3b82f6);
                 color: white;
             }
 
@@ -303,6 +337,136 @@
                 color: white;
             }
 
+            #toggleContentBtn:hover {
+                background: linear-gradient(135deg, var(--primary-green), #3b82f6) !important;
+                padding: 10px !important;
+                border-radius: 10px !important;
+                color: white !important;
+            }
+
+            #status-meta i {
+                font-size: 12px;
+            }
+
+            #status-meta span {
+                color: white;
+                padding: 4px 8px;
+                border-radius: 18px;
+                font-size: 12px;
+                font-weight: 500;
+            }
+
+            /* Private - Đỏ */
+            #status-meta span[data-status="Private"] {
+                background-color: #dc3545;
+            }
+
+            #status-meta span[data-status="Private"] + i,
+            #status-meta:has(span[data-status="Private"]) i {
+                color: #dc3545;
+            }
+
+            /* Public - Xanh lá */
+            #status-meta span[data-status="Public"] {
+                background-color: #28a745;
+            }
+
+            #status-meta span[data-status="Public"] + i,
+            #status-meta:has(span[data-status="Public"]) i {
+                color: #28a745;
+            }
+
+            /* Draft - Vàng */
+            #status-meta span[data-status="Draft"] {
+                background-color: #ffc107;
+            }
+
+            #status-meta span[data-status="Draft"] + i,
+            #status-meta:has(span[data-status="Draft"]) i {
+                color: #ffc107;
+            }
+
+            #bmi-info-section {
+                background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+                border: 1px solid #dee2e6;
+                border-radius: 12px;
+                padding: 24px;
+                margin-top: 20px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+                transition: all 0.3s ease;
+            }
+
+            #bmi-info-section:hover {
+                box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+                transform: translateY(-2px);
+            }
+
+            #bmi-info-section .sidebar-right-title {
+                color: #2c3e50;
+                font-size: 18px;
+                font-weight: 600;
+                margin-bottom: 20px;
+                padding-bottom: 12px;
+                border-bottom: 2px solid #3498db;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+
+            #bmi-info-section .sidebar-right-title i {
+                color: #3498db;
+                font-size: 20px;
+            }
+
+            #bmi-info-section .list-unstyled {
+                margin-bottom: 0;
+            }
+
+            #bmi-info-section .list-unstyled li {
+                padding: 12px 0;
+                border-bottom: 1px solid rgba(222, 226, 230, 0.5);
+                display: flex;
+                align-items: flex-start;
+                line-height: 1.6;
+            }
+
+            #bmi-info-section .list-unstyled li:last-child {
+                border-bottom: none;
+                padding-bottom: 0;
+            }
+
+            #bmi-info-section .list-unstyled li strong {
+                color: #495057;
+                font-weight: 600;
+                min-width: 140px;
+                flex-shrink: 0;
+                font-size: 14px;
+            }
+
+            #bmi-info-section .list-unstyled li:not(:has(strong)) {
+                color: #6c757d;
+                font-size: 14px;
+                margin-left: 140px;
+                padding-left: 0;
+            }
+
+            /* Animation cho icon */
+            @keyframes pulse {
+                0% {
+                    transform: scale(1);
+                }
+                50% {
+                    transform: scale(1.05);
+                }
+                100% {
+                    transform: scale(1);
+                }
+            }
+
+            #bmi-info-section .sidebar-right-title i:hover {
+                animation: pulse 0.6s ease-in-out;
+            }
+
             @media (max-width: 768px) {
                 .blog-title {
                     font-size: 2rem;
@@ -316,10 +480,40 @@
                 .blog-images {
                     grid-template-columns: 1fr;
                 }
+
+                #bmi-info-section {
+                    padding: 16px;
+                    margin-top: 16px;
+                }
+
+                #bmi-info-section .sidebar-right-title {
+                    font-size: 16px;
+                }
+
+                #bmi-info-section .list-unstyled li {
+                    flex-direction: column;
+                    align-items: flex-start;
+                    gap: 4px;
+                }
+
+                #bmi-info-section .list-unstyled li strong {
+                    min-width: auto;
+                }
+
+                #bmi-info-section .list-unstyled li:not(:has(strong)) {
+                    margin-left: 0;
+                }
             }
-            .sidebar-right {
-    overflow: visible !important;
-}
+
+            @media (max-width: 991px) {
+                .sidebar-right {
+                    position: static !important;
+                    top: auto !important;
+                    margin-top: 30px;
+                    max-height: none !important;
+                    overflow-y: visible !important;
+                }
+            }
         </style>
     </head>
     <body>
@@ -354,113 +548,118 @@
                 <c:choose>
                     <c:when test="${not empty blog}">
                         <div class="row">
-                    <!-- Blog Post -->
-                    <div class="col-lg-8">
-                        <article class="blog-post">
-                            <!-- Blog Header -->
-                            <div class="blog-header">
-                                <h1 class="blog-title">${blog.title}</h1>
-                                <div class="blog-meta">
-                                    <div class="meta-item">
-                                        <i class="fas fa-user"></i>
-                                        <span>${blog.authorName}</span>
+                            <!-- Blog Post -->
+                            <div class="col-lg-8">
+                                <article class="blog-post">
+                                    <!-- Blog Header -->
+                                    <div class="blog-header">
+                                        <h1 class="blog-title">${blog.title}</h1>
+                                        <div class="blog-meta">
+                                            <div class="meta-item">
+                                                <i class="fas fa-user"></i>
+                                                <span>${blog.authorName}</span>
+                                            </div>
+                                            <div class="meta-item">
+                                                <i class="fas fa-calendar"></i>
+                                                <span><fmt:formatDate
+                                                        value="${blog.update_at}"
+                                                        pattern="yyyy-MM-dd HH:mm:ss" />
+                                                </span>
+                                            </div>
+                                            <div class="blog-tags">
+                                                <div class="tag">${bmi.classification}</div>
+                                            </div>
+                                            <div class="meta-item" id="status-meta"> 
+                                                <i class="fas fa-circle"></i>
+                                                <span data-status="${blog.status}">${blog.status}</span>
+                                            </div>
+                                            <!--                            <div class="meta-item">
+                                                                                <i class="fas fa-eye"></i>
+                                                                            <span>1.2M lượt xem</span>
+                                                                        </div>-->
+                                            <!--                                    <div class="meta-item">
+                                                                                    <i class="fas fa-comment"></i>
+                                                                                    <span>06 bình luận</span>
+                                                                                </div>-->
+                                        </div>                       
+
                                     </div>
-                                    <div class="meta-item">
-                                        <i class="fas fa-calendar"></i>
-                                        <span><fmt:formatDate
-                                                value="${blog.update_at}"
-                                                pattern="yyyy-MM-dd HH:mm:ss" />
-                                        </span>
+
+                                    <!-- Featured Image -->
+                                    <div class="blog-image-wrapper">
+                                        <img 
+                                            src="${blog.imageUlr}" 
+                                            alt="Blog Image" 
+                                            class="blog-image" 
+                                            onerror="handleImageError(this)">
+                                        <div class="image-placeholder">Không thể tải ảnh</div>
                                     </div>
-                                    <!--                            <div class="meta-item">
-                                                                    <i class="fas fa-eye"></i>
-                                                                    <span>1.2M lượt xem</span>
-                                                                </div>-->
-                                    <div class="meta-item">
-                                        <i class="fas fa-comment"></i>
-                                        <span>06 bình luận</span>
+
+                                    <!-- Blog Content -->
+                                    <div class="blog-content collapsed" id="blogContent">
+                                        ${blog.content}
                                     </div>
-                                </div>                       
-                                <div class="blog-tags">
-                                    <a href="#" class="tag">Thực phẩm</a>
-                                </div>
-                            </div>
-
-                            <!-- Featured Image -->
-                            <img src="${blog.imageUlr}" alt="Blog Image" class="blog-image">
-
-                            <!-- Blog Content -->
-                            <div class="blog-content">
-                                ${blog.content}
-                            </div>
-                        </article>
-                    </div>
-
-                    <!-- Sidebar -->
-                    <div class="col-lg-4">
-                        <aside class="sidebar-right">
-                            <!-- Author Widget -->
-                            <div class="author-widget">
-                                <div class="author-avatar">CB</div>
-                                <div class="author-name">Charlie Barber</div>
-                                <div class="author-role">Senior blog writer</div>
-                                <div class="social-links">
-                                    <a href="#"><i class="fab fa-facebook"></i></a>
-                                    <a href="#"><i class="fab fa-twitter"></i></a>
-                                    <a href="#"><i class="fab fa-github"></i></a>
-                                    <a href="#"><i class="fab fa-behance"></i></a>
-                                </div>
-                                <p class="text-muted">Boot camps có những người ủng hộ và những người phản đối. Một số người không hiểu tại sao bạn phải chi tiền cho boot camp khi bạn có thể tự học.</p>
-                            </div>
-                            <!-- Popular Posts -->
-                            <div class="popular-posts">
-                                <h3 class="sidebar-right-title">Bài viết phổ biến</h3>
-                                <c:forEach var="post" items="${relblog}" varStatus="loop">
-                                    <div class="popular-post">
-                                        <img src="${post.imageUlr}" alt="Popular Post">
-                                        <div class="popular-post-content">
-                                            <h6><a href="nutricontrol?action=showdetail&id=${post.bID}">${post.title}</a></h6>
-                                            <div class="post-time" data-created="${post.update_at}"></div>
-                                        </div>
+                                    <div class="text-center mt-3">
+                                        <button id="toggleContentBtn" class="btn btn-outline-primary" style="display: none">Xem thêm</button>
                                     </div>
-                                </c:forEach>
 
-
+                                </article>
                             </div>
 
-                            <!-- Categories -->
-                            <div class="categories">
-                                <h3 class="sidebar-title">Danh mục bài viết</h3>
-                                <ul class="category-list">
-                                    <li><a href="#">Công nghệ <span class="category-count">37</span></a></li>
-                                    <li><a href="#">Phong cách sống <span class="category-count">24</span></a></li>
-                                    <li><a href="#">Thời trang <span class="category-count">59</span></a></li>
-                                    <li><a href="#">Nghệ thuật <span class="category-count">29</span></a></li>
-                                    <li><a href="#">Thực phẩm <span class="category-count">15</span></a></li>
-                                    <li><a href="#">Kiến trúc <span class="category-count">09</span></a></li>
-                                    <li><a href="#">Phiêu lưu <span class="category-count">44</span></a></li>
-                                </ul>
-                            </div>
+                            <!-- Sidebar -->
+                            <div class="col-lg-4">
+                                <aside class="sidebar-right">
+                                    <!-- Popular Posts -->
+                                    <c:choose>
+                                        <c:when test="${empty relblog}">
+                                            <div class="popular-posts" style="height: 400px; background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px; padding: 20px;">
+                                                <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                                                    <span style="background: #6c757d; color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; margin-right: 10px; font-size: 14px; font-weight: bold;">📝</span>
+                                                    <h3 class="sidebar-right-title">Bài viết liên quan</h3>
+                                                </div>
+                                                <div style="display: flex; align-items: center; justify-content: center; height: calc(100% - 60px); color: #6c757d; font-size: 16px;">
+                                                    Không có bài viết liên quan nào
+                                                </div>
+                                            </div>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <div class="popular-posts">
+                                                <h3 class="sidebar-right-title">Bài viết liên quan</h3>
+                                                <c:forEach var="post" items="${relblog}" varStatus="loop">
+                                                    <div class="popular-post">
+                                                        <img src="${post.imageUlr}" alt="Popular Post">
+                                                        <div class="popular-post-content">
+                                                            <h6><a href="nutricontrol?action=showdetail&id=${post.bID}">${post.title}</a></h6>
+                                                            <div class="post-time" data-created="${post.update_at}"></div>
+                                                        </div>
+                                                    </div>
+                                                </c:forEach>
+                                            </div>
+                                        </c:otherwise>
+                                    </c:choose>
 
-                            <!-- Tag Cloud -->
-                            <div class="tag-cloud-section">
-                                <h3 class="sidebar-title">Thẻ tag</h3>
-                                <div class="tag-cloud">
-                                    <a href="#">Công nghệ</a>
-                                    <a href="#">Thời trang</a>
-                                    <a href="#">Kiến trúc</a>
-                                    <a href="#">Thực phẩm</a>
-                                    <a href="#">Phong cách sống</a>
-                                    <a href="#">Nghệ thuật</a>
-                                    <a href="#">Phiêu lưu</a>
-                                </div>
+                                    <!-- BMI ìnomation -->
+                                    <div id="bmi-info-section" class="bmi-detail mt-4 p-3 rounded bg-light border">
+                                        <h3 class="sidebar-right-title">
+                                            <i class="fas fa-info-circle"></i> 
+                                            Thông tin BMI
+                                        </h3>
+                                        <ul class="list-unstyled mb-0">
+                                            <li><strong>Phân loại:</strong> ${bmi.classification}</li>
+                                            <li><strong>Rank:</strong> 
+                                                <fmt:formatNumber value="${bmi.min_bmi}" type="number" maxFractionDigits="1"/> –
+                                                <fmt:formatNumber value="${bmi.max_bmi}" type="number" maxFractionDigits="1"/>
+                                            </li>
+                                            <li><strong>Mô tả:</strong> ${bmi.decription}</li>
+                                            <li><strong>Đối tượng phù hợp:</strong> ${bmi.tagetAudience}</li>
+                                        </ul>
+                                    </div>
+                                </aside>
                             </div>
-                        </aside>
-                    </div>
-                </div>
+                        </div>
                     </c:when>
                     <c:otherwise>
-                         <c:otherwise>
+                        <c:otherwise>
                             <p style="text-align: center; font-style: italic; color: #555; padding: 40px;">
                                 Không có bài viết nào.
                             </p>
@@ -512,12 +711,36 @@
                             });
                         }, 60000); // 60 giây
                     });
+                    document.addEventListener('DOMContentLoaded', function () {
+                        const content = document.getElementById('blogContent');
+                        const button = document.getElementById('toggleContentBtn');
+
+                        // Chỉ hiển thị nút nếu nội dung vượt quá 500px
+                        if (content.scrollHeight > 500) {
+                            button.style.display = 'inline-block'; // hoặc 'block' tùy thiết kế
+                        }
+
+                        button.addEventListener('click', function () {
+                            content.classList.toggle('expanded');
+                            content.classList.toggle('collapsed');
+                            this.textContent = content.classList.contains('expanded') ? 'Thu gọn' : 'Xem thêm';
+                        });
+                    });
+                    function handleImageError(imgElement) {
+                        imgElement.style.display = "none";
+                        const placeholder = imgElement.nextElementSibling;
+                        if (placeholder && placeholder.classList.contains("image-placeholder")) {
+                            placeholder.style.display = "flex";
+                        }
+                    }
                 </script>
 
 
+
+
                 <jsp:include page="/Nutritionist/footer.jsp"/>  
-        
-        
+
+
         </main>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

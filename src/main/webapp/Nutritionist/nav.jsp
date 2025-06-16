@@ -57,8 +57,7 @@
                     <i class="menu-arrow bi bi-chevron-right"></i>
                 </a>
                 <div class="submenu">
-                    <a href="#" class="menu-link">BMI type List </a>
-                    <a href="#" class="menu-link">New BMI type</a>
+                    <a href="nutricontrol?action=showBMI" class="menu-link">BMI type List </a>
                 </div>
             </div>
 
@@ -71,8 +70,8 @@
                     <i class="menu-arrow bi bi-chevron-right"></i>
                 </a>
                 <div class="submenu">
-                    <a href="#" class="menu-link">Food List </a>
-                    <a href="#" class="menu-link">Food Detail</a>
+                    <a href="${pageContext.request.contextPath}/nutricontrol?action=showfood" class="menu-link">Food List </a>
+                    <a href="${pageContext.request.contextPath}/nutricontrol?action=showfooddetail" class="menu-link">Food Detail</a>
                 </div>
             </div>
             <div class="menu-item">
