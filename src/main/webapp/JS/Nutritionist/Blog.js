@@ -94,9 +94,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td class="action-cell" style="text-align: center;">
                     <a href="nutricontrol?id=${blog.bID}&action=displayblogdetail" title="View"><ion-icon name="eye-outline"></ion-icon></a>
                     <a href="nutricontrol?id=${blog.bID}&action=editblog" title="Edit"> <ion-icon name="create-outline"</ion-icon></a>
-                    <a href="nutricontrol?id=${blog.bID}&action=deleteblog" title="Delete" onclick="return confirm('Bạn có chắc chắn muốn xóa bài viết này?');">
-                        <ion-icon name="trash-outline" style="color: red"></ion-icon>
-                    </a>
+                    <a href="#" title="Delete"
+                                                       onclick="showDeletePopup('nutricontrol?action=deleteblog&id=${blog.bID}', '${blog.title}'); return false;">
+                                                        <ion-icon name="trash-outline" style="color: red"></ion-icon>
+                                               </a>
                 </td>
             `;
             blogTableBody.appendChild(row);
