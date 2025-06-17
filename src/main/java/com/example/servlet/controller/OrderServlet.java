@@ -50,7 +50,7 @@ public class OrderServlet extends HttpServlet {
         request.setAttribute("searchFood", food);
         request.setAttribute("searchStatus", status);
         
-        
+              
         request.getRequestDispatcher("order.jsp").forward(request, response);
     }
     

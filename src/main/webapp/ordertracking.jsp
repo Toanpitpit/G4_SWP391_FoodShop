@@ -33,6 +33,7 @@ SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
         <!-- Bootstrap Icons -->
         <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
         <link rel="stylesheet" href="CSS/defauld.css">
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
     /* CSS chung */
     .main-content {
@@ -188,20 +189,35 @@ SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
         margin-bottom: 25px;
     }
     
+    /* ORDER TRACK IMAGE - GẤP ĐÔI KÍCH THƯỚC BAN ĐẦU */
     .order-track {
         display: flex;
         gap: 30px;
-        align-items: center;
+        align-items: flex-start; /* Căn nội dung lên đầu */
     }
     
     .order-track .image {
-        flex: 0 0 200px;
+        flex: 0 0 400px; /* Gấp đôi 200px ban đầu */
+        height: 300px; /* Tỉ lệ 4:3 */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
     
     .order-track .image img {
         width: 100%;
-        border-radius: 8px;
-        box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.1);
+        height: 100%;
+        object-fit: cover;
+        border-radius: 12px;
+        transition: transform 0.3s ease;
+    }
+    
+    /* Đảm bảo đủ không gian cho ảnh lớn */
+    .wg-box.mb-20 {
+        min-height: 350px;
     }
     
     .order-track .content {
@@ -367,16 +383,27 @@ SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
         margin: 10px 0;
     }
     
-    /* Responsive */
+    /* RESPONSIVE - TỐI ƯU CHO ẢNH LỚN */
+    @media (max-width: 1200px) {
+        .order-track .image {
+            flex: 0 0 350px;
+            height: 260px;
+        }
+    }
+    
     @media (max-width: 992px) {
         .order-track {
             flex-direction: column;
-            align-items: flex-start;
         }
         
         .order-track .image {
-            width: 100%;
+            flex: 0 0 100%;
+            height: 300px;
             margin-bottom: 20px;
+        }
+        
+        .wg-box.mb-20 {
+            min-height: auto;
         }
         
         .road-map {
@@ -447,6 +474,14 @@ SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
             transform: rotate(90deg);
             margin: 5px 0;
         }
+        
+        .order-track .image {
+            height: 250px;
+        }
+        
+        .main-content-inner {
+            padding: 20px;
+        }
     }
 </style>
     </head>
@@ -456,7 +491,7 @@ SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
             <div class="sidebar-header">
                 <a href="#" class="sidebar-brand">
                     <div class="brand-icon">
-                        <i class="bi bi-grid-3x3-gap-fill"></i>
+                        <i class="fas fa-leaf" ></i>
                     </div>
                     <span class="brand-text">Feash & Healthy</span>
                 </a>
@@ -705,7 +740,7 @@ SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
                                         <i class="icon-chevron-right"></i>
                                     </li>
                                     <li>
-                                        <a href="#"><div class="text-tiny">Order</div></a>
+                                        <a href="order"><div class="text-tiny">Order</div></a>
                                     </li>
                                     <li>
                                         <i class="icon-chevron-right"></i>

@@ -112,6 +112,6 @@ public class Order {
     }
     public double getTotalPrice() {
     return this.quantity * this.price;
-}
+                 }
 
 }
