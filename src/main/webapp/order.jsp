@@ -114,9 +114,9 @@
                     <i class="menu-arrow bi bi-chevron-right"></i>
                 </a>
                 <div class="submenu">
-                    <a href="#" class="menu-link">Request List</a>
+                    <a href="order" class="menu-link">Request List</a>
                     <a href="#" class="menu-link">Request Detail</a>
-                    <a href="#" class="menu-link">Request Tracking</a>
+                    <a href="ordertracking.jsp" class="menu-link">Request Tracking</a>
                 </div>
             </div>
 
