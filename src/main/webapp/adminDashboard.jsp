@@ -21,12 +21,12 @@
         :root {
             --sidebar-width: 280px;
             --sidebar-collapsed-width: 70px;
-            --header-height: 70px;
-            --primary-blue: #2563eb;
-            --sidebar-bg: #1e293b;
-            --sidebar-text: #cbd5e1;
-            --sidebar-hover: #334155;
-            --border-color: #334155;
+            --header-height: 90px; /* Increased to match Nutri's height */
+            --primary-green: #47B77B;
+            --sidebar-bg: #E6F4EA;
+            --sidebar-text: #3A3A3A;
+            --sidebar-hover: #FBBF24;
+            --border-color: #B7E28B;
             --content-bg: #f8fafc;
         }
 
@@ -92,7 +92,7 @@
             display: flex;
             align-items: center;
             text-decoration: none;
-            color: white;
+            color: #1e293b;
             font-weight: 700;
             font-size: 20px;
             transition: all 0.3s ease;
@@ -101,14 +101,14 @@
         .brand-icon {
             width: 40px;
             height: 40px;
-            background: linear-gradient(135deg, var(--primary-blue), #3b82f6);
+            background: linear-gradient(135deg, #e0fff4, #a7fcd9);
             border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
             margin-right: 12px;
             font-size: 18px;
-            color: white;
+            color: var(--primary-green);
             flex-shrink: 0;
         }
 
@@ -195,13 +195,13 @@
         }
 
         .menu-link:hover {
-            background: var(--sidebar-hover);
+            background: linear-gradient(135deg, var(--primary-green), #3b82f6);
             color: white;
             transform: translateX(2px);
         }
 
         .menu-link.active {
-            background: linear-gradient(135deg, var(--primary-blue), #3b82f6);
+            background: linear-gradient(135deg, var(--primary-green), #3b82f6);
             color: white;
             box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
         }
@@ -324,17 +324,19 @@
             visibility: visible;
         }
 
+        /* ============ HEADER STYLES ============ */
         .main-header {
             position: fixed;
             top: 0;
             left: var(--sidebar-width);
             right: 0;
             height: var(--header-height);
-            background: white;
+            background: linear-gradient(#d0f0c0, #ffffff);
             border-bottom: 1px solid #e2e8f0;
             z-index: 999;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            padding-left: 130px;
         }
 
         .main-header.collapsed {
@@ -389,8 +391,8 @@
 
         .search-input:focus {
             outline: none;
-            border-color: var(--primary-blue);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+            border-color: var(--primary-green);
+            box-shadow: 0 0 0 3px rgba(71, 183, 123, 0.1);
             background: white;
         }
 
@@ -468,7 +470,7 @@
             width: 36px;
             height: 36px;
             border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary-blue), #3b82f6);
+            background: linear-gradient(135deg, var(--primary-green), #3b82f6);
             color: white;
             display: flex;
             align-items: center;
@@ -501,6 +503,48 @@
             margin-left: 4px;
         }
 
+        /* User Dropdown */
+        .account-dropdown {
+            position: absolute;
+            top: 60px;
+            right: 0;
+            width: 220px;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            display: none;
+            z-index: 999;
+        }
+
+        .account-dropdown ul {
+            list-style: none;
+            margin: 0;
+            padding: 10px 0;
+        }
+
+        .account-dropdown li a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 20px;
+            color: #1e293b;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background 0.2s ease;
+        }
+
+        .account-dropdown li a i {
+            font-size: 18px;
+            color: #64748b;
+        }
+
+        .account-dropdown li a:hover {
+            background-color: #f1f5f9;
+            color: #0f172a;
+        }
+
+        /* ============ MAIN CONTENT STYLES ============ */
         .main-content {
             margin-left: var(--sidebar-width);
             margin-top: var(--header-height);
@@ -547,7 +591,7 @@
         }
 
         .breadcrumb-item:hover {
-            color: var(--primary-blue);
+            color: var(--primary-green);
         }
 
         .breadcrumb-item.active {
@@ -589,7 +633,7 @@
 
         .search-filter button {
             padding: 8px 15px;
-            background-color: #28a745;
+            background-color: var(--primary-green);
             color: #fff;
             border: none;
             border-radius: 5px;
@@ -598,7 +642,7 @@
         }
 
         .search-filter button:hover {
-            background-color: #218838;
+            background-color: #3b9d67;
         }
 
         table {
@@ -617,7 +661,7 @@
         }
 
         th {
-            background-color: #28a745;
+            background-color: var(--primary-green);
             color: #fff;
             font-weight: 600;
         }
@@ -654,12 +698,12 @@
         }
 
         .active-btn {
-            background-color: #28a745;
+            background-color: var(--primary-green);
             color: #fff;
         }
 
         .active-btn:hover {
-            background-color: #218838;
+            background-color: #3b9d67;
         }
 
         .inactive-btn {
@@ -710,7 +754,7 @@
 
         .modal-content h3 {
             margin-bottom: 15px;
-            color: #28a745;
+            color: var(--primary-green);
             font-size: 20px;
         }
 
@@ -736,12 +780,12 @@
         }
 
         .modal-buttons .confirm-btn {
-            background-color: #28a745;
+            background-color: var(--primary-green);
             color: #fff;
         }
 
         .modal-buttons .confirm-btn:hover {
-            background-color: #218838;
+            background-color: #3b9d67;
         }
 
         .modal-buttons .cancel-btn {
@@ -892,13 +936,20 @@
                     <i class="bi bi-bell"></i>
                     <span class="notification-count">3</span>
                 </div>
-                <div class="user-profile">
+                <div class="user-profile" id="user-account">
                     <div class="user-avatar">A</div>
                     <div class="user-info">
                         <div class="user-name">Admin</div>
                         <div class="user-role">Administrator</div>
                     </div>
                     <i class="dropdown-arrow bi bi-chevron-down"></i>
+                </div>
+                <div class="account-dropdown" id="account-dropdown">
+                    <ul>
+                        <li><a href="/account"><i class="bi bi-person"></i> Account</a></li>
+                        <li><a href="/setting"><i class="bi bi-gear"></i> Setting</a></li>
+                        <li><a href="/logout"><i class="bi bi-box-arrow-right"></i> Log out</a></li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -1114,6 +1165,20 @@
                 });
                 this.classList.add('active');
             });
+        });
+
+        // User Dropdown Toggle
+        const userBtn = document.getElementById("user-account");
+        const dropdown = document.getElementById("account-dropdown");
+
+        userBtn.addEventListener("click", () => {
+            dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+        });
+
+        document.addEventListener("click", function (e) {
+            if (!userBtn.contains(e.target) && !dropdown.contains(e.target)) {
+                dropdown.style.display = "none";
+            }
         });
     </script>
 </body>
