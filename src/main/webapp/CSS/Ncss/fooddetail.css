@@ -1,0 +1,375 @@
+/* Container chính full width */
+.full-content-food {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    box-sizing: border-box;
+    background: #f8fafe;
+    border-radius: 16px;
+}
+
+/* Layout chính cho ảnh và thông tin */
+.food-deatail-subcontent {
+    display: flex;
+    gap: 25px;
+    align-items: flex-start;
+    margin-bottom: 30px;
+    width: 100%;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    padding: 25px;
+}
+
+/* Container ảnh - chiếm 35% */
+.food-deatail-img {
+    flex: 0 0 35%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 350px;
+}
+
+/* Styling cho ảnh */
+.food-image {
+    width: 100%;
+    height: 350px;
+    object-fit: cover;
+    border-radius: 16px;
+    border: 2px solid #e8f4f8;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.food-image:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+}
+
+/* Container thông tin - chiếm 65% */
+.info {
+    flex: 0 0 65%;
+    display: flex;
+    flex-direction: column;
+    padding: 10px 0;
+}
+
+/* Tên sản phẩm */
+.info h2 {
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: #1a365d;
+    margin-bottom: 25px;
+    line-height: 1.2;
+    background: linear-gradient(135deg, #4299e1, #2b6cb0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Layout grid cho thông tin - Tối ưu 4 cột */
+.food-deatail-info {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-bottom: 20px;
+}
+
+/* Styling cho các trường thông tin */
+.food-deatail-info > div {
+    display: flex;
+    flex-direction: column;
+    background: #f7fafc;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    transition: all 0.2s ease;
+}
+
+.food-deatail-info > div:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.food-deatail-info strong {
+    font-size: 0.75rem;
+    color: #718096;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Icons cho các trường - Nhỏ gọn hơn */
+.food-deatail-id strong::before {
+    content: "🏷️";
+    font-size: 0.7rem;
+}
+
+.food-deatail-price strong::before {
+    content: "💰";
+    font-size: 0.7rem;
+}
+
+.food-deatail-categories strong::before {
+    content: "📂";
+    font-size: 0.7rem;
+}
+
+.food-deatail-status strong::before {
+    content: "✅";
+    font-size: 0.7rem;
+}
+
+.food-deatail-date strong::before {
+    content: "📅";
+    font-size: 0.7rem;
+}
+
+.food-deatail-tag strong::before {
+    content: "👥";
+    font-size: 0.7rem;
+}
+
+.food-deatail-taget strong::before {
+    content: "💡";
+    font-size: 0.7rem;
+}
+
+/* Input fields - Gọn gàng hơn */
+.food-deatail-info .form-control {
+    border: none;
+    border-radius: 6px;
+    padding: 8px 10px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    background: white;
+    color: #2d3748;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+}
+
+.food-deatail-info .form-control:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+}
+
+/* Chỉ màu đặc biệt cho giá */
+.food-deatail-price {
+    background: linear-gradient(135deg, #fed7d7, #feb2b2) !important;
+    border-color: #fc8181 !important;
+}
+
+.food-deatail-price .form-control {
+    color: #c53030;
+    font-size: 1.1rem;
+    font-weight: 800;
+    background: white;
+    border: 2px solid #fc8181;
+}
+
+/* Trường ngày tháng span 2 cột */
+.food-deatail-date {
+    grid-column: span 2;
+}
+
+.food-deatail-date .form-control {
+    font-size: 0.85rem;
+    color: #4a5568;
+}
+
+/* Trường đối tượng và tip full width */
+.food-deatail-tag,
+.food-deatail-taget {
+    grid-column: 1 / -1;
+    margin-top: 8px;
+}
+
+.food-deatail-tag {
+    background: linear-gradient(135deg, #bee3f8, #90cdf4) !important;
+}
+
+.food-deatail-tag span {
+    display: inline-block;
+    background: #3182ce;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-left: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.food-deatail-taget {
+    background: linear-gradient(135deg, #faf089, #f6e05e) !important;
+}
+
+/* Textarea cho tip */
+.food-deatail-taget textarea {
+    border: none;
+    border-radius: 8px;
+    background: white;
+    color: #744210;
+    font-style: italic;
+    font-size: 0.9rem;
+    resize: none;
+    height: 50px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    padding: 10px 12px;
+}
+
+/* Tabs styling - Gọn gàng hơn */
+.nav-tabs {
+    border-bottom: 2px solid #e2e8f0;
+    margin-top: 30px;
+    background: white;
+    border-radius: 10px 10px 0 0;
+    padding: 5px 5px 0 5px;
+}
+
+.nav-tabs .nav-link {
+    border: none;
+    border-radius: 8px 8px 0 0;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #718096;
+    padding: 12px 20px;
+    margin-right: 3px;
+    transition: all 0.2s ease;
+    background: #f7fafc;
+}
+
+.nav-tabs .nav-link:hover {
+    background: #e2e8f0;
+    color: #4a5568;
+    transform: translateY(-1px);
+}
+
+.nav-tabs .nav-link.active {
+    background: #4299e1;
+    color: white;
+    box-shadow: 0 2px 8px rgba(66, 153, 225, 0.3);
+}
+
+/* Tab content */
+.food-deatail-tag-content {
+    border-radius: 0 0 12px 12px;
+    border: 2px solid #e2e8f0;
+    border-top: none;
+    padding: 25px;
+    background: white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.tab-content h4 {
+    color: #2d3748;
+    font-weight: 700;
+    font-size: 1.3rem;
+    margin-bottom: 20px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+/* Ingredients section */
+.food-deatail-ingredients .form-control {
+    background: #f7fafc;
+    border: 1px solid #e2e8f0;
+    font-weight: 500;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+}
+
+/* Tổng cộng và calories */
+.food-deatail-ingredients .d-inline {
+    display: inline-block !important;
+    width: auto !important;
+    min-width: 100px;
+    font-weight: 700;
+    background: #fef5e7;
+    border: 2px solid #f6ad55;
+    color: #c05621;
+    margin: 0 5px;
+    font-size: 0.9rem;
+}
+
+/* Description textarea */
+.food-deatail-decription textarea {
+    background: #f7fafc;
+    border: 1px solid #e2e8f0;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #4a5568;
+    border-radius: 8px;
+}
+
+/* Recommendations section */
+.food-deatail-recommendation .form-control {
+    background: #f0fff4;
+    border: 1px solid #9ae6b4;
+    color: #276749;
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.list-group-item {
+    border: 1px solid #c6f6d5;
+    background: #f0fff4;
+    color: #276749;
+    padding: 10px 15px;
+    font-size: 0.9rem;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .food-deatail-info {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .food-deatail-subcontent {
+        flex-direction: column;
+        gap: 20px;
+        padding: 20px;
+    }
+    
+    .food-deatail-img,
+    .info {
+        flex: 1;
+    }
+    
+    .food-image {
+        height: 250px;
+    }
+    
+    .info h2 {
+        font-size: 1.8rem;
+        text-align: center;
+    }
+    
+    .food-deatail-info {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+    
+    .food-deatail-date,
+    .food-deatail-tag,
+    .food-deatail-taget {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 480px) {
+    .food-deatail-info {
+        grid-template-columns: 1fr;
+    }
+    
+    .info h2 {
+        font-size: 1.5rem;
+    }
+}

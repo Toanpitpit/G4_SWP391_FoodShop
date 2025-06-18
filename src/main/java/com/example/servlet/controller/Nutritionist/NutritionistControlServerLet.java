@@ -68,20 +68,16 @@ public class NutritionistControlServerLet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException{
         HttpSession sesssion = request.getSession (false);
-//        if(sesssion == null ){
-//            request.getRequestDispatcher ("login.jsp").forward (request, response);
-//            return;
-//        }
-        String action = request.getParameter ("action");
-//        
-        if (action == null) {
-            response.sendRedirect ("login.jsp");
+        if(sesssion == null ){
+            request.getRequestDispatcher ("Homedemo.jsp").forward (request, response);
             return;
         }
-//                try(PrintWriter out  = response.getWriter ()){
-//                  out.print ( action +"da xư lsy tra ve sẻver let");
-//                  
-//
+        String action = request.getParameter ("action");
+    
+        if (action == null) {
+            response.sendRedirect ("Homedemo.jsp");
+            return;
+        }
         switch (action) {
             // BLOG
             case "dashboard":                
@@ -216,6 +212,7 @@ public class NutritionistControlServerLet extends HttpServlet {
 
    private String processImageUpload(Part filePart) throws IOException {
     if (filePart.getSize() > 5 * 1024 * 1024) {
+        
         throw new IllegalStateException("Ảnh vượt quá dung lượng 5MB");
     }
 
