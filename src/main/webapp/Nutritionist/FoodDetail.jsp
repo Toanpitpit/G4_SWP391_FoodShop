@@ -10,32 +10,350 @@
 
         <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/CSS/Ncss/cssdung.css">
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/CSS/Ncss/foodlist.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/CSS/Ncss/defauld.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/CSS/Ncss/fooddetail.css">
+
         <style>
-            .pagination-link{
-                border-radius: 10px: 
-                
+            :root {
+                --primary-color: #28a745;
+                --secondary-color: #6c757d;
+                --success-color: #20c997;
+                --warning-color: #ffc107;
+                --danger-color: #dc3545;
             }
-            .pagination a, .pagination span {
-    padding: 8px 12px;
-    border: 1px solid #ddd;
-    text-decoration: none;
-    color: #333;
-}
 
-.pagination a:hover {
-    background:linear-gradient(135deg, var(--primary-green), #3b82f6) !important;
-}
+            .main-content {
+                margin-left: 250px;
+                padding: 20px;
+                background-color: #f8f9fa;
+                min-height: 100vh;
+            }
 
-.pagination .current {
-    background:linear-gradient(135deg, var(--primary-green), #3b82f6) !important;
-    color: white;
-    border-color: #4CAF50;
-    border-radius: 10px;
-}
+            .breadcrumb-container {
+                background: white;
+                padding: 15px 20px;
+                border-radius: 8px;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+
+            .breadcrumb-nav {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+
+            .breadcrumb-item {
+                color: var(--secondary-color);
+                text-decoration: none;
+                font-size: 14px;
+            }
+
+            .breadcrumb-item:hover {
+                color: var(--primary-color);
+            }
+
+            .breadcrumb-item.active {
+                color: var(--primary-color);
+                font-weight: 500;
+            }
+
+            .breadcrumb-separator {
+                color: var(--secondary-color);
+            }
+
+            .product-card {
+                background: white;
+                border-radius: 12px;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                overflow: hidden;
+            }
+
+            .product-image {
+                background: #f8f9fa;
+                padding: 10px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .product-image img {
+                max-width: 100%;
+                max-height: 400px;
+                object-fit: contain;
+                border-radius: 8px;
+            }
+
+            .product-info {
+                padding: 30px;
+            }
+
+            .product-title {
+                font-size: 24px;
+                font-weight: 600;
+                color: #333;
+                margin-bottom: 20px;
+            }
+
+            .product-price {
+                font-size: 28px;
+                font-weight: 700;
+                color: var(--primary-color);
+                margin-bottom: 15px;
+            }
+
+            .product-meta {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 20px;
+                margin-bottom: 20px;
+            }
+
+            .meta-item {
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .meta-label {
+                font-size: 12px;
+                color: var(--secondary-color);
+                text-transform: uppercase;
+                font-weight: 500;
+            }
+
+            .meta-value {
+                font-size: 14px;
+                color: #333;
+                font-weight: 500;
+            }
+
+            .status-badge {
+                padding: 4px 12px;
+                border-radius: 20px;
+                font-size: 12px;
+                font-weight: 500;
+            }
+
+            .status-active {
+                background-color: #d4edda;
+                color: #155724;
+            }
+
+            .status-inactive {
+                background-color: #f8d7da;
+                color: #721c24;
+            }
+
+            .product-tabs {
+                margin-top: 30px;
+            }
+
+            .nav-tabs {
+                border-bottom: 2px solid #e9ecef;
+            }
+
+            .nav-tabs .nav-link {
+                border: none;
+                color: var(--secondary-color);
+                font-weight: 500;
+                padding: 15px 20px;
+                margin-right: 10px;
+                border-radius: 8px 8px 0 0;
+                background: transparent;
+            }
+
+            .nav-tabs .nav-link:hover {
+                color: var(--primary-color);
+                background-color: #f8f9fa;
+            }
+
+            .nav-tabs .nav-link.active {
+                color: var(--primary-color);
+                background-color: white;
+                border-bottom: 2px solid var(--primary-color);
+                margin-bottom: -2px;
+            }
+
+            .tab-content {
+                background: white;
+                padding: 30px;
+                border-radius: 0 0 8px 8px;
+            }
+
+            .nutrition-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 20px;
+                margin-top: 20px;
+            }
+
+            .nutrition-item {
+                background: #f8f9fa;
+                padding: 20px;
+                border-radius: 8px;
+                text-align: center;
+                border: 1px solid #e9ecef;
+            }
+
+            .nutrition-value {
+                font-size: 24px;
+                font-weight: 700;
+                color: var(--primary-color);
+            }
+
+            .nutrition-label {
+                font-size: 14px;
+                color: var(--secondary-color);
+                margin-top: 5px;
+            }
+
+            .action-buttons {
+                display: flex;
+                gap: 15px;
+                margin-top: 30px;
+            }
+
+            .btn-custom {
+                padding: 12px 24px;
+                border-radius: 8px;
+                font-weight: 500;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                text-decoration: none;
+                border: none;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+
+            .btn-edit {
+                background-color: var(--warning-color);
+                color: #212529;
+            }
+
+            .btn-edit:hover {
+                background-color: #e0a800;
+                transform: translateY(-2px);
+            }
+
+            .btn-delete {
+                background-color: var(--danger-color);
+                color: white;
+            }
+
+            .btn-delete:hover {
+                background-color: #c82333;
+                transform: translateY(-2px);
+            }
+
+            .btn-back {
+                background-color: var(--secondary-color);
+                color: white;
+            }
+
+            .btn-back:hover {
+                background-color: #5a6268;
+                transform: translateY(-2px);
+            }
+
+            .back-button-container {
+                text-align: center;
+                margin-top: 30px;
+            }
+
+            .spec-table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+
+            .spec-table tr {
+                border-bottom: 1px solid #e9ecef;
+            }
+
+            .spec-table td {
+                padding: 15px 0;
+                vertical-align: top;
+            }
+
+            .spec-table td:first-child {
+                font-weight: 500;
+                color: var(--secondary-color);
+                width: 150px;
+            }
+
+            .review-section {
+                text-align: center;
+                padding: 40px 0;
+            }
+
+            .review-section .fa-star {
+                color: #ffc107;
+                font-size: 20px;
+                margin: 0 2px;
+            }
+
+            @media (max-width: 768px) {
+                .main-content {
+                    margin-left: 0;
+                    padding: 15px;
+                }
+
+                .product-info {
+                    padding: 20px;
+                }
+
+                .product-meta {
+                    flex-direction: column;
+                    gap: 15px;
+                }
+
+                .action-buttons {
+                    flex-direction: column;
+                }
+
+                .nutrition-grid {
+                    grid-template-columns: repeat(2, 1fr);
+                    gap: 15px;
+                }
+            }
+        </style>
+        <style>
+            .collapsed-text {
+                max-height: 100px;
+                overflow: hidden;
+                transition: max-height 0.3s ease;
+                position: relative;
+            }
+
+            .collapsed-text.expanded {
+                max-height: none;
+            }
+
+            .meta-label {
+                font-weight: bold;
+                margin-right: 8px;
+            }
+
+            .status-badge {
+                display: inline-block;
+                padding: 2px 8px;
+                background-color: #28a745;
+                color: white;
+                border-radius: 8px;
+                font-size: 0.85rem;
+            }
+
+            #toggleDescBtn {
+                color: #007bff;
+                cursor: pointer;
+                font-size: 0.9rem;
+            }
+
+            #toggleDescBtn:hover {
+                text-decoration: underline;
+            }
         </style>
 
 
@@ -46,268 +364,156 @@
         <!-- Main Header -->
         <jsp:include page="/Nutritionist/main-header.jsp"/>  
 
-        <!-- Main Content -->
         <main class="main-content" id="mainContent">
-            <div class="seller-content">
-                <div class="page-header">
-                    
-                    <h1 class="page-title">Danh sách món ăn</h1>
-                    <ul class="breadcrumb">
-                        <li><a href="nutricontrol?action=dashboard">Trang chủ</a></li>
-                        <li><a href="nutricontrol?action=showfoodlist">Food</a></li>
-                        <li>Danh sách đồ ăn</li>
-                    </ul>
+            <div class="container-fluid">
+                <!-- Breadcrumb -->
+                <div class="breadcrumb-container mb-4">
+                    <nav class="breadcrumb-nav">
+                        <a href="${pageContext.request.contextPath}/nutricotrol?action=dashboard" class="breadcrumb-item">Trang chủ</a>
+                        <span class="breadcrumb-separator">/</span>
+                        <a href="${pageContext.request.contextPath}/nutricontrol?action=showfood" class="breadcrumb-item">Danh sách thực phẩm</a>
+                        <span class="breadcrumb-separator">/</span>
+                        <span class="breadcrumb-item active">Chi tiết sản phẩm</span>
+                    </nav>
                 </div>
 
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title"><i class="fas fa-list-ul"></i>Danh sách đồ ăn</h3>
-                        <div class="card-tools">
-                            <button class="btn btn-outline">
-                                <i class="fas fa-file-export"></i>Xuất dữ liệu
-                            </button>
+                <div class="product-card">
+                    <div class="row g-0">
+                        <!-- Product Image -->
+                        <div class="col-lg-5">
+                            <div class="product-image">
+                                <img src="${pageContext.request.contextPath}/${food.image}" alt="" id="productImage">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-7">
+                            <div class="product-info">
+                                <!-- Title -->
+                                <h1 class="product-title" id="productName">
+                                    ${food.name}
+                                </h1>
+                                <div class="product-price" id="productPrice"> $ ${food.price}</div>
+                                <div class="product-meta" style="display: flex; flex-direction: column; justify-content: left; gap: 5px;">
+                                    <div class="meta-row" style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
+                                        <div class="meta-item">
+                                            <span class="meta-label">ID</span>
+                                            <span class="meta-value" id="productSku"> <i class="fas fa-id"></i>$food.id}</span>
+                                        </div>
+                                        <div class="meta-item">
+                                            <span class="meta-label">Trạng thái</span>
+                                            <span class="status-badge status-active" id="productStatus">${food.status}</span>
+                                        </div> 
+                                    </div>
+                                    <div class="meta-item">
+                                        <span class="meta-label">Danh mục</span>
+                                        <i class="fas fa-calendar"></i>
+                                                <span><fmt:formatDate
+                                                        value="${food.create_at}"
+                                                        pattern="yyyy-MM-dd HH:mm:ss" />
+                                                </span>
+                                    </div>    
+                                    <div class="meta-item">
+                                        <span class="meta-label">Danh mục</span>
+                                        <span class="meta-value" id="productCategory">${food.caName}</span>
+                                    </div>
+                                    <div class="meta-item">
+                                        <span class="meta-label">Tags</span>
+                                        <span class="meta-value" id="productTags">
+                                            <c:forEach var="re" items="${recommendation}">
+                                                <span class="sub-tag">
+                                                   ${re}
+                                                </span>
+                                            </c:forEach>
+                                        </span>
+                                    </div>
+                                    <div class="meta-item">
+                                        <span class="meta-label">Mô tả tag</span>
+                                        <div id="tagDescriptions" class="collapsed-text">
+                                            <c:forEach var="tag_info" items="${subdetailforBMI}">
+                                                ${tag_info}
+                                            </c:forEach>
+                                        </div>
+                                        <a href="javascript:void(0);" id="toggleDescBtn" class = "bmi-taget-info" onclick="toggleTagDesc()>Hiển thị thêm</a>
+                                    </div>
+                                </div>
+                                <div class="action-buttons mt-3">
+                                    <a href="nutricontol?action=copyfood" class="btn-custom btn-edit" id="editBtn">
+                                        <i class="fas fa-edit"></i> Tạo bản sao
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="card-body">
 
-                        <form action="${pageContext.request.contextPath}/nutricontrol?action=displaysortfood" method="GET" id="filterForm">
-                            <div class="filter-controls">
-                                <div class="input-group" style="flex-grow: 1;">
-                                    <i class="fas fa-search"></i>
-                                    <input type="text" name="searchKey" placeholder="Tìm theo tên sản phẩm..." value="${param.searchKey}">
-                                </div>
-                                <div class="input-group" style="flex-grow: 1;">
-                                    <i class="fas fa-search"></i>
-                                    <input type="number" id="searchPrice" name="searchPrice" min="0" step="any" placeholder="Giới hạn giá cao nhất" value="${param.searchPrice}">
-                                </div>
-                                <div class="select-group">
-                                    <select name="status">
-                                        <option value="">Tất cả trạng thái</option>
-                                        <option value="Active" ${param.status == 'Active' ? 'selected' : ''}>Active</option>
-                                        <option value="Hine" ${param.status == 'Hine' ? 'selected' : ''}>Hine</option>
-                                    </select>
-                                </div>
-                                <div class="select-group">
-                                    <select name="bmiId" id="bmiId">
-                                        <option value="">-- Chọn danh mục BMI --</option>
-                                        <c:forEach var="bmi" items="${lstBMI}">
-                                            <option value="${bmi.bmiID}" ${bmi.bmiID == param.bmiId ? 'selected' : ''}>${bmi.classification}</option>
-                                        </c:forEach>
-                                    </select>
-                                </div>
-                                <div class="select-group">
-                                    <select name="category" id="category">
-                                        <option value="">-- Loại món ăn --</option>
-                                        <c:forEach var="c" items="${lstC}">
-                                            <option value="${c.catID}" ${c.catID == param.category ? 'selected' : ''}>${c.caName}</option>
-                                        </c:forEach>
-                                    </select>
-                                </div>
-                                <button type="button" class="btn btn-outline" onclick="toggleAdvancedFilters()">
-                                    <i class="fas fa-sliders-h"></i> Sort
+                    <!-- Product Tabs -->
+                    <div class="product-tabs" style="margin-left: 30px">
+                        <ul class="nav nav-tabs" id="productTabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="description-tab" data-bs-toggle="tab" data-bs-target="#description" type="button" role="tab">
+                                    Mô tả
                                 </button>
-                            </div>
-
-                            <c:set var="isAdvancedFilterActive" value="${not empty param.priceRank or not empty param.sortID or not empty param.sortTime or not empty param.sortPrice}" />
-                            <div class="advanced-filters-container" id="advancedFilters" style="${isAdvancedFilterActive ? 'display: block;' : 'display: none;'} margin-bottom: 15px;">
-                                <div class="advanced-filters-grid">
-                                    <div class="select-group">
-                                        <select name="priceRank" id="priceRank">
-                                            <option value="" ${empty param.priceRank ? 'selected' : ''}>-- Mức giá --</option>
-                                            <option value="0-50000" ${param.priceRank == '0-50000' ? 'selected' : ''}>Dưới 50.000</option>
-                                            <option value="50000-100000" ${param.priceRank == '50000-100000' ? 'selected' : ''}>Từ 50.000 - 100.000</option>
-                                            <option value="100000-200000" ${param.priceRank == '100000-200000' ? 'selected' : ''}>Từ 100.000 - 200.000</option>
-                                            <option value="200000+" ${param.priceRank == '200000+' ? 'selected' : ''}>Trên 200.000</option>         
-                                        </select>
-                                    </div>
-
-                                    <div class="select-group">
-                                        <select name="sortTime">
-                                            <option value="">Thời gian cập nhật</option>
-                                            <option value="asc" ${param.sortTime == 'asc' ? 'selected' : ''}>Tăng dần</option>
-                                            <option value="desc" ${param.sortTime == 'desc' ? 'selected' : ''}>Giảm dần</option>
-                                        </select>
-                                    </div>
-
-                                    <div class="select-group">
-                                        <select name="sortID">
-                                            <option value="">Sort by Id</option>
-                                            <option value="asc" ${param.sortID == 'asc' ? 'selected' : ''}>Tăng dần</option>
-                                            <option value="desc" ${param.sortID == 'desc' ? 'selected' : ''}>Giảm dần</option>
-                                        </select>
-                                    </div>
-
-                                    <div class="select-group">
-                                        <select name="sortPrice">
-                                            <option value="">Sort by Price</option>
-                                            <option value="asc" ${param.sortPrice == 'asc' ? 'selected' : ''}>Tăng dần</option>
-                                            <option value="desc" ${param.sortPrice == 'desc' ? 'selected' : ''}>Giảm dần</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <input type="hidden" name="action" value="displaysortfood" />
-                            <input type="hidden" name="page" id="pageInput" value="${param.page != null ? param.page : 1}" />
-                            <div class="filter-actions">
-                                <button type="button" class="btn btn-outline" onclick="location.href = '${pageContext.request.contextPath}/nutricontrol/showfood'">
-                                    <i class="fas fa-times"></i> Xóa bộ lọc
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="specification-tab" data-bs-toggle="tab" data-bs-target="#specification" type="button" role="tab">
+                                    Thông số kỹ thuật
                                 </button>
-                                <button type="submit" class="btn btn-primary" name="filterSubmit" value="true"><i class="fas fa-filter"></i> Lọc</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="review-tab" data-bs-toggle="tab" data-bs-target="#review" type="button" role="tab">
+                                    Đánh giá
+                                </button>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content" id="productTabContent">
+                            <div class="tab-pane fade show active" id="description" role="tabpanel">
+                               ${detailfood.decription}
                             </div>
-                        </form>
-
-                        <div class="table-container">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Ảnh</th>
-                                        <th>Mã Food</th>
-                                        <th>Tên Món Ăn</th>  
-                                        <th>Category</th>
-                                        <th>Giá</th>
-                                        <th>Trạng Thái</th>
-                                        <th>Cập Nhật Gần Nhất</th>
-                                        <th style="width: 5%;">Thao Tác</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <c:forEach items="${lstFood}" var="food">
-                                        <tr>
-                                            <td>
-                                                <img src="${food.image}" alt="anh food" class="table-avatar"/>
-                                            </td>
-                                            <td><strong>#${food.foodId}</strong></td>
-                                            <td>${food.foodname}</td>
-                                            <td>${food.category}</td>
-                                            <td>
-                                                <span class="price-value">
-                                                    <fmt:formatNumber value="${food.price}" type="number" groupingUsed="true" /> <small>₫</small>
-
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <span class="status-badge status-active">${food.status}</span> 
-                                            </td>
-                                            <td>
-                                                <fmt:formatDate value="${food.update_at}" pattern="dd/MM/yyyy HH:mm:ss" />
-                                            </td>
-                                            <td>
-                                                <div class="table-actions">
-                                                    <a class="action-btn view-btn" title="Xem chi tiết" href="nutricontrol?action=#">
-                                                        <i class="fas fa-eye"></i>
-                                                    </a>
-                                                    <a class="action-btn edit-btn" title="Tạo Bản sao" href="nutricontrol?action=#"">
-                                                        <i class="fas fa-clone"></i>
-                                                    </a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </c:forEach>
-                                    <c:if test="${empty lstFood}">
-                                        <tr>
-                                            <td colspan="8" style="text-align: center; padding: 30px;">
-                                                Không tìm thấy món ăn nào phù hợp.
-                                            </td>
-                                        </tr>
-                                    </c:if>
-                                </tbody>
-                            </table>
-                            <div  id="paginationWrapper" class="pagination-container" style="display: flex; justify-content: space-between; padding: 10px;">
-                                <div style="padding: 10px">Show ${lstFood.size()} of ${totalFood} items</div>
-                                <c:set var="currentPage" value="${param.page != null ? param.page : 1}" />
-                                <c:if test="${totalPages >= 1}">
-                                    <div class="pagination">
-                                        <c:if test="${currentPage > 1}">
-                                            <a href="#" class="prev pagination-link" data-page="${currentPage - 1}">&laquo; Previous</a>
-                                        </c:if>
-                                        <c:forEach var="i" begin="1" end="${totalPages}" varStatus="status">
-                                            <c:choose>
-                                                <c:when test="${i == currentPage}">
-                                                    <span class="current">${i}</span>
-                                                </c:when>
-                                                <c:when test="${i <= currentPage + 2 && i >= currentPage - 2}">
-                                                    <a href="#" class="pagination-link" data-page="${i}">${i}</a>
-                                                </c:when>
-                                                <c:when test="${i == currentPage - 3 || i == currentPage + 3}">
-                                                    <span class="ellipsis">...</span>
-                                                </c:when>
-                                            </c:choose>
-                                        </c:forEach>
-                                        <c:if test="${currentPage < totalPages}">
-                                            <a href="#" class="next pagination-link" data-page="${currentPage + 1}">Next &raquo;</a>
-                                        </c:if>
+                            <div class="tab-pane fade" id="specification" role="tabpanel">
+                                <h6 class="mt-4 mb-3">Thông tin chi tiết:</h6>
+                                ${fooddetail.ingeraction}
+                            </div>
+                            <div class="tab-pane fade" id="review" role="tabpanel">
+                                <div class="review-section">
+                                    <h5 class="mb-3">Đánh giá sản phẩm</h5>
+                                    <div class="mb-3">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <span class="ms-2">5.0 (12 đánh giá)</span>
                                     </div>
-                                </c:if>
+                                    <p class="text-muted">
+                                        Chức năng đánh giá sẽ được cập nhật trong phiên bản tiếp theo.
+                                        Khách hàng có thể để lại nhận xét và đánh giá về chất lượng sản phẩm.
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <jsp:include page="/Nutritionist/footer.jsp"/>  
         </main>
-        <script src="../JS/Nutritionist/common.js"></script>
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-
-<!--        <script src="${pageContext.request.contextPath}/JS/Nutritionist/common.js"></script>-->
         <script>
-                                    function toggleAdvancedFilters() {
-                                        const advancedFilters = document.getElementById('advancedFilters');
-                                        if (window.getComputedStyle(advancedFilters).display === 'none') {
-                                            advancedFilters.style.display = 'block';
-                                        } else {
-                                            advancedFilters.style.display = 'none';
-                                        }
-                                    }
-                                    const input = document.getElementById("searchPrice");
-                                    const select = document.getElementById("priceRank");
+                                            function toggleTagDesc() {
+                                                const desc = document.getElementById("tagDescriptions");
+                                                const btn = document.getElementById("toggleDescBtn");
 
-                                    select.addEventListener("change", function () {
-                                        if (select.value !== "") {
-                                            input.value = "";
-                                            input.disabled = true;
-                                        } else {
-                                            input.disabled = false;
-                                        }
-                                    });
-
-                                    input.addEventListener("input", function () {
-                                        if (input.value !== "") {
-                                            select.value = "";
-                                            select.disabled = true;
-                                        } else {
-                                            select.disabled = false;
-                                        }
-                                    });
-                                    input.addEventListener('input', function () {
-                                        if (parseFloat(input.value) < 0) {
-                                            showAlert("Khôg được nhập giá trị âm", 'danger', 100000);
-                                            input.value = 0;
-                                        }
-                                    });
-
-
-                                    input.addEventListener('keydown', function (e) {
-                                        if (e.key === 'ArrowUp') {
-                                            e.preventDefault();
-                                            input.value = parseInt(input.value || 0) + 10000;
-                                        } else if (e.key === 'ArrowDown') {
-                                            e.preventDefault();
-                                            let newVal = parseInt(input.value || 0) - 10000;
-
-                                        }
-                                    });
-            document.querySelectorAll('.pagination-link').forEach(link => {
-        link.addEventListener('click', function (e) {
-            e.preventDefault();
-            const selectedPage = this.dataset.page;
-            document.getElementById('pageInput').value = selectedPage;
-            document.getElementById('filterForm').submit();
-        });
-    });
+                                                if (desc.classList.contains("expanded")) {
+                                                    desc.classList.remove("expanded");
+                                                    btn.innerText = "Hiển thị thêm";
+                                                } else {
+                                                    desc.classList.add("expanded");
+                                                    btn.innerText = "Thu gọn";
+                                                }
+                                            }
         </script>
-
+        <script src="../JS/Nutritionist/common.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
     </body>
 </html>
 

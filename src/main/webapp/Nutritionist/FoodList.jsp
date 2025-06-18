@@ -50,7 +50,6 @@
         <main class="main-content" id="mainContent">
             <div class="seller-content">
                 <div class="page-header">
-                    
                     <h1 class="page-title">Danh sách món ăn</h1>
                     <ul class="breadcrumb">
                         <li><a href="nutricontrol?action=dashboard">Trang chủ</a></li>

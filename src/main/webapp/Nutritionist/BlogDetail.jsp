@@ -523,8 +523,8 @@
         <jsp:include page="/Nutritionist/main-header.jsp"/>  
         <!-- Main Content -->
         <main class="main-content" id="mainContent">
-
-            <div class="breadcrumb-section">
+            <div class="food-deatail-full">
+                <div class="breadcrumb-section">
                 <div class="breadcrumb-container">
                     <h1 class="page-title" style="padding-left: 32px">Blog Posts</h1>
                     <nav class="breadcrumb-nav">
@@ -741,6 +741,9 @@
                 <jsp:include page="/Nutritionist/footer.jsp"/>  
 
 
+        
+            </div>
+                    
         </main>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

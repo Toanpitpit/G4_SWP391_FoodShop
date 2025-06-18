@@ -10,5 +10,76 @@ package com.example.servlet.model;
  */
 public class FoodDetail {
     private int fdID;
+    private int fdrID;
+    private int fID;
     private boolean isDraft;
+    private String description;
+    private String ingredients;
+
+    public FoodDetail() {
+    }
+
+    public FoodDetail(int fdID, int fdrID, int fID, boolean isDraft, String description, String ingredients) {
+        this.fdID = fdID;
+        this.fdrID = fdrID;
+        this.fID = fID;
+        this.isDraft = isDraft;
+        this.description = description;
+        this.ingredients = ingredients;
+    }
+
+    public int getFdID() {
+        return fdID;
+    }
+
+    public void setFdID(int fdID) {
+        this.fdID = fdID;
+    }
+
+    public int getFdrID() {
+        return fdrID;
+    }
+
+    public void setFdrID(int fdrID) {
+        this.fdrID = fdrID;
+    }
+
+    public int getfID() {
+        return fID;
+    }
+
+    public void setfID(int fID) {
+        this.fID = fID;
+    }
+
+    public boolean isIsDraft() {
+        return isDraft;
+    }
+
+    public void setIsDraft(boolean isDraft) {
+        this.isDraft = isDraft;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(String ingredients) {
+        this.ingredients = ingredients;
+    }
+
+    @Override
+    public String toString() {
+        return "FoodDetail{" + "fdID=" + fdID + ", fdrID=" + fdrID + ", fID=" + fID + ", isDraft=" + isDraft + ", description=" + description + ", ingredients=" + ingredients + '}';
+    }
+    
+    
 }
