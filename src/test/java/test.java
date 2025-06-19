@@ -68,7 +68,7 @@ for (Food food : lstF) {
          for (MonthlyStat monthlyStat : lstM) {
              System.out.println (monthlyStat);
         }
-    
+   //  dàdfsdfsdffdđâ aloo
 //        System.out.println (lstMBlog);
 //        List<MonthlyStat> typeStats = new ArrayList<>();
 //       List<Blogs> lstBlog = _dao.getBlogsByFilter("", 5, true,null);
