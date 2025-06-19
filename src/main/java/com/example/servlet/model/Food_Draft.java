@@ -15,35 +15,27 @@ public class Food_Draft {
     private int originID;
     private int authorID;
     private String foodName;
-    private int catID;
     private String catName;
     private String imageUlr;
-    private String detail;
-    private String ingredients;
-    private int typeBMI; 
     private double price;
     private String status;
     private Timestamp create_at;
     private Timestamp update_at;
 
-    public Food_Draft(int fdrID, int originID, int authorID, String foodName, int catID, String catName, String imageUlr, String detail, String ingredients, int typeBMI, double price, String status, Timestamp create_at, Timestamp update_at) {
+    public Food_Draft() {
+    }
+
+    public Food_Draft(int fdrID, int originID, int authorID, String foodName, String catName, String imageUlr, double price, String status, Timestamp create_at, Timestamp update_at) {
         this.fdrID = fdrID;
         this.originID = originID;
         this.authorID = authorID;
         this.foodName = foodName;
-        this.catID = catID;
         this.catName = catName;
         this.imageUlr = imageUlr;
-        this.detail = detail;
-        this.ingredients = ingredients;
-        this.typeBMI = typeBMI;
         this.price = price;
         this.status = status;
         this.create_at = create_at;
         this.update_at = update_at;
-    }
-
-    public Food_Draft() {
     }
 
     public int getFdrID() {
@@ -78,14 +70,6 @@ public class Food_Draft {
         this.foodName = foodName;
     }
 
-    public int getCatID() {
-        return catID;
-    }
-
-    public void setCatID(int catID) {
-        this.catID = catID;
-    }
-
     public String getCatName() {
         return catName;
     }
@@ -100,30 +84,6 @@ public class Food_Draft {
 
     public void setImageUlr(String imageUlr) {
         this.imageUlr = imageUlr;
-    }
-
-    public String getDetail() {
-        return detail;
-    }
-
-    public void setDetail(String detail) {
-        this.detail = detail;
-    }
-
-    public String getIngredients() {
-        return ingredients;
-    }
-
-    public void setIngredients(String ingredients) {
-        this.ingredients = ingredients;
-    }
-
-    public int getTypeBMI() {
-        return typeBMI;
-    }
-
-    public void setTypeBMI(int typeBMI) {
-        this.typeBMI = typeBMI;
     }
 
     public double getPrice() {
@@ -160,10 +120,7 @@ public class Food_Draft {
 
     @Override
     public String toString() {
-        return "Food_Draft{" + "fdrID=" + fdrID + ", originID=" + originID + ", authorID=" + authorID + ", foodName=" + foodName + ", catID=" + catID + ", catName=" + catName + ", imageUlr=" + imageUlr + ", detail=" + detail + ", ingredients=" + ingredients + ", typeBMI=" + typeBMI + ", price=" + price + ", status=" + status + ", create_at=" + create_at + ", update_at=" + update_at + '}';
-    }
-    
-    
-    
+        return "Food_Draft{" + "fdrID=" + fdrID + ", originID=" + originID + ", authorID=" + authorID + ", foodName=" + foodName + ", catName=" + catName + ", imageUlr=" + imageUlr + ", price=" + price + ", status=" + status + ", create_at=" + create_at + ", update_at=" + update_at + '}';
+    }  
     
 }

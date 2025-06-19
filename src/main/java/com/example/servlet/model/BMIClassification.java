@@ -13,11 +13,12 @@ public class BMIClassification {
     private String classification;
     private float min_bmi;
     private float max_bmi;
-
-    public BMIClassification() {
-    }
     private String decription;
     private String tagetAudience;
+    
+    public BMIClassification() {
+    }
+    
 
     public BMIClassification(int bmiID, String classification, float min_bmi, float max_bmi, String decription, String tagetAudience) {
         this.bmiID = bmiID;

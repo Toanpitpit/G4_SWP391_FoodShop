@@ -1,4 +1,3 @@
-
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -12,6 +11,8 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
         <link rel="stylesheet" href="${pageContext.request.contextPath}/CSS/Ncss/defauld.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/CSS/Ncss/fooddetail.css">
 
@@ -24,12 +25,7 @@
                 --danger-color: #dc3545;
             }
 
-            .main-content {
-                margin-left: 250px;
-                padding: 20px;
-                background-color: #f8f9fa;
-                min-height: 100vh;
-            }
+    
 
             .breadcrumb-container {
                 background: white;
@@ -64,23 +60,32 @@
             }
 
             .product-card {
+                margin: 20px;
+                padding: 10px;
                 background: white;
                 border-radius: 12px;
-                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                box-shadow: 0 8px 25px rgba(0,0,0,0.15),
+                            0 8px 25px rgba(0,0,0,0.15),
+                            0 8px 25px rgba(0,0,0,0.15);
                 overflow: hidden;
+                position: relative;
+                z-index: 10;
+                transform: translateY(-5px);
+                transition: all 0.3s ease;
             }
 
             .product-image {
                 background: #f8f9fa;
-                padding: 10px;
+                padding: 40px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
             }
 
             .product-image img {
+                max-height: 100%;
                 max-width: 100%;
-                max-height: 400px;
+                
                 object-fit: contain;
                 border-radius: 8px;
             }
@@ -90,43 +95,73 @@
             }
 
             .product-title {
-                font-size: 24px;
-                font-weight: 600;
-                color: #333;
-                margin-bottom: 20px;
+                font-size: 30px;
+                font-weight: bold;
+                color: #1a1a1a;
+                margin-bottom: 12px;
+                border-bottom: 2px solid #ddd;
+                margin-top: 30px;
+                text-align: center;
+                ;
             }
 
             .product-price {
                 font-size: 28px;
                 font-weight: 700;
-                color: var(--primary-color);
+                color: orange;
                 margin-bottom: 15px;
             }
 
             .product-meta {
-                display: flex;
-                flex-wrap: wrap;
-                gap: 20px;
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 15px;
                 margin-bottom: 20px;
+                padding: 20px;
+                background: #f8f9fa;
+                border-radius: 8px; 
+               
+            }
+            .product-full {
+                border: 2px solid #e0e0e0;     
+                padding: 16px;
+                border-radius: 12px;
+                background-color: #ffffff;     
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); 
+                transition: all 0.3s ease;
             }
 
             .meta-item {
                 display: flex;
-                flex-direction: column;
-                gap: 5px;
+                align-items: center;
+                gap: 10px;
+                padding: 10px;
+                background: white;
+                border-radius: 6px;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+                transition: all 0.3s ease;
             }
 
             .meta-label {
-                font-size: 12px;
+                font-size: 11px;
                 color: var(--secondary-color);
                 text-transform: uppercase;
-                font-weight: 500;
+                font-weight: 600;
+                min-width: 60px;
+                display: flex;
+                align-items: center;
+                gap: 4px;
             }
 
             .meta-value {
                 font-size: 14px;
                 color: #333;
                 font-weight: 500;
+                flex: 1;
+            }
+
+            .meta-row {
+                display: contents;
             }
 
             .status-badge {
@@ -162,11 +197,6 @@
                 margin-right: 10px;
                 border-radius: 8px 8px 0 0;
                 background: transparent;
-            }
-
-            .nav-tabs .nav-link:hover {
-                color: var(--primary-color);
-                background-color: #f8f9fa;
             }
 
             .nav-tabs .nav-link.active {
@@ -237,17 +267,6 @@
                 background-color: #e0a800;
                 transform: translateY(-2px);
             }
-
-            .btn-delete {
-                background-color: var(--danger-color);
-                color: white;
-            }
-
-            .btn-delete:hover {
-                background-color: #c82333;
-                transform: translateY(-2px);
-            }
-
             .btn-back {
                 background-color: var(--secondary-color);
                 color: white;
@@ -294,6 +313,127 @@
                 margin: 0 2px;
             }
 
+            /* Fixed CSS for collapsed text */
+            .collapsed-text {
+                max-height: 100px;
+                overflow: hidden;
+                transition: max-height 0.3s ease;
+                position: relative;
+            }
+
+            .collapsed-text.expanded {
+                max-height: none;
+            }
+
+            .meta-label {
+                font-weight: bold;
+                margin-right: 8px;
+                font-size: 15px;
+            }
+
+            .status-badge {
+                display: inline-block;
+                padding: 2px 8px;
+                background-color: #28a745;
+                color: white;
+                border-radius: 8px;
+                font-size: 0.85rem;
+            }
+
+            #toggleDescBtn {
+                color: #007bff;
+                cursor: pointer;
+                font-size: 0.9rem;
+                background: none;
+                border: none;
+                padding: 0;
+                margin-top: 10px;
+            }
+
+            #toggleDescBtn:hover {
+                text-decoration: underline;
+            }
+
+            .sub-tag {
+                display: inline-block;
+                padding: 4px 12px;
+                margin: 2px 4px;
+                border-radius: 20px;
+                font-size: 0.8rem;
+                font-weight: 500;
+                border: 1px solid transparent;
+            }
+
+            .tag-description-section {
+                margin-top: 20px;
+                padding: 20px;
+                background: #f8f9fa;
+                border-radius: 8px;
+               
+            }
+
+            .section-title {
+                color: var(--primary-color);
+                font-size: 16px;
+                font-weight: 600;
+                margin-bottom: 15px;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+
+            .tag-desc-item {
+                margin-bottom: 12px;
+                padding: 12px;
+                background: white;
+                border-radius: 6px;
+                border-left: 3px solid var(--success-color);
+            }
+
+            .tag-name {
+                color: var(--primary-color);
+                font-weight: 600;
+            }
+
+            .tag-desc {
+                color: #555;
+                line-height: 1.5;
+            }
+
+            .no-desc {
+                color: var(--secondary-color);
+                font-style: italic;
+                text-align: center;
+                padding: 20px;
+            }
+
+            #toggleDescBtn {
+                color: var(--primary-color);
+                cursor: pointer;
+                font-size: 0.9rem;
+                background: none;
+                border: none;
+                padding: 8px 16px;
+                margin-top: 10px;
+                border-radius: 20px;
+                transition: all 0.3s ease;
+                font-weight: 500;
+            }
+
+            #toggleDescBtn:hover {
+                background-color: var(--primary-color);
+                color: white;
+                transform: translateY(-1px);
+            }
+
+            #toggleDescBtn i {
+                transition: transform 0.3s ease;
+            }
+
+            .collapsed-text.expanded + #toggleDescBtn i {
+                transform: rotate(180deg);
+            }
+
             @media (max-width: 768px) {
                 .main-content {
                     margin-left: 0;
@@ -319,44 +459,6 @@
                 }
             }
         </style>
-        <style>
-            .collapsed-text {
-                max-height: 100px;
-                overflow: hidden;
-                transition: max-height 0.3s ease;
-                position: relative;
-            }
-
-            .collapsed-text.expanded {
-                max-height: none;
-            }
-
-            .meta-label {
-                font-weight: bold;
-                margin-right: 8px;
-            }
-
-            .status-badge {
-                display: inline-block;
-                padding: 2px 8px;
-                background-color: #28a745;
-                color: white;
-                border-radius: 8px;
-                font-size: 0.85rem;
-            }
-
-            #toggleDescBtn {
-                color: #007bff;
-                cursor: pointer;
-                font-size: 0.9rem;
-            }
-
-            #toggleDescBtn:hover {
-                text-decoration: underline;
-            }
-        </style>
-
-
     </head>
     <body>
         <!-- Sidebar -->
@@ -366,10 +468,10 @@
 
         <main class="main-content" id="mainContent">
             <div class="container-fluid">
-                <!-- Breadcrumb -->
+
                 <div class="breadcrumb-container mb-4">
                     <nav class="breadcrumb-nav">
-                        <a href="${pageContext.request.contextPath}/nutricotrol?action=dashboard" class="breadcrumb-item">Trang chủ</a>
+                        <a href="${pageContext.request.contextPath}/nutricontrol?action=dashboard" class="breadcrumb-item">Trang chủ</a>
                         <span class="breadcrumb-separator">/</span>
                         <a href="${pageContext.request.contextPath}/nutricontrol?action=showfood" class="breadcrumb-item">Danh sách thực phẩm</a>
                         <span class="breadcrumb-separator">/</span>
@@ -379,10 +481,17 @@
 
                 <div class="product-card">
                     <div class="row g-0">
-                        <!-- Product Image -->
-                        <div class="col-lg-5">
+                      
+                        <div class="col-lg-5 d-flex justify-content-center align-items-center">
                             <div class="product-image">
-                                <img src="${pageContext.request.contextPath}/${food.image}" alt="" id="productImage">
+                                <c:choose>
+                                    <c:when test="${not empty food.image}">
+                                        <img src="${pageContext.request.contextPath}/img/logo/logo.png" alt="fad" id="productImage">
+                                    </c:when>
+                                    <c:otherwise>
+                                        <img src="${pageContext.request.contextPath}/img/logo/logo.png" alt="Không có hình ảnh" id="productImage">
+                                    </c:otherwise>
+                                </c:choose>
                             </div>
                         </div>
 
@@ -390,62 +499,117 @@
                             <div class="product-info">
                                 <!-- Title -->
                                 <h1 class="product-title" id="productName">
-                                    ${food.name}
+                                    ${food.foodname}
                                 </h1>
-                                <div class="product-price" id="productPrice"> $ ${food.price}</div>
-                                <div class="product-meta" style="display: flex; flex-direction: column; justify-content: left; gap: 5px;">
-                                    <div class="meta-row" style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
-                                        <div class="meta-item">
-                                            <span class="meta-label">ID</span>
-                                            <span class="meta-value" id="productSku"> <i class="fas fa-id"></i>$food.id}</span>
+                                <div class="product-full">
+                                    <div class="product-price-box" style="margin-left: 30px; display: flex; align-items: center; padding: 10px; background-color: #fdf2f2;border-radius: 8px;">
+                                        <div class="price-label" style="font-weight: bold; color: #555; font-size: 25px;">
+                                            <i class="bi bi-currency-dollar" style="margin-right: 5px;"></i>Giá:
                                         </div>
+                                        <div class="price-value" id="productPrice" style="color: #d9534f; font-size: 24px; font-weight: bold; margin-left: 10px;">
+                                            ${food.price}vnđ
+                                        </div>
+                                    </div>
+
+
+                                    <div class="product-meta">
+                                        <!-- ID và Trạng thái -->
                                         <div class="meta-item">
-                                            <span class="meta-label">Trạng thái</span>
-                                            <span class="status-badge status-active" id="productStatus">${food.status}</span>
-                                        </div> 
+                                            <span class="meta-label">
+                                            <i class="fas fa-id-card"></i> ID
+                                        </span>
+                                        <span class="meta-value" id="productSku">${food.foodId}</span>
+                                    </div>
+                                    
+                                    <div class="meta-item">
+                                        <span class="meta-label">
+                                            <i class="fas fa-toggle-on"></i> Trạng thái
+                                        </span>
+                                        <span class="status-badge status-active" id="productStatus">${food.status}</span>
+                                    </div>
+                                 
+                                    <!-- Danh mục -->
+                                    <div class="meta-item">
+                                        <span class="meta-label">
+                                            <i class="fas fa-tags"></i> Danh mục
+                                        </span>
+                                        <span class="meta-value" id="productCategory">${food.category}</span>
                                     </div>
                                     <div class="meta-item">
-                                        <span class="meta-label">Danh mục</span>
-                                        <i class="fas fa-calendar"></i>
-                                                <span><fmt:formatDate
-                                                        value="${food.create_at}"
-                                                        pattern="yyyy-MM-dd HH:mm:ss" />
-                                                </span>
-                                    </div>    
-                                    <div class="meta-item">
-                                        <span class="meta-label">Danh mục</span>
-                                        <span class="meta-value" id="productCategory">${food.caName}</span>
-                                    </div>
-                                    <div class="meta-item">
-                                        <span class="meta-label">Tags</span>
-                                        <span class="meta-value" id="productTags">
-                                            <c:forEach var="re" items="${recommendation}">
-                                                <span class="sub-tag">
-                                                   ${re}
-                                                </span>
-                                            </c:forEach>
+                                        <span class="meta-label">
+                                            <i class="fas fa-calendar"></i> Ngày tạo
+                                        </span>
+                                        <span class="meta-value">
+                                            <fmt:formatDate value="${food.create_at}" pattern="dd/MM/yyyy" />
                                         </span>
                                     </div>
-                                    <div class="meta-item">
-                                        <span class="meta-label">Mô tả tag</span>
-                                        <div id="tagDescriptions" class="collapsed-text">
-                                            <c:forEach var="tag_info" items="${subdetailforBMI}">
-                                                ${tag_info}
-                                            </c:forEach>
+
+                                    <!-- Tags -->
+                                    <div class="meta-item" style="grid-column: 1 / -1;">
+                                        <span class="meta-label">
+                                            <i class="fas fa-bookmark"></i> Tags
+                                        </span>
+                                        <div class="meta-value" id="productTags">
+                                            <c:choose>
+                                                <c:when test="${not empty tagetaudience}">
+                                                    <c:forEach var="ta" items="${tagetaudience}">
+                                                        <span class="sub-tag" style="background-color: green; color: white">
+                                                            ${ta.classification}
+                                                        </span>
+                                                    </c:forEach>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <span class="sub-tag" style="background-color: gray; color: white">
+                                                        Không có thông tin BMI phù hợp
+                                                    </span>
+                                                </c:otherwise>
+                                            </c:choose>
                                         </div>
-                                        <a href="javascript:void(0);" id="toggleDescBtn" class = "bmi-taget-info" onclick="toggleTagDesc()>Hiển thị thêm</a>
                                     </div>
                                 </div>
+
+                                <!-- Tag Description Section -->
+                                <div class="tag-description-section">
+                                    <h6 class="section-title">
+                                        <i class="fas fa-info-circle"></i> Mô tả chi tiết Tags
+                                    </h6>
+                                    <div class="collapsed-text" id="tagDescription">
+                                        <c:choose>
+                                            <c:when test="${not empty tagetaudience}">
+                                                <c:forEach var="ta" items="${tagetaudience}" varStatus="status">
+                                                    <div class="tag-desc-item">
+                                                        <strong class="tag-name">${ta.decription}:</strong> 
+                                                        <span class="tag-desc">
+                                                            <c:choose>
+                                                                <c:when test="${not empty ta.tagetAudience}">
+                                                                    ${ta.tagetAudience}
+                                                                </c:when>
+                                                                <c:otherwise>
+                                                                    Không có mô tả
+                                                                </c:otherwise>
+                                                            </c:choose>
+                                                        </span>
+                                                    </div>
+                                                </c:forEach>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <p class="no-desc">Không có mô tả cho tag BMI.</p>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </div>
+                                   
+                                </div>
+                                </div>
                                 <div class="action-buttons mt-3">
-                                    <a href="nutricontol?action=copyfood" class="btn-custom btn-edit" id="editBtn">
+                                    <a href="nutricontrol?action=copyfood&id=${food.foodId}" class="btn-custom btn-edit" id="editBtn">
                                         <i class="fas fa-edit"></i> Tạo bản sao
                                     </a>
                                 </div>
                             </div>
                         </div>
+
                     </div>
 
-                    <!-- Product Tabs -->
                     <div class="product-tabs" style="margin-left: 30px">
                         <ul class="nav nav-tabs" id="productTabs" role="tablist">
                             <li class="nav-item" role="presentation">
@@ -467,11 +631,25 @@
 
                         <div class="tab-content" id="productTabContent">
                             <div class="tab-pane fade show active" id="description" role="tabpanel">
-                               ${detailfood.decription}
+                                <c:choose>
+                                    <c:when test="${not empty fooddetail.description}">
+                                        ${fooddetail.description}
+                                    </c:when>
+                                    <c:otherwise>
+                                        <p>Chưa có mô tả chi tiết cho sản phẩm này.</p>
+                                    </c:otherwise>
+                                </c:choose>
                             </div>
                             <div class="tab-pane fade" id="specification" role="tabpanel">
                                 <h6 class="mt-4 mb-3">Thông tin chi tiết:</h6>
-                                ${fooddetail.ingeraction}
+                                <c:choose>
+                                    <c:when test="${not empty fooddetail.ingredients}">
+                                        ${fooddetail.ingredients}
+                                    </c:when>
+                                    <c:otherwise>
+                                        <p>Chưa có thông tin thành phần chi tiết.</p>
+                                    </c:otherwise>
+                                </c:choose>
                             </div>
                             <div class="tab-pane fade" id="review" role="tabpanel">
                                 <div class="review-section">
@@ -494,29 +672,37 @@
                     </div>
                 </div>
             </div>
+            <jsp:include page="/Nutritionist/footer.jsp"/>  
         </main>
 
+        <!-- Fixed JavaScript loading -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
         <script>
-                                            function toggleTagDesc() {
-                                                const desc = document.getElementById("tagDescriptions");
-                                                const btn = document.getElementById("toggleDescBtn");
+            // Toggle description function
+            function toggleDescription() {
+                const descElement = document.getElementById('tagDescription');
+                const toggleBtn = document.getElementById('toggleDescBtn');
+                
+                if (descElement.classList.contains('expanded')) {
+                    descElement.classList.remove('expanded');
+                    toggleBtn.innerHTML = '<i class="fas fa-chevron-down"></i> Xem thêm';
+                } else {
+                    descElement.classList.add('expanded');
+                    toggleBtn.innerHTML = '<i class="fas fa-chevron-up"></i> Thu gọn';
+                }
+            }
 
-                                                if (desc.classList.contains("expanded")) {
-                                                    desc.classList.remove("expanded");
-                                                    btn.innerText = "Hiển thị thêm";
-                                                } else {
-                                                    desc.classList.add("expanded");
-                                                    btn.innerText = "Thu gọn";
-                                                }
-                                            }
+            // Initialize page
+            document.addEventListener('DOMContentLoaded', function() {
+                console.log('Page loaded successfully');
+                
+                // Initialize Bootstrap tabs
+                var triggerTabList = [].slice.call(document.querySelectorAll('#productTabs button'));
+                triggerTabList.forEach(function (triggerEl) {
+                    var tabTrigger = new bootstrap.Tab(triggerEl);
+                });
+            });
         </script>
-        <script src="../JS/Nutritionist/common.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+        <script src="${pageContext.request.contextPath}/JS/Nutritionist/common.js"></script>
     </body>
 </html>
-
-
-
-

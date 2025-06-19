@@ -10,8 +10,8 @@ package com.example.servlet.model;
  */
 public class FoodDetail {
     private int fdID;
-    private int fdrID;
-    private int fID;
+    private Integer fdrID;
+    private Integer fID;
     private boolean isDraft;
     private String description;
     private String ingredients;
@@ -19,7 +19,7 @@ public class FoodDetail {
     public FoodDetail() {
     }
 
-    public FoodDetail(int fdID, int fdrID, int fID, boolean isDraft, String description, String ingredients) {
+    public FoodDetail(int fdID, Integer fdrID, Integer fID, boolean isDraft, String description, String ingredients) {
         this.fdID = fdID;
         this.fdrID = fdrID;
         this.fID = fID;
@@ -36,19 +36,19 @@ public class FoodDetail {
         this.fdID = fdID;
     }
 
-    public int getFdrID() {
+    public Integer getFdrID() {
         return fdrID;
     }
 
-    public void setFdrID(int fdrID) {
+    public void setFdrID(Integer fdrID) {
         this.fdrID = fdrID;
     }
 
-    public int getfID() {
+    public Integer getfID() {
         return fID;
     }
 
-    public void setfID(int fID) {
+    public void setfID(Integer fID) {
         this.fID = fID;
     }
 
@@ -75,6 +75,8 @@ public class FoodDetail {
     public void setIngredients(String ingredients) {
         this.ingredients = ingredients;
     }
+    
+    
 
     @Override
     public String toString() {

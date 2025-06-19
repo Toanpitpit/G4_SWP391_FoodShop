@@ -53,18 +53,15 @@
                     <h1 class="page-title">Danh sách món ăn</h1>
                     <ul class="breadcrumb">
                         <li><a href="nutricontrol?action=dashboard">Trang chủ</a></li>
-                        <li><a href="nutricontrol?action=showfoodlist">Food</a></li>
-                        <li>Danh sách đồ ăn</li>
+                        <li><a href="nutricontrol?action=showfoodsuggestionlist">Food Suggestion</a></li>
+                        <li>Danh sách đồ ăn gợi ý</li>
                     </ul>
                 </div>
 
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title"><i class="fas fa-list-ul"></i>Danh sách đồ ăn</h3>
+                        <h3 class="card-title"><i class="fas fa-list-ul"></i>Danh sách đồ ăn gơi ý </h3>
                         <div class="card-tools">
-                            <button class="btn btn-outline">
-                                <i class="fas fa-file-export"></i>Xuất dữ liệu
-                            </button>
                         </div>
                     </div>
                     <div class="card-body">
@@ -160,13 +157,14 @@
                                 <thead>
                                     <tr>
                                         <th>Ảnh</th>
-                                        <th>Mã Food</th>
+                                        <th>Mã Food Suggestion</th>
+                                        <th>Mã Food Origin</th>
                                         <th>Tên Món Ăn</th>  
                                         <th>Category</th>
                                         <th>Giá</th>
                                         <th>Trạng Thái</th>
                                         <th>Cập Nhật Gần Nhất</th>
-                                        <th style="width: 5%;">Thao Tác</th>
+                                        <th style="width: 15%;">Thao Tác</th>
                                     </tr>
                                 </thead>
                                 <tbody>

@@ -4,12 +4,14 @@ import com.example.servlet.dao.AccountDAO;
 import com.example.servlet.dao.BMIClassificationDAO;
 import com.example.servlet.dao.BlogDAO;
 import com.example.servlet.dao.FoodDAO;
+import com.example.servlet.dao.FoodDetailDAO;
 import com.example.servlet.dao.NotifyDAO;
 import com.example.servlet.dao.RequestDAO;
 import com.example.servlet.model.Account;
 import com.example.servlet.model.BMIClassification;
 import com.example.servlet.model.Blogs;
 import com.example.servlet.model.Food;
+import com.example.servlet.model.FoodDetail;
 import com.example.servlet.model.MonthlyStat;
 import com.example.servlet.model.Notifys;
 import java.sql.Date;
@@ -33,35 +35,31 @@ import org.mindrot.jbcrypt.BCrypt;
 public class test {
     
     public static void main(String[] args) throws SQLException {
-//        dis4();
-//        dis6();
-//         dis5();
-dis8();
-//dis();
- try {
-           FoodDAO dao = new FoodDAO();
-            String name = "";               // lọc theo tên, null nếu không cần
-            String category = null;        // lọc theo danh mục, null nếu không cần
-            String status = "Active";      // "Active", "Inactive", hoặc null
-            // Map chứa các trường sắp xếp và hướng sắp xếp
-            Map<String, String> sortFields = new HashMap<>();
-            sortFields.put("id", "DESC");
-            sortFields.put("create_at", "ASC");
-            int page = 1;
-            int pageSize = 10;
-
-//            List<Food> foodList = dao.getListFoods(name, category, status,"20000", null,null, page, pageSize);
-//
-//            System.out.println("===== KẾT QUẢ =====");
-//            for (Food food : foodList) {
-//                System.out.printf("ID: %d | Tên: %s | Giá: %.2f | Tạo lúc: %s | Trạng thái: %s%n",
-//                        food.getFoodId(), food.getFoodname(), food.getPrice(), food.getCreate_at(), food.getStatus());
-//            }
-
+         try{
+             diss();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+    
+ public static void diss() {
+     try {
+          FoodDetailDAO fddao= new FoodDetailDAO();
+     FoodDAO dao = new FoodDAO();
+     List<Food> lstF = dao.getListFoods (null, null, null, null, null, null, null, 1, 3);
+     Food f = dao.getFoodById (3);
+     FoodDetail fd = fddao.getFoodDetailByIdAndDraft (3, true);
+     FoodDetail fdf = fddao.getFoodDetailByIdAndDraft (3, false);
+//     System.out.println (fd);
+//     System.out.println (f);
+//     System.out.println (fdf);
+for (Food food : lstF) {
+         System.out.println (food);    
+         }
+     } catch (Exception e) {
+     }
+     
+}
     public static void dis() throws SQLException{
         BlogDAO _dao = new BlogDAO();
         RequestDAO r_dao  = new RequestDAO ();

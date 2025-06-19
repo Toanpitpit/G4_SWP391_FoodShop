@@ -71,7 +71,6 @@
                 </a>
                 <div class="submenu">
                     <a href="${pageContext.request.contextPath}/nutricontrol?action=showfood" class="menu-link">Food List </a>
-                    <a href="${pageContext.request.contextPath}/nutricontrol?action=showfooddetail" class="menu-link">Food Detail</a>
                 </div>
             </div>
             <div class="menu-item">
