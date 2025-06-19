@@ -43,21 +43,21 @@ public class test {
     }
     
  public static void diss() {
-     try {
-          FoodDetailDAO fddao= new FoodDetailDAO();
-     FoodDAO dao = new FoodDAO();
-     List<Food> lstF = dao.getListFoods (null, null, null, null, null, null, null, 1, 3);
-     Food f = dao.getFoodById (3);
-     FoodDetail fd = fddao.getFoodDetailByIdAndDraft (3, true);
-     FoodDetail fdf = fddao.getFoodDetailByIdAndDraft (3, false);
-//     System.out.println (fd);
-//     System.out.println (f);
-//     System.out.println (fdf);
-for (Food food : lstF) {
-         System.out.println (food);    
-         }
-     } catch (Exception e) {
-     }
+//     try {
+//          FoodDetailDAO fddao= new FoodDetailDAO();
+//     FoodDAO dao = new FoodDAO();
+//     List<Food> lstF = dao.getListFoods (null, null, null, null, null, null, null, 1, 3);
+//     Food f = dao.getFoodById (3);
+//     FoodDetail fd = fddao.getFoodDetailByIdAndDraft (3, true);
+//     FoodDetail fdf = fddao.getFoodDetailByIdAndDraft (3, false);
+////     System.out.println (fd);
+////     System.out.println (f);
+////     System.out.println (fdf);
+//for (Food food : lstF) {
+//         System.out.println (food);    
+//         }
+//     } catch (Exception e) {
+//     }
      
 }
     public static void dis() throws SQLException{
