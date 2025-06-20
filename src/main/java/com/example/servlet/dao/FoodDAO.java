@@ -25,11 +25,11 @@ public class FoodDAO {
             int page, int pageSize) throws SQLException {
 
         QueryBuilder queryBuilder = new QueryBuilder (BASE_QUERY)
-                .addFilter ("name", searchKey) // searchKey từ form
+                .addFilter ("name", searchKey) 
                 .addFilter ("category", category)
                 .addFilter ("status", status)
-                .addFilter ("searchPrice", searchPrice) // giá max đơn giản
-                .addFilter ("priceRank", priceRank) // range giá từ dropdown
+                .addFilter ("searchPrice", searchPrice)
+                .addFilter ("priceRank", priceRank) 
                 .addFilter ("bmiID", bmiId)
                 .addSorting (sortFields)
                 .addPagination (page, pageSize);

@@ -4,14 +4,14 @@ import com.example.servlet.dao.AccountDAO;
 import com.example.servlet.dao.BMIClassificationDAO;
 import com.example.servlet.dao.BlogDAO;
 import com.example.servlet.dao.FoodDAO;
-import com.example.servlet.dao.FoodDetailDAO;
+import com.example.servlet.dao.FoodDraftDAO;
 import com.example.servlet.dao.NotifyDAO;
 import com.example.servlet.dao.RequestDAO;
 import com.example.servlet.model.Account;
 import com.example.servlet.model.BMIClassification;
 import com.example.servlet.model.Blogs;
 import com.example.servlet.model.Food;
-import com.example.servlet.model.FoodDetail;
+import com.example.servlet.model.Food_Draft;
 import com.example.servlet.model.MonthlyStat;
 import com.example.servlet.model.Notifys;
 import java.sql.Date;
@@ -21,6 +21,8 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.mindrot.jbcrypt.BCrypt;
 
 /*
@@ -36,7 +38,7 @@ public class test {
     
     public static void main(String[] args) throws SQLException {
          try{
-             diss();
+             dis9();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -101,6 +103,7 @@ public class test {
 //        }
     }
    public static void dis2() {
+       
     BlogDAO _dao = new BlogDAO();
     Blogs testBlog = new Blogs(
     1, // blogID
@@ -187,22 +190,40 @@ public static void dis8() throws SQLException {
              
     }
     
-    
 }
 
 
-//public static void dis8() throws SQLException {
-//      BMIClassificationDAO bi_dao = new BMIClassificationDAO ();
-//                RequestDAO r_dao = new RequestDAO ();
-//                BlogDAO b_dao = new BlogDAO ();
-//                NotifyDAO n_dao = new NotifyDAO ();
-//                FoodDraftDAO fd_dao = new FoodDraftDAO ();
-//                int totalFdrf = fd_dao.getTotalFooddraft (-1);
-//                int totalBlog  = b_dao.getTotalBlog ();
-//                int totalNotify = n_dao.getTotalNotify (-1,null);
-//                int totalRequest = r_dao.getTotalRequest (-1);
-//                List<MonthlyStat> lstM = r_dao.countRequestsByStatus (-1);
-//                
-//                System.out.println (totalBlog + "+ " + totalFdrf +" +" +  totalNotify + "+" + totalRequest+ " + " + lstM);
-//}
+
+public static void dis9()  {
+        try {
+            Map<String, String> filters = new HashMap<>();
+            filters.put("searchKey", "");
+            filters.put("category", "");
+            filters.put("status", "");
+            filters.put("searchPrice", "");
+            filters.put("priceRank", "");
+            filters.put("bmiId", "");
+            filters.put("authorId", "19");
+            
+            
+            Map<String, String> sortAndPagination = new HashMap<>();
+            sortAndPagination.put("sortprice", "desc");
+            sortAndPagination.put("sorttime", "asc");
+            sortAndPagination.put("page", "1");
+            sortAndPagination.put("pageSize", "10");
+            
+            
+            FoodDraftDAO dao = new FoodDraftDAO();
+            List<Food_Draft> results = dao.getListFoodDrafts(filters, sortAndPagination);
+            int total = dao.getListFoodDraftsTotal(filters, sortAndPagination);
+            for (Food_Draft result : results) {
+                System.out.println (result);
+            }   
+            System.out.println (total);
+        } catch (SQLException ex) {
+                
+            Logger.getLogger (test.class.getName()).log (Level.SEVERE, null, ex);
+        }
+}
+
 }

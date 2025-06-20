@@ -16,26 +16,26 @@
         <link rel="stylesheet" href="${pageContext.request.contextPath}/CSS/Ncss/defauld.css">
         <style>
             .pagination-link{
-                border-radius: 10px: 
-                
+                border-radius: 10px:
+
             }
             .pagination a, .pagination span {
-    padding: 8px 12px;
-    border: 1px solid #ddd;
-    text-decoration: none;
-    color: #333;
-}
+                padding: 8px 12px;
+                border: 1px solid #ddd;
+                text-decoration: none;
+                color: #333;
+            }
 
-.pagination a:hover {
-    background:linear-gradient(135deg, var(--primary-green), #3b82f6) !important;
-}
+            .pagination a:hover {
+                background:linear-gradient(135deg, var(--primary-green), #3b82f6) !important;
+            }
 
-.pagination .current {
-    background:linear-gradient(135deg, var(--primary-green), #3b82f6) !important;
-    color: white;
-    border-color: #4CAF50;
-    border-radius: 10px;
-}
+            .pagination .current {
+                background:linear-gradient(135deg, var(--primary-green), #3b82f6) !important;
+                color: white;
+                border-color: #4CAF50;
+                border-radius: 10px;
+            }
         </style>
 
 
@@ -53,7 +53,7 @@
                     <h1 class="page-title">Danh sách món ăn</h1>
                     <ul class="breadcrumb">
                         <li><a href="nutricontrol?action=dashboard">Trang chủ</a></li>
-                        <li><a href="nutricontrol?action=showfoodsuggestionlist">Food Suggestion</a></li>
+                        <li><a href="nutricontrol?action=showfooddraft">Food Suggestion</a></li>
                         <li>Danh sách đồ ăn gợi ý</li>
                     </ul>
                 </div>
@@ -66,7 +66,7 @@
                     </div>
                     <div class="card-body">
 
-                        <form action="${pageContext.request.contextPath}/nutricontrol?action=displaysortfood" method="GET" id="filterForm">
+                        <form action="${pageContext.request.contextPath}/nutricontrol?action=displaysortfooddraft" method="GET" id="filterForm">
                             <div class="filter-controls">
                                 <div class="input-group" style="flex-grow: 1;">
                                     <i class="fas fa-search"></i>
@@ -86,17 +86,46 @@
                                 <div class="select-group">
                                     <select name="bmiId" id="bmiId">
                                         <option value="">-- Chọn danh mục BMI --</option>
-                                        <c:forEach var="bmi" items="${lstBMI}">
-                                            <option value="${bmi.bmiID}" ${bmi.bmiID == param.bmiId ? 'selected' : ''}>${bmi.classification}</option>
-                                        </c:forEach>
+                                        <c:choose>
+                                            <c:when test="${not empty lstBMI}">
+                                                <c:forEach var="bmi" items="${lstBMI}">
+                                                    <c:choose>
+                                                        <c:when test="${bmi.bmiID == param.bmiId}">
+                                                            <option value="${bmi.bmiID}" selected>${bmi.classification}</option>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <option value="${bmi.bmiID}">${bmi.classification}</option>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </c:forEach>
+                                            </c:when>  
+                                            <c:otherwise>
+                                                <option disabled>Không có danh mục BMI nào</option>
+                                            </c:otherwise>
+                                        </c:choose>
                                     </select>
+
                                 </div>
                                 <div class="select-group">
                                     <select name="category" id="category">
                                         <option value="">-- Loại món ăn --</option>
-                                        <c:forEach var="c" items="${lstC}">
-                                            <option value="${c.catID}" ${c.catID == param.category ? 'selected' : ''}>${c.caName}</option>
-                                        </c:forEach>
+                                        <c:choose>
+                                            <c:when test="${not empty lstC}">
+                                                <c:forEach var="c" items="${lstC}">
+                                                    <c:choose>
+                                                        <c:when test="${c.catID == param.category}">
+                                                            <option value="${c.catID}" selected>${c.caName}</option>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <option value="${c.catID}">${c.caName}</option>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </c:forEach>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <option disabled>Không có loại món ăn nào</option>
+                                            </c:otherwise>
+                                        </c:choose>
                                     </select>
                                 </div>
                                 <button type="button" class="btn btn-outline" onclick="toggleAdvancedFilters()">
@@ -142,10 +171,10 @@
                                     </div>
                                 </div>
                             </div>
-                            <input type="hidden" name="action" value="displaysortfood" />
+                            <input type="hidden" name="action" value="displaysortfooddraft" />
                             <input type="hidden" name="page" id="pageInput" value="${param.page != null ? param.page : 1}" />
                             <div class="filter-actions">
-                                <button type="button" class="btn btn-outline" onclick="location.href = '${pageContext.request.contextPath}/nutricontrol/showfood'">
+                                <button type="button" class="btn btn-outline" onclick="location.href = '${pageContext.request.contextPath}/nutricontrol/displaysortfooddraft'">
                                     <i class="fas fa-times"></i> Xóa bộ lọc
                                 </button>
                                 <button type="submit" class="btn btn-primary" name="filterSubmit" value="true"><i class="fas fa-filter"></i> Lọc</button>
@@ -156,61 +185,78 @@
                             <table>
                                 <thead>
                                     <tr>
-                                        <th>Ảnh</th>
-                                        <th>Mã Food Suggestion</th>
-                                        <th>Mã Food Origin</th>
+                                        <th style="width: 10%;" >Ảnh</th>
+                                        <th>ID</th>
+                                        <th>Origin ID</th>
                                         <th>Tên Món Ăn</th>  
                                         <th>Category</th>
                                         <th>Giá</th>
                                         <th>Trạng Thái</th>
                                         <th>Cập Nhật Gần Nhất</th>
-                                        <th style="width: 15%;">Thao Tác</th>
+                                        <th style="width: 8%;">Thao Tác</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <c:forEach items="${lstFood}" var="food">
-                                        <tr>
-                                            <td>
-                                                <img src="${food.image}" alt="anh food" class="table-avatar"/>
-                                            </td>
-                                            <td><strong>#${food.foodId}</strong></td>
-                                            <td>${food.foodname}</td>
-                                            <td>${food.category}</td>
-                                            <td>
-                                                <span class="price-value">
-                                                    <fmt:formatNumber value="${food.price}" type="number" groupingUsed="true" /> <small>₫</small>
+                                    <c:choose>
+                                        <c:when test="${not empty lstFoodDr}">
+                                            <c:forEach items="${lstFoodDr}" var="food">
+                                                <tr>
+                                                    <td>
+                                                        <img src="${food.imageUlr}" alt="ảnh food" class="table-avatar" />
+                                                    </td>
+                                                    <td><strong>#${food.fdrID}</strong></td>
+                                                    <td><strong><c:choose>
+                                                                <c:when test="${food.originID > 0}">
+                                                                    #${food.originID}
+                                                                </c:when>
+                                                                <c:otherwise>
+                                                                    Tạo mới
+                                                                </c:otherwise>
+                                                            </c:choose>
+</strong></td>
+                                                    <td>${food.foodName}</td>
+                                                    <td>${food.catName}</td>
+                                                    <td>
+                                                        <span class="price-value">
+                                                            <fmt:formatNumber value="${food.price}" type="number" groupingUsed="true" /> <small>₫</small>
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <span class="status-badge status-active">${food.status}</span>
+                                                    </td>
+                                                    <td>
+                                                        <fmt:formatDate value="${food.update_at}" pattern="dd/MM/yyyy HH:mm:ss" />
+                                                    </td>
+                                                    <td>
+                                                        <div class="table-actions">
+                                                            <a class="action-btn view-btn" title="Xem chi tiết" href="nutricontrol?action=showfooddraftdetail&id=${food.fdrID}">
+                                                                <i class="fas fa-eye"></i>
+                                                            </a>
+                                                            <a class="action-btn edit-btn" title="Xem chi tiết" href="nutricontrol?action=showfooddraftdetail&id=${food.fdrID}">
+                                                                <i class="fas fa-edit"></i>
+                                                            </a>    
+                                                            <a class="action-btn remove-btn" title="Xem chi tiết" href="nutricontrol?action=showfooddraftdetail&id=${food.fdrID}">
+                                                                <i class="fas fa-delete"></i>
+                                                            </a>    
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </c:forEach>
+                                        </c:when>
 
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <span class="status-badge status-active">${food.status}</span> 
-                                            </td>
-                                            <td>
-                                                <fmt:formatDate value="${food.update_at}" pattern="dd/MM/yyyy HH:mm:ss" />
-                                            </td>
-                                            <td>
-                                                <div class="table-actions">
-                                                    <a class="action-btn view-btn" title="Xem chi tiết" href="nutricontrol?action=showfooddetail&id=${food.foodId}">
-                                                        <i class="fas fa-eye"></i>
-                                                    </a>
-                                                    <a class="action-btn edit-btn" title="Tạo Bản sao" href="nutricontrol?action=#"">
-                                                        <i class="fas fa-clone"></i>
-                                                    </a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </c:forEach>
-                                    <c:if test="${empty lstFood}">
-                                        <tr>
-                                            <td colspan="8" style="text-align: center; padding: 30px;">
-                                                Không tìm thấy món ăn nào phù hợp.
-                                            </td>
-                                        </tr>
-                                    </c:if>
+                                        <c:otherwise>
+                                            <tr>
+                                                <td colspan="8" style="text-align: center; padding: 30px;">
+                                                    Không tìm thấy món ăn nào phù hợp.
+                                                </td>
+                                            </tr>
+                                        </c:otherwise>
+                                    </c:choose>
+
                                 </tbody>
                             </table>
                             <div  id="paginationWrapper" class="pagination-container" style="display: flex; justify-content: space-between; padding: 10px;">
-                                <div style="padding: 10px">Show ${lstFood.size()} of ${totalFood} items</div>
+                                <div style="padding: 10px">Show ${lstFoodDr.size()} of ${total} items</div>
                                 <c:set var="currentPage" value="${param.page != null ? param.page : 1}" />
                                 <c:if test="${totalPages >= 1}">
                                     <div class="pagination">
@@ -295,14 +341,14 @@
 
                                         }
                                     });
-            document.querySelectorAll('.pagination-link').forEach(link => {
-        link.addEventListener('click', function (e) {
-            e.preventDefault();
-            const selectedPage = this.dataset.page;
-            document.getElementById('pageInput').value = selectedPage;
-            document.getElementById('filterForm').submit();
-        });
-    });
+                                    document.querySelectorAll('.pagination-link').forEach(link => {
+                                        link.addEventListener('click', function (e) {
+                                            e.preventDefault();
+                                            const selectedPage = this.dataset.page;
+                                            document.getElementById('pageInput').value = selectedPage;
+                                            document.getElementById('filterForm').submit();
+                                        });
+                                    });
         </script>
 
     </body>

@@ -334,9 +334,9 @@
             .status-badge {
                 display: inline-block;
                 padding: 2px 8px;
-                background-color: #28a745;
+                background: linear-gradient(135deg, var(--primary-green), #3b82f6);
                 color: white;
-                border-radius: 8px;
+                border-radius: 15px;
                 font-size: 0.85rem;
             }
 
@@ -355,6 +355,7 @@
             }
 
             .sub-tag {
+                background: linear-gradient(135deg, var(--primary-green), #3b82f6);
                 display: inline-block;
                 padding: 4px 12px;
                 margin: 2px 4px;
@@ -364,7 +365,7 @@
                 border: 1px solid transparent;
             }
 
-            .tag-description-section {
+            .tag-description-section  {
                 margin-top: 20px;
                 padding: 20px;
                 background: #f8f9fa;
@@ -387,11 +388,11 @@
                 padding: 12px;
                 background: white;
                 border-radius: 6px;
-                border-left: 3px solid var(--success-color);
+                border-left: 3px solid background: linear-gradient(135deg, var(--primary-green), #3b82f6);;
             }
 
             .tag-name {
-                color: var(--primary-color);
+                color:#3b82f6);;
                 font-weight: 600;
             }
 
@@ -597,7 +598,9 @@
                                             </c:otherwise>
                                         </c:choose>
                                     </div>
-                                   
+                                    <button id="toggleDescBtn" onclick="toggleDescription()">
+                                        <i class="fas fa-chevron-down"></i> Xem thêm
+                                    </button>
                                 </div>
                                 </div>
                                 <div class="action-buttons mt-3">
@@ -619,7 +622,7 @@
                             </li>
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link" id="specification-tab" data-bs-toggle="tab" data-bs-target="#specification" type="button" role="tab">
-                                    Thông số kỹ thuật
+                                    Thông tin thành phần chi tiết
                                 </button>
                             </li>
                             <li class="nav-item" role="presentation">
@@ -641,7 +644,7 @@
                                 </c:choose>
                             </div>
                             <div class="tab-pane fade" id="specification" role="tabpanel">
-                                <h6 class="mt-4 mb-3">Thông tin chi tiết:</h6>
+                                <h6 class="mt-4 mb-3">Thành phần:</h6>
                                 <c:choose>
                                     <c:when test="${not empty fooddetail.ingredients}">
                                         ${fooddetail.ingredients}

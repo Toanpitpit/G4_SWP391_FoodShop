@@ -18,6 +18,7 @@ import com.example.servlet.model.Blogs;
 import com.example.servlet.model.Category;
 import com.example.servlet.model.Food;
 import com.example.servlet.model.FoodDetail;
+import com.example.servlet.model.Food_Draft;
 import com.example.servlet.model.MonthlyStat;
 import com.google.gson.Gson;
 import java.io.IOException;
@@ -58,6 +59,7 @@ public class NutritionistControlServerLet extends HttpServlet {
     private static final String BASE_PATH = "D:\\Semester 5\\SWP391\\Project\\G4_SWP391_FoodShop_Project";
     private static final String UPLOAD_DIRECTORY = BASE_PATH + "\\src\\main\\webapp\\img\\blog";
     private static final String TAGET_DIRECTORY = BASE_PATH + "\\target\\Food-1.0-SNAPSHOT\\img\\blog";
+    private static final long serialVersionUID = 1L;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -123,14 +125,16 @@ public class NutritionistControlServerLet extends HttpServlet {
                 displayBlogDetail (request, response);
                 break;
             case "showfood":
-//                try(PrintWriter out = response.getWriter ()){
-//                    out.print ("aoll");
-//                }
-                
                 ShowFood (request, response);
+                break;
+            case "showfooddraft":
+                ShowFoodDraft (request, response);
                 break;
             case "displaysortfood":
                 ShowFoodSortFilter (request, response);
+                break;
+            case "displaysortfooddraft":
+                ShowFoodDraftSortFilter (request, response);
                 break;
             case "showfooddetail":
                 ShowFoodDetail (request, response);
@@ -592,71 +596,77 @@ public class NutritionistControlServerLet extends HttpServlet {
     }
 
     private void prepareDashboardData(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session = request.getSession (false);
-        Account acc = (Account) session.getAttribute ("Account");
-        BMIClassificationDAO bi_dao = new BMIClassificationDAO ();
-        RequestDAO r_dao = new RequestDAO ();
-        BlogDAO b_dao = new BlogDAO ();
-        NotifyDAO n_dao = new NotifyDAO ();
-        FoodDraftDAO fd_dao = new FoodDraftDAO ();
-
-//        int totalFdrf = fd_dao.getTotalFooddraft (acc.getId ());
-        int totalBlog = b_dao.getTotalBlogbyAuthor (acc.getId ());
-        int totalNotify = n_dao.getTotalNotify (acc.getId (), null);
-        int totalRequest = r_dao.getTotalRequest (acc.getId ());
-
-        List<MonthlyStat> lstM = r_dao.countRequestsByStatus (acc.getId ());
-        List<String> pieChart_data_lables = new ArrayList<> ();
-        List<Integer> pieChart_data_totals = new ArrayList<> ();
-        if (lstM == null || lstM.isEmpty ()) {
-            pieChart_data_lables.add ("No data ");
-            pieChart_data_totals.add (1);
-        } else {
-            for (MonthlyStat monthlyStat : lstM) {
-                pieChart_data_lables.add (monthlyStat.getMonthlName ());
-                pieChart_data_totals.add (monthlyStat.getCount ());
+        try {
+            HttpSession session = request.getSession (false);
+            Account acc = (Account) session.getAttribute ("Account");
+            BMIClassificationDAO bi_dao = new BMIClassificationDAO ();
+            RequestDAO r_dao = new RequestDAO ();
+            BlogDAO b_dao = new BlogDAO ();
+            NotifyDAO n_dao = new NotifyDAO ();
+            FoodDraftDAO fd_dao = new FoodDraftDAO ();
+            
+            
+            int totalBlog = b_dao.getTotalBlogbyAuthor (acc.getId ());
+            int totalNotify = n_dao.getTotalNotify (acc.getId (), null);
+            int totalRequest = r_dao.getTotalRequest (acc.getId ());
+            List<Food_Draft> lsttotalFdr = fd_dao.getFoodDraftsByAuthor (19, 1, 10000000);
+            
+            List<MonthlyStat> lstM = r_dao.countRequestsByStatus (acc.getId ());
+            List<String> pieChart_data_lables = new ArrayList<> ();
+            List<Integer> pieChart_data_totals = new ArrayList<> ();
+            if (lstM == null || lstM.isEmpty ()) {
+                pieChart_data_lables.add ("No data ");
+                pieChart_data_totals.add (1);
+            } else {
+                for (MonthlyStat monthlyStat : lstM) {
+                    pieChart_data_lables.add (monthlyStat.getMonthlName ());
+                    pieChart_data_totals.add (monthlyStat.getCount ());
+                }
             }
+            int currentYear = Year.now ().getValue ();
+            List<Integer> years = new ArrayList<> ();
+            for (int y = 2024; y <= currentYear; y++) {
+                years.add (y);
+            }
+            
+            int selectedYear = currentYear;
+            String text_years = request.getParameter ("year");
+            if (text_years != null && !text_years.trim ().isEmpty ()) {
+                selectedYear = Integer.parseInt (text_years.trim ());
+            }
+            
+            List<String> barChart_data_lables = new ArrayList<> ();
+            List<Integer> barChart_data_totals = new ArrayList<> ();
+            List<MonthlyStat> lstMBlog = b_dao.getMonthlyBlogStatsByYearAndAuthor (selectedYear, -1);
+            for (MonthlyStat monthlyStat : lstMBlog) {
+                barChart_data_lables.add (monthlyStat.getMonthlName ());
+                barChart_data_totals.add (monthlyStat.getCount ());
+            }
+            
+            Gson gson = new Gson ();
+            String pieChart_data_labelsJson = gson.toJson (pieChart_data_lables);
+            String pieChart_data_totalsJson = gson.toJson (pieChart_data_totals);
+            String barChart_data_lablesJson = gson.toJson (barChart_data_lables);
+            String barChart_data_totalsJson = gson.toJson (barChart_data_totals);
+            
+            request.setAttribute ("years", years);
+            request.setAttribute ("currentYear", currentYear);
+            request.setAttribute ("selectedYear", selectedYear);
+            request.setAttribute ("pieChart_data_labelsJson", pieChart_data_labelsJson);
+            request.setAttribute ("pieChart_data_totalsJson", pieChart_data_totalsJson);
+            request.setAttribute ("barChart_data_labelsJson", barChart_data_lablesJson);
+            request.setAttribute ("barChart_data_totalsJson", barChart_data_totalsJson);
+            request.setAttribute ("pieChart_data_labels", pieChart_data_lables);
+            request.setAttribute ("pieChart_data_totals", pieChart_data_totals);
+            request.setAttribute ("totalBlog", totalBlog);
+            
+            request.setAttribute ("totalNotify", totalNotify);
+            request.setAttribute ("totalRequest", totalRequest);
+            request.setAttribute ("totalFdr", lsttotalFdr.size ());
+            request.getRequestDispatcher ("/Nutritionist/DashBoard.jsp").forward (request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger (NutritionistControlServerLet.class.getName()).log (Level.SEVERE, null, ex);
         }
-        int currentYear = Year.now ().getValue ();
-        List<Integer> years = new ArrayList<> ();
-        for (int y = 2024; y <= currentYear; y++) {
-            years.add (y);
-        }
-
-        int selectedYear = currentYear;
-        String text_years = request.getParameter ("year");
-        if (text_years != null && !text_years.trim ().isEmpty ()) {
-            selectedYear = Integer.parseInt (text_years.trim ());
-        }
-
-        List<String> barChart_data_lables = new ArrayList<> ();
-        List<Integer> barChart_data_totals = new ArrayList<> ();
-        List<MonthlyStat> lstMBlog = b_dao.getMonthlyBlogStatsByYearAndAuthor (selectedYear, -1);
-        for (MonthlyStat monthlyStat : lstMBlog) {
-            barChart_data_lables.add (monthlyStat.getMonthlName ());
-            barChart_data_totals.add (monthlyStat.getCount ());
-        }
-
-        Gson gson = new Gson ();
-        String pieChart_data_labelsJson = gson.toJson (pieChart_data_lables);
-        String pieChart_data_totalsJson = gson.toJson (pieChart_data_totals);
-        String barChart_data_lablesJson = gson.toJson (barChart_data_lables);
-        String barChart_data_totalsJson = gson.toJson (barChart_data_totals);
-
-        request.setAttribute ("years", years);
-        request.setAttribute ("currentYear", currentYear);
-        request.setAttribute ("selectedYear", selectedYear);
-        request.setAttribute ("pieChart_data_labelsJson", pieChart_data_labelsJson);
-        request.setAttribute ("pieChart_data_totalsJson", pieChart_data_totalsJson);
-        request.setAttribute ("barChart_data_labelsJson", barChart_data_lablesJson);
-        request.setAttribute ("barChart_data_totalsJson", barChart_data_totalsJson);
-        request.setAttribute ("pieChart_data_labels", pieChart_data_lables);
-        request.setAttribute ("pieChart_data_totals", pieChart_data_totals);
-        request.setAttribute ("totalBlog", totalBlog);
-//        request.setAttribute ("totalFdrf", totalFdrf);
-        request.setAttribute ("totalNotify", totalNotify);
-        request.setAttribute ("totalRequest", totalRequest);
-        request.getRequestDispatcher ("/Nutritionist/DashBoard.jsp").forward (request, response);
     }
 
     private void handleJsonRequest(HttpServletRequest request, HttpServletResponse response)
@@ -792,7 +802,7 @@ public class NutritionistControlServerLet extends HttpServlet {
             int totalBMI = dao.gettotalBMIWithFilterAndSort (input_search, sortId, sortTarget);
             int totalPages = (int) Math.ceil ((double) totalBMI / limit);
 
-            // Gửi dữ liệu cho JSP
+          
             request.setAttribute ("lstBMI", lstBMI);
             request.setAttribute ("totalPages", totalPages);
             request.setAttribute ("totalSize", totalBMI);
@@ -800,12 +810,12 @@ public class NutritionistControlServerLet extends HttpServlet {
             request.setAttribute ("currentPage", page);
             request.setAttribute ("limitpage", limit);
 
-            // Giữ lại filter để điền lại vào input/select
+         
             request.setAttribute ("search", input_search == null ? "" : input_search);
             request.setAttribute ("sortOrderTarget", sortTarget == null ? "" : sortTarget);
             request.setAttribute ("sortOrderID", sortId == null ? "" : sortId);
 
-            // Điều hướng về JSP để hiển thị lại
+         
             request.getRequestDispatcher ("/Nutritionist/BMIPage.jsp").forward (request, response);
         } catch (Exception ex) {
             ex.printStackTrace ();
@@ -878,20 +888,39 @@ public class NutritionistControlServerLet extends HttpServlet {
                     currentPage = 1;
                 }
             }
-            List<Food> lstFood = dao.getListFoods (
-                    searchKey,
-                    category,
-                    status,
-                    searchPrice,
-                    priceRank,
-                    bmiId,
-                    sortFields,
-                    currentPage,
-                    pageSize
-            );
             int totalFoods = dao.getListFoodsTotal (
                     searchKey, category, status, searchPrice, priceRank, bmiId, sortFields
             );
+            List<Food> lstFood = new ArrayList<> ();
+            if (totalFoods > pageSize * (currentPage - 1)) {
+                lstFood = dao.getListFoods (
+                        searchKey,
+                        category,
+                        status,
+                        searchPrice,
+                        priceRank,
+                        bmiId,
+                        sortFields,
+                        currentPage,
+                        pageSize
+                );
+                request.setAttribute ("currentPage", currentPage);
+            }
+            else{
+                lstFood = dao.getListFoods (
+                        searchKey,
+                        category,
+                        status,
+                        searchPrice,
+                        priceRank,
+                        bmiId,
+                        sortFields,
+                        1,
+                        pageSize
+                );
+                request.setAttribute ("currentPage", "1");
+            }
+
             int totalPages = (int) Math.ceil ((double) totalFoods / pageSize);
             List<Category> lstC = c_dao.getListCategoriesNoP (null, null, null);
             BMIClassificationDAO bidao = new BMIClassificationDAO ();
@@ -901,7 +930,7 @@ public class NutritionistControlServerLet extends HttpServlet {
             request.setAttribute ("lstFood", lstFood);
             request.setAttribute ("totalFood", totalFoods);
             request.setAttribute ("totalPages", totalPages);
-            request.setAttribute ("currentPage", currentPage);
+            
             request.getRequestDispatcher ("/Nutritionist/FoodList.jsp").forward (request, response);
 
         } catch (Exception e) {
@@ -942,5 +971,137 @@ public class NutritionistControlServerLet extends HttpServlet {
         response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Server error: " + e.getMessage());
     }
 }
+protected void ShowFoodDraft(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            CategoryDAO c_dao = new CategoryDAO ();
+            BMIClassificationDAO bidao = new BMIClassificationDAO ();
+            List<BMIClassification> lstBMI = bidao.getAllBMI ();
+            int pageSize = 8;
+            int currentPage = 1;
+            
+            Map<String, String> filters = new HashMap<>();
+            filters.put("searchKey", "");
+            filters.put("category", "");
+            filters.put("status", "");
+            filters.put("searchPrice", "");
+            filters.put("priceRank", "");
+            filters.put("bmiId", "");
+            filters.put("authorId", null);
+            
+            
+            Map<String, String> sortAndPagination = new HashMap<>();
+            sortAndPagination.put("sortprice", "desc");
+            sortAndPagination.put("sorttime", "asc");
+            sortAndPagination.put("page", "1");
+            sortAndPagination.put("pageSize", "8");
+            
+            FoodDraftDAO dao = new FoodDraftDAO();
+            List<Category> lstC = c_dao.getListCategoriesNoP (null, null, null);
+            List<Food_Draft> lstFdr = dao.getListFoodDrafts(filters, sortAndPagination);
+            int total = dao.getListFoodDraftsTotal(filters, sortAndPagination);
+            int totalPages = (int) Math.ceil ((double) total / 8);
+            request.setAttribute ("lstBMI", lstBMI);
+            request.setAttribute ("lstFoodDr", lstFdr);
+            request.setAttribute ("lstC", lstC);
+            request.setAttribute ("totalPages", totalPages);
+            request.setAttribute ("total", total);
+            request.setAttribute ("currentPage", currentPage);
+//            try(PrintWriter o = response.getWriter ()){
+//                o.print (lstFdr);
+//            }
+            request.getRequestDispatcher ("/Nutritionist/FoodSuggestion.jsp").forward (request, response);
+        } catch (SQLException e) {
+            e.printStackTrace ();
+        }
 
+    }
+
+protected void ShowFoodDraftSortFilter(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        FoodDraftDAO dao = new FoodDraftDAO ();
+        CategoryDAO c_dao = new CategoryDAO ();
+        try {
+            String searchKey = request.getParameter ("searchKey");
+            String category = request.getParameter ("category");
+            String status = request.getParameter ("status");
+            String searchPrice = request.getParameter ("searchPrice");
+            String priceRank = request.getParameter ("priceRank");
+            String bmiId = request.getParameter ("bmiId");
+            Map<String, String> filters = new HashMap<> ();
+            if (searchKey != null && !searchKey.isEmpty ()) {
+                filters.put ("searchKey", searchKey);
+            }
+            if (category != null && !category.isEmpty ()) {
+                filters.put ("category", category);
+            }
+            if (status != null && !status.isEmpty ()) {
+                filters.put ("status", status);
+            }
+            if (searchPrice != null && !searchPrice.isEmpty ()) {
+                filters.put ("searchPrice", searchPrice);
+            }
+            if (priceRank != null && !priceRank.isEmpty ()) {
+                filters.put ("priceRank", priceRank);
+            }
+            if (bmiId != null && !bmiId.isEmpty ()) {
+                filters.put ("bmiId", bmiId);
+            }
+            Map<String, String> sortAndPagination = new HashMap<> ();
+            String sortPrice = request.getParameter ("sortPrice");
+            String sortTime = request.getParameter ("sortTime");
+            String sortID = request.getParameter ("sortID");
+
+            if (sortID != null && !sortID.isEmpty ()) {
+                sortAndPagination.put ("sortID", sortID);
+            }
+            if (sortPrice != null && !sortPrice.isEmpty ()) {
+                sortAndPagination.put ("sortPrice", sortPrice);
+            }
+            if (sortTime != null && !sortTime.isEmpty ()) {
+                sortAndPagination.put ("sortTime", sortTime);
+            }
+            
+            int pageSize = 8;
+            int currentPage = 1;
+            String pageParam = request.getParameter ("page");
+            if (pageParam != null && !pageParam.isEmpty ()) {
+                try {
+                    currentPage = Integer.parseInt (pageParam);
+                    sortAndPagination.put ("page",pageParam);
+                } catch (NumberFormatException e) {
+                    currentPage = 1;
+                }
+            }
+            
+            List<Food_Draft> lstFdr = new ArrayList<> ();
+            int total = dao.getListFoodDraftsTotal (filters, sortAndPagination);
+            if (total > pageSize * (currentPage - 1)){
+                sortAndPagination.put ("page",pageParam);
+               lstFdr = dao.getListFoodDrafts (filters, sortAndPagination);
+               request.setAttribute ("currentPage", currentPage);
+            }
+            else{
+                sortAndPagination.put ("page","1");
+                lstFdr = dao.getListFoodDrafts (filters, sortAndPagination);
+                request.setAttribute ("currentPage", "1");
+            }
+            int totalPages = (int) Math.ceil ((double) total  / pageSize);
+            List<Category> lstC = c_dao.getListCategoriesNoP (null, null, null);
+            BMIClassificationDAO bidao = new BMIClassificationDAO ();
+            List<BMIClassification> lstBMI = bidao.getAllBMI ();
+            request.setAttribute ("lstBMI", lstBMI);
+            request.setAttribute ("lstC", lstC);
+            request.setAttribute ("lstFoodDr", lstFdr);
+            request.setAttribute ("total", total);
+            request.setAttribute ("totalPages", totalPages);
+            
+            request.getRequestDispatcher ("/Nutritionist/FoodSuggestion.jsp").forward (request, response);
+
+        } catch (Exception e) {
+            e.printStackTrace ();
+            request.setAttribute ("error", "Lỗi khi xử lý danh sách món ăn: " + e.getMessage ());
+            request.getRequestDispatcher ("error.jsp").forward (request, response);
+        }
+    }
 }

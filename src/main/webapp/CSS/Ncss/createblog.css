@@ -866,7 +866,7 @@ textarea.form-control {
 .new-blog-form .new-form-card {
     font-size: 20px;
     background: #fafbfc;
-    border: 1px solid var(--border-color);
+    border: 2px solid var(--primary-green);
     border-radius: var(--border-radius);
     padding: var(--spacing-lg);
     position: relative;
@@ -924,7 +924,7 @@ textarea.form-control {
 
 .new-blog-form .new-image-preview-container {
     position: relative;
-    border: 2px dashed var(--border-color);
+    border: 2px dashed var(--primary-green);
     border-radius: var(--border-radius);
     overflow: hidden;
     text-align: center;
@@ -933,8 +933,9 @@ textarea.form-control {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center; 
     width: 100%;
-    max-width: 480px;
+    max-width: 500px;
     aspect-ratio: 16 / 9; 
 }
 

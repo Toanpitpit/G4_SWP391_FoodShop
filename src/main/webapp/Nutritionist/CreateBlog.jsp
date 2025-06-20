@@ -349,7 +349,7 @@
         <script>
             CKEDITOR.replace('editor', {
                 versionCheck: false,
-                height: 400
+                height: 300
             });
 
             document.getElementById('newBlogForm').addEventListener('submit', function () {

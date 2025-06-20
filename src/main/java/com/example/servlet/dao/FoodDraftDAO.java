@@ -145,7 +145,12 @@ public class FoodDraftDAO {
         Food_Draft foodDraft = new Food_Draft ();
         foodDraft.setFdrID (rs.getInt ("pdrID"));
         foodDraft.setOriginID (rs.getInt ("originID"));
-        foodDraft.setAuthorID (rs.getInt ("authorID"));
+        int authorId = rs.getInt ("authorID");
+        if (rs.wasNull ()) {
+            foodDraft.setAuthorID (-1);
+        } else {
+            foodDraft.setAuthorID (authorId);
+        }
         foodDraft.setFoodName (rs.getString ("pName"));
         foodDraft.setCatName (rs.getString ("caName"));
         foodDraft.setImageUlr (rs.getString ("p_image"));
@@ -346,7 +351,6 @@ public class FoodDraftDAO {
         QueryBuilder queryBuilder = new QueryBuilder (BASE_QUERY)
                 .addFilter ("authorID", String.valueOf(authorId))
                 .addPagination (page, pageSize);
-
         return executeQuery (queryBuilder);
     }
     public List<Food_Draft> getFoodDraftsByOrigin(int originId, int page, int pageSize) throws SQLException {
@@ -508,8 +512,6 @@ public class FoodDraftDAO {
                     conn.rollback();
                     return false;
                 }
-
-                // Insert vào bảng Foods
                 try (PreparedStatement insertStmt = conn.prepareStatement(insertSql)) {
                     insertStmt.setString(1, draft.getFoodName());
                     insertStmt.setObject(2, getCategoryIdByName(draft.getCatName()));
@@ -518,7 +520,6 @@ public class FoodDraftDAO {
                     insertStmt.executeUpdate();
                 }
 
-                // Update status của draft
                 try (PreparedStatement updateStmt = conn.prepareStatement(updateSql)) {
                     updateStmt.setInt(1, foodDraftId);
                     updateStmt.executeUpdate();
