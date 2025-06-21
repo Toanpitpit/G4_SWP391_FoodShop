@@ -18,6 +18,7 @@ import com.example.servlet.model.Blogs;
 import com.example.servlet.model.Category;
 import com.example.servlet.model.Food;
 import com.example.servlet.model.FoodDetail;
+import com.example.servlet.model.FoodDraftDTO;
 import com.example.servlet.model.Food_Draft;
 import com.example.servlet.model.MonthlyStat;
 import com.google.gson.Gson;
@@ -55,21 +56,11 @@ import java.util.logging.Logger;
 )
 public class NutritionistControlServerLet extends HttpServlet {
 
-    // D:\Semester 5\SWP391\SWP391_HealthyFood-main\G4_SWP391_FoodShop-master (3)\G4_SWP391_FoodShop-master\G4_SWP391_FoodShop-master
     private static final String BASE_PATH = "D:\\Semester 5\\SWP391\\Project\\G4_SWP391_FoodShop_Project";
     private static final String UPLOAD_DIRECTORY = BASE_PATH + "\\src\\main\\webapp\\img\\blog";
     private static final String TAGET_DIRECTORY = BASE_PATH + "\\target\\Food-1.0-SNAPSHOT\\img\\blog";
     private static final long serialVersionUID = 1L;
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession sesssion = request.getSession (false);
@@ -139,6 +130,16 @@ public class NutritionistControlServerLet extends HttpServlet {
             case "showfooddetail":
                 ShowFoodDetail (request, response);
                 break;
+            case "copyfood":
+                CopyFood (request, response);
+                break;
+            case "showcreatefooddraft":
+                ShowCreateFoodDraft (request, response);
+                break;
+            case "createfooddraft":
+
+                CreateFoodDraft (request, response);
+                break;
             default:
         }
     }
@@ -201,7 +202,7 @@ public class NutritionistControlServerLet extends HttpServlet {
 
         String imageUrl;
         try {
-            imageUrl = processImageUpload (imagePart);
+            imageUrl = processImageUpload (imagePart, "blog");
         } catch (IllegalStateException e) {
             request.setAttribute ("Errmess", "Ảnh vượt quá dung lượng cho phép (5MB).");
             DisplayCreateBlog (request, response);
@@ -224,37 +225,6 @@ public class NutritionistControlServerLet extends HttpServlet {
             request.setAttribute ("Errmess", "Không thể tạo bài viết. Vui lòng thử lại.");
             DisplayCreateBlog (request, response);
         }
-    }
-
-    private String processImageUpload(Part filePart) throws IOException {
-        if (filePart.getSize () > 5 * 1024 * 1024) {
-
-            throw new IllegalStateException ("Ảnh vượt quá dung lượng 5MB");
-        }
-
-        String fileName = filePart.getSubmittedFileName ();
-        if (fileName == null || fileName.isEmpty ()) {
-            return null;
-        }
-
-        String fileExtension = fileName.contains (".")
-                ? fileName.substring (fileName.lastIndexOf (".")) : "";
-
-        String uniqueFileName = UUID.randomUUID () + fileExtension;
-
-        File uploadDir = new File (UPLOAD_DIRECTORY);
-        if (!uploadDir.exists ()) {
-            uploadDir.mkdirs ();
-        }
-
-        String filePath = UPLOAD_DIRECTORY + File.separator + uniqueFileName;
-        filePart.write (filePath);
-
-        File source = new File (filePath);
-        File target = new File (TAGET_DIRECTORY + File.separator + uniqueFileName);
-        Files.copy (source.toPath (), target.toPath (), StandardCopyOption.REPLACE_EXISTING);
-
-        return "img/blog/" + uniqueFileName;
     }
 
     private boolean isNotValidInput(String title, String content, String bmiIdStr, String status, Part imagePart) {
@@ -360,7 +330,6 @@ public class NutritionistControlServerLet extends HttpServlet {
             return;
         }
 
-        // Tạo blog object
         Timestamp now = new Timestamp (System.currentTimeMillis ());
         Blogs blog = new Blogs (
                 id, acc.getId (), acc.getUsername (), bmiId,
@@ -604,13 +573,12 @@ public class NutritionistControlServerLet extends HttpServlet {
             BlogDAO b_dao = new BlogDAO ();
             NotifyDAO n_dao = new NotifyDAO ();
             FoodDraftDAO fd_dao = new FoodDraftDAO ();
-            
-            
+
             int totalBlog = b_dao.getTotalBlogbyAuthor (acc.getId ());
             int totalNotify = n_dao.getTotalNotify (acc.getId (), null);
             int totalRequest = r_dao.getTotalRequest (acc.getId ());
             List<Food_Draft> lsttotalFdr = fd_dao.getFoodDraftsByAuthor (19, 1, 10000000);
-            
+
             List<MonthlyStat> lstM = r_dao.countRequestsByStatus (acc.getId ());
             List<String> pieChart_data_lables = new ArrayList<> ();
             List<Integer> pieChart_data_totals = new ArrayList<> ();
@@ -628,13 +596,13 @@ public class NutritionistControlServerLet extends HttpServlet {
             for (int y = 2024; y <= currentYear; y++) {
                 years.add (y);
             }
-            
+
             int selectedYear = currentYear;
             String text_years = request.getParameter ("year");
             if (text_years != null && !text_years.trim ().isEmpty ()) {
                 selectedYear = Integer.parseInt (text_years.trim ());
             }
-            
+
             List<String> barChart_data_lables = new ArrayList<> ();
             List<Integer> barChart_data_totals = new ArrayList<> ();
             List<MonthlyStat> lstMBlog = b_dao.getMonthlyBlogStatsByYearAndAuthor (selectedYear, -1);
@@ -642,13 +610,13 @@ public class NutritionistControlServerLet extends HttpServlet {
                 barChart_data_lables.add (monthlyStat.getMonthlName ());
                 barChart_data_totals.add (monthlyStat.getCount ());
             }
-            
+
             Gson gson = new Gson ();
             String pieChart_data_labelsJson = gson.toJson (pieChart_data_lables);
             String pieChart_data_totalsJson = gson.toJson (pieChart_data_totals);
             String barChart_data_lablesJson = gson.toJson (barChart_data_lables);
             String barChart_data_totalsJson = gson.toJson (barChart_data_totals);
-            
+
             request.setAttribute ("years", years);
             request.setAttribute ("currentYear", currentYear);
             request.setAttribute ("selectedYear", selectedYear);
@@ -659,13 +627,13 @@ public class NutritionistControlServerLet extends HttpServlet {
             request.setAttribute ("pieChart_data_labels", pieChart_data_lables);
             request.setAttribute ("pieChart_data_totals", pieChart_data_totals);
             request.setAttribute ("totalBlog", totalBlog);
-            
+
             request.setAttribute ("totalNotify", totalNotify);
             request.setAttribute ("totalRequest", totalRequest);
             request.setAttribute ("totalFdr", lsttotalFdr.size ());
             request.getRequestDispatcher ("/Nutritionist/DashBoard.jsp").forward (request, response);
         } catch (SQLException ex) {
-            Logger.getLogger (NutritionistControlServerLet.class.getName()).log (Level.SEVERE, null, ex);
+            Logger.getLogger (NutritionistControlServerLet.class.getName ()).log (Level.SEVERE, null, ex);
         }
     }
 
@@ -802,7 +770,6 @@ public class NutritionistControlServerLet extends HttpServlet {
             int totalBMI = dao.gettotalBMIWithFilterAndSort (input_search, sortId, sortTarget);
             int totalPages = (int) Math.ceil ((double) totalBMI / limit);
 
-          
             request.setAttribute ("lstBMI", lstBMI);
             request.setAttribute ("totalPages", totalPages);
             request.setAttribute ("totalSize", totalBMI);
@@ -810,12 +777,10 @@ public class NutritionistControlServerLet extends HttpServlet {
             request.setAttribute ("currentPage", page);
             request.setAttribute ("limitpage", limit);
 
-         
             request.setAttribute ("search", input_search == null ? "" : input_search);
             request.setAttribute ("sortOrderTarget", sortTarget == null ? "" : sortTarget);
             request.setAttribute ("sortOrderID", sortId == null ? "" : sortId);
 
-         
             request.getRequestDispatcher ("/Nutritionist/BMIPage.jsp").forward (request, response);
         } catch (Exception ex) {
             ex.printStackTrace ();
@@ -827,6 +792,9 @@ public class NutritionistControlServerLet extends HttpServlet {
     protected void ShowFood(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
+            String Errmess = request.getParameter ("Errmess");
+            String successMessage = request.getParameter ("successMessage");
+
             CategoryDAO c_dao = new CategoryDAO ();
             FoodDAO dao = new FoodDAO ();
             BMIClassificationDAO bidao = new BMIClassificationDAO ();
@@ -837,13 +805,20 @@ public class NutritionistControlServerLet extends HttpServlet {
             List<Food> lstF = dao.getListFoods (null, null, null, null, null, null, null, currentPage, pageSize);
             int totalFood = dao.getListFoodsTotal (null, null, null, null, null, null, null);
             int totalPages = (int) Math.ceil ((double) totalFood / pageSize);
+
+            if (Errmess != null && !Errmess.trim ().isEmpty ()) {
+                request.setAttribute ("Errmess", Errmess);
+            }
+            if (successMessage != null && !successMessage.trim ().isBlank ()) {
+                request.setAttribute ("successMessage", successMessage);
+            }
             request.setAttribute ("lstBMI", lstBMI);
             request.setAttribute ("lstFood", lstF);
             request.setAttribute ("lstC", lstC);
             request.setAttribute ("totalFood", totalFood);
             request.setAttribute ("totalPages", totalPages);
             request.setAttribute ("currentPage", currentPage);
-            
+
             request.getRequestDispatcher ("/Nutritionist/FoodList.jsp").forward (request, response);
         } catch (SQLException e) {
             e.printStackTrace ();
@@ -878,7 +853,7 @@ public class NutritionistControlServerLet extends HttpServlet {
                 sortFields.put ("sortTime", sortTime);
             }
 
-            int pageSize = 6;
+            int pageSize = 8;
             int currentPage = 1;
             String pageParam = request.getParameter ("page");
             if (pageParam != null && !pageParam.isEmpty ()) {
@@ -905,8 +880,7 @@ public class NutritionistControlServerLet extends HttpServlet {
                         pageSize
                 );
                 request.setAttribute ("currentPage", currentPage);
-            }
-            else{
+            } else {
                 lstFood = dao.getListFoods (
                         searchKey,
                         category,
@@ -930,7 +904,7 @@ public class NutritionistControlServerLet extends HttpServlet {
             request.setAttribute ("lstFood", lstFood);
             request.setAttribute ("totalFood", totalFoods);
             request.setAttribute ("totalPages", totalPages);
-            
+
             request.getRequestDispatcher ("/Nutritionist/FoodList.jsp").forward (request, response);
 
         } catch (Exception e) {
@@ -940,38 +914,39 @@ public class NutritionistControlServerLet extends HttpServlet {
         }
     }
 
- protected void ShowFoodDetail(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
-    try {
-        FoodDAO dao = new FoodDAO();
-        FoodDetailDAO fd_dao = new FoodDetailDAO();
-        
-        String idtxt = request.getParameter("id");
-        int fID = Integer.parseInt(idtxt);
+    protected void ShowFoodDetail(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            FoodDAO dao = new FoodDAO ();
+            FoodDetailDAO fd_dao = new FoodDetailDAO ();
 
-        Food food = dao.getFoodById(fID);
-        FoodDetail fooddetail = fd_dao.getFoodDetailByIdAndDraft(fID, false);
-        List<BMIClassification> tagetaudience = fd_dao.getBMIClassificationsByFoodOrDraftId(fID, false);
+            String idtxt = request.getParameter ("id");
+            int fID = Integer.parseInt (idtxt);
 
-        if (food == null) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Food not found");
-            return;
+            Food food = dao.getFoodById (fID);
+            FoodDetail fooddetail = fd_dao.getFoodDetailByIdAndDraft (fID, false);
+            List<BMIClassification> tagetaudience = fd_dao.getBMIClassificationsByFoodOrDraftId (fID, false);
+
+            if (food == null) {
+                response.sendError (HttpServletResponse.SC_NOT_FOUND, "Food not found");
+                return;
+            }
+
+            request.setAttribute ("id", fID);
+            request.setAttribute ("food", food);
+            request.setAttribute ("fooddetail", fooddetail);
+            request.setAttribute ("tagetaudience", tagetaudience);
+
+            request.getRequestDispatcher ("/Nutritionist/FoodDetail.jsp").forward (request, response);
+        } catch (NumberFormatException e) {
+            response.sendError (HttpServletResponse.SC_BAD_REQUEST, "Invalid ID format");
+        } catch (Exception e) {
+            e.printStackTrace ();
+            response.sendError (HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Server error: " + e.getMessage ());
         }
-
-        request.setAttribute("id", fID);
-        request.setAttribute("food", food);
-        request.setAttribute("fooddetail", fooddetail);
-        request.setAttribute("tagetaudience", tagetaudience);
-     
-        request.getRequestDispatcher("/Nutritionist/FoodDetail.jsp").forward(request, response);
-    } catch (NumberFormatException e) {
-        response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid ID format");
-    } catch (Exception e) {
-        e.printStackTrace();
-        response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Server error: " + e.getMessage());
     }
-}
-protected void ShowFoodDraft(HttpServletRequest request, HttpServletResponse response)
+
+    protected void ShowFoodDraft(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
             CategoryDAO c_dao = new CategoryDAO ();
@@ -979,27 +954,26 @@ protected void ShowFoodDraft(HttpServletRequest request, HttpServletResponse res
             List<BMIClassification> lstBMI = bidao.getAllBMI ();
             int pageSize = 8;
             int currentPage = 1;
-            
-            Map<String, String> filters = new HashMap<>();
-            filters.put("searchKey", "");
-            filters.put("category", "");
-            filters.put("status", "");
-            filters.put("searchPrice", "");
-            filters.put("priceRank", "");
-            filters.put("bmiId", "");
-            filters.put("authorId", null);
-            
-            
-            Map<String, String> sortAndPagination = new HashMap<>();
-            sortAndPagination.put("sortprice", "desc");
-            sortAndPagination.put("sorttime", "asc");
-            sortAndPagination.put("page", "1");
-            sortAndPagination.put("pageSize", "8");
-            
-            FoodDraftDAO dao = new FoodDraftDAO();
+
+            Map<String, String> filters = new HashMap<> ();
+            filters.put ("searchKey", "");
+            filters.put ("category", "");
+            filters.put ("status", "");
+            filters.put ("searchPrice", "");
+            filters.put ("priceRank", "");
+            filters.put ("bmiId", "");
+            filters.put ("authorId", null);
+
+            Map<String, String> sortAndPagination = new HashMap<> ();
+            sortAndPagination.put ("sortprice", "desc");
+            sortAndPagination.put ("sorttime", "asc");
+            sortAndPagination.put ("page", "1");
+            sortAndPagination.put ("pageSize", "8");
+
+            FoodDraftDAO dao = new FoodDraftDAO ();
             List<Category> lstC = c_dao.getListCategoriesNoP (null, null, null);
-            List<Food_Draft> lstFdr = dao.getListFoodDrafts(filters, sortAndPagination);
-            int total = dao.getListFoodDraftsTotal(filters, sortAndPagination);
+            List<Food_Draft> lstFdr = dao.getListFoodDrafts (filters, sortAndPagination);
+            int total = dao.getListFoodDraftsTotal (filters, sortAndPagination);
             int totalPages = (int) Math.ceil ((double) total / 8);
             request.setAttribute ("lstBMI", lstBMI);
             request.setAttribute ("lstFoodDr", lstFdr);
@@ -1007,9 +981,6 @@ protected void ShowFoodDraft(HttpServletRequest request, HttpServletResponse res
             request.setAttribute ("totalPages", totalPages);
             request.setAttribute ("total", total);
             request.setAttribute ("currentPage", currentPage);
-//            try(PrintWriter o = response.getWriter ()){
-//                o.print (lstFdr);
-//            }
             request.getRequestDispatcher ("/Nutritionist/FoodSuggestion.jsp").forward (request, response);
         } catch (SQLException e) {
             e.printStackTrace ();
@@ -1017,7 +988,7 @@ protected void ShowFoodDraft(HttpServletRequest request, HttpServletResponse res
 
     }
 
-protected void ShowFoodDraftSortFilter(HttpServletRequest request, HttpServletResponse response)
+    protected void ShowFoodDraftSortFilter(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         FoodDraftDAO dao = new FoodDraftDAO ();
         CategoryDAO c_dao = new CategoryDAO ();
@@ -1061,32 +1032,31 @@ protected void ShowFoodDraftSortFilter(HttpServletRequest request, HttpServletRe
             if (sortTime != null && !sortTime.isEmpty ()) {
                 sortAndPagination.put ("sortTime", sortTime);
             }
-            
+
             int pageSize = 8;
             int currentPage = 1;
             String pageParam = request.getParameter ("page");
             if (pageParam != null && !pageParam.isEmpty ()) {
                 try {
                     currentPage = Integer.parseInt (pageParam);
-                    sortAndPagination.put ("page",pageParam);
+                    sortAndPagination.put ("page", pageParam);
                 } catch (NumberFormatException e) {
                     currentPage = 1;
                 }
             }
-            
+
             List<Food_Draft> lstFdr = new ArrayList<> ();
             int total = dao.getListFoodDraftsTotal (filters, sortAndPagination);
-            if (total > pageSize * (currentPage - 1)){
-                sortAndPagination.put ("page",pageParam);
-               lstFdr = dao.getListFoodDrafts (filters, sortAndPagination);
-               request.setAttribute ("currentPage", currentPage);
-            }
-            else{
-                sortAndPagination.put ("page","1");
+            if (total > pageSize * (currentPage - 1)) {
+                sortAndPagination.put ("page", pageParam);
+                lstFdr = dao.getListFoodDrafts (filters, sortAndPagination);
+                request.setAttribute ("currentPage", currentPage);
+            } else {
+                sortAndPagination.put ("page", "1");
                 lstFdr = dao.getListFoodDrafts (filters, sortAndPagination);
                 request.setAttribute ("currentPage", "1");
             }
-            int totalPages = (int) Math.ceil ((double) total  / pageSize);
+            int totalPages = (int) Math.ceil ((double) total / pageSize);
             List<Category> lstC = c_dao.getListCategoriesNoP (null, null, null);
             BMIClassificationDAO bidao = new BMIClassificationDAO ();
             List<BMIClassification> lstBMI = bidao.getAllBMI ();
@@ -1095,7 +1065,7 @@ protected void ShowFoodDraftSortFilter(HttpServletRequest request, HttpServletRe
             request.setAttribute ("lstFoodDr", lstFdr);
             request.setAttribute ("total", total);
             request.setAttribute ("totalPages", totalPages);
-            
+
             request.getRequestDispatcher ("/Nutritionist/FoodSuggestion.jsp").forward (request, response);
 
         } catch (Exception e) {
@@ -1104,4 +1074,255 @@ protected void ShowFoodDraftSortFilter(HttpServletRequest request, HttpServletRe
             request.getRequestDispatcher ("error.jsp").forward (request, response);
         }
     }
+
+    protected void CopyFood(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        FoodDraftDAO dao = new FoodDraftDAO ();
+        HttpSession session = request.getSession (false);
+        if (session == null) {
+            response.sendRedirect ("/Nutritionist/Homedemo.jsp");
+            return;
+        } else {
+            Account acc = (Account) session.getAttribute ("Account");
+            try {
+                String orgIDtxt = request.getParameter ("id");
+                if (orgIDtxt != null && !orgIDtxt.trim ().isEmpty ()) {
+                    int orgID = Integer.parseInt (orgIDtxt);
+                    int authodID = acc.getId ();
+                    int check = dao.copyFoodToDraft (orgID, authodID);
+                    if (check == -1) {
+                        String ErrMess = "Có lỗi trong quá trình copy vui lòng thử lại";
+                        request.setAttribute ("Errmess", ErrMess);
+                        ShowFood (request, response);
+                    }
+                    String successMessage = "Copy Sucessfuly draftID is : " + check;
+                    request.setAttribute ("successMessage", successMessage);
+                    ShowFood (request, response);
+                } else {
+                    String ErrMess = "Server canot get full ìnomation about authod angd food . Try again!";
+                    request.setAttribute ("Errmess", ErrMess);
+                    ShowFood (request, response);
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace ();
+                String ErrMess = "Lỗi hệ thống xin vui lòng thử lại";
+                request.setAttribute ("Errmess", ErrMess);
+                ShowFood (request, response);
+            }
+        }
+    }
+
+    protected void ShowCreateFoodDraft(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        FoodDraftDAO dao = new FoodDraftDAO ();
+        HttpSession session = request.getSession (false);
+        if (session == null) {
+            response.sendRedirect ("/Nutritionist/Homedemo.jsp");
+            return;
+        } else {
+            Account acc = (Account) session.getAttribute ("Account");
+            try {
+                CategoryDAO c_dao = new CategoryDAO ();
+                BMIClassificationDAO bi_dao = new BMIClassificationDAO ();
+                List<Category> lstC = c_dao.getListCategoriesNoP (null, null, null);
+                List<BMIClassification> lstBMI = bi_dao.getAllBMI ();
+
+                if (lstC != null && lstBMI != null) {
+                    request.setAttribute ("lstC", lstC);
+                    request.setAttribute ("lstBMI", lstBMI);
+                    request.getRequestDispatcher ("/Nutritionist/CreateFoodDraft.jsp").forward (request, response);
+                } else {
+                    request.setAttribute ("Ermessr", "Lỗi tai dữ liệu");
+                    request.getRequestDispatcher ("/Nutritionist/CreateFoodDraft.jsp").forward (request, response);
+                }
+            } catch (Exception e) {
+                request.setAttribute ("Ermessr", "Lỗi");
+                request.getRequestDispatcher ("/Nutritionist/CreateFoodDraft.jsp").forward (request, response);
+            }
+        }
+    }
+   protected void CreateFoodDraft(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+    FoodDraftDAO dao = new FoodDraftDAO();
+    HttpSession session = request.getSession(false);
+    if (session == null) {
+        response.sendRedirect("/Nutritionist/Homedemo.jsp");
+        return;
+    } else {
+        Account acc = (Account) session.getAttribute("Account");
+        try {
+            String name = request.getParameter("name");
+            String pricetxt = request.getParameter("price");
+            String categorytxt = request.getParameter("category");
+            String description = request.getParameter("description");
+            String ingredients = request.getParameter("ingredients");
+            String[] bmiValues = request.getParameterValues("bmi");
+            String bmiString;
+            if (bmiValues == null || bmiValues.length == 0) {
+                bmiString = "7";
+            } else if (bmiValues.length == 1) {
+                bmiString = bmiValues[0];
+            } else {
+                bmiString = String.join(",", bmiValues);
+            }
+
+            Part imagePart = request.getPart("image");
+            double price = 0;
+            int category = 0;
+            
+            
+            if (name == null || name.trim().isEmpty()) {
+                request.setAttribute("Errmess", "Name Food cannot be empty");
+                ShowCreateFoodDraft(request, response);
+                return;
+            }
+            
+            try {
+                if (pricetxt == null || pricetxt.trim().isEmpty()) {
+                    request.setAttribute("Errmess", "Price cannot be empty");
+                    ShowCreateFoodDraft(request, response);
+                    return;
+                } else {
+                    price = Double.parseDouble(pricetxt);
+                }
+                if (categorytxt == null || categorytxt.trim().isEmpty()) {
+                    request.setAttribute("Errmess", "Category cannot be null");
+                    ShowCreateFoodDraft(request, response);
+                    return;
+                } else {
+                    category = Integer.parseInt(categorytxt);
+                }
+            } catch (NumberFormatException e) {
+                request.setAttribute("Errmess", "Wrong type price or category");
+                ShowCreateFoodDraft(request, response);
+                return;
+            }
+            
+            if (description == null || description.trim().isEmpty()) {
+                request.setAttribute("Errmess", "Description cannot be null");
+                ShowCreateFoodDraft(request, response);
+                return;
+            }
+            
+            if (ingredients == null || ingredients.trim().isEmpty()) {
+                request.setAttribute("Errmess", "Ingredients cannot be null");
+                ShowCreateFoodDraft(request, response);
+                return;
+            }
+            
+            String imageUrl;
+            try {
+                imageUrl = processImageUpload(imagePart, "fooddraft");
+            } catch (IllegalStateException e) {
+                request.setAttribute("Errmess", "Ảnh vượt quá dung lượng cho phép (5MB).");
+                ShowCreateFoodDraft(request, response);
+                return;
+            } catch (Exception e) {
+                System.err.println("Image upload error: " + e.getMessage());
+                e.printStackTrace();
+                request.setAttribute("Errmess", "Đã xảy ra lỗi khi tải ảnh: " + e.getMessage());
+                ShowCreateFoodDraft(request, response);
+                return;
+            }
+            
+            
+            FoodDraftDTO fdrDto = new FoodDraftDTO();
+            fdrDto.setName(name);
+            fdrDto.setAuthorId(acc.getId());
+            fdrDto.setCategoryId(category);
+            fdrDto.setDescription(description);
+            fdrDto.setIngredients(ingredients);
+            fdrDto.setBmiIds(bmiString);
+            fdrDto.setStatus("Draft");
+            fdrDto.setImagePath(imageUrl); 
+            fdrDto.setPrice(price);
+            fdrDto.setOriginId(null); 
+            
+            
+            boolean check = dao.createFoodDraft(fdrDto);
+            if (check) {
+                request.setAttribute("successMessage", "Create Successfully!");
+                ShowCreateFoodDraft(request, response);
+            } else {
+                request.setAttribute("Errmess", "Create Failed, try again!");
+                ShowCreateFoodDraft(request, response);
+            }
+            
+        } catch (Exception e) {
+            System.err.println("Unexpected error in CreateFoodDraft servlet: " + e.getMessage());
+            e.printStackTrace();
+            request.setAttribute("Errmess", "An unexpected error occurred");
+            ShowCreateFoodDraft(request, response);
+        }
+    }
+}
+
+
+private String processImageUpload(Part filePart, String folder) throws IOException, IllegalStateException {
+    if (filePart.getSize() > 5 * 1024 * 1024) {
+        throw new IllegalStateException("Ảnh vượt quá dung lượng 5MB");
+    }
+
+    String fileName = filePart.getSubmittedFileName();
+    if (fileName == null || fileName.isEmpty()) {
+        return null;
+    }
+
+
+    String fileExtension = fileName.contains(".")
+            ? fileName.substring(fileName.lastIndexOf(".")).toLowerCase() : "";
+    String[] allowedExtensions = {".jpg", ".jpeg", ".png", ".gif"};
+    boolean validExtension = false;
+    for (String ext : allowedExtensions) {
+        if (fileExtension.equals(ext)) {
+            validExtension = true;
+            break;
+        }
+    }
+    if (!validExtension) {
+        throw new IllegalStateException("File type not allowed. Only JPG, PNG, GIF are supported.");
+    }
+
+    String uniqueFileName = UUID.randomUUID() + fileExtension;
+    String uploadDirPath = BASE_PATH + "\\src\\main\\webapp\\img\\" + folder;
+    String targetDirPath = BASE_PATH + "\\target\\Food-1.0-SNAPSHOT\\img\\" + folder;
+
+
+    File uploadDir = new File(uploadDirPath);
+    File targetDir = new File(targetDirPath);
+    
+    if (!uploadDir.exists()) {
+        uploadDir.mkdirs();
+    }
+    if (!targetDir.exists()) {
+        targetDir.mkdirs();
+    }
+
+    String filePath = uploadDirPath + File.separator + uniqueFileName;
+    
+    try {
+        filePart.write(filePath);
+        
+        File source = new File(filePath);
+        File target = new File(targetDirPath + File.separator + uniqueFileName);
+        
+   
+        if (!source.exists()) {
+            throw new IOException("Source file does not exist after write");
+        }
+        
+        Files.copy(source.toPath(), target.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        
+    } catch (Exception e) {
+        
+        File sourceFile = new File(filePath);
+        if (sourceFile.exists()) {
+            sourceFile.delete();
+        }
+        throw new IOException("Error copying file: " + e.getMessage(), e);
+    }
+    
+    return "img/" + folder + "/" + uniqueFileName;
+}
 }

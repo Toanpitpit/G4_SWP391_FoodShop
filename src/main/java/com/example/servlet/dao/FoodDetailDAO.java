@@ -13,10 +13,6 @@ import java.util.List;
 
 public class FoodDetailDAO {
 
-    /**
-     * Lấy FoodDetail theo id và isDraft.
-     * Trả về null nếu không tìm thấy hoặc có lỗi.
-     */
     public FoodDetail getFoodDetailByIdAndDraft(int id, boolean isDraft) {
         String sql = "SELECT * FROM FoodDetail WHERE isdraft = ? AND " +
                      (isDraft ? "draft_id = ?" : "food_id = ?");
@@ -32,40 +28,22 @@ public class FoodDetailDAO {
                 }
             }
         } catch (SQLException ex) {
-            // In ra console / Tomcat log để debug
             ex.printStackTrace();
         }
         return null;
     }
 
-    /**
-     * Map một ResultSet row thành FoodDetail.
-     * Giả định model FoodDetail có:
-     *   private int fdID;          // không nullable
-     *   private Boolean isDraft;
-     *   private Integer fID;       // nullable
-     *   private Integer fdrID;     // nullable
-     *   private String description;
-     *   private String ingredients;
-     */
     private FoodDetail mapResultSetToFoodDetail(ResultSet rs) {
         FoodDetail fd = new FoodDetail();
         try {
-            // Khóa chính của FoodDetail
             fd.setFdID(rs.getInt("fdId"));
-
-            // isDraft
             fd.setIsDraft(rs.getBoolean("isdraft"));
-
-            // food_id nullable
             int foodId = rs.getInt("food_id");
             if (rs.wasNull()) {
                 fd.setfID(null);
             } else {
                 fd.setfID(foodId);
             }
-
-            // draft_id nullable
             int draftId = rs.getInt("draft_id");
             if (rs.wasNull()) {
                 fd.setFdrID(null);
@@ -81,10 +59,7 @@ public class FoodDetailDAO {
         return fd;
     }
 
-    /**
-     * Lấy danh sách BMIClassification liên quan tới Food hoặc Draft.
-     * Trả về List rỗng nếu không có bản ghi hoặc có lỗi.
-     */
+
     public List<BMIClassification> getBMIClassificationsByFoodOrDraftId(int id, boolean isDraft) {
         List<BMIClassification> bmiList = new ArrayList<>();
 

@@ -40,7 +40,6 @@ function newPreviewImage(event) {
         };
         reader.readAsDataURL(file);
     } else {
-        // Nếu không chọn file
         preview.src = '';
         preview.style.display = 'none';
         placeholder.style.display = 'block';
@@ -93,8 +92,7 @@ function previewImageEdit(event) {
     const button = document.querySelector('.new-btn-submit');
     const overlay = document.querySelector('.loading-overlay');
     const elements = form.querySelectorAll("input, textarea, select, button");
-
-    // -- Kiểm tra tiêu đề --
+    
     const titleInput = document.getElementById('title');
     const titleText = titleInput.value.trim();
     const wordCount = titleText.split(/\s+/).filter(word => word !== '').length;
@@ -110,7 +108,7 @@ function previewImageEdit(event) {
         return;
     }
 
-    // -- Kiểm tra nội dung --
+   
     const content = CKEDITOR.instances.editor.getData().trim();
     if (!content) {
         e.preventDefault();
@@ -121,31 +119,10 @@ function previewImageEdit(event) {
         if (overlay) overlay.style.display = 'none';
         elements.forEach(el => el.disabled = false);
         return;
-    }
-
-    
+    }  
     button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang xử lý...';
     form.classList.add('loading');
 });
 
 
     
-//document.getElementById('newBlogForm').addEventListener('submit', function (e) {
-//    const titleInput = document.getElementById('title');
-//    const titleText = titleInput.value.trim();
-//    const wordCount = titleText.split(/\s+/).length;
-//    const button = document.querySelector('.new-btn-submit');
-//    const form = document.querySelector('.new-blog-form');
-//    if (wordCount < 5 || wordCount > 30) {
-//        e.preventDefault(); 
-//        showWarning('Tiêu đề phải chứa từ 5 đến 30 từ để tối ưu SEO.');
-//        button.innerHTML = '<i class="fas fa-check"></i> Xuất bản bài viết';
-//        form.classList.remove('loading'); 
-//        return;
-//    }
-//    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang xử lý...';
-//    form.classList.add('loading');
-//});
-
-
-

@@ -753,7 +753,6 @@ textarea.form-control {
     background-color: #c0392b;
 }
 
-/* New Blog Form Styles - Prefixed to avoid conflicts */
 .new-blog-form {
     --primary-green: #47B77B;
     --light-green: #E8F5E9;

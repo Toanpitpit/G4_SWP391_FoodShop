@@ -195,35 +195,29 @@ public static void dis8() throws SQLException {
 
 
 public static void dis9()  {
-        try {
-            Map<String, String> filters = new HashMap<>();
-            filters.put("searchKey", "");
-            filters.put("category", "");
-            filters.put("status", "");
-            filters.put("searchPrice", "");
-            filters.put("priceRank", "");
-            filters.put("bmiId", "");
-            filters.put("authorId", "19");
-            
-            
-            Map<String, String> sortAndPagination = new HashMap<>();
-            sortAndPagination.put("sortprice", "desc");
-            sortAndPagination.put("sorttime", "asc");
-            sortAndPagination.put("page", "1");
-            sortAndPagination.put("pageSize", "10");
-            
-            
-            FoodDraftDAO dao = new FoodDraftDAO();
-            List<Food_Draft> results = dao.getListFoodDrafts(filters, sortAndPagination);
-            int total = dao.getListFoodDraftsTotal(filters, sortAndPagination);
-            for (Food_Draft result : results) {
-                System.out.println (result);
-            }   
-            System.out.println (total);
-        } catch (SQLException ex) {
-                
-            Logger.getLogger (test.class.getName()).log (Level.SEVERE, null, ex);
-        }
+//    Map<String, String> filters = new HashMap<>();
+//    filters.put("searchKey", "");
+//    filters.put("category", "");
+//    filters.put("status", "");
+//    filters.put("searchPrice", "");
+//    filters.put("priceRank", "");
+//    filters.put("bmiId", "");
+//    filters.put("authorId", "19");
+//    Map<String, String> sortAndPagination = new HashMap<>();
+//    sortAndPagination.put("sortprice", "desc");
+//    sortAndPagination.put("sorttime", "asc");
+//    sortAndPagination.put("page", "1");
+//    sortAndPagination.put("pageSize", "10");
+    FoodDraftDAO dao = new FoodDraftDAO();
+//            List<Food_Draft> results = dao.getListFoodDrafts(filters, sortAndPagination);
+//            int total = dao.getListFoodDraftsTotal(filters, sortAndPagination);
+//            for (Food_Draft result : results) {
+//                System.out.println (result);
+//            }   
+//            System.out.println (total);
+
+    int check =  dao.copyFoodToDraft (1, 21);
+    System.out.println (check);
 }
 
 }

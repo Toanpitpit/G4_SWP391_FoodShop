@@ -23,7 +23,7 @@ document.addEventListener("click", (e) => {
         notifDropdown.style.display = "none";
     }
 });
-// Toggle Sidebar Function
+
 function toggleSidebar() {
     const sidebar = document.getElementById('sidebar');
     const mainHeader = document.getElementById('mainHeader');
@@ -53,7 +53,6 @@ function toggleSidebar() {
     }
 }
 
-// Expand sidebar when clicked while collapsed
 function expandSidebarOnClick() {
     const sidebar = document.getElementById('sidebar');
     const mainHeader = document.getElementById('mainHeader');
@@ -66,7 +65,6 @@ function expandSidebarOnClick() {
     }
 }
 
-// Toggle Submenu Function
 function toggleSubmenu(element) {
     const submenu = element.parentElement.querySelector('.submenu');
     const arrow = element.querySelector('.menu-arrow');
@@ -102,7 +100,6 @@ function toggleSubmenu(element) {
     }
 }
 
-// Close sidebar on mobile when clicking outside
 document.addEventListener('click', function (event) {
     if (window.innerWidth <= 768) {
         const sidebar = document.getElementById('sidebar');
@@ -114,7 +111,7 @@ document.addEventListener('click', function (event) {
     }
 });
 
-// Handle window resize
+
 window.addEventListener('resize', function () {
     const sidebar = document.getElementById('sidebar');
     const mainHeader = document.getElementById('mainHeader');
@@ -129,7 +126,7 @@ window.addEventListener('resize', function () {
     }
 });
 
-// Active menu item handling
+
 document.querySelectorAll('.menu-link').forEach(link => {
     link.addEventListener('click', function (e) {
         // Don't prevent default for items with submenus
@@ -145,7 +142,7 @@ document.querySelectorAll('.menu-link').forEach(link => {
         }
     });
 });
-// Fullscreen toggle
+
 document.querySelector('[title="Fullscreen"]').addEventListener('click', function () {
     if (!document.fullscreenElement) {
         document.documentElement.requestFullscreen();
@@ -156,21 +153,6 @@ document.querySelector('[title="Fullscreen"]').addEventListener('click', functio
     }
 });
 
-// Initialize tooltips for collapsed sidebar
-function initTooltips() {
-    const sidebar = document.getElementById('sidebar');
-    const menuLinks = document.querySelectorAll('.menu-link[data-tooltip]');
-
-    menuLinks.forEach(link => {
-        link.addEventListener('mouseenter', function () {
-            if (sidebar.classList.contains('collapsed')) {
-                // Tooltip is handled by CSS
-            }
-        });
-    });
-}
-
-// Initialize on page load
 document.addEventListener('DOMContentLoaded', function () {
     initTooltips();
 
@@ -202,7 +184,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
-// Smooth scrolling for internal links
+
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
         e.preventDefault();
@@ -336,10 +318,10 @@ class AlertNotification {
     }
 }
 
-// Initialize global alert system
+
 const alertSystem = new AlertNotification();
 
-// Auto-detect existing alerts and convert them
+
 document.addEventListener('DOMContentLoaded', function () {
     // Tìm các alert cũ và chuyển đổi
     const existingAlerts = document.querySelectorAll('.alert');

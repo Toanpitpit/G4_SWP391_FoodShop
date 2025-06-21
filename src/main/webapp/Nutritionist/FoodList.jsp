@@ -45,7 +45,21 @@
         <jsp:include page="/Nutritionist/nav.jsp"/>  
         <!-- Main Header -->
         <jsp:include page="/Nutritionist/main-header.jsp"/>  
+          <c:if test="${not empty Errmess}">
+            <div class="alert alert-danger" style="display: none;">${Errmess}</div>
+        </c:if>
 
+        <c:if test="${not empty successMessage}">
+            <div class="alert alert-success" style="display: none;">${successMessage}</div>
+        </c:if>
+
+        <c:if test="${not empty warningMessage}">
+            <div class="alert alert-warning" style="display: none;">${warningMessage}</div>
+        </c:if>
+
+        <c:if test="${not empty infoMessage}">
+            <div class="alert alert-info" style="display: none;">${infoMessage}</div>
+        </c:if>s
         <!-- Main Content -->
         <main class="main-content" id="mainContent">
             <div class="seller-content">
@@ -195,7 +209,7 @@
                                                     <a class="action-btn view-btn" title="Xem chi tiết" href="nutricontrol?action=showfooddetail&id=${food.foodId}">
                                                         <i class="fas fa-eye"></i>
                                                     </a>
-                                                    <a class="action-btn edit-btn" title="Tạo Bản sao" href="nutricontrol?action=#"">
+                                                    <a class="action-btn edit-btn" title="Tạo Bản sao" href="nutricontrol?action=copyfood&id=${food.foodId}">
                                                         <i class="fas fa-clone"></i>
                                                     </a>
                                                 </div>

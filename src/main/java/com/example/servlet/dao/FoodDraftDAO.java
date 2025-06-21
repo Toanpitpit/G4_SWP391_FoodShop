@@ -4,8 +4,12 @@
  */
 package com.example.servlet.dao;
 
+import com.example.servlet.model.FoodDraftDTO;
 import com.example.servlet.model.Food_Draft;
 import com.example.servlet.utils.DBConnect;
+import com.google.common.util.concurrent.ExecutionError;
+import java.math.BigDecimal;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -374,32 +378,31 @@ public class FoodDraftDAO {
         return foodDraftList;
     }
 
-    public boolean insertFoodDraft(Food_Draft foodDraft) {
-        String sql = "INSERT INTO FoodDrafts (originID, authorID, pName, catID, p_image, price, status) "
-                   + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+    
+    public int copyFoodToDraft(int originalFoodID, int authorID) {
+        String sql = "{CALL CopyFoodToDraft(?, ?)}";
 
-        try (Connection conn = new DBConnect().getConnection(); 
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (CallableStatement cs = new DBConnect ().getConnection ().prepareCall (sql)) {
 
-            if (foodDraft.getOriginID() == 0) {
-                stmt.setNull(1, java.sql.Types.INTEGER);
-            } else {
-                stmt.setInt(1, foodDraft.getOriginID());
+            cs.setInt (1, originalFoodID);
+            cs.setInt (2, authorID);
+            try (ResultSet rs = cs.executeQuery ()) {
+                if (rs.next ()) {
+                    return rs.getInt ("NewDraftID");
+                }
             }
-            stmt.setInt(2, foodDraft.getAuthorID());
-            stmt.setString(3, foodDraft.getFoodName());
-            stmt.setObject(4, getCategoryIdByName(foodDraft.getCatName()));
-            stmt.setString(5, foodDraft.getImageUlr());
-            stmt.setDouble(6, foodDraft.getPrice());
-            stmt.setString(7, foodDraft.getStatus());
-
-            return stmt.executeUpdate() > 0;
-        } catch (SQLException ex) {
-            Logger.getLogger(FoodDraftDAO.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
+            catch (ExecutionError e){
+                  e.printStackTrace ();
+            }
+        } catch (SQLException e) {
+            System.err.println ("Error copying food to draft: " + e.getMessage ());
+            e.printStackTrace ();
         }
+        return -1;
     }
 
+   
+   
     public boolean updateFoodDraft(Food_Draft foodDraft) {
         String sql = "UPDATE FoodDrafts SET pName = ?, catID = ?, p_image = ?, price = ?, status = ?, update_at = GETDATE() "
                    + "WHERE pdrID = ?";
@@ -482,84 +485,48 @@ public class FoodDraftDAO {
         return 0;
     }
 
-    public boolean approveFoodDraft(int foodDraftId) {
-        String selectSql = "SELECT * FROM FoodDrafts WHERE pdrID = ?";
-        String insertSql = "INSERT INTO Foods (pName, catID, p_image, price, status) VALUES (?, ?, ?, ?, 'active')";
-        String updateSql = "UPDATE FoodDrafts SET status = 'approved' WHERE pdrID = ?";
+public boolean createFoodDraft(FoodDraftDTO dto) {
+    String sql = "{call CreateFoodDraft(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";
+    try (Connection conn = new DBConnect().getConnection();
+         CallableStatement stmt = conn.prepareCall(sql)) {
+        stmt.setNString(1, dto.getName());
+        stmt.setInt(2, dto.getCategoryId());
+        stmt.setString(3, dto.getImagePath());
+        stmt.setDouble(4, dto.getPrice());
+        stmt.setString(5, dto.getStatus());
+        stmt.setInt(6, dto.getAuthorId());
 
-        try (Connection conn = new DBConnect().getConnection()) {
-            conn.setAutoCommit(false);
-            
-            try {
-                Food_Draft draft = null;
-                try (PreparedStatement selectStmt = conn.prepareStatement(selectSql)) {
-                    selectStmt.setInt(1, foodDraftId);
-                    try (ResultSet rs = selectStmt.executeQuery()) {
-                        if (rs.next()) {
-                            draft = new Food_Draft();
-                            draft.setFdrID(rs.getInt("pdrID"));
-                            draft.setOriginID(rs.getInt("originID"));
-                            draft.setAuthorID(rs.getInt("authorID"));
-                            draft.setFoodName(rs.getString("pName"));
-                            draft.setImageUlr(rs.getString("p_image"));
-                            draft.setPrice(rs.getDouble("price"));
-                            draft.setStatus(rs.getString("status"));
-                        }
-                    }
-                }
-
-                if (draft == null) {
-                    conn.rollback();
-                    return false;
-                }
-                try (PreparedStatement insertStmt = conn.prepareStatement(insertSql)) {
-                    insertStmt.setString(1, draft.getFoodName());
-                    insertStmt.setObject(2, getCategoryIdByName(draft.getCatName()));
-                    insertStmt.setString(3, draft.getImageUlr());
-                    insertStmt.setDouble(4, draft.getPrice());
-                    insertStmt.executeUpdate();
-                }
-
-                try (PreparedStatement updateStmt = conn.prepareStatement(updateSql)) {
-                    updateStmt.setInt(1, foodDraftId);
-                    updateStmt.executeUpdate();
-                }
-
-                conn.commit();
-                return true;
-            } catch (SQLException ex) {
-                conn.rollback();
-                throw ex;
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(FoodDraftDAO.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
+        if (dto.getOriginId() != null && dto.getOriginId() > 0) {
+            stmt.setInt(7, dto.getOriginId());
+        } else {
+            stmt.setNull(7, java.sql.Types.INTEGER);
         }
+        stmt.setNString(8, dto.getDescription());
+        stmt.setNString(9, dto.getIngredients());
+        stmt.setNString(10, dto.getBmiIds());
+        
+        boolean hasResult = stmt.execute();
+        while (hasResult) {
+            try (ResultSet rs = stmt.getResultSet()) {
+                if (rs.next()) {
+                    return rs.getInt("Success") == 1;
+                }
+            }
+            hasResult = stmt.getMoreResults();
+        }
+        
+    } catch (SQLException e) {
+        System.err.println("SQL Exception in createFoodDraft: " + e.getMessage());
+        e.printStackTrace();
+        return false;
+    } catch (Exception e) {
+        System.err.println("Unexpected error in createFoodDraft: " + e.getMessage());
+        e.printStackTrace();
+        return false;
     }
+    
+    return false;
 }
 
-/*
-VÍ DỤ CÁCH SỬ DỤNG:
+}
 
-// Tạo Map filters
-Map<String, String> filters = new HashMap<>();
-filters.put("searchKey", "pizza");
-filters.put("category", "1");
-filters.put("status", "pending");
-filters.put("searchPrice", "50.0");
-filters.put("priceRank", "10-50");
-filters.put("bmiId", "2");
-filters.put("authorId", "123");
-
-// Tạo Map sort và pagination
-Map<String, String> sortAndPagination = new HashMap<>();
-sortAndPagination.put("sortprice", "desc");  // sort theo giá giảm dần
-sortAndPagination.put("sorttime", "asc");    // sort theo thời gian tăng dần
-sortAndPagination.put("page", "1");          // trang 1
-sortAndPagination.put("pageSize", "20");     // 20 items per page
-
-// Gọi phương thức
-FoodDraftDAO dao = new FoodDraftDAO();
-List<Food_Draft> results = dao.getListFoodDrafts(filters, sortAndPagination);
-int total = dao.getListFoodDraftsTotal(filters, sortAndPagination);
-*/
