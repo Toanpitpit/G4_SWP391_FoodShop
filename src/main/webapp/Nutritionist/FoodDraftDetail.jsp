@@ -24,9 +24,7 @@
                 --warning-color: #ffc107;
                 --danger-color: #dc3545;
             }
-
-    
-
+            
             .breadcrumb-container {
                 background: white;
                 padding: 15px 20px;
@@ -471,7 +469,7 @@
                         <span class="breadcrumb-separator">/</span>
                         <a href="${pageContext.request.contextPath}/nutricontrol?action=showfood" class="breadcrumb-item">Danh sách đồ ăn</a>
                         <span class="breadcrumb-separator">/</span>
-                        <span class="breadcrumb-item active">Chi tiết sản phẩm</span>
+                        <span class="breadcrumb-item active">Chi tiết Food draft</span>
                     </nav>
                 </div>
 
@@ -481,8 +479,8 @@
                         <div class="col-lg-5 d-flex justify-content-center align-items-center">
                             <div class="product-image">
                                 <c:choose>
-                                    <c:when test="${not empty food.image}">
-                                        <img src="${pageContext.request.contextPath}/img/logo/logo.png" alt="fad" id="productImage">
+                                    <c:when test="${not empty food.imageUlr}">
+                                        <img src="${pageContext.request.contextPath}/${food.imageUlr}" alt="fad" id="productImage">
                                     </c:when>
                                     <c:otherwise>
                                         <img src="${pageContext.request.contextPath}/img/logo/logo.png" alt="Không có hình ảnh" id="productImage">
@@ -495,7 +493,7 @@
                             <div class="product-info">
                                 <!-- Title -->
                                 <h1 class="product-title" id="productName">
-                                    ${food.foodname}
+                                    ${food.foodName}
                                 </h1>
                                 <div class="product-full">
                                     <div class="product-price-box" style="margin-left: 30px; display: flex; align-items: center; padding: 10px; background-color: #fdf2f2;border-radius: 8px;">
@@ -513,7 +511,11 @@
                                             <span class="meta-label">
                                             <i class="fas fa-id-card"></i> ID
                                         </span>
-                                        <span class="meta-value" id="productSku">${food.foodId}</span>
+                                        <span class="meta-value" id="productSku">${food.fdrID}</span>
+                                         <span class="meta-label">
+                                            <i class="fas fa-id-card"></i> Origin ID
+                                        </span>
+                                        <span class="meta-value" id="productSku">${food.originID}</span>
                                     </div>
                                     
                                     <div class="meta-item">
@@ -526,7 +528,7 @@
                                         <span class="meta-label">
                                             <i class="fas fa-tags"></i> Danh mục
                                         </span>
-                                        <span class="meta-value" id="productCategory">${food.category}</span>
+                                        <span class="meta-value" id="productCategory">${food.catName}</span>
                                     </div>
                                     <div class="meta-item">
                                         <span class="meta-label">
@@ -590,11 +592,6 @@
                                         <i class="fas fa-chevron-down"></i> Xem thêm
                                     </button>
                                 </div>
-                                </div>
-                                <div class="action-buttons mt-3">
-                                    <a href="nutricontrol?action=copyfood&id=${food.foodId}" class="btn-custom btn-edit" id="editBtn">
-                                        <i class="fas fa-edit"></i> Tạo bản sao
-                                    </a>
                                 </div>
                             </div>
                         </div>

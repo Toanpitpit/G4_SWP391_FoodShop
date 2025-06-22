@@ -196,7 +196,7 @@ public class FoodDraftDAO {
                         parameters.add (value.trim ());
                         break;
                     case "searchPrice":
-                        // Giá tối đa đơn giản từ input number
+                       
                         try {
                         double maxPrice = Double.parseDouble (value.trim ());
                         sql.append ("AND fd.price <= ? ");
@@ -206,7 +206,7 @@ public class FoodDraftDAO {
                     }
                     break;
                     case "priceRank":
-                        // Range giá từ dropdown
+                       
                         addPriceRangeFilter (value.trim ());
                         break;
                     case "bmiID":
@@ -332,7 +332,7 @@ public class FoodDraftDAO {
         }
     }
 
-    public Food_Draft getFoodDraftById(int foodDraftId) {
+    public Food_Draft getFoodDraftById(int foodDraftId,int authodID) {
         String sql = BASE_QUERY + " AND fd.pdrID = ?";
 
         try (Connection conn = new DBConnect ().getConnection (); PreparedStatement stmt = conn.prepareStatement (sql)) {
@@ -341,9 +341,15 @@ public class FoodDraftDAO {
 
             try (ResultSet rs = stmt.executeQuery ()) {
                 if (rs.next ()) {
-                    return mapResultSetToFoodDraft (rs);
+                    Food_Draft food =  mapResultSetToFoodDraft (rs);
+                    if(food.getAuthorID () != authodID ){
+                        return null;
+                    }else {
+                        return food;
+                    }
                 }
             }
+            
         } catch (SQLException ex) {
             Logger.getLogger (FoodDraftDAO.class.getName ()).log (Level.SEVERE, null, ex);
         }
@@ -401,89 +407,6 @@ public class FoodDraftDAO {
         return -1;
     }
 
-   
-   
-    public boolean updateFoodDraft(Food_Draft foodDraft) {
-        String sql = "UPDATE FoodDrafts SET pName = ?, catID = ?, p_image = ?, price = ?, status = ?, update_at = GETDATE() "
-                   + "WHERE pdrID = ?";
-
-        try (Connection conn = new DBConnect().getConnection(); 
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setString(1, foodDraft.getFoodName());
-            stmt.setObject(2, getCategoryIdByName(foodDraft.getCatName()));
-            stmt.setString(3, foodDraft.getImageUlr());
-            stmt.setDouble(4, foodDraft.getPrice());
-            stmt.setString(5, foodDraft.getStatus());
-            stmt.setInt(6, foodDraft.getFdrID());
-
-            return stmt.executeUpdate() > 0;
-        } catch (SQLException ex) {
-            Logger.getLogger(FoodDraftDAO.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
-        }
-    }
-
-    public boolean deleteFoodDraft(int foodDraftId) {
-        String sql = "DELETE FROM FoodDrafts WHERE pdrID = ?";
-
-        try (Connection conn = new DBConnect().getConnection(); 
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setInt(1, foodDraftId);
-            return stmt.executeUpdate() > 0;
-        } catch (SQLException ex) {
-            Logger.getLogger(FoodDraftDAO.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
-        }
-    }
-
-    private Integer getCategoryIdByName(String categoryName) {
-        if (categoryName == null || categoryName.trim().isEmpty()) {
-            return null;
-        }
-
-        String sql = "SELECT catID FROM Category WHERE caName = ?";
-        try (Connection conn = new DBConnect().getConnection(); 
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setString(1, categoryName.trim());
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getInt("catID");
-                }
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(FoodDraftDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
-    }
-
-    public List<Food_Draft> getPendingFoodDraft(int page, int pageSize) throws SQLException {
-        QueryBuilder queryBuilder = new QueryBuilder (BASE_QUERY)
-                .addFilter ("status", "pending")
-                .addPagination (page, pageSize);
-
-        return executeQuery (queryBuilder);
-    }
-
-    public int countFoodDraftsByStatus(String status) {
-        String sql = "SELECT COUNT(*) FROM FoodDrafts WHERE status = ?";
-        
-        try (Connection conn = new DBConnect().getConnection(); 
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setString(1, status);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getInt(1);
-                }
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(FoodDraftDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return 0;
-    }
 
 public boolean createFoodDraft(FoodDraftDTO dto) {
     String sql = "{call CreateFoodDraft(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";

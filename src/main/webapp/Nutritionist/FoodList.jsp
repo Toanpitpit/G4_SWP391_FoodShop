@@ -59,7 +59,7 @@
 
         <c:if test="${not empty infoMessage}">
             <div class="alert alert-info" style="display: none;">${infoMessage}</div>
-        </c:if>s
+        </c:if>
         <!-- Main Content -->
         <main class="main-content" id="mainContent">
             <div class="seller-content">
@@ -75,11 +75,6 @@
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title"><i class="fas fa-list-ul"></i>Danh sách đồ ăn</h3>
-                        <div class="card-tools">
-                            <button class="btn btn-outline">
-                                <i class="fas fa-file-export"></i>Xuất dữ liệu
-                            </button>
-                        </div>
                     </div>
                     <div class="card-body">
 

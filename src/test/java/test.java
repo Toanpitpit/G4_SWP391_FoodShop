@@ -4,6 +4,7 @@ import com.example.servlet.dao.AccountDAO;
 import com.example.servlet.dao.BMIClassificationDAO;
 import com.example.servlet.dao.BlogDAO;
 import com.example.servlet.dao.FoodDAO;
+import com.example.servlet.dao.FoodDetailDAO;
 import com.example.servlet.dao.FoodDraftDAO;
 import com.example.servlet.dao.NotifyDAO;
 import com.example.servlet.dao.RequestDAO;
@@ -11,6 +12,7 @@ import com.example.servlet.model.Account;
 import com.example.servlet.model.BMIClassification;
 import com.example.servlet.model.Blogs;
 import com.example.servlet.model.Food;
+import com.example.servlet.model.FoodDetail;
 import com.example.servlet.model.Food_Draft;
 import com.example.servlet.model.MonthlyStat;
 import com.example.servlet.model.Notifys;
@@ -38,7 +40,7 @@ public class test {
     
     public static void main(String[] args) throws SQLException {
          try{
-             dis9();
+            diss();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -60,6 +62,17 @@ public class test {
 //         }
 //     } catch (Exception e) {
 //     }
+
+            FoodDraftDAO dao = new FoodDraftDAO();
+            FoodDetailDAO fd_dao = new FoodDetailDAO ();
+            Food_Draft food = dao.getFoodDraftById (119,21);
+            FoodDetail fooddetail = fd_dao.getFoodDetailByIdAndDraft (119, true);
+            List<BMIClassification> tagetaudience = fd_dao.getBMIClassificationsByFoodOrDraftId (119, true);
+            System.out.println (food); 
+            System.out.println (fooddetail); 
+            for (BMIClassification bmi : tagetaudience) {
+                System.out.println (bmi.getClassification ());
+     }
      
 }
     public static void dis() throws SQLException{
