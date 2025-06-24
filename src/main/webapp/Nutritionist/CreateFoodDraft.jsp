@@ -567,7 +567,7 @@
                             </nav>
                         </div>
                     </div>
-                    <form action="nutricontrol?action=dsdgdf" method="post" enctype="multipart/form-data" id="foodForm">
+                    <form action="nutricontrol?action=updatefooddaraft" method="post" enctype="multipart/form-data" id="foodForm">
 
                         <div class="main-layout">
                             <div class="left-section">
@@ -683,16 +683,18 @@
 
                                 <div class="text-editor-section">
                                     <div class="form-group">
+                                         <c:set var="ingredients" value="${not empty fooddetail.ingredients ? fooddetail.ingredients:''}" />
                                         <label class="form-label">Thành phần món ăn:</label>
                                         <div class="text-editor-wrapper">
-                                            <textarea class="form-textarea" name="ingredients" value="${fooddetail.ingredients}" id="ingredients"  placeholder="Thành phần ...">${param.ingredients != null ? param.ingredients : ''}</textarea>
+                                            <textarea class="form-textarea" name="ingredients" id="ingredients"  placeholder="Thành phần ...">${ingredients != null ? ingredients : ''}</textarea>
                                         </div>
                                     </div>
 
                                     <div class="form-group">
+                                         <c:set var="description" value="${not empty fooddetail.description ? fooddetail.description :''}" />
                                         <label class="form-label">Mô tả món ăn:</label>
                                         <div class="text-editor-wrapper">
-                                            <textarea class="form-textarea" name="description"  value="${fooddetail.description} id="description" placeholder="Mô tả ...">${param.description != null ? param.description : ''}</textarea>
+                                            <textarea class="form-textarea" name="description"  value="${fooddetail.description} id="description" placeholder="Mô tả ...">${description != null ? description : ''}</textarea>
                                         </div>
                                     </div>
                                 </div>

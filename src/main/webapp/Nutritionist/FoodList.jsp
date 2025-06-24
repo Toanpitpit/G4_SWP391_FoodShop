@@ -157,7 +157,7 @@
                             <input type="hidden" name="action" value="displaysortfood" />
                             <input type="hidden" name="page" id="pageInput" value="${param.page != null ? param.page : 1}" />
                             <div class="filter-actions">
-                                <button type="button" class="btn btn-outline" onclick="location.href = '${pageContext.request.contextPath}/nutricontrol/showfood'">
+                                <button type="button" class="btn btn-outline" onclick="location.href = '${pageContext.request.contextPath}/nutricontrol?action=showfood'">
                                     <i class="fas fa-times"></i> Xóa bộ lọc
                                 </button>
                                 <button type="submit" class="btn btn-primary" name="filterSubmit" value="true"><i class="fas fa-filter"></i> Lọc</button>

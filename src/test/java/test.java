@@ -39,11 +39,8 @@ import org.mindrot.jbcrypt.BCrypt;
 public class test {
     
     public static void main(String[] args) throws SQLException {
-         try{
-            diss();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        
+                
     }
     
  public static void diss() {

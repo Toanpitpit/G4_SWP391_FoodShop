@@ -95,11 +95,11 @@ function previewImageEdit(event) {
     
     const titleInput = document.getElementById('title');
     const titleText = titleInput.value.trim();
-    const wordCount = titleText.split(/\s+/).filter(word => word !== '').length;
-
+    const validWords = titleText.split(/\s+/).filter(word => /[\p{L}\p{N}]/u.test(word));
+    const wordCount = validWords.length;
     if (wordCount < 5 || wordCount > 30) {
         e.preventDefault();
-        showWarning('❗ Tiêu đề phải chứa từ 5 đến 30 từ để tối ưu SEO.');
+        showWarning('❗ Tiêu đề phải chứa từ 5 đến 30 từ không tính ký tự đặc biệt để tối ưu SEO.');
         form.classList.remove('loading');
         button.disabled = false;
         button.innerHTML = '<i class="fas fa-check"></i> Xuất bản bài viết';
@@ -108,18 +108,30 @@ function previewImageEdit(event) {
         return;
     }
 
-   
-    const content = CKEDITOR.instances.editor.getData().trim();
-    if (!content) {
+
+    const contentHTML = CKEDITOR.instances.editor.getData().trim();
+
+    const contentText = contentHTML
+            .replace(/<[^>]*>/g, '')
+            .replace(/&nbsp;/g, ' ')
+            .trim();
+
+
+    const contentWords = contentText.split(/\s+/).filter(word => /[\p{L}\p{N}]/u.test(word));
+    const contentWordCount = contentWords.length;
+
+
+    if (contentWordCount < 20) {
         e.preventDefault();
-        showWarning("❗ Vui lòng nhập nội dung bài viết trước khi xuất bản.");
+        showWarning("❗ Nội dung bài viết phải có ít nhất 20 từ hợp lệ (không tính ký tự đặc biệt).");
         form.classList.remove('loading');
         button.disabled = false;
         button.innerHTML = '<i class="fas fa-check"></i> Xuất bản bài viết';
-        if (overlay) overlay.style.display = 'none';
+        if (overlay)
+            overlay.style.display = 'none';
         elements.forEach(el => el.disabled = false);
         return;
-    }  
+    }
     button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang xử lý...';
     form.classList.add('loading');
 });
