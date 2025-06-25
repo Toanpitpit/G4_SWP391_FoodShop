@@ -487,7 +487,8 @@ SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
     </head>
     <body>
         <!-- Sidebar -->
-         <nav class="sidebar" id="sidebar">
+         
+      <nav class="sidebar" id="sidebar">
     <div class="sidebar-header">
         <a href="#" class="sidebar-brand">
             <div class="brand-icon">
@@ -516,32 +517,9 @@ SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
         <div class="menu-section">
             <div class="menu-section-title">All Pages</div>
 
-            <div class="menu-item">
-                <a href="#" class="menu-link" data-tooltip="Blog Posts" onclick="toggleSubmenu(this)">
-                    <div class="menu-icon">
-                         <i class="bi bi-journal-text"></i>
-                    </div>
-                    <span class="menu-text">Blogs</span>
-                    <i class="menu-arrow bi bi-chevron-right"></i>
-                </a>
-                <div class="submenu">
-                    <a href="${pageContext.request.contextPath}/nutricontrol?action=displaycreateblog" class="menu-link">Design Blog</a>
-                    <a href="${pageContext.request.contextPath}/nutricontrol?action=displayblog" class="menu-link">Blogs List</a>
-                </div>
-            </div>
+            
 
-            <div class="menu-item">
-                <a href="#" class="menu-link" data-tooltip="BMI type" onclick="toggleSubmenu(this)">
-                    <div class="menu-icon">
-                        <i class="bi bi-layers"></i>
-                    </div>
-                    <span class="menu-text">BMI type</span>
-                    <i class="menu-arrow bi bi-chevron-right"></i>
-                </a>
-                <div class="submenu">
-                    <a href="nutricontrol?action=showBMI" class="menu-link">BMI type List </a>
-                </div>
-            </div>
+            
 
             <div class="menu-item">
                 <a href="#" class="menu-link" data-tooltip="All Food item from shop" onclick="toggleSubmenu(this)">
@@ -552,7 +530,7 @@ SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
                     <i class="menu-arrow bi bi-chevron-right"></i>
                 </a>
                 <div class="submenu">
-                    <a href="${pageContext.request.contextPath}/Nutritionist/FoodList.jsp" class="menu-link">Food List </a>
+                    <a href="viewFoods.jsp" class="menu-link">Food List </a>
                     <a href="${pageContext.request.contextPath}/nutricontrol?action=showfood" class="menu-link">Food Detail</a>
                 </div>
             </div>
@@ -575,32 +553,19 @@ SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
                     <div class="menu-icon">
                         <i class="bi bi-file-earmark-plus"></i>
                     </div>
-                    <span class="menu-text">Request</span>
+                    <span class="menu-text">Order</span>
                     <span class="menu-badge">12</span>
                     <i class="menu-arrow bi bi-chevron-right"></i>
                 </a>
                 <div class="submenu">
-                    <a href="order" class="menu-link">Request List</a>
-                    <a href="#" class="menu-link">Request Detail</a>
-                    <a href="ordertracking.jsp" class="menu-link">Request Tracking</a>
+                    <a href="order" class="menu-link">Order List</a>
+                    <a href="#" class="menu-link">Order Detail</a>
+                    <a href="ordertracking.jsp" class="menu-link">Order Tracking</a>
+                    <a href="invoice.jsp" class="menu-link">Invoice</a>
                 </div>
             </div>
 
            
-            <div class="menu-item">
-                <a href="#" class="menu-link" data-tooltip="Reports" onclick="toggleSubmenu(this)">
-                    <div class="menu-icon">
-                        <i class="bi bi-file-text"></i>
-                    </div>
-                    <span class="menu-text">Reports</span>
-                    <i class="menu-arrow bi bi-chevron-right"></i>
-                </a>
-                <div class="submenu">
-                    <a href="#" class="menu-link">Sales Report</a>
-                    <a href="#" class="menu-link">User Report</a>
-                    <a href="#" class="menu-link">Product Report</a>
-                </div>
-            </div>
             
              <div class="menu-item">
                 <a href="#" class="menu-link" data-tooltip="Users" onclick="toggleSubmenu(this)">
@@ -656,7 +621,7 @@ SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
 
             <div class="marquee-container">
                 <div class="marquee-text">
-                    🍽️ Welcome to <strong>Healthy Food</strong> 🥗 Nutritionist Management 💪 Eat Well, Live Better! 🥦
+                    🍽️ Welcome to <strong>Healthy Food</strong> 🥗 Saler Management 💪 Eat Well, Live Better! 🥦
                 </div>
             </div>
         </div>

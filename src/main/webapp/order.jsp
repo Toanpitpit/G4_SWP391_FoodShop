@@ -50,32 +50,9 @@
         <div class="menu-section">
             <div class="menu-section-title">All Pages</div>
 
-            <div class="menu-item">
-                <a href="#" class="menu-link" data-tooltip="Blog Posts" onclick="toggleSubmenu(this)">
-                    <div class="menu-icon">
-                         <i class="bi bi-journal-text"></i>
-                    </div>
-                    <span class="menu-text">Blogs</span>
-                    <i class="menu-arrow bi bi-chevron-right"></i>
-                </a>
-                <div class="submenu">
-                    <a href="${pageContext.request.contextPath}/nutricontrol?action=displaycreateblog" class="menu-link">Design Blog</a>
-                    <a href="${pageContext.request.contextPath}/nutricontrol?action=displayblog" class="menu-link">Blogs List</a>
-                </div>
-            </div>
+            
 
-            <div class="menu-item">
-                <a href="#" class="menu-link" data-tooltip="BMI type" onclick="toggleSubmenu(this)">
-                    <div class="menu-icon">
-                        <i class="bi bi-layers"></i>
-                    </div>
-                    <span class="menu-text">BMI type</span>
-                    <i class="menu-arrow bi bi-chevron-right"></i>
-                </a>
-                <div class="submenu">
-                    <a href="nutricontrol?action=showBMI" class="menu-link">BMI type List </a>
-                </div>
-            </div>
+            
 
             <div class="menu-item">
                 <a href="#" class="menu-link" data-tooltip="All Food item from shop" onclick="toggleSubmenu(this)">
@@ -86,7 +63,7 @@
                     <i class="menu-arrow bi bi-chevron-right"></i>
                 </a>
                 <div class="submenu">
-                    <a href="${pageContext.request.contextPath}/Nutritionist/FoodList.jsp" class="menu-link">Food List </a>
+                    <a href="viewFoods.jsp" class="menu-link">Food List </a>
                     <a href="${pageContext.request.contextPath}/nutricontrol?action=showfood" class="menu-link">Food Detail</a>
                 </div>
             </div>
@@ -109,32 +86,19 @@
                     <div class="menu-icon">
                         <i class="bi bi-file-earmark-plus"></i>
                     </div>
-                    <span class="menu-text">Request</span>
+                    <span class="menu-text">Order</span>
                     <span class="menu-badge">12</span>
                     <i class="menu-arrow bi bi-chevron-right"></i>
                 </a>
                 <div class="submenu">
-                    <a href="order" class="menu-link">Request List</a>
-                    <a href="#" class="menu-link">Request Detail</a>
-                    <a href="ordertracking.jsp" class="menu-link">Request Tracking</a>
+                    <a href="order" class="menu-link">Order List</a>
+                    <a href="#" class="menu-link">Order Detail</a>
+                    <a href="ordertracking.jsp" class="menu-link">Order Tracking</a>
+                    <a href="invoice.jsp" class="menu-link">Invoice</a>
                 </div>
             </div>
 
            
-            <div class="menu-item">
-                <a href="#" class="menu-link" data-tooltip="Reports" onclick="toggleSubmenu(this)">
-                    <div class="menu-icon">
-                        <i class="bi bi-file-text"></i>
-                    </div>
-                    <span class="menu-text">Reports</span>
-                    <i class="menu-arrow bi bi-chevron-right"></i>
-                </a>
-                <div class="submenu">
-                    <a href="#" class="menu-link">Sales Report</a>
-                    <a href="#" class="menu-link">User Report</a>
-                    <a href="#" class="menu-link">Product Report</a>
-                </div>
-            </div>
             
              <div class="menu-item">
                 <a href="#" class="menu-link" data-tooltip="Users" onclick="toggleSubmenu(this)">
@@ -190,7 +154,7 @@
 
             <div class="marquee-container">
                 <div class="marquee-text">
-                    🍽️ Welcome to <strong>Healthy Food</strong> 🥗 Nutritionist Management 💪 Eat Well, Live Better! 🥦
+                    🍽️ Welcome to <strong>Healthy Food</strong> 🥗 Saler management 💪 Eat Well, Live Better! 🥦
                 </div>
             </div>
         </div>
@@ -372,88 +336,90 @@
                     <h5 class="mb-0">Order Management</h5>
                 </div>
                 <div class="card-body">
-    <form method="get" action="order" class="search-form">
-        <div class="row g-3">
-            <!-- Search by Order ID -->
-            <div class="col-md-6 col-lg-3">
-                <div class="input-group">
-                    <span class="input-group-text"><i class="bi bi-hash"></i></span>
-                    <input type="text" name="orderId" class="form-control" placeholder="Order ID" value="${param.orderId}" />
-                </div>
-            </div>
-            
-            <!-- Search by Customer Name -->
-            <div class="col-md-6 col-lg-3">
-                <div class="input-group">
-                    <span class="input-group-text"><i class="bi bi-person"></i></span>
-                    <input type="text" name="customerName" class="form-control" placeholder="Customer Name" value="${param.customerName}" />
-                </div>
-            </div>
-            
-            <!-- Search by Category -->
-            <div class="col-md-6 col-lg-3">
-                <div class="input-group">
-                    <span class="input-group-text"><i class="bi bi-folder"></i></span>
-                    <select name="category" class="form-select">
-                        <option value="">All Categories</option>
-                        <option value="Đồ uống" ${param.category == 'Đồ uống' ? 'selected' : ''}>🥤 Đồ uống</option>
-                        <option value="Healthy Food" ${param.category == 'Healthy Food' ? 'selected' : ''}>🥗 Healthy Food</option>
-                        <option value="Món Chính" ${param.category == 'Món Chính' ? 'selected' : ''}>🍛 Món Chính</option>
-                        <option value="Món Khai Vị" ${param.category == 'Món Khai Vị' ? 'selected' : ''}>🥟 Món Khai Vị</option>
-                        <option value="Món Tráng Miệng" ${param.category == 'Món Tráng Miệng' ? 'selected' : ''}>🍰 Món Tráng Miệng</option>
-                    </select>
-                </div>
-            </div>
-            
-            <!-- Search by Phone Number -->
-            <div class="col-md-6 col-lg-3">
-                <div class="input-group">
-                    <span class="input-group-text"><i class="bi bi-telephone"></i></span>
-                    <input type="text" name="phone" class="form-control" placeholder="Phone Number" value="${param.phone}" />
-                </div>
-            </div>
-            
-            <!-- Search by Food Name -->
-            <div class="col-md-6 col-lg-3">
-                <div class="input-group">
-                    <span class="input-group-text"><i class="bi bi-basket"></i></span>
-                    <input type="text" name="food" class="form-control" placeholder="Food Name" value="${param.food}" />
-                </div>
-            </div>
-            
-            <!-- Search by Status -->
-            <div class="col-md-6 col-lg-3">
-                <div class="input-group">
-                    <span class="input-group-text"><i class="bi bi-info-circle"></i></span>
-                    <select name="status" class="form-select">
-                        <option value="">All Statuses</option>
-                        <option value="Pending" ${param.status == 'Pending' ? 'selected' : ''}>Pending</option>
-                        <option value="Accepted" ${param.status == 'Accepted' ? 'selected' : ''}>Accepted</option>
-                        <option value="Rejected" ${param.status == 'Rejected' ? 'selected' : ''}>Rejected</option>
-                        <option value="Cancelled" ${param.status == 'Cancelled' ? 'selected' : ''}>Cancelled</option>
-                    </select>
-                </div>
-            </div>
-            
-            <!-- Search Button -->
-            <div class="col-md-6 col-lg-3">
-                <button type="submit" class="btn btn-primary w-100">
-                    <i class="bi bi-search me-2"></i> Search
-                </button>
-            </div>
-            
-            <!-- Reset Button -->
-            <div class="col-md-6 col-lg-3">
-                <a href="ManageOrderServlet" class="btn btn-outline-secondary w-100">
-                    <i class="bi bi-arrow-counterclockwise me-2"></i> Reset
-                </a>
+   <!-- Form tìm kiếm -->
+<form method="get" action="order" class="search-form">
+    <div class="row g-3">
+        <!-- Các trường tìm kiếm -->
+        <div class="col-md-6 col-lg-3">
+            <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-hash"></i></span>
+                <input type="text" name="orderId" class="form-control" 
+                       placeholder="Order ID" value="${searchOrderId}" />
             </div>
         </div>
-    </form>
+        
+        <div class="col-md-6 col-lg-3">
+            <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-person"></i></span>
+                <input type="text" name="customerName" class="form-control" 
+                       placeholder="Customer Name" value="${searchCustomerName}" />
+            </div>
+        </div>
+        
+        <!-- Sửa lại dropdown category -->
+        <div class="col-md-6 col-lg-3">
+            <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-folder"></i></span>
+                <select name="category" class="form-select">
+                    <option value="">All Categories</option>
+                    <option value="Đồ uống" ${searchCategory == 'Đồ uống' ? 'selected' : ''}>🥤 Đồ uống</option>
+                    <option value="Healthy Food" ${searchCategory == 'Healthy Food' ? 'selected' : ''}>🥗 Healthy Food</option>
+                    <option value="Món Chính" ${searchCategory == 'Món Chính' ? 'selected' : ''}>🍛 Món Chính</option>
+                    <option value="Món Khai Vị" ${searchCategory == 'Món Khai Vị' ? 'selected' : ''}>🥟 Món Khai Vị</option>
+                    <option value="Món Tráng Miệng" ${searchCategory == 'Món Tráng Miệng' ? 'selected' : ''}>🍰 Món Tráng Miệng</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="col-md-6 col-lg-3">
+            <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-telephone"></i></span>
+                <input type="text" name="phone" class="form-control" 
+                       placeholder="Phone Number" value="${searchPhone}" />
+            </div>
+        </div>
+        
+        <div class="col-md-6 col-lg-3">
+            <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-basket"></i></span>
+                <input type="text" name="food" class="form-control" 
+                       placeholder="Food Name" value="${searchFood}" />
+            </div>
+        </div>
+        
+        <!-- Sửa lại dropdown status -->
+        <div class="col-md-6 col-lg-3">
+            <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-info-circle"></i></span>
+                <select name="status" class="form-select">
+                    <option value="">All Statuses</option>
+                    <option value="Pending" ${searchStatus == 'Pending' ? 'selected' : ''}>Pending</option>
+                    <option value="Accepted" ${searchStatus == 'Accepted' ? 'selected' : ''}>Accepted</option>
+                    <option value="Rejected" ${searchStatus == 'Rejected' ? 'selected' : ''}>Rejected</option>
+                    <option value="Cancelled" ${searchStatus == 'Cancelled' ? 'selected' : ''}>Cancelled</option>
+                </select>
+            </div>
+        </div>
+        
+        <!-- Nút tìm kiếm và reset -->
+        <div class="col-md-6 col-lg-3">
+            <button type="submit" class="btn btn-primary w-100">
+                <i class="bi bi-search me-2"></i> Search
+            </button>
+        </div>
+        
+        <div class="col-md-6 col-lg-3">
+            <a href="${pageContext.request.contextPath}/order" class="btn btn-outline-secondary w-100">
+                <i class="bi bi-arrow-counterclockwise me-2"></i> Reset
+            </a>
+        </div>
+    </div>
+</form>
 </div>
             </div>
 
             <!-- Order Table -->
+
             <div class="card">
                 <div class="card-body">
                     <div class="table-responsive">
@@ -484,21 +450,24 @@
                     <td>${order.address}</td>
                     <td>${order.phone}</td>
                     <td>${order.food}</td>
-                    <td>
-                <c:choose>
-                    <c:when test="${not empty order.image}">
-                        <img src="${pageContext.request.contextPath}/${order.image}" 
-                             alt="${order.food}" 
-                             class="food-image"
-                             onerror="this.onerror=null; this.src='${pageContext.request.contextPath}/img/food'">
-                    </c:when>
-                    <c:otherwise>
-                        <div class="no-image-placeholder">
-                            <i class="bi bi-image"></i>
-                        </div>
-                    </c:otherwise>
-                </c:choose>
-            </td>
+                      <!-- THÊM ĐOẠN CODE HIỂN THỊ ẢNH TẠI ĐÂY -->
+                <td>
+                    <c:choose>
+                        <c:when test="${not empty order.image}">
+                            <img src="${pageContext.request.contextPath}/${order.image}" 
+                                 alt="${order.food}" 
+                                 class="food-image"
+                                 style="width: 50px; height: 50px; object-fit: cover;"
+                                 onerror="this.onerror=null; this.src='${pageContext.request.contextPath}/${order.image}'">
+                        </c:when>
+                        <c:otherwise>
+                            <div class="no-image-placeholder">
+                                <i class="bi bi-image"></i>
+                            </div>
+                        </c:otherwise>
+                    </c:choose>
+                </td>
+                <!-- KẾT THÚC PHẦN HIỂN THỊ ẢNH -->
                     <td>${order.category}</td>
                     <td>${order.quantity}</td>
                     <td>${order.price}</td>
@@ -554,6 +523,23 @@
                             <a href="${trackUrl}" class="btn btn-info btn-sm">
                                 <i class="bi bi-truck"></i> Track
                             </a>
+                                <!-- Thêm nút View Invoice -->
+        <c:url var="invoiceUrl" value="invoice.jsp">
+            <c:param name="orderId" value="${order.id}"/>
+            <c:param name="customerName" value="${order.customerName}"/>
+            <c:param name="address" value="${order.address}"/>
+            <c:param name="phone" value="${order.phone}"/>
+            <c:param name="food" value="${order.food}"/>
+            <c:param name="category" value="${order.category}"/>
+            <c:param name="quantity" value="${order.quantity}"/>
+            <c:param name="price" value="${order.price}"/>
+            <c:param name="totalPrice" value="${order.getTotalPrice()}"/>
+            <c:param name="status" value="${order.status}"/>
+            <c:param name="image" value="${order.image}"/>
+        </c:url>
+        <a href="${invoiceUrl}" class="btn btn-primary btn-sm">
+            <i class="bi bi-receipt"></i> Invoice
+        </a>
                         </div>
                     </td>
                 </tr>
@@ -572,6 +558,20 @@
                     </div>
                 </div>
             </div>
+            <!-- Pagination -->
+                <nav class="mt-4">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1">Previous</a>
+                        </li>
+                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">Next</a>
+                        </li>
+                    </ul>
+                </nav>
         </div>
         <!-- End of Order Management Section -->
 
