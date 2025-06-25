@@ -20,22 +20,22 @@
                 
             }
             .pagination a, .pagination span {
-    padding: 8px 12px;
-    border: 1px solid #ddd;
-    text-decoration: none;
-    color: #333;
-}
+                padding: 8px 12px;
+                border: 1px solid #ddd;
+                text-decoration: none;
+                color: #333;
+            }
 
-.pagination a:hover {
-    background:linear-gradient(135deg, var(--primary-green), #3b82f6) !important;
-}
+            .pagination a:hover {
+                background:linear-gradient(135deg, var(--primary-green), #3b82f6) !important;
+            }
 
-.pagination .current {
-    background:linear-gradient(135deg, var(--primary-green), #3b82f6) !important;
-    color: white;
-    border-color: #4CAF50;
-    border-radius: 10px;
-}
+            .pagination .current {
+                background:linear-gradient(135deg, var(--primary-green), #3b82f6) !important;
+                color: white;
+                border-color: #4CAF50;
+                border-radius: 10px;
+            }
         </style>
 
 

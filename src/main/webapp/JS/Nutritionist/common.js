@@ -166,23 +166,27 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Add click listener to sidebar for expanding when collapsed
+    // ✅ FIXED: Cho phép mở lại sidebar nếu đang bị collapse (không phân biệt màn hình lớn hay nhỏ)
     const sidebar = document.getElementById('sidebar');
     if (sidebar) {
         sidebar.addEventListener('click', function (e) {
-            // Only expand if sidebar is collapsed and we're on desktop
-            if (sidebar.classList.contains('collapsed') && window.innerWidth > 768) {
-                // Check if click is not on toggle button or submenu elements
-                const isToggleButton = e.target.closest('.mobile-toggle') || e.target.closest('[onclick*="toggleSidebar"]');
-                const isSubmenuClick = e.target.closest('.submenu');
+            const isToggleButton = e.target.closest('.mobile-toggle') || e.target.closest('[onclick*="toggleSidebar"]');
+            const isSubmenuClick = e.target.closest('.submenu');
 
-                if (!isToggleButton && !isSubmenuClick) {
-                    expandSidebarOnClick();
-                }
+            if (!isToggleButton && !isSubmenuClick && sidebar.classList.contains('collapsed')) {
+                expandSidebarOnClick();
             }
         });
     }
 });
+
+
+function initTooltips() {
+    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+        new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+}
 
 
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {

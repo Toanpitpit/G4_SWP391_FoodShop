@@ -3,6 +3,7 @@
 import com.example.servlet.dao.AccountDAO;
 import com.example.servlet.dao.BMIClassificationDAO;
 import com.example.servlet.dao.BlogDAO;
+import com.example.servlet.dao.CategoryDAO;
 import com.example.servlet.dao.FoodDAO;
 import com.example.servlet.dao.FoodDetailDAO;
 import com.example.servlet.dao.FoodDraftDAO;
@@ -11,6 +12,7 @@ import com.example.servlet.dao.RequestDAO;
 import com.example.servlet.model.Account;
 import com.example.servlet.model.BMIClassification;
 import com.example.servlet.model.Blogs;
+import com.example.servlet.model.Category;
 import com.example.servlet.model.Food;
 import com.example.servlet.model.FoodDetail;
 import com.example.servlet.model.Food_Draft;
@@ -39,8 +41,12 @@ import org.mindrot.jbcrypt.BCrypt;
 public class test {
     
     public static void main(String[] args) throws SQLException {
-        
-                
+        CategoryDAO dao =new CategoryDAO ();
+        List<Category> lst = dao.getListCategories (null, null, null, 1, 10);
+        for (Category category : lst) {
+            System.out.println (category.toString ());
+        }
+      
     }
     
  public static void diss() {

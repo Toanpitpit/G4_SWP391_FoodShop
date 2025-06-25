@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đặt Lại Mật Khẩu</title>
+    <title>Reset Password</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -524,6 +524,25 @@
                 0 30px 60px rgba(0, 0, 0, 0.2),
                 0 0 0 1px rgba(40, 167, 69, 0.3);
         }
+        
+        /* THÊM CSS CHO ICON CON MẮT */
+        #togglePasswordIcon {
+            transition: all 0.3s ease;
+        }
+
+        #togglePasswordIcon:hover {
+            color: #28a745 !important;
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        /* Đảm bảo icon không bị che bởi các element khác */
+        .form-control:focus + .input-icon + #togglePasswordIcon {
+            color: #28a745;
+        }
     </style>
 </head>
 <body>
@@ -532,8 +551,8 @@
             <div class="lock-icon">
                 <i class="fas fa-key"></i>
             </div>
-            <h2 class="main-title">Đặt Lại Mật Khẩu</h2>
-            <p class="subtitle">Nhập mã xác nhận và mật khẩu mới của bạn để hoàn tất việc đặt lại mật khẩu.</p>
+            <h2 class="main-title">Reset password</h2>
+            <p class="subtitle">Enter your verification code and new password to complete the password reset.</p>
         </div>
 
         <div class="form-section">
@@ -557,10 +576,10 @@
 
             <form action="${pageContext.request.contextPath}/ResetPasswordController" method="post" id="resetPasswordForm">
                 <div class="form-group">
-                    <label for="code" class="form-label">Mã Xác Nhận</label>
+                    <label for="code" class="form-label">Verification code</label>
                     <div class="input-group">
                         <input type="text" class="form-control" id="code" name="code" required 
-                               placeholder="Nhập mã xác nhận từ email" maxlength="10" autocomplete="off">
+                               placeholder="Enter verification code from email" maxlength="10" autocomplete="off">
                         <i class="fas fa-shield-alt input-icon"></i>
                     </div>
                     
@@ -568,49 +587,70 @@
                     <div class="resend-section" id="resendSection">
                         <div>
                             <p class="resend-text">
-                                Không nhận được mã? 
+                                Didn't receive the code?
                             </p>
                             <div id="countdownDisplay" class="countdown">
                                 <i class="fas fa-clock"></i>
-                                <span id="countdownText">Gửi lại sau <span id="timeRemaining">60</span>s</span>
+                                <span id="countdownText">Resend in <span id="timeRemaining">60</span>s</span>
                             </div>
                         </div>
                         <div class="resend-btn-container">
                             <button type="button" class="resend-btn" id="resendBtn" onclick="resendCode()" style="display: none;">
                                 <i class="fas fa-paper-plane"></i>
-                                Gửi lại mã
+                                Resend code
                             </button>
                         </div>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="newPassword" class="form-label">Mật Khẩu Mới</label>
+                    <label for="newPassword" class="form-label">New password</label>
                     <div class="input-group">
                         <input type="password" class="form-control" id="newPassword" name="newPassword" required 
-                               placeholder="Nhập mật khẩu mới (tối thiểu 6 ký tự)" minlength="6" onkeyup="checkPasswordStrength(this.value)">
+                               placeholder="Enter a new password" minlength="8" onkeyup="checkPasswordStrength(this.value)">
                         <i class="fas fa-lock input-icon"></i>
+                        <i class="fas fa-eye" id="togglePasswordIcon" onclick="togglePasswordVisibility()" 
+                           style="position: absolute; 
+                                  right: 20px; 
+                                  top: 50%; 
+                                  transform: translateY(-50%); 
+                                  cursor: pointer; 
+                                  z-index: 5; 
+                                  color: #6c757d; 
+                                  font-size: 16px;"></i>
                     </div>
+                    
                     <div class="password-strength" id="passwordStrength" style="display: none;">
                         <div class="strength-bar">
                             <div class="strength-fill" id="strengthFill"></div>
                         </div>
                         <span id="strengthText"></span>
                     </div>
+                    
+                    <div class="password-requirements" style="margin-top: 10px; margin-bottom: 20px; font-size: 0.85rem; color: #6c757d;">
+                        <p style="margin-bottom: 8px; font-weight: 600;">Password must contain:</p>
+                        <ul style="margin: 0; padding-left: 20px;">
+                            <li>At least 8 characters</li>
+                            <li>One lowercase letter (a-z)</li>
+                            <li>One uppercase letter (A-Z)</li>
+                            <li>One number (0-9)</li>
+                            <li>One special character (@#$%^&+=!)</li>
+                        </ul>
+                    </div>
                 </div>
-
+                
                 <input type="hidden" name="email" value="${email}">
                 
                 <button type="submit" class="btn btn-primary" id="submitBtn">
                     <i class="fas fa-sync-alt me-2"></i>
-                    Đặt Lại Mật Khẩu
+                    Reset password
                 </button>
             </form>
 
             <div class="back-link">
                 <a href="${pageContext.request.contextPath}/ForgotPasswordController">
                     <i class="fas fa-arrow-left"></i>
-                    Quay lại
+                    Back to forgot password
                 </a>
             </div>
         </div>
@@ -621,14 +661,14 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="resendModalTitle">Thông báo</h5>
+                    <h5 class="modal-title" id="resendModalTitle">Successfully</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body" id="resendModalBody">
                     <!-- Response content will be inserted here -->
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
@@ -636,62 +676,146 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        let countdownTimer;
-        let countdownSeconds = 60; // Start with 60 seconds
-        const initialCountdown = 60;
+        function togglePasswordVisibility() {
+        const passwordInput = document.getElementById('newPassword');
+        const toggleIcon = document.getElementById('togglePasswordIcon');
 
-        // Start countdown automatically when page loads
+        if (passwordInput.type === 'password') {
+            // Hiện password
+            passwordInput.type = 'text';
+            toggleIcon.classList.remove('fa-eye');
+            toggleIcon.classList.add('fa-eye-slash');
+            toggleIcon.style.color = '#28a745';
+        } else {
+            // Ẩn password
+            passwordInput.type = 'password';
+            toggleIcon.classList.remove('fa-eye-slash');
+            toggleIcon.classList.add('fa-eye');
+            toggleIcon.style.color = '#6c757d';
+        }
+    }
+
+        let countdownTimer;
+        let countdownSeconds = 60;
+        const COUNTDOWN_KEY = 'resetPasswordCountdown';
+        const EMAIL_KEY = 'resetPasswordEmail';
+
+        // Lấy email hiện tại
+        function getCurrentEmail() {
+            return document.querySelector('input[name="email"]').value || 
+                   localStorage.getItem(EMAIL_KEY) || '';
+        }
+
+        // Lưu thông tin countdown vào localStorage
+        function saveCountdownToStorage(seconds, email) {
+            const countdownData = {
+                remainingTime: seconds,
+                startTime: Date.now(),
+                email: email
+            };
+            localStorage.setItem(COUNTDOWN_KEY, JSON.stringify(countdownData));
+            localStorage.setItem(EMAIL_KEY, email);
+        }
+
+        // Lấy thông tin countdown từ localStorage
+        function getCountdownFromStorage() {
+            const data = localStorage.getItem(COUNTDOWN_KEY);
+            if (!data) return null;
+
+            try {
+                const countdownData = JSON.parse(data);
+                const currentEmail = getCurrentEmail();
+
+                // Kiểm tra xem có phải cùng email không
+                if (countdownData.email !== currentEmail) {
+                    clearCountdownStorage();
+                    return null;
+                }
+
+                // Tính thời gian đã trôi qua
+                const elapsedTime = Math.floor((Date.now() - countdownData.startTime) / 1000);
+                const remainingTime = Math.max(0, countdownData.remainingTime - elapsedTime);
+
+                return remainingTime;
+            } catch (e) {
+                clearCountdownStorage();
+                return null;
+            }
+        }
+
+        // Xóa countdown storage
+        function clearCountdownStorage() {
+            localStorage.removeItem(COUNTDOWN_KEY);
+            localStorage.removeItem(EMAIL_KEY);
+        }
+
+        // Khởi tạo countdown khi trang load
         window.addEventListener('load', function() {
-            startCountdown(60);
+            const currentEmail = getCurrentEmail();
+            if (!currentEmail) return;
+
+            // Kiểm tra xem có countdown đang chạy không
+            const savedCountdown = getCountdownFromStorage();
+
+            if (savedCountdown !== null && savedCountdown > 0) {
+                // Tiếp tục countdown từ thời điểm đã lưu
+                startCountdown(savedCountdown);
+            } else {
+                // Bắt đầu countdown mới nếu có thông báo success
+                const hasSuccess = document.querySelector('.alert-success') !== null;
+                if (hasSuccess) {
+                    startCountdown(60);
+                } else {
+                    // Hiển thị nút resend ngay lập tức
+                    showResendButton();
+                }
+            }
         });
 
         function checkPasswordStrength(password) {
             const strengthDiv = document.getElementById('passwordStrength');
             const strengthFill = document.getElementById('strengthFill');
             const strengthText = document.getElementById('strengthText');
-            
+
             if (password.length === 0) {
                 strengthDiv.style.display = 'none';
                 return;
             }
-            
+
             strengthDiv.style.display = 'block';
-            
+
             let strength = 0;
             let text = '';
             let color = '';
-            
-            // Check password criteria
+
+            // Kiểm tra các tiêu chí mật khẩu mạnh (CẬP NHẬT THEO TIÊU CHÍ MỚI)
             if (password.length >= 8) strength++;
             if (/[a-z]/.test(password)) strength++;
             if (/[A-Z]/.test(password)) strength++;
             if (/[0-9]/.test(password)) strength++;
-            if (/[^A-Za-z0-9]/.test(password)) strength++;
-            
+            if (/[@#$%^&+=!]/.test(password)) strength++;
+
             switch (strength) {
                 case 0:
                 case 1:
-                    text = 'Rất yếu';
+                case 2:
+                    text = 'Weak - Need all requirements';
                     color = '#e53e3e';
                     break;
-                case 2:
-                    text = 'Yếu';
+                case 3:
+                    text = 'Fair - Missing some requirements';
                     color = '#dd6b20';
                     break;
-                case 3:
-                    text = 'Trung bình';
+                case 4:
+                    text = 'Good - Almost there';
                     color = '#d69e2e';
                     break;
-                case 4:
-                    text = 'Mạnh';
+                case 5:
+                    text = 'Strong - Perfect!';
                     color = '#38a169';
                     break;
-                case 5:
-                    text = 'Rất mạnh';
-                    color = '#2f855a';
-                    break;
             }
-            
+
             strengthText.textContent = text;
             strengthText.style.color = color;
             strengthFill.style.width = (strength * 20) + '%';
@@ -699,43 +823,42 @@
         }
 
         function resendCode() {
-            const email = document.querySelector('input[name="email"]').value;
+            const email = getCurrentEmail();
             const resendBtn = document.getElementById('resendBtn');
-            
+
             if (!email) {
-                showModal('Lỗi', 'Không tìm thấy email!', 'danger');
+                showModal('Error', 'Email not found!', 'danger');
                 return;
             }
 
             // Disable button and show loading
             resendBtn.disabled = true;
-            resendBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Đang gửi...';
+            resendBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> Sending...';
 
             // Create AJAX request
             const xhr = new XMLHttpRequest();
             xhr.open('POST', '${pageContext.request.contextPath}/ForgotPasswordController', true);
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-            
+
             xhr.onreadystatechange = function() {
                 if (xhr.readyState === 4) {
                     if (xhr.status === 200) {
                         const response = xhr.responseText.trim();
-                        
-                        if (response.includes('Mã xác nhận đã được gửi')) {
-                            showModal('Thành công', response, 'success');
-                            startCountdown(60); // Start new 60 second countdown
+
+                        if (response.includes('The verification code has been sent')) {
+                            showModal('Successfully', response, 'success');
+                            startCountdown(60); // Bắt đầu countdown mới
                         } else {
-                            showModal('Lỗi', response, 'danger');
+                            showModal('Error', response, 'danger');
                             showResendButton();
                         }
                     } else {
-                        showModal('Lỗi', 'Có lỗi xảy ra khi gửi yêu cầu!', 'danger');
+                        showModal('Error', 'Errors occurred while sending the request!', 'danger');
                         showResendButton();
                     }
                 }
             };
 
-            // Send request with email and action
             xhr.send('email=' + encodeURIComponent(email) + '&action=resend');
         }
 
@@ -743,12 +866,12 @@
             const modal = new bootstrap.Modal(document.getElementById('resendModal'));
             const titleEl = document.getElementById('resendModalTitle');
             const bodyEl = document.getElementById('resendModalBody');
-            
+
             titleEl.textContent = title;
-            
+
             let iconClass = '';
             let colorClass = '';
-            
+
             switch(type) {
                 case 'success':
                     iconClass = 'fas fa-check-circle text-success';
@@ -762,39 +885,49 @@
                     iconClass = 'fas fa-info-circle text-info';
                     colorClass = 'text-info';
             }
-            
+
             bodyEl.innerHTML = `<div class="d-flex align-items-center">
                 <i class="${iconClass} me-2 fs-4"></i>
                 <span class="${colorClass}">${message}</span>
             </div>`;
-            
+
             modal.show();
         }
 
         function startCountdown(seconds) {
             countdownSeconds = seconds;
+            const currentEmail = getCurrentEmail();
             const resendBtn = document.getElementById('resendBtn');
             const countdownDisplay = document.getElementById('countdownDisplay');
             const timeRemaining = document.getElementById('timeRemaining');
             const resendSection = document.getElementById('resendSection');
-            
+
+            // Lưu countdown vào localStorage
+            saveCountdownToStorage(seconds, currentEmail);
+
             // Hide resend button and show countdown
             resendBtn.style.display = 'none';
             countdownDisplay.style.display = 'flex';
             resendSection.classList.add('countdown-active');
-            
+
             // Clear any existing timer
             if (countdownTimer) {
                 clearInterval(countdownTimer);
             }
-            
+
             countdownTimer = setInterval(function() {
                 timeRemaining.textContent = countdownSeconds;
-                
+
                 countdownSeconds--;
-                
+
+                // Cập nhật localStorage mỗi giây
+                if (countdownSeconds >= 0) {
+                    saveCountdownToStorage(countdownSeconds, currentEmail);
+                }
+
                 if (countdownSeconds < 0) {
                     clearInterval(countdownTimer);
+                    clearCountdownStorage(); // Xóa storage khi hết thời gian
                     showResendButton();
                 }
             }, 1000);
@@ -804,20 +937,21 @@
             const resendBtn = document.getElementById('resendBtn');
             const countdownDisplay = document.getElementById('countdownDisplay');
             const resendSection = document.getElementById('resendSection');
-            
+
             // Reset button state
             resendBtn.disabled = false;
-            resendBtn.innerHTML = '<i class="fas fa-paper-plane"></i>Gửi lại mã';
-            
+            resendBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Resend code';
+
             // Show button and hide countdown
             resendBtn.style.display = 'inline-block';
             countdownDisplay.style.display = 'none';
             resendSection.classList.remove('countdown-active');
-            
-            // Clear timer
+
+            // Clear timer and storage
             if (countdownTimer) {
                 clearInterval(countdownTimer);
             }
+            clearCountdownStorage();
         }
 
         // Enhanced focus effects
@@ -825,33 +959,61 @@
             input.addEventListener('focus', function() {
                 this.parentElement.style.transform = 'scale(1.02)';
             });
-            
+
             input.addEventListener('blur', function() {
                 this.parentElement.style.transform = 'scale(1)';
             });
         });
 
-        // Form submission with loading state and validation
+        // Form submission với validation mật khẩu mạnh
         document.getElementById('resetPasswordForm').addEventListener('submit', function(e) {
             const code = document.getElementById('code').value.trim();
             const password = document.getElementById('newPassword').value;
-            
+
             // Basic validation
             if (code.length === 0) {
                 e.preventDefault();
-                alert('Vui lòng nhập mã xác nhận!');
+                alert('Please enter the verification code!');
                 return;
             }
-            
-            if (password.length < 6) {
+
+            // VALIDATION MẬT KHẨU MẠNH
+            if (password.length < 8) {
                 e.preventDefault();
-                alert('Mật khẩu phải có ít nhất 6 ký tự!');
+                alert('Password must be at least 8 characters long!');
                 return;
             }
-            
+
+            if (!/[a-z]/.test(password)) {
+                e.preventDefault();
+                alert('Password must contain at least one lowercase letter!');
+                return;
+            }
+
+            if (!/[A-Z]/.test(password)) {
+                e.preventDefault();
+                alert('Password must contain at least one uppercase letter!');
+                return;
+            }
+
+            if (!/[0-9]/.test(password)) {
+                e.preventDefault();
+                alert('Password must contain at least one number!');
+                return;
+            }
+
+            if (!/[@#$%^&+=!]/.test(password)) {
+                e.preventDefault();
+                alert('Password must contain at least one special character (@#$%^&+=!)!');
+                return;
+            }
+
+            // Nếu validation pass, xóa countdown storage
+            clearCountdownStorage();
+
             const submitBtn = document.getElementById('submitBtn');
             submitBtn.classList.add('btn-loading');
-            submitBtn.innerHTML = 'Đang xử lý...';
+            submitBtn.innerHTML = 'Sending...';
             submitBtn.disabled = true;
         });
 
@@ -871,17 +1033,31 @@
         container.addEventListener('mouseenter', function() {
             this.style.transform = 'translateY(-5px) scale(1.02)';
         });
-        
+
         container.addEventListener('mouseleave', function() {
             this.style.transform = 'translateY(0) scale(1)';
         });
 
-        // Cleanup interval when page unloads
+        // Cleanup khi trang unload
         window.addEventListener('beforeunload', function() {
-            if (countdownInterval) {
-                clearInterval(countdownInterval);
+            if (countdownTimer) {
+                clearInterval(countdownTimer);
+            }
+        });
+
+        // Xử lý khi user chuyển tab (visibility change)
+        document.addEventListener('visibilitychange', function() {
+            if (!document.hidden) {
+                // Khi user quay lại tab, kiểm tra countdown
+                const savedCountdown = getCountdownFromStorage();
+                if (savedCountdown !== null && savedCountdown > 0) {
+                    startCountdown(savedCountdown);
+                } else if (savedCountdown === 0) {
+                    showResendButton();
+                }
             }
         });
     </script>
+
 </body>
 </html>

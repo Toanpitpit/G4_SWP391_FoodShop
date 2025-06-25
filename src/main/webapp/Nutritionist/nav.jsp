@@ -1,8 +1,3 @@
-<%-- 
-    Document   : nav
-    Created on : Jun 13, 2025, 9:23:14 PM
-    Author     : Admin
---%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <nav class="sidebar" id="sidebar">
@@ -53,11 +48,11 @@
                     <div class="menu-icon">
                         <i class="bi bi-layers"></i>
                     </div>
-                    <span class="menu-text">BMI type</span>
+                    <span class="menu-text">Category</span>
                     <i class="menu-arrow bi bi-chevron-right"></i>
                 </a>
                 <div class="submenu">
-                    <a href="nutricontrol?action=showBMI" class="menu-link">BMI type List </a>
+                    <a href="nutricontrol?action=showcategory" class="menu-link">Category List</a>
                 </div>
             </div>
 
