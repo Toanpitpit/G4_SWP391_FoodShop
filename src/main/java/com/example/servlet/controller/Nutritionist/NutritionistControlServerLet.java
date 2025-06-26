@@ -70,12 +70,12 @@ public class NutritionistControlServerLet extends HttpServlet {
             return;
         }
         String action = request.getParameter ("action");
-         
+
         if (action == null) {
             response.sendRedirect ("Homedemo.jsp");
             return;
         }
-        
+
         switch (action) {
             case "dashboard":
                 dashboard (request, response);
@@ -141,19 +141,22 @@ public class NutritionistControlServerLet extends HttpServlet {
                 ShowFoodDraftDetail (request, response);
                 break;
             case "showeditfooddraft":
+                ShowUpdateFoodDraft (request, response);
+                break;
+            case "showcategory":
+                ShowCategoryList (request, response);
+                break;
+            case "displaysortcategory":
+                ShowCategoryListSort (request, response);
+                break;
+            case "showEditCategory":
+                ShowEditCategory (request, response);
+                break;
+            case "createCategory":
 //                try(PrintWriter o = response.getWriter ()){
 //                o.print ("oke");
 //                }
-                ShowUpdateFoodDraft (request, response);
-                break;
-                case "showcategory":
-                ShowCategoryList (request, response);
-                break;
-                case "displaysortcategory":
-                try(PrintWriter o = response.getWriter ()){
-                o.print ("oke");
-                }
-//                ShowCategoryListSort (request, response);
+                ShowCategoryListSort (request, response);
                 break;
             default:
         }
@@ -1547,6 +1550,7 @@ public class NutritionistControlServerLet extends HttpServlet {
             }
         }
     }
+
     protected void ShowCategoryList(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession (false);
@@ -1554,20 +1558,20 @@ public class NutritionistControlServerLet extends HttpServlet {
             response.sendRedirect ("/Nutritionist/Homedemo.jsp");
             return;
         } else {
-           
+
             try {
-                if(request.getParameter ("Errmess")!=null){
+                if (request.getParameter ("Errmess") != null) {
                     request.setAttribute ("Errmess", request.getParameter ("Errmess"));
                 }
                 CategoryDAO c_dao = new CategoryDAO ();
-                List<Category> lstC = c_dao.getListCategories (null, null, null , 1 ,5);
+                List<Category> lstC = c_dao.getListCategories (null, null, null, 1, 5);
                 int curentPage = 1;
-                int pageSize = 5; 
+                int pageSize = 5;
                 int total = c_dao.getListCategoriesTotal (null, null, null);
                 int totalPages = (int) Math.ceil ((double) total / pageSize);
-                request.setAttribute("currentPage", curentPage);
-                request.setAttribute("totalPages", totalPages);
-                request.setAttribute("totalCategory", total);
+                request.setAttribute ("currentPage", curentPage);
+                request.setAttribute ("totalPages", totalPages);
+                request.setAttribute ("totalCategory", total);
                 request.setAttribute ("lstC", lstC);
                 request.getRequestDispatcher ("/Nutritionist/CategoryList.jsp").forward (request, response);
             } catch (SQLException ex) {
@@ -1576,49 +1580,124 @@ public class NutritionistControlServerLet extends HttpServlet {
             }
         }
     }
-    
+
     protected void ShowCategoryListSort(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession (false);
         if (session == null) {
             response.sendRedirect ("/Nutritionist/Homedemo.jsp");
             return;
-        } else {
-                String searchKey = request.getParameter ("searchKey");
-                String searchKeyDe = request.getParameter ("searchKeyDe");
-                String sortCreate = request.getParameter ("sortCreate");
-                String sortUpdate = request.getParameter ("sortUpdate");
-                
-            try {
-                CategoryDAO c_dao = new CategoryDAO ();
-                
-                int curentPage = 1;
-                int pageSize = 5; 
-                Map <String,String> sortFields = new HashMap ();
-                if(sortCreate != null) {
-                    sortFields.put ("create_at", sortCreate);
-                }
-                if(sortUpdate != null) {
-                    sortFields.put ("update_at", sortCreate);
-                }
-                int page = 0;
-                String pagetxt = request.getParameter ("page");
-                if(pagetxt.trim ().isEmpty () || pagetxt == null){
-                    page = 1;
-                }else {
-                    try {
-                        page = Integer.parseInt (pagetxt);
-                    } catch (Exception e) {
-                        request.setAttribute ("Errmess", "Convert page fail!!");
-                        ShowCategoryList (request, response);
+        }
+
+        String searchKey = request.getParameter ("searchKey");
+        String searchKeyDe = request.getParameter ("searchKeyDe");
+        String sortCreate = request.getParameter ("sortCreate");
+        String sortUpdate = request.getParameter ("sortUpdate");
+        String isJsonRequest = request.getParameter ("json");
+
+        try {
+            CategoryDAO c_dao = new CategoryDAO ();
+
+            int pageSize = 5;
+            Map<String, String> sortFields = new HashMap<> ();
+
+            if (sortCreate != null && !sortCreate.trim ().isEmpty ()) {
+                sortFields.put ("create_at", sortCreate);
+            }
+            if (sortUpdate != null && !sortUpdate.trim ().isEmpty ()) {
+                sortFields.put ("update_at", sortUpdate); // Sửa từ sortCreate thành sortUpdate
+            }
+
+            int page = 1;
+            String pagetxt = request.getParameter ("page");
+
+            if (pagetxt != null && !pagetxt.trim ().isEmpty ()) {
+                try {
+                    page = Integer.parseInt (pagetxt);
+                    if (page < 1) {
+                        page = 1;
                     }
+                } catch (NumberFormatException e) {
+                    page = 1;
                 }
-                List<Category> lstC = c_dao.getListCategories (searchKey, searchKeyDe, sortFields , page ,5);
-                int total = c_dao.getListCategoriesTotal (null, null, sortFields);
+            }
+
+            List<Category> lstC = c_dao.getListCategories (searchKey, searchKeyDe, sortFields, page, pageSize);
+            int total = c_dao.getListCategoriesTotal (searchKey, searchKeyDe, sortFields); // Sửa: truyền đúng tham số
+            int totalPages = (int) Math.ceil ((double) total / pageSize);
+
+            if ("true".equals (isJsonRequest)) {
+
+                response.setContentType ("application/json");
+                response.setCharacterEncoding ("UTF-8");
+
+                Map<String, Object> jsonResponse = new HashMap<> ();
+                jsonResponse.put ("categories", lstC);
+                jsonResponse.put ("totalPages", totalPages);
+                jsonResponse.put ("currentPage", page);
+                jsonResponse.put ("currentSize", lstC.size ());
+                jsonResponse.put ("totalSize", total);
+                jsonResponse.put ("totalCategory", total);
+
+                Map<String, String> filters = new HashMap<> ();
+                filters.put ("searchKey", searchKey != null ? searchKey : "");
+                filters.put ("searchKeyDe", searchKeyDe != null ? searchKeyDe : "");
+                filters.put ("sortCreate", sortCreate != null ? sortCreate : "");
+                filters.put ("sortUpdate", sortUpdate != null ? sortUpdate : "");
+                jsonResponse.put ("filters", filters);
+
+                Gson gson = new Gson ();
+                String jsonString = gson.toJson (jsonResponse);
+                response.getWriter ().write (jsonString);
+                return;
+            }
+
+            request.setAttribute ("currentPage", page);
+            request.setAttribute ("totalPages", totalPages);
+            request.setAttribute ("totalCategory", total);
+            request.setAttribute ("lstC", lstC);
+            request.getRequestDispatcher ("/Nutritionist/CategoryList.jsp").forward (request, response);
+
+        } catch (SQLException ex) {
+            if ("true".equals (isJsonRequest)) {
+
+                response.setContentType ("application/json");
+                response.setCharacterEncoding ("UTF-8");
+
+                Map<String, String> errorResponse = new HashMap<> ();
+                errorResponse.put ("error", "Lỗi tại dữ liệu");
+                errorResponse.put ("message", ex.getMessage ());
+
+                Gson gson = new Gson ();
+                response.getWriter ().write (gson.toJson (errorResponse));
+            } else {
+                request.setAttribute ("Ermessr", "Lỗi tại dữ liệu");
+                request.getRequestDispatcher ("/Nutritionist/CategoryList.jsp").forward (request, response);
+            }
+        }
+    }
+
+    protected void CreateCategory(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        HttpSession session = request.getSession (false);
+        if (session == null) {
+            response.sendRedirect ("/Nutritionist/Homedemo.jsp");
+            return;
+        } else {
+
+            try {
+                if (request.getParameter ("Errmess") != null) {
+                    request.setAttribute ("Errmess", request.getParameter ("Errmess"));
+                }
+                CategoryDAO c_dao = new CategoryDAO ();
+                List<Category> lstC = c_dao.getListCategories (null, null, null, 1, 5);
+                int curentPage = 1;
+                int pageSize = 5;
+                int total = c_dao.getListCategoriesTotal (null, null, null);
                 int totalPages = (int) Math.ceil ((double) total / pageSize);
-                request.setAttribute("currentPage", curentPage);
-                request.setAttribute("totalPages", totalPages);
-                request.setAttribute("totalCategory", total);
+                request.setAttribute ("currentPage", curentPage);
+                request.setAttribute ("totalPages", totalPages);
+                request.setAttribute ("totalCategory", total);
                 request.setAttribute ("lstC", lstC);
                 request.getRequestDispatcher ("/Nutritionist/CategoryList.jsp").forward (request, response);
             } catch (SQLException ex) {
@@ -1627,4 +1706,34 @@ public class NutritionistControlServerLet extends HttpServlet {
             }
         }
     }
+
+    protected void ShowEditCategory(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        HttpSession session = request.getSession (false);
+        if (session == null) {
+            response.sendRedirect ("/Nutritionist/Homedemo.jsp");
+            return;
+        } else {
+
+            try {
+                if (request.getParameter ("Errmess") != null) {
+                    request.setAttribute ("Errmess", request.getParameter ("Errmess"));
+                }
+                int id = -1;
+                CategoryDAO dao = new CategoryDAO ();
+                String idCatxt = request.getParameter ("id");
+                if (idCatxt != null && !idCatxt.trim ().isEmpty ()) {
+                    id = Integer.parseInt (idCatxt);
+                    Category cat = dao.getCategoryByID (id);
+                    request.setAttribute ("cat", cat);
+                }
+
+                request.getRequestDispatcher ("/Nutritionist/EditCategory.jsp").forward (request, response);
+            } catch (NumberFormatException ex) {
+                request.setAttribute ("Ermessr", "Lỗi tai dữ liệu");
+                request.getRequestDispatcher ("/Nutritionist/CreateFoodDraft.jsp").forward (request, response);
+            }
+        }
+    }
+
 }

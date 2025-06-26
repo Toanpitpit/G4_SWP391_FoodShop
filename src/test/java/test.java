@@ -42,10 +42,12 @@ public class test {
     
     public static void main(String[] args) throws SQLException {
         CategoryDAO dao =new CategoryDAO ();
-        List<Category> lst = dao.getListCategories (null, null, null, 1, 10);
-        for (Category category : lst) {
-            System.out.println (category.toString ());
-        }
+        String name  = "Bánh";
+        String description = "Nhân táo đỏ hạnh nhân tốt cho sức khỏe";
+        
+        Category ca = new Category (3, name, description, null, null);
+        boolean check  = dao.insertCategory (ca);
+        System.out.println (check);
       
     }
     

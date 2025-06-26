@@ -557,6 +557,7 @@
             <jsp:include page="/Nutritionist/footer.jsp"/>  
         </main>
         <script src="../JS/Nutritionist/common.js"></script>
+    
                 <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
         <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>

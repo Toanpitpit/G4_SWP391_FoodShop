@@ -200,7 +200,7 @@
                 font-size: 0.9rem;
             }
             thead {
-              border-radius: 10px;    
+                border-radius: 10px;
             }
             thead th {
                 background-color: #E3F2FD;
@@ -357,28 +357,28 @@
                     gap: 1rem;
                 }
             }
-            
-                        .pagination-link{
-                border-radius: 10px: 
-                
+
+            .pagination-link{
+                border-radius: 10px:
+
             }
             .pagination a, .pagination span {
-    padding: 8px 12px;
-    border: 1px solid #ddd;
-    text-decoration: none;
-    color: #333;
-}
+                padding: 8px 12px;
+                border: 1px solid #ddd;
+                text-decoration: none;
+                color: #333;
+            }
 
-.pagination a:hover {
-    background:linear-gradient(135deg, var(--primary-green), #3b82f6) !important;
-}
+            .pagination a:hover {
+                background:linear-gradient(135deg, var(--primary-green), #3b82f6) !important;
+            }
 
-.pagination .current {
-    background:linear-gradient(135deg, var(--primary-green), #3b82f6) !important;
-    color: white;
-    border-color: #4CAF50;
-    border-radius: 10px;
-}
+            .pagination .current {
+                background:linear-gradient(135deg, var(--primary-green), #3b82f6) !important;
+                color: white;
+                border-color: #4CAF50;
+                border-radius: 10px;
+            }
         </style>
     </head>
     <body>
@@ -406,7 +406,8 @@
                         </div>
                         <div class="card-body">
                             <div class="card-control" style="display: flex; justify-content: space-between">
-                                <form action="${pageContext.request.contextPath}/nutricontrol?action=dashboard" method="GET" >
+                                <form id="filterForm" action="${pageContext.request.contextPath}/nutricontrol" method="GET">
+                                    <input type="hidden" name="action" value="displaysortcategory">
                                     <div class="filter-controls" style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap;">
 
                                         <div class="input-group">
@@ -437,10 +438,10 @@
                                     </div>
                                 </form>
 
-<!--                                <a href="nutricontrol?action=showcreatecategory" class="create-btn">
-                                    <i class="fas fa-plus"></i>
-                                    Add new
-                                </a> -->
+                                <!--                                <a href="nutricontrol?action=showcreatecategory" class="create-btn">
+                                                                    <i class="fas fa-plus"></i>
+                                                                    Add new
+                                                                </a> -->
                             </div> 
                             <div class="table-container">
                                 <table>
@@ -459,7 +460,7 @@
                                             <c:when test="${empty lstC}">
                                                 <tr>
                                                     <td colspan="8" style="text-align: center; margin: 30px;">
-                                                        Không tìm thấy loạinào phù hợp.
+                                                        Không tìm thấy loại nào phù hợp.
                                                     </td>
                                                 </tr>
                                             </c:when>
@@ -470,29 +471,29 @@
                                                         <td>${cat.caName}</td>
                                                         <td>${cat.decription}</td>
                                                         <td>
-                                                <fmt:formatDate value="${cat.create_at}" pattern="dd/MM/yyyy HH:mm:ss" />
-                                                </td>
-                                                <td>
-                                                <fmt:formatDate value="${cat.update_at}" pattern="dd/MM/yyyy HH:mm:ss" />
-                                                </td>
-                                                <td>
-                                                    <div class="table-actions">
+                                                            <fmt:formatDate value="${cat.create_at}" pattern="dd/MM/yyyy HH:mm:ss" />
+                                                        </td>
+                                                        <td>
+                                                            <fmt:formatDate value="${cat.update_at}" pattern="dd/MM/yyyy HH:mm:ss" />
+                                                        </td>
+                                                        <td>
+                                                            <div class="table-actions">
 
-                                                        <a class="action-btn edit-btn" title="Chỉnh sửa"
-                                                           href="nutricontrol?action=showeditfooddraft&id=${cat.catID}">
-                                                            <i class="fas fa-edit"></i>
-                                                        </a>
-                                                        <a class="action-btn remove-btn" id="confirmDeleteBtn" title="Xóa" style="background-color:red; color:white"
-                                                           href="#" onclick="showDeletePopup('nutricontrol?action=delete&id=${cat.catID}', '${cat.caName}'); return false;"
-                                                           >
-                                                            <i class="fas fa-trash" ></i>
-                                                        </a>   
-                                                    </div>
-                                                </td>
-                                                </tr>
-                                            </c:forEach>
-                                        </c:otherwise>
-                                    </c:choose>
+                                                                <a class="action-btn edit-btn" title="Chỉnh sửa"
+                                                                   href="nutricontrol?action=showEditCategory&id=${cat.catID}">
+                                                                    <i class="fas fa-edit"></i>
+                                                                </a>
+                                                                <a class="action-btn remove-btn" id="confirmDeleteBtn" title="Xóa" style="background-color:red; color:white"
+                                                                   href="#" onclick="showDeletePopup('nutricontrol?action=delete&id=${cat.catID}', '${cat.caName}'); return false;"
+                                                                   >
+                                                                    <i class="fas fa-trash" ></i>
+                                                                </a>   
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </c:forEach>
+                                            </c:otherwise>
+                                        </c:choose>
                                     </tbody>
                                 </table>
                                 <div  id="paginationWrapper" class="pagination-container" style="display: flex; justify-content: space-between; padding: 10px;">
@@ -532,5 +533,41 @@
         </main>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
         <script src="${pageContext.request.contextPath}/JS/Nutritionist/common.js"></script>
+        <script src="${pageContext.request.contextPath}/JS/Nutritionist/Category.js"></script>
+        <script>
+                                                               document.addEventListener('DOMContentLoaded', function () {
+                                                                   // Xử lý phân trang
+                                                                   document.querySelectorAll('.pagination-link').forEach(link => {
+                                                                       link.addEventListener('click', function (e) {
+                                                                           e.preventDefault();
+                                                                           const page = this.getAttribute('data-page');
+
+                                                                           // Tạo form ẩn để gửi request
+                                                                           const form = document.getElementById('filterForm');
+                                                                           const pageInput = document.createElement('input');
+                                                                           pageInput.type = 'hidden';
+                                                                           pageInput.name = 'page';
+                                                                           pageInput.value = page;
+
+                                                                           form.appendChild(pageInput);
+                                                                           form.submit();
+                                                                       });
+                                                                   });
+
+                                                                   // Xử lý submit form đúng cách
+                                                                   document.getElementById('filterForm').addEventListener('submit', function (e) {
+                                                                       // Đảm bảo không có input page cũ
+                                                                       const oldPageInput = this.querySelector('input[name="page"]');
+                                                                       if (oldPageInput)
+                                                                           oldPageInput.remove();
+                                                                   });
+                                                               });
+
+                                                               function showDeletePopup(url, name) {
+                                                                   if (confirm(`Bạn có chắc chắn muốn xóa category "\${name}"?`)) {
+                                                                       window.location.href = url;
+                                                                   }
+                                                               }
+        </script>
     </body>
 </html>
