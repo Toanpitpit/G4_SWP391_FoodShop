@@ -530,7 +530,7 @@ SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
                     <i class="menu-arrow bi bi-chevron-right"></i>
                 </a>
                 <div class="submenu">
-                    <a href="viewFoods.jsp" class="menu-link">Food List </a>
+                    <a href="viewFoodList" class="menu-link">Food List </a>
                     <a href="${pageContext.request.contextPath}/nutricontrol?action=showfood" class="menu-link">Food Detail</a>
                 </div>
             </div>

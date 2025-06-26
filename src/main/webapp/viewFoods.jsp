@@ -6,6 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="vi">
     <head>
@@ -196,7 +197,7 @@
                     <i class="menu-arrow bi bi-chevron-right"></i>
                 </a>
                 <div class="submenu">
-                    <a href="viewFoods.jsp" class="menu-link">Food List </a>
+                    <a href="viewFoodList" class="menu-link">Food List </a>
                     <a href="${pageContext.request.contextPath}/nutricontrol?action=showfood" class="menu-link">Food Detail</a>
                 </div>
             </div>
@@ -376,7 +377,7 @@
                     
                     <!-- Search and Filter Bar -->
                     <div class="food-search-bar">
-                        <form action="SearchFoodServlet" method="get" class="row g-3">
+                       <form action="viewFoodList" method="get" class="row g-3">
                             <div class="col-md-3">
                                 <div class="input-group">
                                     <span class="input-group-text bg-white">
@@ -442,8 +443,8 @@
                     
                     <!-- Food Table -->
                     <div class="table-responsive">
-                        <table class="food-table">
-                            <thead>
+                        <table class="food-table table table-bordered table-hover">
+                            <thead class="thead-dark">
                                 <tr>
                                     <th>ID</th>
                                     <th>Food Name</th>
@@ -455,145 +456,44 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>F001</td>
-                                    <td>Grilled Pork Banh Mi</td>
-                                    <td>
-                                        <img src="https://images.unsplash.com/photo-1565958011703-44f9829ba187" 
-                                             alt="Grilled Pork Banh Mi" 
-                                             class="food-image">
-                                    </td>
-                                    <td>
-                                        <span class="category-badge">🍛 Main Dishes</span>
-                                    </td>
-                                    <td class="price-tag">35,000 ₫</td>
-                                    <td>
-                                        <span class="status-badge status-available">Available</span>
-                                    </td>
-                                    <td>
-                                        <button class="action-btn btn-view" title="View Details">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                        <button class="action-btn btn-edit" title="Edit">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="action-btn btn-delete" title="Delete">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </td>
+                                <c:forEach var="food" items="${foodList}">
+                                    <tr>
+                                        <td>${food.id}</td>
+                                        <td>${food.name}</td>
+                                        <td>
+                                            <c:choose>
+                                                <c:when test="${not empty food.image}">
+                                                    <img src="${pageContext.request.contextPath}/${food.image}" 
+                                                         alt="${food.name}" class="food-image"
+                                                         style="width: 50px; height: 50px; object-fit: cover;" />
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <i class="bi bi-image" style="font-size: 24px; color: gray;"></i>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </td>
+                                        <td><span class="category-badge">${food.category}</span></td>
+                                        <td class="price-tag">
+                                            ${food.price}
+                                        </td>
+                                <td>
+                                    <span class="status-badge ${food.status eq 'Available' ? 'status-available' : 'status-out'}">
+                                        ${food.status}
+                                    </span>
+                                </td>
+                                <td>
+                                    <button class="action-btn btn-view" title="View Details">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="action-btn btn-edit" title="Edit">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="action-btn btn-delete" title="Delete">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
                                 </tr>
-                                
-                                <tr>
-                                    <td>F002</td>
-                                    <td>Bubble Milk Tea</td>
-                                    <td>
-                                        <img src="https://images.unsplash.com/photo-1595981267035-7b04ca84a82d" 
-                                             alt="Bubble Milk Tea" 
-                                             class="food-image">
-                                    </td>
-                                    <td>
-                                        <span class="category-badge">🥤 Drinks</span>
-                                    </td>
-                                    <td class="price-tag">25,000 ₫</td>
-                                    <td>
-                                        <span class="status-badge status-out">Out of stock</span>
-                                    </td>
-                                    <td>
-                                        <button class="action-btn btn-view" title="View Details">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                        <button class="action-btn btn-edit" title="Edit">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="action-btn btn-delete" title="Delete">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                
-                                <tr>
-                                    <td>F003</td>
-                                    <td>Tuna Salad</td>
-                                    <td>
-                                        <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd" 
-                                             alt="Tuna Salad" 
-                                             class="food-image">
-                                    </td>
-                                    <td>
-                                        <span class="category-badge">🥗 Healthy Food</span>
-                                    </td>
-                                    <td class="price-tag">45,000 ₫</td>
-                                    <td>
-                                        <span class="status-badge status-available">Available</span>
-                                    </td>
-                                    <td>
-                                        <button class="action-btn btn-view" title="View Details">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                        <button class="action-btn btn-edit" title="Edit">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="action-btn btn-delete" title="Delete">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                
-                                <tr>
-                                    <td>F004</td>
-                                    <td>Vietnamese Spring Rolls</td>
-                                    <td>
-                                        <img src="https://images.unsplash.com/photo-1590301157283-66dc4e1cbf07" 
-                                             alt="Vietnamese Spring Rolls" 
-                                             class="food-image">
-                                    </td>
-                                    <td>
-                                        <span class="category-badge">🥟 Appetizers</span>
-                                    </td>
-                                    <td class="price-tag">30,000 ₫</td>
-                                    <td>
-                                        <span class="status-badge status-available">Available</span>
-                                    </td>
-                                    <td>
-                                        <button class="action-btn btn-view" title="View Details">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                        <button class="action-btn btn-edit" title="Edit">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="action-btn btn-delete" title="Delete">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                
-                                <tr>
-                                    <td>F005</td>
-                                    <td>Mango Sticky Rice</td>
-                                    <td>
-                                        <img src="https://images.unsplash.com/photo-1634034379073-f689b460a3fc" 
-                                             alt="Mango Sticky Rice" 
-                                             class="food-image">
-                                    </td>
-                                    <td>
-                                        <span class="category-badge">🍰 Desserts</span>
-                                    </td>
-                                    <td class="price-tag">20,000 ₫</td>
-                                    <td>
-                                        <span class="status-badge status-out">Out of stock</span>
-                                    </td>
-                                    <td>
-                                        <button class="action-btn btn-view" title="View Details">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                        <button class="action-btn btn-edit" title="Edit">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="action-btn btn-delete" title="Delete">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
+                            </c:forEach>
                             </tbody>
                         </table>
                     </div>
