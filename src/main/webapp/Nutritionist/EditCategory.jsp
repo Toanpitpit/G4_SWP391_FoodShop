@@ -121,17 +121,17 @@
             <!-- Breadcrumb Section -->
             <div class="breadcrumb-section">
                 <div class="breadcrumb-container">
-                    <h1 class="page-title" style="padding-left: 32px">Welcome to Nutritionist Admin Dashboard</h1>
+                    <h1 class="page-title" style="padding-left: 32px">Category Management</h1>
                     <nav class="breadcrumb-nav">
                         <a href="${pageContext.request.contextPath}/nutricontrol?action=dashboard" class="breadcrumb-item">Home</a>
                         <span class="breadcrumb-separator">
                             <i class="bi bi-chevron-right"></i>
                         </span>
-                        <a href="${pageContext.request.contextPath}/nutricontrol?action=dashboard" class="breadcrumb-item">Category</a>
+                        <a href="${pageContext.request.contextPath}/nutricontrol?action=showcategory" class="breadcrumb-item">Category</a>
                         <span class="breadcrumb-separator">
                             <i class="bi bi-chevron-right"></i>
                         </span>
-                        <span class="breadcrumb-item active">Create Category</span>
+                        <span class="breadcrumb-item active">Design Category</span>
                     </nav>
                 </div>
             </div>
@@ -154,7 +154,7 @@
             <div class="content-wrapper">
                 <c:choose>
                     <c:when test="${not empty cat}">
-                        <form action="/category/create" method="post">
+                        <form action="${pageContext.request.contextPath}/nutricontrol?action=updateCategory&id=${cat.catID}" method="post">
                             <div class="mb-3">
                                 <label for="name" class="form-label">Tên danh mục</label>
                                 <c:set var="name" value="${not empty param.name ? param.name : cat.caName}"/>
@@ -163,13 +163,14 @@
 
                             <div class="mb-3">
                                 <label for="description" class="form-label">Mô tả</label> 
-                                <c:set var="description" value="${not empty param.description ? param.decription : cat.decription}"/>
+                                <c:set var="description" value="${not empty param.description ? param.description : cat.decription}"/>
                                 <textarea class="form-control" id="description" name="description" rows="3" required> ${not empty description ? description :''}</textarea>
                             </div>
                             <button type="submit" class="btn btn-primary">Save</button>
                         </form>
                     </c:when>
                     <c:otherwise>
+                        <form action="${pageContext.request.contextPath}/nutricontrol?action=createCategory" method="post">
                         <div class="mb-3">
                             <label for="name" class="form-label">Tên danh mục</label>
                             <input type="text" value="${not empty param.name ? param.name :''} " class="form-control" id="name" name="name" required>
@@ -194,18 +195,6 @@
         <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
         <script src="${pageContext.request.contextPath}/JS/Nutritionist/common.js"></script>
 
-        <script>
-            CKEDITOR.replace('description', {
-                height: 300,
-                versionCheck: false,
-                toolbar: [
-                    {name: 'basicstyles', items: ['Bold', 'Italic', 'Underline']},
-                    {name: 'paragraph', items: ['NumberedList', 'BulletedList', 'JustifyLeft', 'JustifyCenter', 'JustifyRight']},
-                    {name: 'styles', items: ['Format']},
-                    {name: 'clipboard', items: ['Undo', 'Redo']}
-                ],
-                removePlugins: 'image,table,media,flash',
-            });
-        </script>
+        
     </body>
 </html>

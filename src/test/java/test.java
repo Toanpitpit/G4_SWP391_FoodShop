@@ -42,11 +42,8 @@ public class test {
     
     public static void main(String[] args) throws SQLException {
         CategoryDAO dao =new CategoryDAO ();
-        String name  = "Bánh";
-        String description = "Nhân táo đỏ hạnh nhân tốt cho sức khỏe";
         
-        Category ca = new Category (3, name, description, null, null);
-        boolean check  = dao.insertCategory (ca);
+        boolean check  = dao.deleteCategory (28);
         System.out.println (check);
       
     }

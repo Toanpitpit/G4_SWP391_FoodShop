@@ -363,6 +363,11 @@ public class FoodDraftDAO {
                 .addPagination (page, pageSize);
         return executeQuery (queryBuilder);
     }
+    public List<Food_Draft> getTotalFoodDraftsByAuthor(int authorId) throws SQLException {
+        QueryBuilder queryBuilder = new QueryBuilder (BASE_QUERY)
+                .addFilter ("authorID", String.valueOf(authorId));
+        return executeQuery (queryBuilder);
+    }
     public List<Food_Draft> getFoodDraftsByOrigin(int originId, int page, int pageSize) throws SQLException {
         String sql = BASE_QUERY + " AND fd.originID = ? ORDER BY fd.pdrID ASC OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
 

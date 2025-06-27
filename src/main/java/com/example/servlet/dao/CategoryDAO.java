@@ -166,25 +166,53 @@ public class CategoryDAO {
         }
     }
 
-    public boolean update(int id, Category category) {
+    public boolean updateCategory(Category category) {
         DBConnect db = new DBConnect ();
-        String sql = "UPDATE Category SET caName = ?, description = ? WHERE caID = ?";
+        String sql = "UPDATE Category SET caName = ?, description = ?, update_at = ? WHERE catID = ?";
         try (PreparedStatement ps = db.getConnection ().prepareStatement (sql)) {
             ps.setString (1, category.getCaName ());
             ps.setString (2, category.getDecription ());
-            ps.setInt (3, id);
+            ps.setTimestamp (3, new Timestamp (System.currentTimeMillis ()));
+            ps.setInt (4, category.getCatID ());
             return ps.executeUpdate () > 0;
         } catch (SQLException e) {
             e.printStackTrace ();
             return false;
         }
     }
+    public boolean deleteCategory(int catID) {
+    DBConnect db = new DBConnect();
+    String sql = "DELETE FROM Category WHERE catID = ?";
+    try (PreparedStatement ps = db.getConnection().prepareStatement(sql)) {
+        ps.setInt(1, catID);
+        return ps.executeUpdate() > 0;
+    } catch (SQLException e) {
+        e.printStackTrace();
+        return false;
+    }
+}
+
 
     public boolean existsByName(String caName) {
         DBConnect db = new DBConnect ();
-        String sql = "SELECT 1 FROM Category WHERE caName = ? LIMIT 1";
+        String sql = "SELECT TOP 1 1 FROM Category WHERE caName = ?";
         try (PreparedStatement ps = db.getConnection ().prepareStatement (sql)) {
             ps.setString (1, caName);
+            try (ResultSet rs = ps.executeQuery ()) {
+                return rs.next ();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace ();
+            return false;
+        }
+    }
+
+    public boolean isDuplicateNameExceptId(String caName, int excludeId) {
+        DBConnect db = new DBConnect ();
+        String sql = "SELECT TOP 1 1 FROM Category WHERE caName = ? AND catID != ?";
+        try (PreparedStatement ps = db.getConnection ().prepareStatement (sql)) {
+            ps.setString (1, caName);
+            ps.setInt (2, excludeId);
             try (ResultSet rs = ps.executeQuery ()) {
                 return rs.next ();
             }
@@ -211,6 +239,27 @@ public class CategoryDAO {
         } catch (SQLException e) {
             e.printStackTrace ();
             return null;
+        }
+    }
+
+    public boolean hasAnyFoodOrDraftLinkedToCategory(int catID) {
+        String sql
+                = "SELECT 1 FROM Foods WHERE catID = ? "
+                + "UNION "
+                + "SELECT 1 FROM FoodDrafts WHERE catID = ?";
+
+        try (
+                Connection conn = new DBConnect ().getConnection (); PreparedStatement ps = conn.prepareStatement (sql)) {
+            ps.setInt (1, catID);
+            ps.setInt (2, catID);
+
+            try (ResultSet rs = ps.executeQuery ()) {
+                return rs.next ();
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace ();
+            return false;
         }
     }
 

@@ -36,6 +36,64 @@
                 border-color: #4CAF50;
                 border-radius: 10px;
             }
+            .table-container {
+                margin-top: 20px;
+                overflow-x: auto; 
+                border: 1px solid #e0e5ec;
+                border-radius: 8px;
+                padding:10px; 
+            }
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                font-size: 0.9rem;
+            }
+            thead {
+                border-radius: 10px;
+            }
+            thead th {
+                background-color: #E3F2FD;
+                padding: 1rem;
+                text-align: left;
+                font-weight: 600;
+                color: black;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                border-bottom: 2px solid #ced4da;
+            }
+
+            tbody tr {
+                transition: background-color 0.15s ease-in-out;
+            }
+
+            tbody tr:nth-of-type(even) {
+                background-color: #f8f9fa;
+            }
+
+            tbody tr:hover {
+                background-color: #e9ecef;
+            }
+
+            tbody td {
+                padding: 0.9rem 1rem;
+                vertical-align: middle;
+                border-bottom: 1px solid #e9ecef;
+                color: #34495e;
+            }
+            .ellipsis {
+                max-width: 300px;        
+                white-space: nowrap;    
+                overflow: hidden;       
+                text-overflow: ellipsis; 
+                display: inline-block;  
+                vertical-align: middle;
+            }
+
+            tbody td strong {
+                font-weight: 600;
+                color: #3498db;
+            }
         </style>
 
 

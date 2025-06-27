@@ -467,7 +467,7 @@
                     <nav class="breadcrumb-nav">
                         <a href="${pageContext.request.contextPath}/nutricontrol?action=dashboard" class="breadcrumb-item">Trang chủ</a>
                         <span class="breadcrumb-separator">/</span>
-                        <a href="${pageContext.request.contextPath}/nutricontrol?action=showfood" class="breadcrumb-item">Danh sách đồ ăn</a>
+                        <a href="${pageContext.request.contextPath}/nutricontrol?action=showfooddraft" class="breadcrumb-item">Food Suggestion</a>
                         <span class="breadcrumb-separator">/</span>
                         <span class="breadcrumb-item active">Chi tiết Food draft</span>
                     </nav>

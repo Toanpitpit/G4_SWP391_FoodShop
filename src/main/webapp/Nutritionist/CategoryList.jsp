@@ -16,30 +16,25 @@
         <link rel="stylesheet" href="${pageContext.request.contextPath}/CSS/Ncss/defauld.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/CSS/Ncss/foodlist.css">
         <style>
-            /* =================================================================
-   CATEGORY CONTENT & PAGE LAYOUT
-   ================================================================= */
-
             .category-content {
                 padding: 24px;
-                background-color: #f4f7f9; /* A light, neutral background for the content area */
+                background-color: #f4f7f9; 
             }
 
-            /* Page Header with Breadcrumbs */
             .category-content .page-header {
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
                 margin-bottom: 24px;
-                flex-wrap: wrap; /* Allow wrapping on smaller screens */
-                gap: 16px; /* Space between title and breadcrumbs if they wrap */
+                flex-wrap: wrap; 
+                gap: 16px;
             }
 
             .category-content .page-header .page-title {
                 margin: 0;
-                font-size: 1.75rem; /* 28px */
+                font-size: 1.75rem; 
                 font-weight: 700;
-                color: #2c3e50; /* Darker, professional blue-gray */
+                color: #2c3e50; 
             }
 
             .category-content .page-header .breadcrumb {
@@ -57,7 +52,7 @@
             }
 
             .category-content .page-header .breadcrumb li a {
-                color: #3498db; /* A friendly blue for links */
+                color: #3498db; 
                 text-decoration: none;
                 transition: color 0.2s ease;
             }
@@ -67,24 +62,22 @@
             }
 
             .category-content .page-header .breadcrumb li::after {
-                content: '›'; /* Use a more elegant separator */
+                content: '›'; 
                 margin: 0 8px;
-                color: #95a5a6; /* Muted separator color */
+                color: #95a5a6;
             }
 
             .category-content .page-header .breadcrumb li:last-child::after {
-                content: ''; /* Remove separator from the last item */
+                content: ''; 
             }
 
-            /* =================================================================
-               MAIN CARD STYLING
-               ================================================================= */
+
 
             .card {
                 border: 1px solid #e0e5ec;
                 border-radius: 12px;
                 box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
-                overflow: hidden; /* Ensures child elements respect the border radius */
+                overflow: hidden; 
                 background-color: #ffffff;
             }
 
@@ -98,9 +91,9 @@
 
             .card-header .card-title {
                 margin: 0;
-                font-size: 1.15rem; /* 18px */
+                font-size: 1.15rem; 
                 font-weight: 600;
-                color: #34495e; /* A strong, dark color */
+                color: #34495e;
             }
 
             .card-header .card-title .fas {
@@ -112,10 +105,7 @@
                 padding: 1.5rem;
             }
 
-            /* =================================================================
-               FILTER AND SEARCH FORM
-               ================================================================= */
-
+          
             #filterForm {
                 margin-bottom: 2rem;
             }
@@ -160,7 +150,7 @@
                 align-items: center;
                 gap: 6px;
 
-                padding: 6px 14px; /* nhỏ lại so với bản to */
+                padding: 6px 14px; 
                 border: none;
                 border-radius: 30px;
 
@@ -171,7 +161,7 @@
                 text-decoration: none;
                 cursor: pointer;
                 transition: opacity 0.2s ease;
-                height: 38px; /* chuẩn với input thông thường */
+                height: 38px; 
                 line-height: 1;
             }
 
@@ -185,18 +175,16 @@
 
 
 
-            /* =================================================================
-               DATA TABLE STYLING
-               ================================================================= */
+         
             .table-container {
-                overflow-x: auto; /* Makes table scrollable on small screens */
+                overflow-x: auto; 
                 border: 1px solid #e0e5ec;
                 border-radius: 8px;
             }
 
             table {
                 width: 100%;
-                border-collapse: collapse; /* Cleaner look */
+                border-collapse: collapse;
                 font-size: 0.9rem;
             }
             thead {
@@ -222,7 +210,7 @@
             }
 
             tbody tr:hover {
-                background-color: #e9ecef; /* Subtle hover effect */
+                background-color: #e9ecef;
             }
 
             tbody td {
@@ -231,23 +219,27 @@
                 border-bottom: 1px solid #e9ecef;
                 color: #34495e;
             }
+            .ellipsis {
+                max-width: 300px;        
+                white-space: nowrap;    
+                overflow: hidden;       
+                text-overflow: ellipsis; 
+                display: inline-block;  
+                vertical-align: middle;
+            }
 
             tbody td strong {
                 font-weight: 600;
                 color: #3498db;
             }
 
-            /* Empty table message */
+            
             tbody tr td[colspan="8"] {
                 font-size: 1rem;
                 color: #7f8c8d;
                 font-style: italic;
                 padding: 40px 0;
             }
-
-
-
-
             .table-actions {
                 display: flex;
                 justify-content: center;
@@ -261,7 +253,7 @@
                 width: 34px;
                 height: 34px;
                 border: none;
-                border-radius: 50%; /* Circular buttons */
+                border-radius: 50%; 
                 font-size: 14px;
                 color: white;
                 text-decoration: none;
@@ -275,22 +267,18 @@
             }
 
             .action-btn.edit-btn {
-                background-color: #f39c12; /* A warm orange for edit */
+                background-color: #f39c12; 
             }
             .action-btn.edit-btn:hover {
                 background-color: #e67e22;
             }
 
             .action-btn.remove-btn {
-                background-color: #e74c3c; /* A strong red for delete */
+                background-color: #e74c3c; 
             }
             .action-btn.remove-btn:hover {
                 background-color: #c0392b;
             }
-
-            /* =================================================================
-               PAGINATION STYLING
-               ================================================================= */
             .pagination-container {
                 display: flex;
                 justify-content: space-between;
@@ -299,7 +287,7 @@
                 padding: 1rem 1.5rem;
                 border-top: 1px solid #e0e5ec;
                 background-color: #f8f9fa;
-                margin-top: -1px; /* Overlap with card-body bottom margin */
+                margin-top: -1px; 
             }
 
             .pagination-container > div:first-child {
@@ -333,7 +321,7 @@
                 border: 1px solid transparent; /* Keep spacing consistent */
             }
 
-            /* Responsive adjustments */
+        
             @media (max-width: 768px) {
                 .category-content .page-header {
                     flex-direction: column;
@@ -380,21 +368,263 @@
                 border-radius: 10px;
             }
         </style>
+         <style>
+       /* Popup Overlay */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .popup-overlay.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        /* Popup Container */
+        .popup-container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            max-width: 420px;
+            width: 90%;
+            margin: 20px;
+            transform: scale(0.7) translateY(-50px);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            overflow: hidden;
+        }
+
+        .popup-overlay.show .popup-container {
+            transform: scale(1) translateY(0);
+        }
+
+        /* Popup Header */
+        .popup-header {
+            background: rgba(144, 238, 144, 0.5);
+            color: #004d40;
+            padding: 24px;
+            text-align: center;
+            position: relative;
+        }
+
+        .popup-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            font-size: 24px;
+        }
+
+        .popup-title {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .popup-subtitle {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        /* Popup Body */
+        .popup-body {
+            padding: 24px;
+            text-align: center;
+        }
+
+        .popup-message {
+            font-size: 16px;
+            color: #555;
+            line-height: 1.5;
+            margin-bottom: 8px;
+        }
+
+        .popup-warning {
+            font-size: 14px;
+            color: #888;
+            font-style: italic;
+        }
+
+        /* Popup Actions */
+        .popup-actions {
+            padding: 0 24px 24px;
+            display: flex;
+            gap: 12px;
+            flex-direction: column;
+        }
+
+        .popup-btn {
+            padding: 14px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .popup-btn-delete {
+            background: linear-gradient(135deg, #ff4757, #ff3742);
+            color: white;
+        }
+
+        .popup-btn-delete:hover {
+            background: linear-gradient(135deg, #ff3742, #ff2d3a);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 71, 87, 0.3);
+        }
+
+        .popup-btn-cancel {
+            background: #f8f9fa;
+            color: #555;
+            border: 2px solid #e9ecef;
+        }
+
+        .popup-btn-cancel:hover {
+            background: #e9ecef;
+            border-color: #dee2e6;
+        }
+
+        /* Demo styling */
+        .demo-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 40px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .demo-title {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 16px;
+        }
+
+        .demo-description {
+            color: #666;
+            margin-bottom: 32px;
+            line-height: 1.6;
+        }
+
+        .delete-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #ff4757, #ff3742);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+
+        .delete-link:hover {
+            background: linear-gradient(135deg, #ff3742, #ff2d3a);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 71, 87, 0.3);
+        }
+
+        /* Responsive Design */
+        @media (min-width: 480px) {
+            .popup-actions {
+                flex-direction: row;
+            }
+            
+            .popup-btn {
+                flex: 1;
+            }
+        }
+
+        @media (max-width: 479px) {
+            .popup-container {
+                width: 95%;
+                margin: 10px;
+            }
+            
+            .popup-header {
+                padding: 20px;
+            }
+            
+            .popup-icon {
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+            }
+            
+            .popup-title {
+                font-size: 20px;
+            }
+            
+            .popup-body {
+                padding: 20px;
+            }
+            
+            .popup-actions {
+                padding: 0 20px 20px;
+            }
+            
+            .popup-btn {
+                padding: 12px 16px;
+                font-size: 15px;
+            }
+        }}
+        </style>
     </head>
     <body>
         <jsp:include page="/Nutritionist/nav.jsp"/>  
         <jsp:include page="/Nutritionist/main-header.jsp"/>  
+        <c:if test="${not empty Errmess}">
+            <div class="alert alert-danger" style="display: none;">${Errmess}</div>
+        </c:if>
+
+        <c:if test="${not empty successMessage}">
+            <div class="alert alert-success" style="display: none;">${successMessage}</div>
+        </c:if>
+
+        <c:if test="${not empty warningMessage}">
+            <div class="alert alert-warning" style="display: none;">${warningMessage}</div>
+        </c:if>
+
+        <c:if test="${not empty infoMessage}">
+            <div class="alert alert-info" style="display: none;">${infoMessage}</div>
+        </c:if>
 
         <main class="main-content" id="mainContent">
             <div class="breadcrumb-section">
                 <div class="breadcrumb-container">
                     <h1 class="page-title" style="padding-left: 32px">Category List</h1>
                     <nav class="breadcrumb-nav">
-                        <a href="/nutricorol?action=dashboard" class="breadcrumb-item">Home</a>
+                        <a href="/nutricontrol?action=dashboard" class="breadcrumb-item">Home</a>
                         <span class="breadcrumb-separator">
                             <i class="bi bi-chevron-right"></i>
                         </span>
-                        <span class="breadcrumb-item active">Dashboard</span>
+                        <a href="/nutricontrol?action=showcategory" class="breadcrumb-item">Category</a>
+                        <span class="breadcrumb-separator">
+                            <i class="bi bi-chevron-right"></i>
+                        </span>
+                        <span class="breadcrumb-item active">Category List</span>
                     </nav>
                 </div>
             </div>
@@ -402,7 +632,7 @@
                 <div class="category-content">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title"><i class="fas fa-list-ul"></i>Danh sách đồ ăn</h3>
+                            <h3 class="card-title"><i class="fas fa-list-ul"></i>Danh sách danh mục đồ ăn</h3>
                         </div>
                         <div class="card-body">
                             <div class="card-control" style="display: flex; justify-content: space-between">
@@ -438,10 +668,10 @@
                                     </div>
                                 </form>
 
-                                <!--                                <a href="nutricontrol?action=showcreatecategory" class="create-btn">
-                                                                    <i class="fas fa-plus"></i>
-                                                                    Add new
-                                                                </a> -->
+                                <a href="nutricontrol?action=showEditCategory" class="create-btn">
+                                    <i class="fas fa-plus"></i>
+                                    Add new
+                                </a> 
                             </div> 
                             <div class="table-container">
                                 <table>
@@ -469,7 +699,7 @@
                                                     <tr>
                                                         <td><strong>#${cat.catID}</strong></td>
                                                         <td>${cat.caName}</td>
-                                                        <td>${cat.decription}</td>
+                                                        <td class="ellipsis" title="${cat.decription}">${cat.decription}</td>
                                                         <td>
                                                             <fmt:formatDate value="${cat.create_at}" pattern="dd/MM/yyyy HH:mm:ss" />
                                                         </td>
@@ -484,7 +714,7 @@
                                                                     <i class="fas fa-edit"></i>
                                                                 </a>
                                                                 <a class="action-btn remove-btn" id="confirmDeleteBtn" title="Xóa" style="background-color:red; color:white"
-                                                                   href="#" onclick="showDeletePopup('nutricontrol?action=delete&id=${cat.catID}', '${cat.caName}'); return false;"
+                                                                   href="#" onclick="showDeletePopup('nutricontrol?action=deleteCategory&id=${cat.catID}', '${cat.caName}'); return false;"
                                                                    >
                                                                     <i class="fas fa-trash" ></i>
                                                                 </a>   
@@ -531,43 +761,98 @@
 
             <jsp:include page="/Nutritionist/footer.jsp"/>  
         </main>
+        <div id="deletePopup" class="popup-overlay">
+            <div class="popup-container">
+                <div class="popup-header">
+                    <div class="popup-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="popup-title">Xác nhận xóa</div>
+                    <div class="popup-subtitle">Thao tác này không thể hoàn tác</div>
+                </div>
+
+                <div class="popup-body">
+                    <div class="popup-message" id="popupMessage">
+                        Bạn có chắc chắn muốn xóa bài viết này?
+                    </div>
+                    <div class="popup-warning">
+                        Dữ liệu sẽ bị xóa vĩnh viễn và không thể khôi phục.
+                    </div>
+                </div>
+
+                <div class="popup-actions">
+                    <button class="popup-btn popup-btn-cancel" onclick="closeDeletePopup()">
+                        <i class="fas fa-times"></i>
+                        Hủy bỏ
+                    </button>
+                    <a id="confirmDeleteBtn" href="nutricontrol?action=deleteCategory&id=${cat.catID}" class="popup-btn popup-btn-delete">
+                        <i class="fas fa-trash-alt"></i>
+                        Xóa ngay
+                    </a>
+                </div>
+            </div>
+        </div>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
         <script src="${pageContext.request.contextPath}/JS/Nutritionist/common.js"></script>
         <script src="${pageContext.request.contextPath}/JS/Nutritionist/Category.js"></script>
-        <script>
-                                                               document.addEventListener('DOMContentLoaded', function () {
-                                                                   // Xử lý phân trang
-                                                                   document.querySelectorAll('.pagination-link').forEach(link => {
-                                                                       link.addEventListener('click', function (e) {
-                                                                           e.preventDefault();
-                                                                           const page = this.getAttribute('data-page');
+              <script>
+     let deleteUrl = '';
+     let categoryTitle = '';
 
-                                                                           // Tạo form ẩn để gửi request
-                                                                           const form = document.getElementById('filterForm');
-                                                                           const pageInput = document.createElement('input');
-                                                                           pageInput.type = 'hidden';
-                                                                           pageInput.name = 'page';
-                                                                           pageInput.value = page;
+    
+     function showDeletePopup(url, title = '') {
+         deleteUrl = url;
+         categoryTitle = title;
+            
+     
+         const messageElement = document.getElementById('popupMessage');
+         if (title) {
+             messageElement.innerHTML = `Bạn có chắc chắn muốn danh mục :<br><strong>"${title}"</strong>?`;
+         } else {
+             messageElement.innerHTML = 'Bạn có chắc chắn muốn xóa danh mục này?';
+         }
+            
+         document.getElementById('confirmDeleteBtn').href = deleteUrl;
+            
+        
+         const popup = document.getElementById('deletePopup');
+         popup.classList.add('show');
+            
+        
+         document.body.style.overflow = 'hidden';
+     }
 
-                                                                           form.appendChild(pageInput);
-                                                                           form.submit();
-                                                                       });
-                                                                   });
+    
+     function closeDeletePopup() {
+         const popup = document.getElementById('deletePopup');
+         popup.classList.remove('show');
+            
+       
+         document.body.style.overflow = 'auto';
+            
+       
+         deleteUrl = '';
+         blogTitle = '';
+     }
 
-                                                                   // Xử lý submit form đúng cách
-                                                                   document.getElementById('filterForm').addEventListener('submit', function (e) {
-                                                                       // Đảm bảo không có input page cũ
-                                                                       const oldPageInput = this.querySelector('input[name="page"]');
-                                                                       if (oldPageInput)
-                                                                           oldPageInput.remove();
-                                                                   });
-                                                               });
+    
+     document.getElementById('deletePopup').addEventListener('click', function(e) {
+         if (e.target === this) {
+             closeDeletePopup();
+         }
+     });
 
-                                                               function showDeletePopup(url, name) {
-                                                                   if (confirm(`Bạn có chắc chắn muốn xóa category "\${name}"?`)) {
-                                                                       window.location.href = url;
-                                                                   }
-                                                               }
+    
+     document.addEventListener('keydown', function(e) {
+         if (e.key === 'Escape') {
+             closeDeletePopup();
+         }
+     });
+
+     
+     document.querySelector('.popup-container').addEventListener('click', function(e) {
+         e.stopPropagation();
+     });
         </script>
     </body>
 </html>

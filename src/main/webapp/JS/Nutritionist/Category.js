@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         for (const [key, value] of formData.entries()) {
             params.append(key, value);
-            console.log(`${key}: ${value}`);
+            
         }
         
         
@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             const res = await fetch(`nutricontrol?${params.toString()}`);
-            console.log("Status code:", res.status);
+           
             const data = await res.json();
             
             updateFormFilters(data.filters);
@@ -43,12 +43,12 @@ document.addEventListener('DOMContentLoaded', () => {
         sendAjax(1);
     });
 
-    // Xử lý thay đổi sort Create
+   
     form.querySelector('#sortCreate').addEventListener('change', () => {
         sendAjax(1);
     });
 
-    // Xử lý thay đổi sort Update
+   
     form.querySelector('#sortUpdate').addEventListener('change', () => {
         sendAjax(1);
     });
@@ -118,19 +118,19 @@ document.addEventListener('DOMContentLoaded', () => {
             row.innerHTML = `
                 <td><strong>#${cat.catID}</strong></td>
                 <td>${cat.caName}</td>
-                <td>${cat.decription}</td>
+                <td class="ellipsis" title="${cat.decription}">${cat.decription}</td>
                 <td>${formatDate(cat.create_at)}</td>
                 <td>${formatDate(cat.update_at)}</td>
                 <td>
                     <div class="table-actions">
                         <a class="action-btn edit-btn" title="Chỉnh sửa"
-                           href="nutricontrol?action=showeditfooddraft&id=${cat.catID}">
+                           href="nutricontrol?action=showEditCategory&id=${cat.catID}">
                             <i class="fas fa-edit"></i>
                         </a>
                         <a class="action-btn remove-btn" title="Xóa" 
                            style="background-color:red; color:white"
                            href="#" 
-                           onclick="showDeletePopup('nutricontrol?action=delete&id=${cat.catID}', '${cat.caName}'); return false;">
+                           href="#" onclick="showDeletePopup('nutricontrol?action=deleteCategory&id=${cat.catID}', '${cat.caName}'); return false;">
                             <i class="fas fa-trash"></i>
                         </a>   
                     </div>

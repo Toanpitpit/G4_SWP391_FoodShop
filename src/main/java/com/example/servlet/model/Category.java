@@ -25,6 +25,11 @@ public class Category {
         this.update_at = update_at;
     }
 
+    public Category(String caName, String decription) {
+        this.caName = caName;
+        this.decription = decription;
+    }
+    
     public int getCatID() {
         return catID;
     }

@@ -415,7 +415,7 @@
                                 <span class="breadcrumb-separator">
                                     <i class="bi bi-chevron-right"></i>
                                 </span>
-                                <span class="breadcrumb-item active">Create Food Sugesstion</span>
+                                <span class="breadcrumb-item active">Create Food Suggestion</span>
                             </nav>
                         </div>
                     </div>
@@ -460,9 +460,6 @@
 
                                             </select>
                                         </div>
-                                        <button type="button" class="btn-new-category" onclick="">
-                                            + Tạo mới
-                                        </button>
                                     </div>
                                 </div>
 
@@ -559,7 +556,7 @@
                                 <span class="breadcrumb-separator">
                                     <i class="bi bi-chevron-right"></i>
                                 </span>
-                                <a href="${pageContext.request.contextPath}/nutricontrol?action=showfooddraft" class="breadcrumb-item">Danh sách món ăn gợi ý</a>
+                                <a href="${pageContext.request.contextPath}/nutricontrol?action=showfooddraft" class="breadcrumb-item">Food Suggestion List</a>
                                 <span class="breadcrumb-separator">
                                     <i class="bi bi-chevron-right"></i>
                                 </span>
@@ -612,9 +609,6 @@
                                                 </c:choose>
                                             </select>
                                         </div>
-                                        <button type="button" class="btn-new-category" onclick="">
-                                            + Tạo mới
-                                        </button>
                                     </div>
                                 </div>
 

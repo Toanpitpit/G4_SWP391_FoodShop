@@ -44,6 +44,8 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.jsoup.Jsoup;
 
 /**
@@ -156,7 +158,13 @@ public class NutritionistControlServerLet extends HttpServlet {
 //                try(PrintWriter o = response.getWriter ()){
 //                o.print ("oke");
 //                }
-                ShowCategoryListSort (request, response);
+                CreateCategory (request, response);
+                break;
+            case "updateCategory":
+                UpdateCategory (request, response);
+                break;
+            case "deleteCategory":
+                deleteCategory (request, response);
                 break;
             default:
         }
@@ -594,14 +602,13 @@ public class NutritionistControlServerLet extends HttpServlet {
             BMIClassificationDAO bi_dao = new BMIClassificationDAO ();
             RequestDAO r_dao = new RequestDAO ();
             BlogDAO b_dao = new BlogDAO ();
+            FoodDraftDAO fdr_dao = new FoodDraftDAO ();
             NotifyDAO n_dao = new NotifyDAO ();
             FoodDraftDAO fd_dao = new FoodDraftDAO ();
-
+            int totalFoodDraft = fdr_dao.getTotalFoodDraftsByAuthor (acc.getId ()).size ();
             int totalBlog = b_dao.getTotalBlogbyAuthor (acc.getId ());
             int totalNotify = n_dao.getTotalNotify (acc.getId (), null);
             int totalRequest = r_dao.getTotalRequest (acc.getId ());
-            List<Food_Draft> lsttotalFdr = fd_dao.getFoodDraftsByAuthor (19, 1, 10000000);
-
             List<MonthlyStat> lstM = r_dao.countRequestsByStatus (acc.getId ());
             List<String> pieChart_data_lables = new ArrayList<> ();
             List<Integer> pieChart_data_totals = new ArrayList<> ();
@@ -652,8 +659,8 @@ public class NutritionistControlServerLet extends HttpServlet {
             request.setAttribute ("totalBlog", totalBlog);
 
             request.setAttribute ("totalNotify", totalNotify);
+            request.setAttribute ("totalFdrf", totalFoodDraft);
             request.setAttribute ("totalRequest", totalRequest);
-            request.setAttribute ("totalFdr", lsttotalFdr.size ());
             request.getRequestDispatcher ("/Nutritionist/DashBoard.jsp").forward (request, response);
         } catch (SQLException ex) {
             Logger.getLogger (NutritionistControlServerLet.class.getName ()).log (Level.SEVERE, null, ex);
@@ -1220,13 +1227,13 @@ public class NutritionistControlServerLet extends HttpServlet {
                     return;
                 }
 
-                if (description == null || description.trim ().isEmpty ()) {
+                if (!isCKEditorContentEmpty(description)) {
                     request.setAttribute ("Errmess", "Description cannot be null");
                     ShowCreateFoodDraft (request, response);
                     return;
                 }
 
-                if (ingredients == null || ingredients.trim ().isEmpty ()) {
+                if (!isCKEditorContentEmpty(ingredients)) {
                     request.setAttribute ("Errmess", "Ingredients cannot be null");
                     ShowCreateFoodDraft (request, response);
                     return;
@@ -1364,69 +1371,7 @@ public class NutritionistControlServerLet extends HttpServlet {
         }
     }
 
-    private String processImageUpload(Part filePart, String folder) throws IOException, IllegalStateException {
-        if (filePart.getSize () > 5 * 1024 * 1024) {
-            throw new IllegalStateException ("Ảnh vượt quá dung lượng 5MB");
-        }
-
-        String fileName = filePart.getSubmittedFileName ();
-        if (fileName == null || fileName.isEmpty ()) {
-            return null;
-        }
-
-        String fileExtension = fileName.contains (".")
-                ? fileName.substring (fileName.lastIndexOf (".")).toLowerCase () : "";
-        String[] allowedExtensions = {".jpg", ".jpeg", ".png", ".gif"};
-        boolean validExtension = false;
-        for (String ext : allowedExtensions) {
-            if (fileExtension.equals (ext)) {
-                validExtension = true;
-                break;
-            }
-        }
-        if (!validExtension) {
-            throw new IllegalStateException ("File type not allowed. Only JPG, PNG, GIF are supported.");
-        }
-
-        String uniqueFileName = UUID.randomUUID () + fileExtension;
-        String uploadDirPath = BASE_PATH + "\\src\\main\\webapp\\img\\" + folder;
-        String targetDirPath = BASE_PATH + "\\target\\Food-1.0-SNAPSHOT\\img\\" + folder;
-
-        File uploadDir = new File (uploadDirPath);
-        File targetDir = new File (targetDirPath);
-
-        if (!uploadDir.exists ()) {
-            uploadDir.mkdirs ();
-        }
-        if (!targetDir.exists ()) {
-            targetDir.mkdirs ();
-        }
-
-        String filePath = uploadDirPath + File.separator + uniqueFileName;
-
-        try {
-            filePart.write (filePath);
-
-            File source = new File (filePath);
-            File target = new File (targetDirPath + File.separator + uniqueFileName);
-
-            if (!source.exists ()) {
-                throw new IOException ("Source file does not exist after write");
-            }
-
-            Files.copy (source.toPath (), target.toPath (), StandardCopyOption.REPLACE_EXISTING);
-
-        } catch (Exception e) {
-
-            File sourceFile = new File (filePath);
-            if (sourceFile.exists ()) {
-                sourceFile.delete ();
-            }
-            throw new IOException ("Error copying file: " + e.getMessage (), e);
-        }
-
-        return "img/" + folder + "/" + uniqueFileName;
-    }
+    
 
     protected void UpdateFoodDraft(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -1563,6 +1508,9 @@ public class NutritionistControlServerLet extends HttpServlet {
                 if (request.getParameter ("Errmess") != null) {
                     request.setAttribute ("Errmess", request.getParameter ("Errmess"));
                 }
+                if (request.getParameter ("successMessage") != null) {
+                    request.setAttribute ("successMessage", request.getParameter ("successMessage"));
+                }
                 CategoryDAO c_dao = new CategoryDAO ();
                 List<Category> lstC = c_dao.getListCategories (null, null, null, 1, 5);
                 int curentPage = 1;
@@ -1683,30 +1631,147 @@ public class NutritionistControlServerLet extends HttpServlet {
         if (session == null) {
             response.sendRedirect ("/Nutritionist/Homedemo.jsp");
             return;
-        } else {
+        }
 
-            try {
-                if (request.getParameter ("Errmess") != null) {
-                    request.setAttribute ("Errmess", request.getParameter ("Errmess"));
-                }
-                CategoryDAO c_dao = new CategoryDAO ();
-                List<Category> lstC = c_dao.getListCategories (null, null, null, 1, 5);
-                int curentPage = 1;
-                int pageSize = 5;
-                int total = c_dao.getListCategoriesTotal (null, null, null);
-                int totalPages = (int) Math.ceil ((double) total / pageSize);
-                request.setAttribute ("currentPage", curentPage);
-                request.setAttribute ("totalPages", totalPages);
-                request.setAttribute ("totalCategory", total);
-                request.setAttribute ("lstC", lstC);
-                request.getRequestDispatcher ("/Nutritionist/CategoryList.jsp").forward (request, response);
-            } catch (SQLException ex) {
-                request.setAttribute ("Ermessr", "Lỗi tai dữ liệu");
-                request.getRequestDispatcher ("/Nutritionist/CreateFoodDraft.jsp").forward (request, response);
+        CategoryDAO dao = new CategoryDAO ();
+        String name = request.getParameter ("name");
+        String rawDescription = request.getParameter ("description");
+
+        if (name != null) {
+            name = name.trim ().replaceAll ("\\s+", " ");
+        }
+
+        if (rawDescription != null) {
+            rawDescription = rawDescription.trim ();
+            if (rawDescription.isEmpty ()) {
+                request.setAttribute ("Errmess", "Description must have at least 3 words and cannot be empty or just whitespace.");
+                ShowEditCategory (request, response);
+                return;
             }
+            if(isValidText(rawDescription ,3)== false){
+                request.setAttribute ("Errmess", "Description must have at least 3 words and cannot be empty or just whitespace.");
+                ShowEditCategory (request, response);
+                return;
+            }
+        }
+        if (name == null || name.isEmpty ()) {
+            request.setAttribute ("Errmess", "Name must not be empty or only whitespace.");
+            ShowEditCategory (request, response);
+            return;
+        }
+        boolean exists = false;
+        try {
+            exists = dao.existsByName (name);
+        } catch (Exception e) {
+            e.printStackTrace ();
+        }
+
+        if (exists) {
+            request.setAttribute ("Errmess", "Category name already exists. Try another name.");
+            ShowEditCategory (request, response);
+            return;
+        }
+        Category category = new Category (name, rawDescription);
+        boolean inserted = dao.insertCategory (category);
+
+        if (!inserted) {
+            request.setAttribute ("Errmess", "Failed to create category. Try again.");
+            ShowEditCategory (request, response);
+        } else {
+            request.setAttribute ("successMessage", "Created successfully!");
+            ShowCategoryList (request, response);
         }
     }
 
+     protected void UpdateCategory(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        HttpSession session = request.getSession (false);
+        if (session == null) {
+            response.sendRedirect ("/Nutritionist/Homedemo.jsp");
+            return;
+        }
+
+        CategoryDAO dao = new CategoryDAO ();
+        String idtxt = request.getParameter ("id");
+        int id = 0;
+        String name = request.getParameter ("name");
+        String rawDescription = request.getParameter ("description");
+        if(idtxt == null || idtxt.trim ().isEmpty ()){
+                request.setAttribute ("Errmess", "Colected id fail!!");
+                ShowEditCategory (request, response);
+                return;
+        }
+         else {
+             try {
+                id = Integer.parseInt (idtxt);
+             } catch (Exception e) {
+                request.setAttribute ("Errmess", "Wrong type id");
+                ShowEditCategory (request, response);
+                return;  
+             }
+        }
+         Category ca = dao.getCategoryByID (id);
+         
+         if(dao.hasAnyFoodOrDraftLinkedToCategory(id)){
+             request.setAttribute ("Errmess", "Cannot update a category that is currently used by one or more foods or FoodSuggestion.");
+                ShowEditCategory (request, response);
+                return;
+         }
+         if (ca == null) {
+             request.setAttribute ("Errmess", "Category not exited!!");
+             ShowEditCategory (request, response);
+             return;
+         }
+        if (name != null) {
+            name = name.trim ().replaceAll ("\\s+", " ");
+        }
+
+        if (rawDescription != null) {
+            rawDescription = rawDescription.trim ();
+            if (rawDescription.isEmpty ()) {
+                request.setAttribute ("Errmess", "Description must have at least 3 words and cannot be empty or just whitespace.");
+                ShowEditCategory (request, response);
+                return;
+            }
+            if(isValidText(rawDescription ,3)== false){
+                request.setAttribute ("Errmess", "Description must have at least 3 words and cannot be empty or just whitespace.");
+                ShowEditCategory (request, response);
+                return;
+            }
+        }
+        if (name == null || name.isEmpty ()) {
+            request.setAttribute ("Errmess", "Name must not be empty or only whitespace.");
+            ShowEditCategory (request, response);
+            return;
+        }
+        boolean exists = false;
+        try {
+            exists = dao.isDuplicateNameExceptId (name,ca.getCatID ());
+        } catch (Exception e) {
+            e.printStackTrace ();
+        }
+
+        if (exists) {
+            request.setAttribute ("Errmess", "Category name already exists. Try another name.");
+            ShowEditCategory (request, response);
+            return;
+        }
+        
+        
+        ca.setCaName (name);
+        ca.setCatID (id);
+        ca.setDecription (rawDescription);
+        boolean updated = dao.updateCategory (ca);
+
+        if (!updated) {
+            request.setAttribute ("Errmess", "Failed to update category. Try again.");
+            ShowEditCategory (request, response);
+        } else {
+            request.setAttribute ("successMessage", "Update successfully!");
+            ShowCategoryList (request, response);
+        }
+    }
+    
     protected void ShowEditCategory(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession (false);
@@ -1734,6 +1799,140 @@ public class NutritionistControlServerLet extends HttpServlet {
                 request.getRequestDispatcher ("/Nutritionist/CreateFoodDraft.jsp").forward (request, response);
             }
         }
+    }
+    protected void deleteCategory(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        HttpSession session = request.getSession (false);
+        if (session == null) {
+            response.sendRedirect ("/Nutritionist/Homedemo.jsp");
+            return;
+        } else {
+
+            try {
+                int id = -1;
+                CategoryDAO dao = new CategoryDAO ();
+                String idCatxt = request.getParameter ("id");
+                if (idCatxt != null && !idCatxt.trim ().isEmpty ()) {
+                    id = Integer.parseInt (idCatxt);
+                }
+                if(dao.hasAnyFoodOrDraftLinkedToCategory (id)){
+                   request.setAttribute ("Errmess", "Cannot delete a category that is currently used by one or more foods or FoodSuggestion.");
+                    ShowCategoryList (request, response);
+                    return; 
+                }
+                else{
+                  boolean deleted = dao.deleteCategory (id);
+
+                    if (!deleted) {
+                        request.setAttribute ("Errmess", "Failed to delete category. Try again.");
+                        ShowCategoryList (request, response);
+                    } else {
+                        request.setAttribute ("successMessage", "Delete successfully!");
+                        ShowCategoryList (request, response);
+                    }
+                    
+                }
+                    
+              
+            } catch (NumberFormatException ex) {
+                request.setAttribute ("Ermessr", "Lỗi tai dữ liệu");
+                request.getRequestDispatcher ("/Nutritionist/CreateFoodDraft.jsp").forward (request, response);
+            }
+        }
+    }
+    
+    
+    private boolean isCKEditorContentEmpty(String html) {
+        if (html == null) {
+            return true;
+        }
+        String text = Jsoup.parse (html).text ();
+        return text.trim ().isEmpty ();
+    }
+
+    public static boolean isValidText(String input, int minWords) {
+        if (input == null) {
+            return false;
+        }
+        String cleaned = input.trim ().replaceAll ("\\s+", " ");
+        if (cleaned.isEmpty ()) {
+            return false;
+        }
+        Pattern wordPattern = Pattern.compile ("\\b[\\p{L}\\p{N}']+\\b");
+        Matcher matcher = wordPattern.matcher (cleaned);
+
+        int count = 0;
+        while (matcher.find ()) {
+            count++;
+            if (count >= minWords) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private String processImageUpload(Part filePart, String folder) throws IOException, IllegalStateException {
+        if (filePart.getSize () > 5 * 1024 * 1024) {
+            throw new IllegalStateException ("Ảnh vượt quá dung lượng 5MB");
+        }
+
+        String fileName = filePart.getSubmittedFileName ();
+        if (fileName == null || fileName.isEmpty ()) {
+            return null;
+        }
+
+        String fileExtension = fileName.contains (".")
+                ? fileName.substring (fileName.lastIndexOf (".")).toLowerCase () : "";
+        String[] allowedExtensions = {".jpg", ".jpeg", ".png", ".gif"};
+        boolean validExtension = false;
+        for (String ext : allowedExtensions) {
+            if (fileExtension.equals (ext)) {
+                validExtension = true;
+                break;
+            }
+        }
+        if (!validExtension) {
+            throw new IllegalStateException ("File type not allowed. Only JPG, PNG, GIF are supported.");
+        }
+
+        String uniqueFileName = UUID.randomUUID () + fileExtension;
+        String uploadDirPath = BASE_PATH + "\\src\\main\\webapp\\img\\" + folder;
+        String targetDirPath = BASE_PATH + "\\target\\Food-1.0-SNAPSHOT\\img\\" + folder;
+
+        File uploadDir = new File (uploadDirPath);
+        File targetDir = new File (targetDirPath);
+
+        if (!uploadDir.exists ()) {
+            uploadDir.mkdirs ();
+        }
+        if (!targetDir.exists ()) {
+            targetDir.mkdirs ();
+        }
+
+        String filePath = uploadDirPath + File.separator + uniqueFileName;
+
+        try {
+            filePart.write (filePath);
+
+            File source = new File (filePath);
+            File target = new File (targetDirPath + File.separator + uniqueFileName);
+
+            if (!source.exists ()) {
+                throw new IOException ("Source file does not exist after write");
+            }
+
+            Files.copy (source.toPath (), target.toPath (), StandardCopyOption.REPLACE_EXISTING);
+
+        } catch (Exception e) {
+
+            File sourceFile = new File (filePath);
+            if (sourceFile.exists ()) {
+                sourceFile.delete ();
+            }
+            throw new IOException ("Error copying file: " + e.getMessage (), e);
+        }
+
+        return "img/" + folder + "/" + uniqueFileName;
     }
 
 }
