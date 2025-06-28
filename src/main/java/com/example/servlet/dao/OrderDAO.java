@@ -1,11 +1,14 @@
-package com.example.servlet.dao;
-import com.example.servlet.model.Order;
+package com.yourpackage.dao;
+
 import com.example.servlet.utils.DBConnect;
+import com.yourpackage.model.Order;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+
+
 
 public class OrderDAO {
     
@@ -59,62 +62,68 @@ public class OrderDAO {
     }
     
     // Tìm kiếm đơn hàng với các điều kiện
-    public List<Order> searchOrders(String orderId, String customerName, String category, 
-                                   String phone, String food,String price, String status) {
-        List<Order> orders = new ArrayList<>();
-        
-        // Build dynamic SQL query
-        StringBuilder sql = new StringBuilder();
-        sql.append("SELECT ")
-           .append("o.oID AS OrderID, ")
-           .append("a.name AS CustomerName, ")
-           .append("a.phone AS Phone, ")
-           .append("o.adress AS Address, ")
-           .append("f.pName AS Food, ")
-           .append("c.caName AS Category, ")
-           .append("od.quantity AS Quantity, ")
-           .append("f.price AS Price, ")
-           .append("o.status AS Status ")
-           .append("FROM Orders o ")
-           .append("JOIN Accounts a ON o.acID = a.id ")
-           .append("JOIN OrderDetail od ON o.oID = od.oID ")
-           .append("JOIN Foods f ON od.pId = f.pID ")
-           .append("LEFT JOIN Category c ON f.catID = c.catID ")
-           .append("WHERE 1=1 ");
-        
-        List<Object> parameters = new ArrayList<>();
-        
-        // Add search conditions for each field
-        if (orderId != null && !orderId.trim().isEmpty()) {
-            sql.append("AND o.oID = ? ");
-            parameters.add(Integer.parseInt(orderId));
-        }
-        
-        if (customerName != null && !customerName.trim().isEmpty()) {
-            sql.append("AND a.name LIKE ? ");
-            parameters.add("%" + customerName + "%");
-        }
-        
-        if (category != null && !category.trim().isEmpty()) {
-            sql.append("AND c.caName LIKE ? ");
-            parameters.add("%" + category + "%");
-        }
-        
-        if (phone != null && !phone.trim().isEmpty()) {
-            sql.append("AND a.phone LIKE ? ");
-            parameters.add("%" + phone + "%");
-        }
-        
-        if (food != null && !food.trim().isEmpty()) {
-            sql.append("AND f.pName LIKE ? ");
-            parameters.add("%" + food + "%");
-        }
-        
-        if (status != null && !status.trim().isEmpty()) {
-            sql.append("AND o.status = ? ");
-            parameters.add(status);
-        }
-         sql.append("GROUP BY o.oID, a.name, a.phone, o.adress, o.status ");
+   public List<Order> searchOrders(String orderId, String customerName, String category, 
+                               String phone, String food, String status) {
+    List<Order> orders = new ArrayList<>();
+    
+    StringBuilder sql = new StringBuilder();
+    sql.append("SELECT ")
+       .append("o.oID AS OrderID, ")
+       .append("a.name AS CustomerName, ")
+       .append("a.phone AS Phone, ")
+       .append("o.adress AS Address, ")
+       .append("f.pName AS Food, ")
+       .append("f.p_image AS Image, ") // THÊM TRƯỜNG IMAGE
+       .append("c.caName AS Category, ")
+       .append("od.quantity AS Quantity, ")
+       .append("f.price AS Price, ")
+       .append("o.status AS Status ")
+       .append("FROM Orders o ")
+       .append("JOIN Accounts a ON o.acID = a.id ")
+       .append("JOIN OrderDetail od ON o.oID = od.oID ")
+       .append("JOIN Foods f ON od.pId = f.pID ")
+       .append("LEFT JOIN Category c ON f.catID = c.catID ")
+       .append("WHERE 1=1 ");
+    
+    List<Object> parameters = new ArrayList<>();
+    
+    // Điều kiện tìm kiếm
+   if (orderId != null && !orderId.trim().isEmpty()) {
+    try {
+        sql.append("AND o.oID = ? ");
+        parameters.add(Integer.parseInt(orderId));
+    } catch (NumberFormatException e) {
+        // Xử lý khi orderId không phải số
+        sql.append("AND 1=0 "); // Luôn sai để không trả về kết quả
+    }
+}
+    
+    if (customerName != null && !customerName.trim().isEmpty()) {
+        sql.append("AND a.name LIKE ? ");
+        parameters.add("%" + customerName + "%");
+    }
+    
+    if (category != null && !category.trim().isEmpty()) {
+        sql.append("AND c.caName LIKE ? ");
+        parameters.add("%" + category + "%");
+    }
+    
+    if (phone != null && !phone.trim().isEmpty()) {
+        sql.append("AND a.phone LIKE ? ");
+        parameters.add("%" + phone + "%");
+    }
+    
+    if (food != null && !food.trim().isEmpty()) {
+        sql.append("AND f.pName LIKE ? ");
+        parameters.add("%" + food + "%");
+    }
+    
+    if (status != null && !status.trim().isEmpty()) {
+        sql.append("AND o.status = ? ");
+        parameters.add(status);
+    }
+    
+    sql.append("GROUP BY o.oID, a.name, a.phone, o.adress, f.pName, f.p_image, c.caName, od.quantity, f.price, o.status ");
     sql.append("ORDER BY o.oID");
         
         
@@ -137,6 +146,7 @@ public class OrderDAO {
                 order.setPhone(rs.getString("Phone"));
                 order.setAddress(rs.getString("Address"));
                 order.setFood(rs.getString("Food"));
+                 order.setImage(rs.getString("Image"));
                 order.setCategory(rs.getString("Category"));
                 order.setQuantity(rs.getInt("Quantity"));
                 order.setPrice(rs.getDouble("Price"));

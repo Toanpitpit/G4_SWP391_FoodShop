@@ -3,34 +3,39 @@
 <html>
 <head>
     <title>Add Food</title>
-    <style>
-        body { font-family: "Segoe UI", sans-serif; background: #f0f0f0; padding: 40px; }
-        form { background: white; padding: 30px; border-radius: 10px; width: 400px; margin: auto; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        label, input, select { display: block; width: 100%; margin-bottom: 15px; }
-        input, select { padding: 10px; border: 1px solid #ccc; border-radius: 5px; }
-        button { padding: 10px 20px; background: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer; }
-        button:hover { background: #45a049; }
-    </style>
+
 </head>
 <body>
-    <form action="AddFoodServlet" method="post">
-        <h2>Add New Food</h2>
+   <form action="addFood" method="post" enctype="multipart/form-data">
+    <div class="mb-3">
         <label>Food Name:</label>
-        <input type="text" name="name" required>
-
+        <input type="text" name="name" required class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label>Image:</label>
+        <input type="file" name="image" accept="image/*" class="form-control" />
+    </div>
+    <div class="mb-3">
         <label>Category:</label>
-        <input type="text" name="category">
-
-        <label>Price:</label>
-        <input type="number" step="0.01" name="price" required>
-
-        <label>Status:</label>
-        <select name="status">
-            <option value="Available">Available</option>
-            <option value="Out of Stock">Out of Stock</option>
+        <select name="category" class="form-control">
+            <option value="Đồ uống">🥤 Drinks</option>
+            <option value="Healthy Food">🥗 Healthy Food</option>
+            <!-- Thêm các mục khác -->
         </select>
+    </div>
+    <div class="mb-3">
+        <label>Price:</label>
+        <input type="number" name="price" required class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label>Status:</label>
+        <select name="status" class="form-control">
+            <option value="Available">Available</option>
+            <option value="Out of stock">Out of stock</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-success">Submit</button>
+</form>
 
-        <button type="submit">Add Food</button>
-    </form>
 </body>
 </html>

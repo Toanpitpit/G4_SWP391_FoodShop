@@ -1,4 +1,4 @@
-package com.example.servlet.model;
+package com.yourpackage.model;
 
 public class Order {
     private int id;
@@ -112,6 +112,6 @@ public class Order {
     }
     public double getTotalPrice() {
     return this.quantity * this.price;
-}
+                 }
 
 }

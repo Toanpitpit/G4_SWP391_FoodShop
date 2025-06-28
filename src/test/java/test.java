@@ -96,7 +96,7 @@ public class test {
     3,  // bmiId
     "Test update moi ne truoc deu th", // title
     "sdasd", // imageUlr
-    "Nội dung chi tiết về chế độ ăn theo BMI.", // content
+    "Nội dung chi tiết v�? chế độ ăn theo BMI.", // content
     "Private", // status
     null, // create_at
     new Timestamp(System.currentTimeMillis())  // update_at
@@ -152,8 +152,8 @@ public static void dis6() {
 public static void dis7() throws SQLException {
     BMIClassificationDAO dao = new BMIClassificationDAO();
     System.out.println (dao.countAllBMI ());
-    List<BMIClassification> lstBMI = dao.getBMIWithFilterAndSort("Người","type_id",null,0,7);
-    int totl = dao.gettotalBMIWithFilterAndSort ("Người", "type_id", null);
+    List<BMIClassification> lstBMI = dao.getBMIWithFilterAndSort("Ngư�?i","type_id",null,0,7);
+    int totl = dao.gettotalBMIWithFilterAndSort ("Ngư�?i", "type_id", null);
 //    List<BMIClassification> lstBMI = dao.getAllBMI();
     for (BMIClassification bMIClassification : lstBMI) {
         System.out.println(bMIClassification.toString());

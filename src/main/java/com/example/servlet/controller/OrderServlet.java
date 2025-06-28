@@ -1,15 +1,12 @@
-package com.example.servlet.controller;
-
-
-
-import com.example.servlet.dao.OrderDAO;
-import com.example.servlet.model.Order;
+import com.yourpackage.dao.OrderDAO;
+import com.yourpackage.model.Order;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 
 /**
@@ -24,26 +21,22 @@ public class OrderServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        // Get search parameters
-        String orderId = request.getParameter("orderId");
-        String customerName = request.getParameter("customerName");
-        String category = request.getParameter("category");
-        String phone = request.getParameter("phone");
-        String food = request.getParameter("food");
-        String price = request.getParameter("price");
-        String status = request.getParameter("status");
-        
-        List<Order> orders;
-        
-        // Check if any search parameters are provided
-        if (hasSearchParameters(orderId, customerName, category, phone, food,price, status)) {
-            // Perform search with filters
-            orders = orderDAO.searchOrders(orderId, customerName, category, phone, food, price, status);
-        } else {
-            // Get all orders if no search parameters
-            orders = orderDAO.getAllOrders();
-        }
-        
+         // Lấy các tham số tìm kiếm
+    String orderId = request.getParameter("orderId");
+    String customerName = request.getParameter("customerName");
+    String category = request.getParameter("category");
+    String phone = request.getParameter("phone");
+    String food = request.getParameter("food");
+    String status = request.getParameter("status");
+    
+    List<Order> orders;
+    
+    // SỬA LẠI: Gọi searchOrders() với 6 tham số thay vì 7
+    if (hasSearchParameters(orderId, customerName, category, phone, food, status)) {
+        orders = orderDAO.searchOrders(orderId, customerName, category, phone, food, status);
+    } else {
+        orders = orderDAO.getAllOrders();
+    }
         // Set attributes for JSP to maintain search form values
         request.setAttribute("orderList", orders);
         request.setAttribute("searchOrderId", orderId);
@@ -53,7 +46,7 @@ public class OrderServlet extends HttpServlet {
         request.setAttribute("searchFood", food);
         request.setAttribute("searchStatus", status);
         
-        
+              
         request.getRequestDispatcher("order.jsp").forward(request, response);
     }
     
@@ -114,8 +107,8 @@ public class OrderServlet extends HttpServlet {
     /**
      * Helper method to check if any search parameters are provided
      */
-    private boolean hasSearchParameters(String... parameters) {
-        for (String param : parameters) {
+    private boolean hasSearchParameters(String... params) {
+        for (String param : params) {
             if (param != null && !param.trim().isEmpty()) {
                 return true;
             }
