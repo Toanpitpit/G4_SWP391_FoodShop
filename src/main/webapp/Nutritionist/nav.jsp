@@ -1,8 +1,3 @@
-<%-- 
-    Document   : nav
-    Created on : Jun 13, 2025, 9:23:14 PM
-    Author     : Admin
---%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <nav class="sidebar" id="sidebar">
@@ -53,11 +48,11 @@
                     <div class="menu-icon">
                         <i class="bi bi-layers"></i>
                     </div>
-                    <span class="menu-text">BMI type</span>
+                    <span class="menu-text">Category</span>
                     <i class="menu-arrow bi bi-chevron-right"></i>
                 </a>
                 <div class="submenu">
-                    <a href="nutricontrol?action=showBMI" class="menu-link">BMI type List </a>
+                    <a href="nutricontrol?action=showcategory" class="menu-link">Category List</a>
                 </div>
             </div>
 
@@ -71,7 +66,6 @@
                 </a>
                 <div class="submenu">
                     <a href="${pageContext.request.contextPath}/nutricontrol?action=showfood" class="menu-link">Food List </a>
-                    <a href="${pageContext.request.contextPath}/nutricontrol?action=showfooddetail" class="menu-link">Food Detail</a>
                 </div>
             </div>
             <div class="menu-item">
@@ -83,9 +77,8 @@
                     <i class="menu-arrow bi bi-chevron-right"></i>
                 </a>
                 <div class="submenu">
-                    <a href="#" class="menu-link">List Food Suggestion</a>
-                    <a href="#" class="menu-link">Create new Suggestion</a>
-                    <a href="#" class="menu-link">Detail</a>
+                    <a href="${pageContext.request.contextPath}/nutricontrol?action=showfooddraft" class="menu-link">List Food Suggestion</a>
+                    <a href="${pageContext.request.contextPath}/nutricontrol?action=showcreatefooddraft" class="menu-link">Create new Suggestion</a>
                 </div>
             </div>
             <div class="menu-item">

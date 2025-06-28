@@ -492,6 +492,12 @@
                     </div>
                 </c:if>
                 
+                <c:if test="${not empty success}">
+                    <div class="alert alert-success" role="alert" id="successAlert">
+                        <i class="fas fa-check-circle me-2"></i>${success}
+                    </div>
+                </c:if>
+                
                 <form action="login" method="post" id="loginForm">
                     <div class="form-floating">
                         <input type="text" class="form-control" id="username" name="username" placeholder="Your Email" value="${username}" required>
@@ -554,6 +560,29 @@
                     }
                 });
             });
+            
+            // THÊM AUTO-HIDE ALERTS AFTER 5 SECONDS
+            document.addEventListener('DOMContentLoaded', function() {
+                const successAlert = document.getElementById('successAlert');
+    
+                if (successAlert) {
+                    setTimeout(() => {
+                        successAlert.style.animation = 'fadeOut 0.5s ease-out';
+                        setTimeout(() => {
+                            successAlert.style.display = 'none';
+                        }, 500);
+                    }, 5000);
+                }
+            });
         </script>
+        
+        <style>
+        /* THÊM CSS CHO FADE OUT ANIMATION */
+        @keyframes fadeOut {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 0; transform: translateY(-20px); }
+        }
+        </style>
+        
     </body>
 </html>

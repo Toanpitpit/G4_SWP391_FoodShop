@@ -459,7 +459,7 @@
      let deleteUrl = '';
      let blogTitle = '';
 
-     // Function to show delete popup
+    
      function showDeletePopup(url, title = '') {
          deleteUrl = url;
          blogTitle = title;
@@ -474,42 +474,42 @@
             
          document.getElementById('confirmDeleteBtn').href = deleteUrl;
             
-         // Show popup with animation
+        
          const popup = document.getElementById('deletePopup');
          popup.classList.add('show');
             
-         // Prevent body scrolling
+        
          document.body.style.overflow = 'hidden';
      }
 
-     // Function to close delete popup
+    
      function closeDeletePopup() {
          const popup = document.getElementById('deletePopup');
          popup.classList.remove('show');
             
-         // Restore body scrolling
+       
          document.body.style.overflow = 'auto';
             
-         // Clear variables
+       
          deleteUrl = '';
          blogTitle = '';
      }
 
-     // Close popup when clicking outside
+    
      document.getElementById('deletePopup').addEventListener('click', function(e) {
          if (e.target === this) {
              closeDeletePopup();
          }
      });
 
-     // Close popup with Escape key
+    
      document.addEventListener('keydown', function(e) {
          if (e.key === 'Escape') {
              closeDeletePopup();
          }
      });
 
-     // Prevent popup from closing when clicking inside
+     
      document.querySelector('.popup-container').addEventListener('click', function(e) {
          e.stopPropagation();
      });

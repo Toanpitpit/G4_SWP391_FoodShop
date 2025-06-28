@@ -3,13 +3,19 @@
 import com.example.servlet.dao.AccountDAO;
 import com.example.servlet.dao.BMIClassificationDAO;
 import com.example.servlet.dao.BlogDAO;
+import com.example.servlet.dao.CategoryDAO;
 import com.example.servlet.dao.FoodDAO;
+import com.example.servlet.dao.FoodDetailDAO;
+import com.example.servlet.dao.FoodDraftDAO;
 import com.example.servlet.dao.NotifyDAO;
 import com.example.servlet.dao.RequestDAO;
 import com.example.servlet.model.Account;
 import com.example.servlet.model.BMIClassification;
 import com.example.servlet.model.Blogs;
+import com.example.servlet.model.Category;
 import com.example.servlet.model.Food;
+import com.example.servlet.model.FoodDetail;
+import com.example.servlet.model.Food_Draft;
 import com.example.servlet.model.MonthlyStat;
 import com.example.servlet.model.Notifys;
 import java.sql.Date;
@@ -19,6 +25,8 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.mindrot.jbcrypt.BCrypt;
 
 /*
@@ -33,35 +41,42 @@ import org.mindrot.jbcrypt.BCrypt;
 public class test {
     
     public static void main(String[] args) throws SQLException {
-//        dis4();
-//        dis6();
-//         dis5();
-dis8();
-//dis();
- try {
-           FoodDAO dao = new FoodDAO();
-            String name = "";               // lọc theo tên, null nếu không cần
-            String category = null;        // lọc theo danh mục, null nếu không cần
-            String status = "Active";      // "Active", "Inactive", hoặc null
-            // Map chứa các trường sắp xếp và hướng sắp xếp
-            Map<String, String> sortFields = new HashMap<>();
-            sortFields.put("id", "DESC");
-            sortFields.put("create_at", "ASC");
-            int page = 1;
-            int pageSize = 10;
-
-//            List<Food> foodList = dao.getListFoods(name, category, status,"20000", null,null, page, pageSize);
-//
-//            System.out.println("===== KẾT QUẢ =====");
-//            for (Food food : foodList) {
-//                System.out.printf("ID: %d | Tên: %s | Giá: %.2f | Tạo lúc: %s | Trạng thái: %s%n",
-//                        food.getFoodId(), food.getFoodname(), food.getPrice(), food.getCreate_at(), food.getStatus());
-//            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        FoodDraftDAO dao = new FoodDraftDAO ();
+        
+        boolean check  = dao.deleteFoodDraft (11);
+        System.out.println (check);
+      
     }
+    
+ public static void diss() {
+//     try {
+//          FoodDetailDAO fddao= new FoodDetailDAO();
+//     FoodDAO dao = new FoodDAO();
+//     List<Food> lstF = dao.getListFoods (null, null, null, null, null, null, null, 1, 3);
+//     Food f = dao.getFoodById (3);
+//     FoodDetail fd = fddao.getFoodDetailByIdAndDraft (3, true);
+//     FoodDetail fdf = fddao.getFoodDetailByIdAndDraft (3, false);
+////     System.out.println (fd);
+////     System.out.println (f);
+////     System.out.println (fdf);
+//for (Food food : lstF) {
+//         System.out.println (food);    
+//         }
+//     } catch (Exception e) {
+//     }
+
+            FoodDraftDAO dao = new FoodDraftDAO();
+            FoodDetailDAO fd_dao = new FoodDetailDAO ();
+            Food_Draft food = dao.getFoodDraftById (119,21);
+            FoodDetail fooddetail = fd_dao.getFoodDetailByIdAndDraft (119, true);
+            List<BMIClassification> tagetaudience = fd_dao.getBMIClassificationsByFoodOrDraftId (119, true);
+            System.out.println (food); 
+            System.out.println (fooddetail); 
+            for (BMIClassification bmi : tagetaudience) {
+                System.out.println (bmi.getClassification ());
+     }
+     
+}
     public static void dis() throws SQLException{
         BlogDAO _dao = new BlogDAO();
         RequestDAO r_dao  = new RequestDAO ();
@@ -70,39 +85,9 @@ dis8();
          for (MonthlyStat monthlyStat : lstM) {
              System.out.println (monthlyStat);
         }
-    
-//        System.out.println (lstMBlog);
-//        List<MonthlyStat> typeStats = new ArrayList<>();
-//       List<Blogs> lstBlog = _dao.getBlogsByFilter("", 5, true,null);
-//       List<Blogs> lstB = _dao.getBlogsByFilterAndPage(null, -1, true, null, 1,10, 21);
-//          System.out.println (_dao.getTotalBlog());
-//        List<String> ststuss;
-//        try {
-//            ststuss = _dao.getAllDistinctStatuses();
-//            for (String ststus : ststuss) {
-//            System.out.println(ststus);
-//        }
-//        } catch (Exception ex) {
-//            Logger.getLogger(test.class.getName()).log(Level.SEVERE, null, ex);
-////        }
-//Blogs b = _dao.getBlogByID (100);
-//        System.out.println (b);
-//        for(Blogs b : lstB){
-//            System.out.println(b.toString());
-//        }
-//    List<Blogs> relesteBlog = _dao.getRelatedBlogByID (237);
-//        for (Blogs blogs : relesteBlog) {
-//            System.out.println (blogs.toString ());
-//        }
-//        FoodDraftDAO dao= new FoodDraftDAO ();
-//        System.out.println (dao.getTotalFooddraft (19)); 
-//        System.out.println (_dao.getTotalBlogbyAuthor (21));
-//        typeStats = _dao.countByTypeBMI(-3);
-//        for (MonthlyStat typeStat : typeStats) {
-//            System.out.println(typeStat.toString());
-//        }
     }
    public static void dis2() {
+       
     BlogDAO _dao = new BlogDAO();
     Blogs testBlog = new Blogs(
     1, // blogID
@@ -189,22 +174,34 @@ public static void dis8() throws SQLException {
              
     }
     
-    
 }
 
 
-//public static void dis8() throws SQLException {
-//      BMIClassificationDAO bi_dao = new BMIClassificationDAO ();
-//                RequestDAO r_dao = new RequestDAO ();
-//                BlogDAO b_dao = new BlogDAO ();
-//                NotifyDAO n_dao = new NotifyDAO ();
-//                FoodDraftDAO fd_dao = new FoodDraftDAO ();
-//                int totalFdrf = fd_dao.getTotalFooddraft (-1);
-//                int totalBlog  = b_dao.getTotalBlog ();
-//                int totalNotify = n_dao.getTotalNotify (-1,null);
-//                int totalRequest = r_dao.getTotalRequest (-1);
-//                List<MonthlyStat> lstM = r_dao.countRequestsByStatus (-1);
-//                
-//                System.out.println (totalBlog + "+ " + totalFdrf +" +" +  totalNotify + "+" + totalRequest+ " + " + lstM);
-//}
+
+public static void dis9()  {
+//    Map<String, String> filters = new HashMap<>();
+//    filters.put("searchKey", "");
+//    filters.put("category", "");
+//    filters.put("status", "");
+//    filters.put("searchPrice", "");
+//    filters.put("priceRank", "");
+//    filters.put("bmiId", "");
+//    filters.put("authorId", "19");
+//    Map<String, String> sortAndPagination = new HashMap<>();
+//    sortAndPagination.put("sortprice", "desc");
+//    sortAndPagination.put("sorttime", "asc");
+//    sortAndPagination.put("page", "1");
+//    sortAndPagination.put("pageSize", "10");
+    FoodDraftDAO dao = new FoodDraftDAO();
+//            List<Food_Draft> results = dao.getListFoodDrafts(filters, sortAndPagination);
+//            int total = dao.getListFoodDraftsTotal(filters, sortAndPagination);
+//            for (Food_Draft result : results) {
+//                System.out.println (result);
+//            }   
+//            System.out.println (total);
+
+    int check =  dao.copyFoodToDraft (1, 21);
+    System.out.println (check);
+}
+
 }

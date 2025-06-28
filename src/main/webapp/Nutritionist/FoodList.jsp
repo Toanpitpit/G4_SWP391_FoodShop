@@ -20,22 +20,80 @@
                 
             }
             .pagination a, .pagination span {
-    padding: 8px 12px;
-    border: 1px solid #ddd;
-    text-decoration: none;
-    color: #333;
-}
+                padding: 8px 12px;
+                border: 1px solid #ddd;
+                text-decoration: none;
+                color: #333;
+            }
 
-.pagination a:hover {
-    background:linear-gradient(135deg, var(--primary-green), #3b82f6) !important;
-}
+            .pagination a:hover {
+                background:linear-gradient(135deg, var(--primary-green), #3b82f6) !important;
+            }
 
-.pagination .current {
-    background:linear-gradient(135deg, var(--primary-green), #3b82f6) !important;
-    color: white;
-    border-color: #4CAF50;
-    border-radius: 10px;
-}
+            .pagination .current {
+                background:linear-gradient(135deg, var(--primary-green), #3b82f6) !important;
+                color: white;
+                border-color: #4CAF50;
+                border-radius: 10px;
+            }
+            .table-container {
+                margin-top: 20px;
+                overflow-x: auto; 
+                border: 1px solid #e0e5ec;
+                border-radius: 8px;
+                padding:10px; 
+            }
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                font-size: 0.9rem;
+            }
+            thead {
+                border-radius: 10px;
+            }
+            thead th {
+                background-color: #E3F2FD;
+                padding: 1rem;
+                text-align: left;
+                font-weight: 600;
+                color: black;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                border-bottom: 2px solid #ced4da;
+            }
+
+            tbody tr {
+                transition: background-color 0.15s ease-in-out;
+            }
+
+            tbody tr:nth-of-type(even) {
+                background-color: #f8f9fa;
+            }
+
+            tbody tr:hover {
+                background-color: #e9ecef;
+            }
+
+            tbody td {
+                padding: 0.9rem 1rem;
+                vertical-align: middle;
+                border-bottom: 1px solid #e9ecef;
+                color: #34495e;
+            }
+            .ellipsis {
+                max-width: 300px;        
+                white-space: nowrap;    
+                overflow: hidden;       
+                text-overflow: ellipsis; 
+                display: inline-block;  
+                vertical-align: middle;
+            }
+
+            tbody td strong {
+                font-weight: 600;
+                color: #3498db;
+            }
         </style>
 
 
@@ -45,7 +103,21 @@
         <jsp:include page="/Nutritionist/nav.jsp"/>  
         <!-- Main Header -->
         <jsp:include page="/Nutritionist/main-header.jsp"/>  
+          <c:if test="${not empty Errmess}">
+            <div class="alert alert-danger" style="display: none;">${Errmess}</div>
+        </c:if>
 
+        <c:if test="${not empty successMessage}">
+            <div class="alert alert-success" style="display: none;">${successMessage}</div>
+        </c:if>
+
+        <c:if test="${not empty warningMessage}">
+            <div class="alert alert-warning" style="display: none;">${warningMessage}</div>
+        </c:if>
+
+        <c:if test="${not empty infoMessage}">
+            <div class="alert alert-info" style="display: none;">${infoMessage}</div>
+        </c:if>
         <!-- Main Content -->
         <main class="main-content" id="mainContent">
             <div class="seller-content">
@@ -61,11 +133,6 @@
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title"><i class="fas fa-list-ul"></i>Danh sách đồ ăn</h3>
-                        <div class="card-tools">
-                            <button class="btn btn-outline">
-                                <i class="fas fa-file-export"></i>Xuất dữ liệu
-                            </button>
-                        </div>
                     </div>
                     <div class="card-body">
 
@@ -148,7 +215,7 @@
                             <input type="hidden" name="action" value="displaysortfood" />
                             <input type="hidden" name="page" id="pageInput" value="${param.page != null ? param.page : 1}" />
                             <div class="filter-actions">
-                                <button type="button" class="btn btn-outline" onclick="location.href = '${pageContext.request.contextPath}/nutricontrol/showfood'">
+                                <button type="button" class="btn btn-outline" onclick="location.href = '${pageContext.request.contextPath}/nutricontrol?action=showfood'">
                                     <i class="fas fa-times"></i> Xóa bộ lọc
                                 </button>
                                 <button type="submit" class="btn btn-primary" name="filterSubmit" value="true"><i class="fas fa-filter"></i> Lọc</button>
@@ -192,10 +259,10 @@
                                             </td>
                                             <td>
                                                 <div class="table-actions">
-                                                    <a class="action-btn view-btn" title="Xem chi tiết" href="nutricontrol?action=#">
+                                                    <a class="action-btn view-btn" title="Xem chi tiết" href="nutricontrol?action=showfooddetail&id=${food.foodId}">
                                                         <i class="fas fa-eye"></i>
                                                     </a>
-                                                    <a class="action-btn edit-btn" title="Tạo Bản sao" href="nutricontrol?action=#"">
+                                                    <a class="action-btn edit-btn" title="Tạo Bản sao" href="nutricontrol?action=copyfood&id=${food.foodId}">
                                                         <i class="fas fa-clone"></i>
                                                     </a>
                                                 </div>

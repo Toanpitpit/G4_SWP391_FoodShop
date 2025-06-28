@@ -51,7 +51,7 @@
                         <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card border-0 shadow-sm h-100">
                                 <div class="card-body">
-                                    <a href="">
+                                    <a href="${pageContext.request.contextPath}/nutricontrol?action=showfooddraft">
                                         <div class="d-flex align-items-center">
                                             <div class="flex-shrink-0">
                                                 <div class="bg-primary bg-gradient text-white rounded-3 p-3">
@@ -74,7 +74,7 @@
                         <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card border-0 shadow-sm h-100">
                                 <div class="card-body">
-                                    <a href="">
+                                    <a href="${pageContext.request.contextPath}/nutricontrol?action=displayblog">
                                         <div class="d-flex align-items-center">
                                             <div class="flex-shrink-0">
                                                 <div class="bg-success bg-gradient text-white rounded-3 p-3">
@@ -205,7 +205,9 @@
                         <div class="col-md-6">
                             <div class="h-100 border rounded p-3">
                                 <!-- Nội dung cột 1 hàng 2 -->
-                                <h5>Biểu đồ / Nội dung 3</h5>
+                                <h5>Biểu đồ / Số lượng Food_Sugesstion theo tháng</h5>
+                                <canvas id="foodDraftLineChart"></canvas>
+                                
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -241,4 +243,6 @@ console.log(document.getElementById('barChart')); // phải != null
             console.log('Bar chart totals:', '${barChart_data_totalsJson}');
         </script>-->
     </body>
+    
+
 </html>

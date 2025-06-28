@@ -332,6 +332,35 @@
                 padding-left: 45px;
             }
 
+            /* Password toggle styles */
+            .password-toggle {
+                position: absolute;
+                right: 16px;
+                top: 50%;
+                transform: translateY(-50%);
+                background: none;
+                border: none;
+                color: #666;
+                cursor: pointer;
+                z-index: 10;
+                font-size: 0.9rem;
+                padding: 0;
+                width: 20px;
+                height: 20px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: color 0.3s ease;
+            }
+
+            .password-toggle:hover {
+                color: #28a745;
+            }
+
+            .password-group .form-control {
+                padding-right: 45px;
+            }
+
             /* Responsive design */
             @media (max-width: 768px) {
                 .register-wrapper {
@@ -471,42 +500,52 @@
                     <div class="form-group">
                         <div class="input-group">
                             <i class="fas fa-user"></i>
-                            <input type="text"  value= "${username}" class="form-control" id="username" name="username" placeholder="Username" required>
+                            <input type="text" class="form-control" id="username" name="username" placeholder="Username" 
+                                   value="<%= request.getAttribute("username") != null ? request.getAttribute("username") : "" %>" required>
                         </div>
                     </div>
                     
                     <div class="form-group">
-                        <div class="input-group">
+                        <div class="input-group password-group">
                             <i class="fas fa-lock"></i>
                             <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+                            <button type="button" class="password-toggle" onclick="togglePassword('password')">
+                                <i class="fas fa-eye" id="password-eye"></i>
+                            </button>
                         </div>
                     </div>
                     
                     <div class="form-group">
-                        <div class="input-group">
+                        <div class="input-group password-group">
                             <i class="fas fa-lock"></i>
-                            <input type="password"; class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" required>
+                            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" required>
+                            <button type="button" class="password-toggle" onclick="togglePassword('confirmPassword')">
+                                <i class="fas fa-eye" id="confirmPassword-eye"></i>
+                            </button>
                         </div>
                     </div>
                     
                     <div class="form-group">
                         <div class="input-group">
                             <i class="fas fa-id-card"></i>
-                            <input type="text" value= "${fullName}" class="form-control" id="fullName" name="fullName" placeholder="Full Name">
+                            <input type="text" class="form-control" id="fullName" name="fullName" placeholder="Full Name"
+                                   value="<%= request.getAttribute("fullName") != null ? request.getAttribute("fullName") : "" %>">
                         </div>
                     </div>
                     
                     <div class="form-group">
                         <div class="input-group">
                             <i class="fas fa-envelope"></i>
-                            <input type="email" value= "${email}" class="form-control" id="email" name="email" placeholder="Email Address">
+                            <input type="email" class="form-control" id="email" name="email" placeholder="Email Address"
+                                   value="<%= request.getAttribute("email") != null ? request.getAttribute("email") : "" %>">
                         </div>
                     </div>
                     
                     <div class="form-group">
                         <div class="input-group">
                             <i class="fas fa-phone"></i>
-                            <input type="text" value= "${phone}" class="form-control" id="phone" name="phone" placeholder="Phone Number">
+                            <input type="text" class="form-control" id="phone" name="phone" placeholder="Phone Number"
+                                   value="<%= request.getAttribute("phone") != null ? request.getAttribute("phone") : "" %>">
                         </div>
                     </div>
                     
@@ -514,14 +553,15 @@
                         <div class="form-group">
                             <select class="form-select" id="gender" name="gender">
                                 <option value="">Select Gender</option>
-                                <option value="Male">Male</option>
-                                <option value="Female">Female</option>
-                                <option value="Other">Other</option>
+                                <option value="Male" <%= "Male".equals(request.getAttribute("gender")) ? "selected" : "" %>>Male</option>
+                                <option value="Female" <%= "Female".equals(request.getAttribute("gender")) ? "selected" : "" %>>Female</option>
+                                <option value="Other" <%= "Other".equals(request.getAttribute("gender")) ? "selected" : "" %>>Other</option>
                             </select>
                         </div>
                         
                         <div class="form-group">
-                            <input type="date" class="form-control" id="birthDate" name="birthDate">
+                            <input type="date" class="form-control" id="birthDate" name="birthDate"
+                                   value="<%= request.getAttribute("birthDate") != null ? request.getAttribute("birthDate") : "" %>">
                         </div>
                     </div>
                     
@@ -534,6 +574,22 @@
         
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
         <script>
+            // Password toggle function
+            function togglePassword(fieldId) {
+                const passwordField = document.getElementById(fieldId);
+                const eyeIcon = document.getElementById(fieldId + '-eye');
+                
+                if (passwordField.type === 'password') {
+                    passwordField.type = 'text';
+                    eyeIcon.classList.remove('fa-eye');
+                    eyeIcon.classList.add('fa-eye-slash');
+                } else {
+                    passwordField.type = 'password';
+                    eyeIcon.classList.remove('fa-eye-slash');
+                    eyeIcon.classList.add('fa-eye');
+                }
+            }
+
             // Add loading animation on form submit
             document.getElementById('registerForm').addEventListener('submit', function() {
                 const btn = document.getElementById('signupBtn');
