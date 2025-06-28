@@ -356,6 +356,21 @@ public class FoodDraftDAO {
 
         return null;
     }
+    public boolean deleteFoodDraft(int pdrID) {
+        String sql = "EXEC DeleteFoodDraft ?";
+        
+        try (Connection conn = new DBConnect ().getConnection ();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            ps.setInt(1, pdrID);
+            ps.executeUpdate();
+            return true;
+            
+        } catch (SQLException e) {
+            System.err.println("Error deleting Food Draft: " + e.getMessage());
+            return false;
+        }
+    }
 
     public List<Food_Draft> getFoodDraftsByAuthor(int authorId, int page, int pageSize) throws SQLException {
         QueryBuilder queryBuilder = new QueryBuilder (BASE_QUERY)
@@ -455,6 +470,47 @@ public boolean createFoodDraft(FoodDraftDTO dto) {
     
     return false;
 }
-
+public boolean updateFoodDraft(int draftID, FoodDraftDTO dto) {
+    String sql = "{call UpdateFoodDraft(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";
+    try (Connection conn = new DBConnect().getConnection();
+         CallableStatement stmt = conn.prepareCall(sql)) {
+        stmt.setInt(1, draftID);
+        stmt.setNString(2, dto.getName());
+        stmt.setInt(3, dto.getCategoryId());
+        stmt.setString(4, dto.getImagePath());
+        stmt.setDouble(5, dto.getPrice());
+        stmt.setString(6, dto.getStatus());
+        stmt.setInt(7, dto.getAuthorId());
+        if (dto.getOriginId() != null && dto.getOriginId() > 0) {
+            stmt.setInt(8, dto.getOriginId());
+        } else {
+            stmt.setNull(8, java.sql.Types.INTEGER);
+        }
+        stmt.setNString(9, dto.getDescription());
+        stmt.setNString(10, dto.getIngredients());
+        stmt.setNString(11, dto.getBmiIds());
+        
+        boolean hasResult = stmt.execute();
+        while (hasResult) {
+            try (ResultSet rs = stmt.getResultSet()) {
+                if (rs.next()) {
+                    return rs.getInt("Success") == 1;
+                }
+            }
+            hasResult = stmt.getMoreResults();
+        }
+        
+    } catch (SQLException e) {
+        System.err.println("SQL Exception in updateFoodDraft: " + e.getMessage());
+        e.printStackTrace();
+        return false;
+    } catch (Exception e) {
+        System.err.println("Unexpected error in updateFoodDraft: " + e.getMessage());
+        e.printStackTrace();
+        return false;
+    }
+    
+    return false;
+}
 }
 

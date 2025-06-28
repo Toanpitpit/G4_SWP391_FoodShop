@@ -281,204 +281,237 @@
             <div class="alert alert-info" style="display: none;">${infoMessage}</div>
         </c:if>
 
-        <main class="main-content" id="mainContent">
-            <div class="seller-content">
-                <div class="page-header">
-                    <h1 class="page-title">Danh sách món ăn</h1>
-                    <ul class="breadcrumb">
-                        <li><a href="nutricontrol?action=dashboard">Trang chủ</a></li>
-                        <li><a href="nutricontrol?action=showfooddraft">Food Suggestion</a></li>
-                        <li>Danh sách đồ ăn gợi ý</li>
-                    </ul>
-                </div>
-
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title"><i class="fas fa-list-ul"></i>Danh sách đồ ăn gơi ý </h3>
-                        <div class="card-tools">
-                        </div>
+            <main class="main-content" id="mainContent">
+                <div class="seller-content">
+                    <div class="page-header">
+                        <h1 class="page-title">Danh sách món ăn</h1>
+                        <ul class="breadcrumb">
+                            <li><a href="nutricontrol?action=dashboard">Trang chủ</a></li>
+                            <li><a href="nutricontrol?action=showfooddraft">Food Suggestion</a></li>
+                            <li>Danh sách đồ ăn gợi ý</li>
+                        </ul>
                     </div>
-                    <div class="card-body">
 
-                        <form action="${pageContext.request.contextPath}/nutricontrol?action=displaysortfooddraft" method="GET" id="filterForm">
-                            <div class="filter-controls">
-                                <div class="input-group" style="flex-grow: 1;">
-                                    <i class="fas fa-search"></i>
-                                    <input type="text" name="searchKey" placeholder="Tìm theo tên sản phẩm..." value="${param.searchKey}">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title"><i class="fas fa-list-ul"></i>Danh sách đồ ăn gơi ý </h3>
+                            <div class="card-tools">
+                            </div>
+                        </div>
+                        <div class="card-body">
+
+                            <form action="${pageContext.request.contextPath}/nutricontrol?action=displaysortfooddraft" method="GET" id="filterForm">
+                                <div class="filter-controls">
+                                    <div class="input-group" style="flex-grow: 1;">
+                                        <i class="fas fa-search"></i>
+                                        <input type="text" name="searchKey" placeholder="Tìm theo tên sản phẩm..." value="${param.searchKey}">
+                                    </div>
+                                    <div class="input-group" style="flex-grow: 1;">
+                                        <i class="fas fa-search"></i>
+                                        <input type="number" id="searchPrice" name="searchPrice" min="0" step="any" placeholder="Giới hạn giá cao nhất" value="${param.searchPrice}">
+                                    </div>
+                                    <div class="select-group">
+                                        <select name="status">
+                                            <option value="">Tất cả trạng thái</option>
+                                            <option value="Active" ${param.status == 'Active' ? 'selected' : ''}>Active</option>
+                                            <option value="Hine" ${param.status == 'Hine' ? 'selected' : ''}>Hine</option>
+                                        </select>
+                                    </div>
+                                    <div class="select-group">
+                                        <select name="bmiId" id="bmiId">
+                                            <option value="">-- Chọn danh mục BMI --</option>
+                                            <c:choose>
+                                                <c:when test="${not empty lstBMI}">
+                                                    <c:forEach var="bmi" items="${lstBMI}">
+                                                        <c:choose>
+                                                            <c:when test="${bmi.bmiID == param.bmiId}">
+                                                                <option value="${bmi.bmiID}" selected>${bmi.classification}</option>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <option value="${bmi.bmiID}">${bmi.classification}</option>
+                                                            </c:otherwise>
+                                                        </c:choose>
+                                                    </c:forEach>
+                                                </c:when>  
+                                                <c:otherwise>
+                                                    <option disabled>Không có danh mục BMI nào</option>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </select>
+
+                                    </div>
+                                    <div class="select-group">
+                                        <select name="category" id="category">
+                                            <option value="">-- Loại món ăn --</option>
+                                            <c:choose>
+                                                <c:when test="${not empty lstC}">
+                                                    <c:forEach var="c" items="${lstC}">
+                                                        <c:choose>
+                                                            <c:when test="${c.catID == param.category}">
+                                                                <option value="${c.catID}" selected>${c.caName}</option>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <option value="${c.catID}">${c.caName}</option>
+                                                            </c:otherwise>
+                                                        </c:choose>
+                                                    </c:forEach>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <option disabled>Không có loại món ăn nào</option>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </select>
+                                    </div>
+                                    <button type="button" class="btn btn-outline" onclick="toggleAdvancedFilters()">
+                                        <i class="fas fa-sliders-h"></i> Sort
+                                    </button>
                                 </div>
-                                <div class="input-group" style="flex-grow: 1;">
-                                    <i class="fas fa-search"></i>
-                                    <input type="number" id="searchPrice" name="searchPrice" min="0" step="any" placeholder="Giới hạn giá cao nhất" value="${param.searchPrice}">
+
+                                <c:set var="isAdvancedFilterActive" value="${not empty param.priceRank or not empty param.sortID or not empty param.sortTime or not empty param.sortPrice}" />
+                                <div class="advanced-filters-container" id="advancedFilters" style="${isAdvancedFilterActive ? 'display: block;' : 'display: none;'} margin-bottom: 15px;">
+                                    <div class="advanced-filters-grid">
+                                        <div class="select-group">
+                                            <select name="priceRank" id="priceRank">
+                                                <option value="" ${empty param.priceRank ? 'selected' : ''}>-- Mức giá --</option>
+                                                <option value="0-50000" ${param.priceRank == '0-50000' ? 'selected' : ''}>Dưới 50.000</option>
+                                                <option value="50000-100000" ${param.priceRank == '50000-100000' ? 'selected' : ''}>Từ 50.000 - 100.000</option>
+                                                <option value="100000-200000" ${param.priceRank == '100000-200000' ? 'selected' : ''}>Từ 100.000 - 200.000</option>
+                                                <option value="200000+" ${param.priceRank == '200000+' ? 'selected' : ''}>Trên 200.000</option>         
+                                            </select>
+                                        </div>
+
+                                        <div class="select-group">
+                                            <select name="sortTime">
+                                                <option value="">Thời gian cập nhật</option>
+                                                <option value="asc" ${param.sortTime == 'asc' ? 'selected' : ''}>Tăng dần</option>
+                                                <option value="desc" ${param.sortTime == 'desc' ? 'selected' : ''}>Giảm dần</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="select-group">
+                                            <select name="sortID">
+                                                <option value="">Sort by Id</option>
+                                                <option value="asc" ${param.sortID == 'asc' ? 'selected' : ''}>Tăng dần</option>
+                                                <option value="desc" ${param.sortID == 'desc' ? 'selected' : ''}>Giảm dần</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="select-group">
+                                            <select name="sortPrice">
+                                                <option value="">Sort by Price</option>
+                                                <option value="asc" ${param.sortPrice == 'asc' ? 'selected' : ''}>Tăng dần</option>
+                                                <option value="desc" ${param.sortPrice == 'desc' ? 'selected' : ''}>Giảm dần</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="select-group">
-                                    <select name="status">
-                                        <option value="">Tất cả trạng thái</option>
-                                        <option value="Active" ${param.status == 'Active' ? 'selected' : ''}>Active</option>
-                                        <option value="Hine" ${param.status == 'Hine' ? 'selected' : ''}>Hine</option>
-                                    </select>
+                                <input type="hidden" name="action" value="displaysortfooddraft" />
+                                <input type="hidden" name="page" id="pageInput" value="${param.page != null ? param.page : 1}" />
+                                <div class="filter-actions">
+                                    <button type="button" class="btn btn-outline" onclick="location.href = '${pageContext.request.contextPath}/nutricontrol/displaysortfooddraft'">
+                                        <i class="fas fa-times"></i> Xóa bộ lọc
+                                    </button>
+                                    <button type="submit" class="btn btn-primary" name="filterSubmit" value="true"><i class="fas fa-filter"></i> Lọc</button>
                                 </div>
-                                <div class="select-group">
-                                    <select name="bmiId" id="bmiId">
-                                        <option value="">-- Chọn danh mục BMI --</option>
+                            </form>
+
+                            <div class="table-container">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 10%;" >Ảnh</th>
+                                            <th>ID</th>
+                                            <th>Origin ID</th>
+                                            <th>Tên Món Ăn</th>  
+                                            <th>Category</th>
+                                            <th>Giá</th>
+                                            <th>Trạng Thái</th>
+                                            <th>Cập Nhật Gần Nhất</th>
+                                            <th style="width: 8%;">Thao Tác</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
                                         <c:choose>
-                                            <c:when test="${not empty lstBMI}">
-                                                <c:forEach var="bmi" items="${lstBMI}">
-                                                    <c:choose>
-                                                        <c:when test="${bmi.bmiID == param.bmiId}">
-                                                            <option value="${bmi.bmiID}" selected>${bmi.classification}</option>
-                                                        </c:when>
-                                                        <c:otherwise>
-                                                            <option value="${bmi.bmiID}">${bmi.classification}</option>
-                                                        </c:otherwise>
-                                                    </c:choose>
+                                            <c:when test="${not empty lstFoodDr}">
+                                                <c:forEach items="${lstFoodDr}" var="food">
+                                                    <tr>
+                                                        <td>
+                                                            <img src="${food.imageUlr}" alt="ảnh food" class="table-avatar" />
+                                                        </td>
+                                                        <td><strong>#${food.fdrID}</strong></td>
+                                                        <td><strong><c:choose>
+                                                                    <c:when test="${food.originID > 0}">
+                                                                        #${food.originID}
+                                                                    </c:when>
+                                                                    <c:otherwise>
+                                                                        Tạo mới
+                                                                    </c:otherwise>
+                                                                </c:choose>
+                                                            </strong></td>
+                                                        <td>${food.foodName}</td>
+                                                        <td>${food.catName}</td>
+                                                        <td>
+                                                            <span class="price-value">
+                                                                <fmt:formatNumber value="${food.price}" type="number" groupingUsed="true" /> <small>₫</small>
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <span class="status-badge status-active">${food.status}</span>
+                                                        </td>
+                                                        <td>
+                                                            <fmt:formatDate value="${food.update_at}" pattern="dd/MM/yyyy HH:mm:ss" />
+                                                        </td>
+                                                        <td>
+                                                            <div class="table-actions">
+                                                                <a class="action-btn view-btn" title="Xem chi tiết" href="nutricontrol?action=showfooddraftdetail&id=${food.fdrID}">
+                                                                    <i class="fas fa-eye"></i>
+                                                                </a>
+                                                                <c:if test="${food.status eq 'DRAFT'}">
+                                                                    <a class="action-btn edit-btn" title="Chỉnh sửa"
+                                                                       href="nutricontrol?action=showeditfooddraft&id=${food.fdrID}">
+                                                                        <i class="fas fa-edit"></i>
+                                                                    </a>
+
+                                                                    <a class="action-btn remove-btn" id="confirmDeleteBtn" title="Xóa" style="background-color:red; color:white"
+                                                                       href="#" onclick="showDeletePopup('nutricontrol?action=deletefooddraft&id=${food.fdrID}', '${food.foodName}'); return false;">
+                                                                        <i class="fas fa-trash"></i>
+                                                                    </a>
+                                                                </c:if>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
                                                 </c:forEach>
-                                            </c:when>  
-                                            <c:otherwise>
-                                                <option disabled>Không có danh mục BMI nào</option>
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </select>
-
-                                </div>
-                                <div class="select-group">
-                                    <select name="category" id="category">
-                                        <option value="">-- Loại món ăn --</option>
-                                        <c:choose>
-                                            <c:when test="${not empty lstC}">
-                                                <c:forEach var="c" items="${lstC}">
-                                                    <c:choose>
-                                                        <c:when test="${c.catID == param.category}">
-                                                            <option value="${c.catID}" selected>${c.caName}</option>
-                                                        </c:when>
-                                                        <c:otherwise>
-                                                            <option value="${c.catID}">${c.caName}</option>
-                                                        </c:otherwise>
-                                                    </c:choose>
-                                                </c:forEach>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <option disabled>Không có loại món ăn nào</option>
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </select>
-                                </div>
-                                <button type="button" class="btn btn-outline" onclick="toggleAdvancedFilters()">
-                                    <i class="fas fa-sliders-h"></i> Sort
-                                </button>
-                            </div>
-
-                            <c:set var="isAdvancedFilterActive" value="${not empty param.priceRank or not empty param.sortID or not empty param.sortTime or not empty param.sortPrice}" />
-                            <div class="advanced-filters-container" id="advancedFilters" style="${isAdvancedFilterActive ? 'display: block;' : 'display: none;'} margin-bottom: 15px;">
-                                <div class="advanced-filters-grid">
-                                    <div class="select-group">
-                                        <select name="priceRank" id="priceRank">
-                                            <option value="" ${empty param.priceRank ? 'selected' : ''}>-- Mức giá --</option>
-                                            <option value="0-50000" ${param.priceRank == '0-50000' ? 'selected' : ''}>Dưới 50.000</option>
-                                            <option value="50000-100000" ${param.priceRank == '50000-100000' ? 'selected' : ''}>Từ 50.000 - 100.000</option>
-                                            <option value="100000-200000" ${param.priceRank == '100000-200000' ? 'selected' : ''}>Từ 100.000 - 200.000</option>
-                                            <option value="200000+" ${param.priceRank == '200000+' ? 'selected' : ''}>Trên 200.000</option>         
-                                        </select>
-                                    </div>
-
-                                    <div class="select-group">
-                                        <select name="sortTime">
-                                            <option value="">Thời gian cập nhật</option>
-                                            <option value="asc" ${param.sortTime == 'asc' ? 'selected' : ''}>Tăng dần</option>
-                                            <option value="desc" ${param.sortTime == 'desc' ? 'selected' : ''}>Giảm dần</option>
-                                        </select>
-                                    </div>
-
-                                    <div class="select-group">
-                                        <select name="sortID">
-                                            <option value="">Sort by Id</option>
-                                            <option value="asc" ${param.sortID == 'asc' ? 'selected' : ''}>Tăng dần</option>
-                                            <option value="desc" ${param.sortID == 'desc' ? 'selected' : ''}>Giảm dần</option>
-                                        </select>
-                                    </div>
-
-                                    <div class="select-group">
-                                        <select name="sortPrice">
-                                            <option value="">Sort by Price</option>
-                                            <option value="asc" ${param.sortPrice == 'asc' ? 'selected' : ''}>Tăng dần</option>
-                                            <option value="desc" ${param.sortPrice == 'desc' ? 'selected' : ''}>Giảm dần</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <input type="hidden" name="action" value="displaysortfooddraft" />
-                            <input type="hidden" name="page" id="pageInput" value="${param.page != null ? param.page : 1}" />
-                            <div class="filter-actions">
-                                <button type="button" class="btn btn-outline" onclick="location.href = '${pageContext.request.contextPath}/nutricontrol/displaysortfooddraft'">
-                                    <i class="fas fa-times"></i> Xóa bộ lọc
-                                </button>
-                                <button type="submit" class="btn btn-primary" name="filterSubmit" value="true"><i class="fas fa-filter"></i> Lọc</button>
-                            </div>
-                        </form>
-
-                        <div class="table-container">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th style="width: 10%;" >Ảnh</th>
-                                        <th>ID</th>
-                                        <th>Origin ID</th>
-                                        <th>Tên Món Ăn</th>  
-                                        <th>Category</th>
-                                        <th>Giá</th>
-                                        <th>Trạng Thái</th>
-                                        <th>Cập Nhật Gần Nhất</th>
-                                        <th style="width: 8%;">Thao Tác</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <c:choose>
-                                        <c:when test="${not empty lstFoodDr}">
-                                            <c:forEach items="${lstFoodDr}" var="food">
-                                                <tr>
-                                                    <td>
-                                                        <img src="${food.imageUlr}" alt="ảnh food" class="table-avatar" />
-                                                    </td>
-                                                    <td><strong>#${food.fdrID}</strong></td>
-                                                    <td><strong><c:choose>
-                                                                <c:when test="${food.originID > 0}">
-                                                                    #${food.originID}
-                                                                </c:when>
-                                                                <c:otherwise>
-                                                                    Tạo mới
-                                                                </c:otherwise>
-                                                            </c:choose>
-</strong></td>
-                                                    <td>${food.foodName}</td>
-                                                    <td>${food.catName}</td>
-                                                    <td>
-                                                        <span class="price-value">
-                                                            <fmt:formatNumber value="${food.price}" type="number" groupingUsed="true" /> <small>₫</small>
-                                                        </span>
-                                                    </td>
-                                                    <td>
-                                                        <span class="status-badge status-active">${food.status}</span>
-                                                    </td>
-                                                    <td>
-                                                        <fmt:formatDate value="${food.update_at}" pattern="dd/MM/yyyy HH:mm:ss" />
-                                                    </td>
-                                                    <td>
-                                                        <div class="table-actions">
-                                                            <a class="action-btn view-btn" title="Xem chi tiết" href="nutricontrol?action=showfooddraftdetail&id=${food.fdrID}">
-                                                                <i class="fas fa-eye"></i>
-                                                            </a>
-                                                            <a class="action-btn edit-btn" title="Chỉnh sửa"
-                                                               href="nutricontrol?action=showeditfooddraft&id=${food.fdrID}">
-                                                                <i class="fas fa-edit"></i>
-                                                            </a>
-                                                            <a class="action-btn remove-btn" id="confirmDeleteBtn" title="Xóa" style="background-color:red; color:white"
-                                                               href="#" onclick="showDeletePopup('nutricontrol?action=delete&id=${food.fdrID}', '${food.foodName}'); return false;"
-                                                               >
-                                                                <i class="fas fa-trash" ></i>
-                                                            </a>   
+                                            <div id="deletePopup" class="popup-overlay">
+                                                <div class="popup-container">
+                                                    <div class="popup-header">
+                                                        <div class="popup-icon">
+                                                            <i class="fas fa-exclamation-triangle"></i>
                                                         </div>
-                                                    </td>
-                                                </tr>
-                                            </c:forEach>
+                                                        <div class="popup-title">Xác nhận xóa</div>
+                                                        <div class="popup-subtitle">Thao tác này không thể hoàn tác</div>
+                                                    </div>
+
+                                                    <div class="popup-body">
+                                                        <div class="popup-message" id="popupMessage">
+                                                            Bạn có chắc chắn muốn xóa sản phẩm này?
+                                                        </div>
+                                                        <div class="popup-warning">
+                                                            Dữ liệu sẽ bị xóa vĩnh viễn và không thể khôi phục.
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="popup-actions">
+                                                        <button class="popup-btn popup-btn-cancel" onclick="closeDeletePopup()">
+                                                            <i class="fas fa-times"></i>
+                                                            Hủy bỏ
+                                                        </button>
+                                                        <a id="confirmDeleteBtn" href="nutricontrol?action=deletefooddraft&id=${food.fdrID}" class="popup-btn popup-btn-delete">
+                                                            <i class="fas fa-trash-alt"></i>
+                                                            Xóa ngay
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </c:when>
 
                                         <c:otherwise>
@@ -490,72 +523,42 @@
                                         </c:otherwise>
                                     </c:choose>
 
-                                </tbody>
-                            </table>
-                            <div  id="paginationWrapper" class="pagination-container" style="display: flex; justify-content: space-between; padding: 10px;">
-                                <div style="padding: 10px">Show ${lstFoodDr.size()} of ${total} items</div>
-                                <c:set var="currentPage" value="${param.page != null ? param.page : 1}" />
-                                <c:if test="${totalPages >= 1}">
-                                    <div class="pagination">
-                                        <c:if test="${currentPage > 1}">
-                                            <a href="#" class="prev pagination-link" data-page="${currentPage - 1}">&laquo; Previous</a>
-                                        </c:if>
-                                        <c:forEach var="i" begin="1" end="${totalPages}" varStatus="status">
-                                            <c:choose>
-                                                <c:when test="${i == currentPage}">
-                                                    <span class="current">${i}</span>
-                                                </c:when>
-                                                <c:when test="${i <= currentPage + 2 && i >= currentPage - 2}">
-                                                    <a href="#" class="pagination-link" data-page="${i}">${i}</a>
-                                                </c:when>
-                                                <c:when test="${i == currentPage - 3 || i == currentPage + 3}">
-                                                    <span class="ellipsis">...</span>
-                                                </c:when>
-                                            </c:choose>
-                                        </c:forEach>
-                                        <c:if test="${currentPage < totalPages}">
-                                            <a href="#" class="next pagination-link" data-page="${currentPage + 1}">Next &raquo;</a>
-                                        </c:if>
-                                    </div>
-                                </c:if>
+                                    </tbody>
+                                </table>
+                                <div  id="paginationWrapper" class="pagination-container" style="display: flex; justify-content: space-between; padding: 10px;">
+                                    <div style="padding: 10px">Show ${lstFoodDr.size()} of ${total} items</div>
+                                    <c:set var="currentPage" value="${param.page != null ? param.page : 1}" />
+                                    <c:if test="${totalPages >= 1}">
+                                        <div class="pagination">
+                                            <c:if test="${currentPage > 1}">
+                                                <a href="#" class="prev pagination-link" data-page="${currentPage - 1}">&laquo; Previous</a>
+                                            </c:if>
+                                            <c:forEach var="i" begin="1" end="${totalPages}" varStatus="status">
+                                                <c:choose>
+                                                    <c:when test="${i == currentPage}">
+                                                        <span class="current">${i}</span>
+                                                    </c:when>
+                                                    <c:when test="${i <= currentPage + 2 && i >= currentPage - 2}">
+                                                        <a href="#" class="pagination-link" data-page="${i}">${i}</a>
+                                                    </c:when>
+                                                    <c:when test="${i == currentPage - 3 || i == currentPage + 3}">
+                                                        <span class="ellipsis">...</span>
+                                                    </c:when>
+                                                </c:choose>
+                                            </c:forEach>
+                                            <c:if test="${currentPage < totalPages}">
+                                                <a href="#" class="next pagination-link" data-page="${currentPage + 1}">Next &raquo;</a>
+                                            </c:if>
+                                        </div>
+                                    </c:if>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div id="deletePopup" class="popup-overlay">
-            <div class="popup-container">
-                <div class="popup-header">
-                    <div class="popup-icon">
-                        <i class="fas fa-exclamation-triangle"></i>
-                    </div>
-                    <div class="popup-title">Xác nhận xóa</div>
-                    <div class="popup-subtitle">Thao tác này không thể hoàn tác</div>
-                </div>
 
-                <div class="popup-body">
-                    <div class="popup-message" id="popupMessage">
-                        Bạn có chắc chắn muốn xóa sản phẩm này?
-                    </div>
-                    <div class="popup-warning">
-                        Dữ liệu sẽ bị xóa vĩnh viễn và không thể khôi phục.
-                    </div>
-                </div>
-
-                <div class="popup-actions">
-                    <button class="popup-btn popup-btn-cancel" onclick="closeDeletePopup()">
-                        <i class="fas fa-times"></i>
-                        Hủy bỏ
-                    </button>
-                    <a id="confirmDeleteBtn" href="nutritionist?action=deletefooddraft&id=blog.bID" class="popup-btn popup-btn-delete">
-                        <i class="fas fa-trash-alt"></i>
-                        Xóa ngay
-                    </a>
-                </div>
-            </div>
-        </div>
-            <jsp:include page="/Nutritionist/footer.jsp"/>  
-        </main>
+                <jsp:include page="/Nutritionist/footer.jsp"/>  
+            </main>
         <script src="../JS/Nutritionist/common.js"></script>
     
                 <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
@@ -629,7 +632,7 @@
      
          const messageElement = document.getElementById('popupMessage');
          if (title) {
-             messageElement.innerHTML = `Bạn có chắc chắn muốn xóa bài viết:<br><strong>"${title}"</strong>?`;
+             messageElement.innerHTML = `Bạn có chắc chắn muốn xóa Sản phẩm :<br><strong>"${title}"</strong>?`;
          } else {
              messageElement.innerHTML = 'Bạn có chắc chắn muốn xóa bài viết này?';
          }

@@ -18,8 +18,6 @@ document.addEventListener('DOMContentLoaded', () => {
             params.append(key, value);
             
         }
-        
-        
         params.append('json', 'true');
         params.append('page', page);
 
@@ -165,16 +163,12 @@ document.addEventListener('DOMContentLoaded', () => {
         html += `</div>`;
         paginationWrapper.innerHTML = html;
     }
-
-    // Cập nhật thông tin hiển thị kết quả
     function updateShowResult(currentSize, totalSize) {
         const showResultDiv = paginationWrapper.querySelector('div:first-child');
         if (showResultDiv) {
             showResultDiv.textContent = `Show ${currentSize} of ${totalSize} items`;
         }
     }
-
-    // Hàm format date (giả sử server trả về định dạng ISO hoặc timestamp)
     function formatDate(dateString) {
         if (!dateString) return '';
         const date = new Date(dateString);

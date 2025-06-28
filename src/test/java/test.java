@@ -41,9 +41,9 @@ import org.mindrot.jbcrypt.BCrypt;
 public class test {
     
     public static void main(String[] args) throws SQLException {
-        CategoryDAO dao =new CategoryDAO ();
+        FoodDraftDAO dao = new FoodDraftDAO ();
         
-        boolean check  = dao.deleteCategory (28);
+        boolean check  = dao.deleteFoodDraft (11);
         System.out.println (check);
       
     }
@@ -85,37 +85,6 @@ public class test {
          for (MonthlyStat monthlyStat : lstM) {
              System.out.println (monthlyStat);
         }
-   //  dàdfsdfsdffdđâ aloo
-//        System.out.println (lstMBlog);
-//        List<MonthlyStat> typeStats = new ArrayList<>();
-//       List<Blogs> lstBlog = _dao.getBlogsByFilter("", 5, true,null);
-//       List<Blogs> lstB = _dao.getBlogsByFilterAndPage(null, -1, true, null, 1,10, 21);
-//          System.out.println (_dao.getTotalBlog());
-//        List<String> ststuss;
-//        try {
-//            ststuss = _dao.getAllDistinctStatuses();
-//            for (String ststus : ststuss) {
-//            System.out.println(ststus);
-//        }
-//        } catch (Exception ex) {
-//            Logger.getLogger(test.class.getName()).log(Level.SEVERE, null, ex);
-////        }
-//Blogs b = _dao.getBlogByID (100);
-//        System.out.println (b);
-//        for(Blogs b : lstB){
-//            System.out.println(b.toString());
-//        }
-//    List<Blogs> relesteBlog = _dao.getRelatedBlogByID (237);
-//        for (Blogs blogs : relesteBlog) {
-//            System.out.println (blogs.toString ());
-//        }
-//        FoodDraftDAO dao= new FoodDraftDAO ();
-//        System.out.println (dao.getTotalFooddraft (19)); 
-//        System.out.println (_dao.getTotalBlogbyAuthor (21));
-//        typeStats = _dao.countByTypeBMI(-3);
-//        for (MonthlyStat typeStat : typeStats) {
-//            System.out.println(typeStat.toString());
-//        }
     }
    public static void dis2() {
        

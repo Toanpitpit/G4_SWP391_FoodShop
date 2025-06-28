@@ -400,7 +400,7 @@
         </c:if>
 
         <main class="main-content" id="mainContent">
-            
+
             <c:choose>
                 <c:when test="${empty fooddraftedit}">
                     <div class="breadcrumb-section">
@@ -484,10 +484,10 @@
                                     </div>
                                 </div>
                                 <div class="submit-section">
-                                <button type="submit" class="btn-submit">
-                                    TẠO MÓN ĂN
-                                </button>
-                               </div>
+                                    <button type="submit" class="btn-submit">
+                                        TẠO MÓN ĂN
+                                    </button>
+                                </div>
 
                             </div>
 
@@ -564,7 +564,7 @@
                             </nav>
                         </div>
                     </div>
-                    <form action="nutricontrol?action=updatefooddaraft" method="post" enctype="multipart/form-data" id="foodForm">
+                    <form action="nutricontrol?action=updatefooddraft&id=${fooddraftedit.fdrID}" method="post" enctype="multipart/form-data" id="foodForm">
 
                         <div class="main-layout">
                             <div class="left-section">
@@ -590,14 +590,14 @@
                                     <label class="form-label">Danh mục:</label>
                                     <div class="category-group">
                                         <div class="category-select">
-                                          <c:set var="selectedCategory" value="${empty selectedCategory ? fooddraftedit.catName : selectedCategory}" />
+                                            <c:set var="selectedCategory" value="${empty selectedCategory ? fooddraftedit.catName : selectedCategory}" />
                                             <select class="form-select" name="category" id="category">
                                                 <option value="">Chọn danh mục...</option>
 
                                                 <c:choose>
                                                     <c:when test="${not empty lstC}">
                                                         <c:forEach var="ca" items="${lstC}">
-                                                            <option value="${ca.caName}" 
+                                                            <option value="${ca.catID}" 
                                                                     ${selectedCategory eq ca.caName ? 'selected' : ''}>
                                                                 ${ca.caName}
                                                             </option>
@@ -613,29 +613,29 @@
                                 </div>
 
 
-                                          <c:set var="hasCurrentImage" value="${not empty fooddraftedit.imageUlr}" />
-                                          <div class="form-group">
-                                              <label class="form-label">Ảnh minh họa:</label>
-                                              <div class="image-upload-area" id="imageUploadArea" onclick="document.getElementById('imageInput').click()">
-                                                  <input type="file" name="image" id="imageInput" accept="image/*" style="display:none" onchange="previewImage(this)">
-                                                  <div id="uploadPlaceholder" ${hasCurrentImage ? 'style="display: none;"' : ''}>
-                                                      <div class="upload-icon">
-                                                          <i class="bi bi-cloud-upload"></i>
-                                                      </div>
-                                                      <div class="upload-text">Chọn file...</div>
-                                                      <div class="upload-subtext">Chỉ hỗ trợ JPG, PNG, GIF</div>
-                                                  </div>
-                                              </div>
-                                          </div>
+                                <c:set var="hasCurrentImage" value="${not empty fooddraftedit.imageUlr}" />
+                                <div class="form-group">
+                                    <label class="form-label">Ảnh minh họa:</label>
+                                    <div class="image-upload-area" id="imageUploadArea" onclick="document.getElementById('imageInput').click()">
+                                        <input type="file" name="image" id="imageInput" accept="image/*" style="display:none" onchange="previewImage(this)">
+                                        <div id="uploadPlaceholder" ${hasCurrentImage ? 'style="display: none;"' : ''}>
+                                            <div class="upload-icon">
+                                                <i class="bi bi-cloud-upload"></i>
+                                            </div>
+                                            <div class="upload-text">Chọn file...</div>
+                                            <div class="upload-subtext">Chỉ hỗ trợ JPG, PNG, GIF</div>
+                                        </div>
+                                    </div>
+                                </div>
 
-                                          <div class="form-group">
-                                              <label class="form-label">» Xem trước ảnh:</label>
-                                              <div id="imagePreview" style="border: 1px dashed #cbd5e0; border-radius: 8px; padding: 0px; text-align: center; color: #a0aec0; font-size: 2rem; background: #f7fafc; overflow: hidden; ${hasCurrentImage ? '' : 'display: none;'}">
-                                                  <c:if test="${hasCurrentImage}">
-                                                      <img id="previewImageTag" src="${fooddraftedit.imageUlr}" style="max-width: 100%; max-height: 400px; border-radius: 20px;" alt="Xem trước ảnh" />
-                                                  </c:if>
-                                              </div>
-                                          </div>
+                                <div class="form-group">
+                                    <label class="form-label">» Xem trước ảnh:</label>
+                                    <div id="imagePreview" style="border: 1px dashed #cbd5e0; border-radius: 8px; padding: 0px; text-align: center; color: #a0aec0; font-size: 2rem; background: #f7fafc; overflow: hidden; ${hasCurrentImage ? '' : 'display: none;'}">
+                                        <c:if test="${hasCurrentImage}">
+                                            <img id="previewImageTag" src="${fooddraftedit.imageUlr}" style="max-width: 100%; max-height: 400px; border-radius: 20px;" alt="Xem trước ảnh" />
+                                        </c:if>
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="right-section">
@@ -653,9 +653,15 @@
                                             <c:when test="${not empty lstBMI}">
                                                 <c:forEach var="bi" items="${lstBMI}">
                                                     <div class="bmi-option">
-                                                        <input type="checkbox" class="bmi-checkbox" name="bmi" value="${bi.bmiID}" id="underweight">
-                                                        <div>
-                                                            <div class="bmi-label">${bi.classification}</div>
+                                                        <input 
+                                                            type="checkbox" 
+                                                            class="bmi-checkbox" 
+                                                            name="bmi" 
+                                                            value="${bi.bmiID}" 
+                                                            id="bmi-${bi.bmiID}"
+                                                             <c:if test="${selectedBmiMap[bi.bmiID]}">checked</c:if> />
+                                                            <div>
+                                                                <div class="bmi-label">${bi.classification}</div>
                                                         </div>
                                                     </div>
                                                 </c:forEach>
@@ -663,12 +669,14 @@
                                             <c:otherwise>
                                                 <div class="bmi-option">
                                                     <div>
-                                                        <div style="display:  flex ; justify-content: center;
-                                                             align-content: center; color: red; ">Không có dữ liêu</div>
+                                                        <div style="display: flex; justify-content: center; align-items: center; color: red;">
+                                                            Không có dữ liệu
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </c:otherwise>
                                         </c:choose>
+
 
                                     </div>
                                     <small style="text-align: center; display: flex;justify-content: center
@@ -677,7 +685,7 @@
 
                                 <div class="text-editor-section">
                                     <div class="form-group">
-                                         <c:set var="ingredients" value="${not empty fooddetail.ingredients ? fooddetail.ingredients:''}" />
+                                        <c:set var="ingredients" value="${not empty fooddetail.ingredients ? fooddetail.ingredients:''}" />
                                         <label class="form-label">Thành phần món ăn:</label>
                                         <div class="text-editor-wrapper">
                                             <textarea class="form-textarea" name="ingredients" id="ingredients"  placeholder="Thành phần ...">${ingredients != null ? ingredients : ''}</textarea>
@@ -685,7 +693,7 @@
                                     </div>
 
                                     <div class="form-group">
-                                         <c:set var="description" value="${not empty fooddetail.description ? fooddetail.description :''}" />
+                                        <c:set var="description" value="${not empty fooddetail.description ? fooddetail.description :''}" />
                                         <label class="form-label">Mô tả món ăn:</label>
                                         <div class="text-editor-wrapper">
                                             <textarea class="form-textarea" name="description"  value="${fooddetail.description} id="description" placeholder="Mô tả ...">${description != null ? description : ''}</textarea>
@@ -701,9 +709,9 @@
                             </div>
                         </div>
                     </form>
-                                                                
-                
-                                             
+
+
+
                 </c:otherwise>
             </c:choose>
 
@@ -714,181 +722,181 @@
         <script src="${pageContext.request.contextPath}/JS/Nutritionist/common.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/ckeditor/4.22.1/ckeditor.js"></script>
         <script>
-      CKEDITOR.replace('ingredients', {
-                                            height: 200,
-                                            versionCheck: false,
-                                            toolbar: [
-                                                {name: 'basicstyles', items: ['Bold', 'Italic', 'Underline']},
-                                                {name: 'paragraph', items: ['NumberedList', 'BulletedList', 'JustifyLeft', 'JustifyCenter', 'JustifyRight']},
-                                                {name: 'styles', items: ['Format']},
-                                                {name: 'clipboard', items: ['Undo', 'Redo']}
-                                            ],
-                                            removePlugins: 'image,table,media,flash',
-                                        });
-      CKEDITOR.replace('description', {
-                                            height: 200,
-                                            versionCheck: false,
-                                            toolbar: [
-                                                {name: 'basicstyles', items: ['Bold', 'Italic', 'Underline']},
-                                                {name: 'paragraph', items: ['NumberedList', 'BulletedList', 'JustifyLeft', 'JustifyCenter', 'JustifyRight']},
-                                                {name: 'styles', items: ['Format']},
-                                                {name: 'clipboard', items: ['Undo', 'Redo']}
-                                            ],
-                                            removePlugins: 'image,table,media,flash',
-                                        });
+                                            CKEDITOR.replace('ingredients', {
+                                                height: 200,
+                                                versionCheck: false,
+                                                toolbar: [
+                                                    {name: 'basicstyles', items: ['Bold', 'Italic', 'Underline']},
+                                                    {name: 'paragraph', items: ['NumberedList', 'BulletedList', 'JustifyLeft', 'JustifyCenter', 'JustifyRight']},
+                                                    {name: 'styles', items: ['Format']},
+                                                    {name: 'clipboard', items: ['Undo', 'Redo']}
+                                                ],
+                                                removePlugins: 'image,table,media,flash',
+                                            });
+                                            CKEDITOR.replace('description', {
+                                                height: 200,
+                                                versionCheck: false,
+                                                toolbar: [
+                                                    {name: 'basicstyles', items: ['Bold', 'Italic', 'Underline']},
+                                                    {name: 'paragraph', items: ['NumberedList', 'BulletedList', 'JustifyLeft', 'JustifyCenter', 'JustifyRight']},
+                                                    {name: 'styles', items: ['Format']},
+                                                    {name: 'clipboard', items: ['Undo', 'Redo']}
+                                                ],
+                                                removePlugins: 'image,table,media,flash',
+                                            });
 
-                                        function previewImage(input) {
-    const file = input.files[0];
-    const previewContainer = document.getElementById('imagePreview');
-    const previewImg = document.getElementById('previewImageTag');
-    const placeholder = document.getElementById('uploadPlaceholder');
-    const imageInput = document.getElementById('imageInput');
-    const currentImageDisplay = document.getElementById('currentImageDisplay'); 
+                                            function previewImage(input) {
+                                                const file = input.files[0];
+                                                const previewContainer = document.getElementById('imagePreview');
+                                                const previewImg = document.getElementById('previewImageTag');
+                                                const placeholder = document.getElementById('uploadPlaceholder');
+                                                const imageInput = document.getElementById('imageInput');
+                                                const currentImageDisplay = document.getElementById('currentImageDisplay');
 
-    if (!file) {
-        previewImg.src = '';
-        previewContainer.style.display = 'none';
-        placeholder.style.display = 'block';
-        
-        if (currentImageDisplay) {
-            currentImageDisplay.style.display = 'block';
-        }
-        return;
-    }
+                                                if (!file) {
+                                                    previewImg.src = '';
+                                                    previewContainer.style.display = 'none';
+                                                    placeholder.style.display = 'block';
 
-    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
-    if (!allowedTypes.includes(file.type)) {
-        showWarning("❌ Chỉ hỗ trợ ảnh JPG, PNG, GIF.");
-        input.value = '';
-        previewImg.src = '';
-        previewContainer.style.display = 'none';
-        placeholder.style.display = 'block';
-        
-        if (currentImageDisplay) {
-            currentImageDisplay.style.display = 'block';
-        }
-        return;
-    }
+                                                    if (currentImageDisplay) {
+                                                        currentImageDisplay.style.display = 'block';
+                                                    }
+                                                    return;
+                                                }
 
-    if (file.size > 5 * 1024 * 1024) {
-        showWarning("❌ Ảnh vượt quá dung lượng cho phép (5MB).");
-        input.value = '';
-        previewImg.src = '';
-        previewContainer.style.display = 'none';
-        placeholder.style.display = 'block';
-      
-        if (currentImageDisplay) {
-            currentImageDisplay.style.display = 'block';
-        }
-        return;
-    }
-    
-    const reader = new FileReader();
-    reader.onload = function (e) {
-        previewImg.src = e.target.result;
-        previewContainer.style.display = 'block';
-        placeholder.style.display = 'block';
-        imageInput.st.display = 'block';
-        if (currentImageDisplay) {
-            currentImageDisplay.style.display = 'none';
-        }
-    };
-    reader.readAsDataURL(file);
-}
+                                                const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+                                                if (!allowedTypes.includes(file.type)) {
+                                                    showWarning("❌ Chỉ hỗ trợ ảnh JPG, PNG, GIF.");
+                                                    input.value = '';
+                                                    previewImg.src = '';
+                                                    previewContainer.style.display = 'none';
+                                                    placeholder.style.display = 'block';
 
-document.getElementById('foodForm').addEventListener('submit', function (e) {
-    if (CKEDITOR.instances.description) {
-        CKEDITOR.instances.description.updateElement();
-    }
-    if (CKEDITOR.instances.ingredients) {
-        CKEDITOR.instances.ingredients.updateElement();
-    }
+                                                    if (currentImageDisplay) {
+                                                        currentImageDisplay.style.display = 'block';
+                                                    }
+                                                    return;
+                                                }
 
-    const form = this;
-    const name = document.getElementById('name').value.trim();
-    const price = document.getElementById('price').value.trim();
-    const category = document.getElementById('category').value;
-    const imageInput = document.getElementById('imageInput');
-    const ingredients = document.getElementById('ingredients').value.trim();
-    const description = document.getElementById('description').value.trim();
-    
-    
-    const isEditMode = form.querySelector('input[name="foodID"]') !== null;
-    const currentImageDisplay = document.getElementById('currentImageDisplay');
-    const hasCurrentImage = currentImageDisplay !== null;
+                                                if (file.size > 5 * 1024 * 1024) {
+                                                    showWarning("❌ Ảnh vượt quá dung lượng cho phép (5MB).");
+                                                    input.value = '';
+                                                    previewImg.src = '';
+                                                    previewContainer.style.display = 'none';
+                                                    placeholder.style.display = 'block';
 
-    let hasError = false;
+                                                    if (currentImageDisplay) {
+                                                        currentImageDisplay.style.display = 'block';
+                                                    }
+                                                    return;
+                                                }
 
-    if (name.length < 3) {
-        showWarning("❗ Tên món ăn phải có ít nhất 3 ký tự.");
-        hasError = true;
-    }
+                                                const reader = new FileReader();
+                                                reader.onload = function (e) {
+                                                    previewImg.src = e.target.result;
+                                                    previewContainer.style.display = 'block';
+                                                    placeholder.style.display = 'block';
+                                                    imageInput.st.display = 'block';
+                                                    if (currentImageDisplay) {
+                                                        currentImageDisplay.style.display = 'none';
+                                                    }
+                                                };
+                                                reader.readAsDataURL(file);
+                                            }
 
-    if (!price || isNaN(price) || parseInt(price) <= 0) {
-        showWarning("❗ Giá món ăn phải là số nguyên dương hợp lệ.");
-        hasError = true;
-    }
+                                            document.getElementById('foodForm').addEventListener('submit', function (e) {
+                                                if (CKEDITOR.instances.description) {
+                                                    CKEDITOR.instances.description.updateElement();
+                                                }
+                                                if (CKEDITOR.instances.ingredients) {
+                                                    CKEDITOR.instances.ingredients.updateElement();
+                                                }
 
-    if (!category) {
-        showWarning("❗ Vui lòng chọn danh mục cho món ăn hoặc tạo mới.");
-        hasError = true;
-    }
+                                                const form = this;
+                                                const name = document.getElementById('name').value.trim();
+                                                const price = document.getElementById('price').value.trim();
+                                                const category = document.getElementById('category').value;
+                                                const imageInput = document.getElementById('imageInput');
+                                                const ingredients = document.getElementById('ingredients').value.trim();
+                                                const description = document.getElementById('description').value.trim();
 
-    
-    const file = imageInput.files[0];
-    if (!file) {
-        // Nếu là trang create hoặc trang edit mà không có ảnh hiện tại
-        if (!isEditMode || !hasCurrentImage) {
-            showWarning("❗ Vui lòng chọn ảnh minh họa cho món ăn.");
-            hasError = true;
-        }
-    } else {
-        // Nếu có chọn file mới thì validate
-        const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
-        if (!allowedTypes.includes(file.type)) {
-            showWarning("❌ Ảnh phải là JPG, PNG hoặc GIF.");
-            hasError = true;
-        }
-        if (file.size > 5 * 1024 * 1024) {
-            showWarning("❌ Ảnh vượt quá 5MB cho phép.");
-            hasError = true;
-        }
-    }
 
-    if (ingredients.length === 0) {
-        showWarning("❗ Vui lòng nhập thành phần món ăn.");
-        hasError = true;
-    }
+                                                const isEditMode = form.querySelector('input[name="foodID"]') !== null;
+                                                const currentImageDisplay = document.getElementById('currentImageDisplay');
+                                                const hasCurrentImage = currentImageDisplay !== null;
 
-    if (description.length === 0) {
-        showWarning("❗ Vui lòng nhập mô tả món ăn.");
-        hasError = true;
-    }
+                                                let hasError = false;
 
-    if (hasError) {
-        e.preventDefault();
-        return;
-    }
-    
-    const checkedBMI = document.querySelectorAll('input[name="bmi"]:checked');
-    if (checkedBMI.length === 0) {
-        const hidden = document.createElement('input');
-        hidden.type = 'hidden';
-        hidden.name = 'bmi';
-        hidden.value = '7';
-        form.appendChild(hidden);
-    }
+                                                if (name.length < 3) {
+                                                    showWarning("❗ Tên món ăn phải có ít nhất 3 ký tự.");
+                                                    hasError = true;
+                                                }
 
-    const submitBtn = form.querySelector('.btn-submit');
-    submitBtn.disabled = true;
-    
-   
-    if (isEditMode) {
-        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang cập nhật...';
-    } else {
-        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang xử lý...';
-    }
-});
+                                                if (!price || isNaN(price) || parseInt(price) <= 0) {
+                                                    showWarning("❗ Giá món ăn phải là số nguyên dương hợp lệ.");
+                                                    hasError = true;
+                                                }
+
+                                                if (!category) {
+                                                    showWarning("❗ Vui lòng chọn danh mục cho món ăn hoặc tạo mới.");
+                                                    hasError = true;
+                                                }
+
+
+                                                const file = imageInput.files[0];
+                                                if (!file) {
+                                                    // Nếu là trang create hoặc trang edit mà không có ảnh hiện tại
+                                                    if (!isEditMode || !hasCurrentImage) {
+                                                        showWarning("❗ Vui lòng chọn ảnh minh họa cho món ăn.");
+                                                        hasError = true;
+                                                    }
+                                                } else {
+                                                    // Nếu có chọn file mới thì validate
+                                                    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+                                                    if (!allowedTypes.includes(file.type)) {
+                                                        showWarning("❌ Ảnh phải là JPG, PNG hoặc GIF.");
+                                                        hasError = true;
+                                                    }
+                                                    if (file.size > 5 * 1024 * 1024) {
+                                                        showWarning("❌ Ảnh vượt quá 5MB cho phép.");
+                                                        hasError = true;
+                                                    }
+                                                }
+
+                                                if (ingredients.length === 0) {
+                                                    showWarning("❗ Vui lòng nhập thành phần món ăn.");
+                                                    hasError = true;
+                                                }
+
+                                                if (description.length === 0) {
+                                                    showWarning("❗ Vui lòng nhập mô tả món ăn.");
+                                                    hasError = true;
+                                                }
+
+                                                if (hasError) {
+                                                    e.preventDefault();
+                                                    return;
+                                                }
+
+                                                const checkedBMI = document.querySelectorAll('input[name="bmi"]:checked');
+                                                if (checkedBMI.length === 0) {
+                                                    const hidden = document.createElement('input');
+                                                    hidden.type = 'hidden';
+                                                    hidden.name = 'bmi';
+                                                    hidden.value = '7';
+                                                    form.appendChild(hidden);
+                                                }
+
+                                                const submitBtn = form.querySelector('.btn-submit');
+                                                submitBtn.disabled = true;
+
+
+                                                if (isEditMode) {
+                                                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang cập nhật...';
+                                                } else {
+                                                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang xử lý...';
+                                                }
+                                            });
         </script>
     </body>
 </html>

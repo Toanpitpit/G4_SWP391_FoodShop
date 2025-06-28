@@ -5,6 +5,7 @@
 package com.example.servlet.controller.Nutritionist;
 
 import com.example.servlet.dao.BMIClassificationDAO;
+import com.example.servlet.dao.BMI_RecommentdationDAO;
 import com.example.servlet.dao.BlogDAO;
 import com.example.servlet.dao.CategoryDAO;
 import com.example.servlet.dao.FoodDAO;
@@ -46,6 +47,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import org.jsoup.Jsoup;
 
 /**
@@ -145,6 +147,12 @@ public class NutritionistControlServerLet extends HttpServlet {
             case "showeditfooddraft":
                 ShowUpdateFoodDraft (request, response);
                 break;
+            case "updatefooddraft":
+                UpdateFoodDraft (request, response);
+                break;
+            case "deletefooddraft":
+                deleteFoodDraft (request, response);
+                break;
             case "showcategory":
                 ShowCategoryList (request, response);
                 break;
@@ -166,6 +174,7 @@ public class NutritionistControlServerLet extends HttpServlet {
             case "deleteCategory":
                 deleteCategory (request, response);
                 break;
+
             default:
         }
     }
@@ -185,7 +194,7 @@ public class NutritionistControlServerLet extends HttpServlet {
     @Override
     public String getServletInfo() {
         return "Short description";
-    }// 
+    }
 
     protected void createBlog(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -426,12 +435,6 @@ public class NutritionistControlServerLet extends HttpServlet {
 
     }
 
-    protected void notgen(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-
-    }
-
-    // xóa bài viết 
     protected void deleteBlog(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType ("text/html;charset=UTF-8");
@@ -455,10 +458,6 @@ public class NutritionistControlServerLet extends HttpServlet {
             DisplayBlog (request, response);
         }
 
-    }
-
-    protected void nogen(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
     }
 
     protected void DisplayBlog(HttpServletRequest request, HttpServletResponse response)
@@ -979,12 +978,25 @@ public class NutritionistControlServerLet extends HttpServlet {
     protected void ShowFoodDraft(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
+            HttpSession session = request.getSession (false);
+            if (session == null) {
+                response.sendRedirect ("/Nutritionist/Homedemo.jsp");
+                return;
+            }
+
+            if (request.getParameter ("Errmess") != null) {
+                request.setAttribute ("Errmess", request.getParameter ("Errmess"));
+            }
+            if (request.getParameter ("successMessage") != null) {
+                request.setAttribute ("successMessage", request.getParameter ("successMessage"));
+            }
+            Account acc = (Account) session.getAttribute ("Account");
             CategoryDAO c_dao = new CategoryDAO ();
             BMIClassificationDAO bidao = new BMIClassificationDAO ();
             List<BMIClassification> lstBMI = bidao.getAllBMI ();
             int pageSize = 8;
             int currentPage = 1;
-
+            String idtxt = String.valueOf (acc.getId ());
             Map<String, String> filters = new HashMap<> ();
             filters.put ("searchKey", "");
             filters.put ("category", "");
@@ -992,7 +1004,7 @@ public class NutritionistControlServerLet extends HttpServlet {
             filters.put ("searchPrice", "");
             filters.put ("priceRank", "");
             filters.put ("bmiId", "");
-            filters.put ("authorId", null);
+            filters.put ("authorId", idtxt);
 
             Map<String, String> sortAndPagination = new HashMap<> ();
             sortAndPagination.put ("sortprice", "desc");
@@ -1227,17 +1239,17 @@ public class NutritionistControlServerLet extends HttpServlet {
                     return;
                 }
 
-                if (!isCKEditorContentEmpty(description)) {
-                    request.setAttribute ("Errmess", "Description cannot be null");
-                    ShowCreateFoodDraft (request, response);
-                    return;
-                }
-
-                if (!isCKEditorContentEmpty(ingredients)) {
-                    request.setAttribute ("Errmess", "Ingredients cannot be null");
-                    ShowCreateFoodDraft (request, response);
-                    return;
-                }
+//                if (!isCKEditorContentEmpty (description)) {
+//                    request.setAttribute ("Errmess", "Description cannot be null");
+//                    ShowCreateFoodDraft (request, response);
+//                    return;
+//                }
+//
+//                if (!isCKEditorContentEmpty (ingredients)) {
+//                    request.setAttribute ("Errmess", "Ingredients cannot be null");
+//                    ShowCreateFoodDraft (request, response);
+//                    return;
+//                }
 
                 String imageUrl;
                 try {
@@ -1261,7 +1273,7 @@ public class NutritionistControlServerLet extends HttpServlet {
                 fdrDto.setDescription (description);
                 fdrDto.setIngredients (ingredients);
                 fdrDto.setBmiIds (bmiString);
-                fdrDto.setStatus ("Draft");
+                fdrDto.setStatus ("DRAFT");
                 fdrDto.setImagePath (imageUrl);
                 fdrDto.setPrice (price);
                 fdrDto.setOriginId (null);
@@ -1355,144 +1367,184 @@ public class NutritionistControlServerLet extends HttpServlet {
                 List<Category> lstC = c_dao.getListCategoriesNoP (null, null, null);
                 List<BMIClassification> lstBMI = bi_dao.getAllBMI ();
 
+                BMI_RecommentdationDAO bre_dao = new BMI_RecommentdationDAO ();
+                List<BMIClassification> lstbmiRe = fd_dao.getBMIClassificationsByFoodOrDraftId (id, true);
+
+                Map<Integer, Boolean> selectedBmiMap = lstbmiRe.stream ()
+                        .collect (Collectors.toMap (BMIClassification::getBmiID, b -> true));
+                request.setAttribute ("selectedBmiMap", selectedBmiMap);
                 if (lstC != null && lstBMI != null) {
                     request.setAttribute ("lstC", lstC);
                     request.setAttribute ("lstBMI", lstBMI);
                     request.getRequestDispatcher ("/Nutritionist/CreateFoodDraft.jsp").forward (request, response);
                 } else {
 
-                    request.setAttribute ("Ermessr", "Lỗi tai dữ liệu");
+                    request.setAttribute ("Ermessr", "Fail to loading data");
                     request.getRequestDispatcher ("/Nutritionist/CreateFoodDraft.jsp").forward (request, response);
                 }
             } catch (Exception e) {
-                request.setAttribute ("Ermessr", "Lỗi");
+                request.setAttribute ("Ermessr", "Wrong!!");
                 request.getRequestDispatcher ("/Nutritionist/CreateFoodDraft.jsp").forward (request, response);
             }
         }
     }
 
-    
-
     protected void UpdateFoodDraft(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        Logger logger = Logger.getLogger (this.getClass ().getName ());
         FoodDraftDAO dao = new FoodDraftDAO ();
         HttpSession session = request.getSession (false);
+
         if (session == null) {
             response.sendRedirect ("/Nutritionist/Homedemo.jsp");
             return;
-        } else {
-            Account acc = (Account) session.getAttribute ("Account");
+        }
+
+        Account acc = (Account) session.getAttribute ("Account");
+        try {
+            String name = request.getParameter ("name");
+            String pricetxt = request.getParameter ("price");
+            String categorytxt = request.getParameter ("category");
+            String description = request.getParameter ("description");
+            String ingredients = request.getParameter ("ingredients");
+            String[] bmiValues = request.getParameterValues ("bmi");
+            String fdrIDtxt = request.getParameter ("id");
+
+            String bmiString;
+            if (bmiValues == null || bmiValues.length == 0) {
+                bmiString = "7";
+            } else if (bmiValues.length == 1) {
+                bmiString = bmiValues[0];
+            } else {
+                bmiString = String.join (",", bmiValues);
+            }
+
+            Part imagePart = request.getPart ("image");
+            double price = 0;
+            int category = 0;
+            int fdrID = 0;
+
+            if (name == null || name.trim ().isEmpty ()) {
+                request.setAttribute ("Errmess", "Name Food cannot be empty");
+                ShowUpdateFoodDraft (request, response);
+                return;
+            }
+
             try {
-                String name = request.getParameter ("name");
-                String pricetxt = request.getParameter ("price");
-                String categorytxt = request.getParameter ("category");
-                String description = request.getParameter ("description");
-                String ingredients = request.getParameter ("ingredients");
-                String[] bmiValues = request.getParameterValues ("bmi");
-                String fdrIDtxt = request.getParameter ("id");
-                String bmiString;
-                if (bmiValues == null || bmiValues.length == 0) {
-                    bmiString = "7";
-                } else if (bmiValues.length == 1) {
-                    bmiString = bmiValues[0];
+                if (pricetxt == null || pricetxt.trim ().isEmpty ()) {
+                    request.setAttribute ("Errmess", "Price cannot be empty");
+                    ShowUpdateFoodDraft (request, response);
+                    return;
                 } else {
-                    bmiString = String.join (",", bmiValues);
-                }
-
-                Part imagePart = request.getPart ("image");
-                double price = 0;
-                int category = 0;
-
-                if (name == null || name.trim ().isEmpty ()) {
-                    request.setAttribute ("Errmess", "Name Food cannot be empty");
-                    ShowCreateFoodDraft (request, response);
-                    return;
-                }
-
-                try {
-                    if (pricetxt == null || pricetxt.trim ().isEmpty ()) {
-                        request.setAttribute ("Errmess", "Price cannot be empty");
-                        ShowCreateFoodDraft (request, response);
+                    price = Double.parseDouble (pricetxt);
+                    if (price < 0) {
+                        request.setAttribute ("Errmess", "Price must be non-negative");
+                        ShowUpdateFoodDraft (request, response);
                         return;
-                    } else {
-                        price = Double.parseDouble (pricetxt);
                     }
-                    if (categorytxt == null || categorytxt.trim ().isEmpty ()) {
-                        request.setAttribute ("Errmess", "Category cannot be null");
-                        ShowCreateFoodDraft (request, response);
-                        return;
-                    } else {
-//                    category = Integer.parseInt(categorytxt);
-                    }
-                } catch (NumberFormatException e) {
-                    request.setAttribute ("Errmess", "Wrong type price or category");
-                    ShowCreateFoodDraft (request, response);
+                }
+            } catch (NumberFormatException e) {
+                request.setAttribute ("Errmess", "Invalid price format");
+                ShowUpdateFoodDraft (request, response);
+                return;
+            }
+            try {
+                if (categorytxt == null || categorytxt.trim ().isEmpty ()) {
+                    request.setAttribute ("Errmess", "Category cannot be null");
+                    ShowUpdateFoodDraft (request, response);
+                    return;
+                } else {
+                    category = Integer.parseInt (categorytxt);
+                }
+            } catch (NumberFormatException e) {
+                request.setAttribute ("Errmess", "Invalid category format");
+                ShowUpdateFoodDraft (request, response);
+                return;
+            }
+
+            try {
+                if (fdrIDtxt == null || fdrIDtxt.trim ().isEmpty ()) {
+                    request.setAttribute ("Errmess", "Food draft ID is required");
+                    ShowUpdateFoodDraft (request, response);
                     return;
                 }
+                fdrID = Integer.parseInt (fdrIDtxt);
+            } catch (NumberFormatException e) {
+                request.setAttribute ("Errmess", "Can't collected id");
+                ShowUpdateFoodDraft (request, response);
+                return;
+            }
 
-                if (description == null || description.trim ().isEmpty ()) {
-                    request.setAttribute ("Errmess", "Description cannot be null");
-                    ShowCreateFoodDraft (request, response);
-                    return;
+            if (isCKEditorContentEmpty (description)) {
+                request.setAttribute ("Errmess", "Description cannot be null");
+                ShowUpdateFoodDraft (request, response);
+                return;
+            }
+
+            if (isCKEditorContentEmpty (ingredients)) {
+                request.setAttribute ("Errmess", "Ingredients cannot be null");
+                ShowUpdateFoodDraft (request, response);
+                return;
+            }
+
+            String imageUrl = null;
+            String oldImagePath = null;
+
+            try {
+                Food_Draft existingDraft = dao.getFoodDraftById (fdrID, acc.getId ());
+                if (existingDraft != null) {
+                    oldImagePath = existingDraft.getImageUlr ();
                 }
 
-                if (ingredients == null || ingredients.trim ().isEmpty ()) {
-                    request.setAttribute ("Errmess", "Ingredients cannot be null");
-                    ShowCreateFoodDraft (request, response);
-                    return;
-                }
-
-                String imageUrl;
-                try {
-                    int fdrID = Integer.parseInt (fdrIDtxt);
-                } catch (Exception e) {
-                    request.setAttribute ("Errmess", "");
-                }
-                try {
-                    if (imagePart == null) {
-                        imageUrl = fdrIDtxt;
+                if (imagePart != null && imagePart.getSize () > 0) {
+                    if (oldImagePath != null && !oldImagePath.isEmpty ()) {
+                        boolean deleteSuccess = deleteOldImage (oldImagePath);
+                        if (!deleteSuccess) {
+                            logger.warning ("Failed to delete old image: " + oldImagePath + ", but continuing with update");
+                        }
                     }
                     imageUrl = processImageUpload (imagePart, "fooddraft");
 
-                } catch (IllegalStateException e) {
-                    request.setAttribute ("Errmess", "Ảnh vượt quá dung lượng cho phép (5MB).");
-                    ShowCreateFoodDraft (request, response);
-                    return;
-                } catch (Exception e) {
-                    System.err.println ("Image upload error: " + e.getMessage ());
-                    e.printStackTrace ();
-                    request.setAttribute ("Errmess", "Đã xảy ra lỗi khi tải ảnh: " + e.getMessage ());
-                    ShowCreateFoodDraft (request, response);
-                    return;
-                }
-
-                FoodDraftDTO fdrDto = new FoodDraftDTO ();
-                fdrDto.setName (name);
-                fdrDto.setAuthorId (acc.getId ());
-                fdrDto.setCategoryId (category);
-                fdrDto.setDescription (description);
-                fdrDto.setIngredients (ingredients);
-                fdrDto.setBmiIds (bmiString);
-                fdrDto.setStatus ("Draft");
-                fdrDto.setImagePath (imageUrl);
-                fdrDto.setPrice (price);
-                fdrDto.setOriginId (null);
-
-                boolean check = dao.createFoodDraft (fdrDto);
-                if (check) {
-                    request.setAttribute ("successMessage", "Create Successfully!");
-                    ShowFoodDraft (request, response);
                 } else {
-                    request.setAttribute ("Errmess", "Create Failed, try again!");
-                    ShowCreateFoodDraft (request, response);
+                    imageUrl = oldImagePath;
                 }
-
+            } catch (IllegalStateException e) {
+                request.setAttribute ("Errmess", "Ảnh vượt quá dung lượng cho phép (5MB).");
+                ShowUpdateFoodDraft (request, response);
+                return;
             } catch (Exception e) {
-                System.err.println ("Unexpected error in CreateFoodDraft servlet: " + e.getMessage ());
-                e.printStackTrace ();
-                request.setAttribute ("Errmess", "An unexpected error occurred");
-                ShowCreateFoodDraft (request, response);
+                request.setAttribute ("Errmess", "Đã xảy ra lỗi khi tải ảnh: " + e.getMessage ());
+                ShowUpdateFoodDraft (request, response);
+                return;
             }
+            FoodDraftDTO fdrDto = new FoodDraftDTO ();
+
+            fdrDto.setName (name);
+            fdrDto.setAuthorId (acc.getId ());
+            fdrDto.setCategoryId (category);
+            fdrDto.setDescription (description);
+            fdrDto.setIngredients (ingredients);
+            fdrDto.setBmiIds (bmiString);
+            fdrDto.setStatus ("Draft");
+            fdrDto.setImagePath (imageUrl);
+            fdrDto.setPrice (price);
+            fdrDto.setOriginId (null);
+
+            boolean check = dao.updateFoodDraft (fdrID, fdrDto);
+
+            if (check) {
+                request.setAttribute ("successMessage", "Update Successfully!");
+                ShowFoodDraft (request, response);
+            } else {
+                request.setAttribute ("Errmess", "Update Failed, try again!");
+                ShowUpdateFoodDraft (request, response);
+            }
+
+        } catch (Exception e) {
+
+            e.printStackTrace ();
+            request.setAttribute ("Errmess", "An unexpected error occurred");
+            ShowUpdateFoodDraft (request, response);
         }
     }
 
@@ -1648,7 +1700,7 @@ public class NutritionistControlServerLet extends HttpServlet {
                 ShowEditCategory (request, response);
                 return;
             }
-            if(isValidText(rawDescription ,3)== false){
+            if (isValidText (rawDescription, 3) == false) {
                 request.setAttribute ("Errmess", "Description must have at least 3 words and cannot be empty or just whitespace.");
                 ShowEditCategory (request, response);
                 return;
@@ -1683,7 +1735,7 @@ public class NutritionistControlServerLet extends HttpServlet {
         }
     }
 
-     protected void UpdateCategory(HttpServletRequest request, HttpServletResponse response)
+    protected void UpdateCategory(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession (false);
         if (session == null) {
@@ -1696,32 +1748,31 @@ public class NutritionistControlServerLet extends HttpServlet {
         int id = 0;
         String name = request.getParameter ("name");
         String rawDescription = request.getParameter ("description");
-        if(idtxt == null || idtxt.trim ().isEmpty ()){
-                request.setAttribute ("Errmess", "Colected id fail!!");
-                ShowEditCategory (request, response);
-                return;
-        }
-         else {
-             try {
+        if (idtxt == null || idtxt.trim ().isEmpty ()) {
+            request.setAttribute ("Errmess", "Colected id fail!!");
+            ShowEditCategory (request, response);
+            return;
+        } else {
+            try {
                 id = Integer.parseInt (idtxt);
-             } catch (Exception e) {
+            } catch (Exception e) {
                 request.setAttribute ("Errmess", "Wrong type id");
                 ShowEditCategory (request, response);
-                return;  
-             }
-        }
-         Category ca = dao.getCategoryByID (id);
-         
-         if(dao.hasAnyFoodOrDraftLinkedToCategory(id)){
-             request.setAttribute ("Errmess", "Cannot update a category that is currently used by one or more foods or FoodSuggestion.");
-                ShowEditCategory (request, response);
                 return;
-         }
-         if (ca == null) {
-             request.setAttribute ("Errmess", "Category not exited!!");
-             ShowEditCategory (request, response);
-             return;
-         }
+            }
+        }
+        Category ca = dao.getCategoryByID (id);
+
+        if (dao.hasAnyFoodOrDraftLinkedToCategory (id)) {
+            request.setAttribute ("Errmess", "Cannot update a category that is currently used by one or more foods or FoodSuggestion.");
+            ShowEditCategory (request, response);
+            return;
+        }
+        if (ca == null) {
+            request.setAttribute ("Errmess", "Category not exited!!");
+            ShowEditCategory (request, response);
+            return;
+        }
         if (name != null) {
             name = name.trim ().replaceAll ("\\s+", " ");
         }
@@ -1733,7 +1784,7 @@ public class NutritionistControlServerLet extends HttpServlet {
                 ShowEditCategory (request, response);
                 return;
             }
-            if(isValidText(rawDescription ,3)== false){
+            if (isValidText (rawDescription, 3) == false) {
                 request.setAttribute ("Errmess", "Description must have at least 3 words and cannot be empty or just whitespace.");
                 ShowEditCategory (request, response);
                 return;
@@ -1746,7 +1797,7 @@ public class NutritionistControlServerLet extends HttpServlet {
         }
         boolean exists = false;
         try {
-            exists = dao.isDuplicateNameExceptId (name,ca.getCatID ());
+            exists = dao.isDuplicateNameExceptId (name, ca.getCatID ());
         } catch (Exception e) {
             e.printStackTrace ();
         }
@@ -1756,8 +1807,7 @@ public class NutritionistControlServerLet extends HttpServlet {
             ShowEditCategory (request, response);
             return;
         }
-        
-        
+
         ca.setCaName (name);
         ca.setCatID (id);
         ca.setDecription (rawDescription);
@@ -1771,7 +1821,7 @@ public class NutritionistControlServerLet extends HttpServlet {
             ShowCategoryList (request, response);
         }
     }
-    
+
     protected void ShowEditCategory(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession (false);
@@ -1800,6 +1850,7 @@ public class NutritionistControlServerLet extends HttpServlet {
             }
         }
     }
+
     protected void deleteCategory(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession (false);
@@ -1815,13 +1866,12 @@ public class NutritionistControlServerLet extends HttpServlet {
                 if (idCatxt != null && !idCatxt.trim ().isEmpty ()) {
                     id = Integer.parseInt (idCatxt);
                 }
-                if(dao.hasAnyFoodOrDraftLinkedToCategory (id)){
-                   request.setAttribute ("Errmess", "Cannot delete a category that is currently used by one or more foods or FoodSuggestion.");
+                if (dao.hasAnyFoodOrDraftLinkedToCategory (id)) {
+                    request.setAttribute ("Errmess", "Cannot delete a category that is currently used by one or more foods or FoodSuggestion.");
                     ShowCategoryList (request, response);
-                    return; 
-                }
-                else{
-                  boolean deleted = dao.deleteCategory (id);
+                    return;
+                } else {
+                    boolean deleted = dao.deleteCategory (id);
 
                     if (!deleted) {
                         request.setAttribute ("Errmess", "Failed to delete category. Try again.");
@@ -1830,18 +1880,78 @@ public class NutritionistControlServerLet extends HttpServlet {
                         request.setAttribute ("successMessage", "Delete successfully!");
                         ShowCategoryList (request, response);
                     }
-                    
+
                 }
-                    
-              
+
             } catch (NumberFormatException ex) {
                 request.setAttribute ("Ermessr", "Lỗi tai dữ liệu");
-                request.getRequestDispatcher ("/Nutritionist/CreateFoodDraft.jsp").forward (request, response);
+                ShowCategoryList (request, response);
             }
         }
     }
-    
-    
+
+    protected void deleteFoodDraft(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        HttpSession session = request.getSession (false);
+        if (session == null) {
+            response.sendRedirect ("/Nutritionist/Homedemo.jsp");
+            return;
+        }
+
+        Account acc = (Account) session.getAttribute ("Account");
+        if (acc == null) {
+            response.sendRedirect ("/Nutritionist/Homedemo.jsp");
+            return;
+        }
+
+        String idtxt = request.getParameter ("id");
+
+        try {
+            if (idtxt == null || idtxt.trim ().isEmpty ()) {
+                request.setAttribute ("Errmess", "Food Draft ID is required");
+                ShowFoodDraft (request, response);
+                return;
+            }
+
+            int id = Integer.parseInt (idtxt.trim ());
+            FoodDraftDAO dao = new FoodDraftDAO ();
+            Food_Draft food = dao.getFoodDraftById (id, acc.getId ());
+
+            if (food == null) {
+                request.setAttribute ("Errmess", "Food Draft not found or you are not the author");
+                ShowFoodDraft (request, response);
+                return;
+            }
+            if (!"DRAFT".equals (food.getStatus ())) {
+                request.setAttribute ("Errmess", "Cannot delete Food Draft with status: " + food.getStatus () + ". Only DRAFT status can be deleted.");
+                ShowFoodDraft (request, response);
+                return;
+            }
+            String imgpath = food.getImageUlr ();
+            boolean isDeleted = dao.deleteFoodDraft (id);
+
+            if (isDeleted) {
+                request.setAttribute ("successMessage", "Food Draft deleted successfully");
+                deleteOldImage (imgpath);
+                ShowFoodDraft (request, response);
+                return;
+            } else {
+                request.setAttribute ("Errmess", "Failed to delete Food Draft. Please try again.");
+                ShowFoodDraft (request, response);
+                return;
+            }
+
+            
+        } catch (NumberFormatException e) {
+            request.setAttribute ("Ermessr", "Invalid Food Draft ID format");
+            ShowFoodDraft (request, response);
+        } catch (Exception e) {
+            e.printStackTrace ();
+            request.setAttribute ("Ermessr", "An unexpected error occurred while deleting Food Draft");
+            ShowFoodDraft (request, response);
+        }
+    }
+
     private boolean isCKEditorContentEmpty(String html) {
         if (html == null) {
             return true;
@@ -1933,6 +2043,31 @@ public class NutritionistControlServerLet extends HttpServlet {
         }
 
         return "img/" + folder + "/" + uniqueFileName;
+    }
+
+    private boolean deleteOldImage(String oldImagePath) {
+        if (oldImagePath == null || oldImagePath.isEmpty ()) {
+            return true;
+        }
+
+        try {
+            if (oldImagePath.startsWith ("img/")) {
+                String sourceImagePath = BASE_PATH + "\\src\\main\\webapp\\" + oldImagePath.replace ("/", "\\");
+                String targetImagePath = BASE_PATH + "\\target\\Food-1.0-SNAPSHOT\\" + oldImagePath.replace ("/", "\\");
+
+                File sourceFile = new File (sourceImagePath);
+                File targetFile = new File (targetImagePath);
+
+                boolean sourceDeleted = !sourceFile.exists () || sourceFile.delete ();
+                boolean targetDeleted = !targetFile.exists () || targetFile.delete ();
+
+                return sourceDeleted && targetDeleted;
+            } else {
+                return true;
+            }
+        } catch (Exception e) {
+            return false;
+        }
     }
 
 }

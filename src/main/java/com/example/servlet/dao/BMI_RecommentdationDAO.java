@@ -21,7 +21,7 @@ import java.util.logging.Logger;
  *
  * @author Admin
  */
-public class BMI_Recommentdation {
+public class BMI_RecommentdationDAO {
      public BMI_Recomentdation getBMIRecommentdationID(int id,boolean isDraft) {
         String sql = "SELECT * FROM FoodBMIRecommendation WHERE isdraft = ? AND " +
                      (isDraft ? "fdrID = ?" : "fID = ?");
@@ -37,7 +37,7 @@ public class BMI_Recommentdation {
                 }
             }
         } catch (java.sql.SQLException ex) {
-             Logger.getLogger (BMI_Recommentdation.class.getName()).log (Level.SEVERE, null, ex);
+             Logger.getLogger (BMI_RecommentdationDAO.class.getName()).log (Level.SEVERE, null, ex);
          }
         return null;
     }
@@ -52,7 +52,7 @@ public class BMI_Recommentdation {
             re.setfID (rs.getInt ("fdrID")); 
             
         } catch (java.sql.SQLException ex) {
-             Logger.getLogger (BMI_Recommentdation.class.getName()).log (Level.SEVERE, null, ex);
+             Logger.getLogger (BMI_RecommentdationDAO.class.getName()).log (Level.SEVERE, null, ex);
          }
         return re;
     }
