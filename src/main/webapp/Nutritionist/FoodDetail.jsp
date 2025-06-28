@@ -11,12 +11,15 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
 
         <link rel="stylesheet" href="${pageContext.request.contextPath}/CSS/Ncss/defauld.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/CSS/Ncss/fooddetail.css">
 
         <style>
+
             :root {
                 --primary-color: #28a745;
                 --secondary-color: #6c757d;
@@ -309,7 +312,7 @@
                 color: #ffc107;
                 font-size: 20px;
                 margin: 0 2px;
-            }
+          }
 
             /* Fixed CSS for collapsed text */
             .collapsed-text {
@@ -463,6 +466,7 @@
         <jsp:include page="/Nutritionist/nav.jsp"/>  
         <jsp:include page="/Nutritionist/main-header.jsp"/>  
         <main class="main-content" id="mainContent">
+
             <div class="container-fluid">
 
                 <div class="breadcrumb-container mb-4">
@@ -470,10 +474,12 @@
                         <a href="${pageContext.request.contextPath}/nutricontrol?action=dashboard" class="breadcrumb-item">Trang chủ</a>
                         <span class="breadcrumb-separator">/</span>
                         <a href="${pageContext.request.contextPath}/nutricontrol?action=showfood" class="breadcrumb-item">Danh sách đồ ăn</a>
+
                         <span class="breadcrumb-separator">/</span>
                         <span class="breadcrumb-item active">Chi tiết sản phẩm</span>
                     </nav>
                 </div>
+
 
                 <div class="product-card">
                     <div class="row g-0">
@@ -659,6 +665,9 @@
                                     </p>
                                 </div>
                             </div>
+
+                <!-- Detail Card -->
+              
                         </div>
                     </div>
                 </div>
@@ -689,6 +698,7 @@
                     var tabTrigger = new bootstrap.Tab(triggerEl);
                 });
             });
+
         </script>
         <script src="${pageContext.request.contextPath}/JS/Nutritionist/common.js"></script>
     </body>

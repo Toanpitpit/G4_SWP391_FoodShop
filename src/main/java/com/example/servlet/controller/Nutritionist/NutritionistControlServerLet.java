@@ -70,6 +70,7 @@ public class NutritionistControlServerLet extends HttpServlet {
             throws ServletException, IOException {
         HttpSession sesssion = request.getSession (false);
         if (sesssion == null) {
+
             request.getRequestDispatcher ("Homedemo.jsp").forward (request, response);
             return;
         }
