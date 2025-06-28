@@ -770,12 +770,6 @@ public class NutritionistControlServerLet extends HttpServlet {
             request.setAttribute ("lstBMI", lstBMI);
             request.setAttribute ("currentPage", page);
             request.setAttribute ("totalPages", totalPages);
-
-//        try(PrintWriter out = response.getWriter ()){
-//            out.print ("+" + page);
-//            out.print ("+" + totalCount);
-//            out.print (totalPages);
-//        }
             request.getRequestDispatcher ("/Nutritionist/BMIPage.jsp").forward (request, response);
         } catch (Exception e) {
             e.printStackTrace ();
