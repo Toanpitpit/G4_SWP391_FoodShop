@@ -370,7 +370,7 @@
                 <div class="food-list-container">
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <h3 class="mb-0">Food List Management</h3>
-                        <a href="#" class="btn btn-success">
+                        <a href="addFoods.jsp" class="btn btn-success">
                             <i class="fas fa-plus me-2"></i> Add New Food
                         </a>
                     </div>
