@@ -18,6 +18,7 @@ import com.example.servlet.model.FoodDetail;
 import com.example.servlet.model.Food_Draft;
 import com.example.servlet.model.MonthlyStat;
 import com.example.servlet.model.Notifys;
+import com.example.servlet.model.Requests;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -41,10 +42,11 @@ import org.mindrot.jbcrypt.BCrypt;
 public class test {
     
     public static void main(String[] args) throws SQLException {
-        FoodDraftDAO dao = new FoodDraftDAO ();
-        
-        boolean check  = dao.deleteFoodDraft (11);
-        System.out.println (check);
+        RequestDAO dao = new RequestDAO ();
+       List<Requests> lstR = dao.getListRequests (null, null, 1, 10);
+        for (Requests requests : lstR) {
+            System.out.println (requests.toString ());
+        }
       
     }
     

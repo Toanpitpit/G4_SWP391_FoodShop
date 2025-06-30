@@ -19,24 +19,14 @@ public class Requests {
   private int draftID;
   private String foodName;
   private String status;
-  private String note;
+  private String requestNote;
+  private String responseNote;
   private String handleBY;
   private Timestamp create_at;
   private Timestamp update_at;
 
-    public Requests(int rID, String title, int authorID, String authorName, String type, int draftID, String foodName, String status, String note, String handleBY, Timestamp create_at, Timestamp update_at) {
-        this.rID = rID;
-        this.title = title;
-        this.authorID = authorID;
-        this.authorName = authorName;
-        this.type = type;
-        this.draftID = draftID;
-        this.foodName = foodName;
-        this.status = status;
-        this.note = note;
-        this.handleBY = handleBY;
-        this.create_at = create_at;
-        this.update_at = update_at;
+    public Requests() {
+       
     }
 
     public int getrID() {
@@ -103,12 +93,20 @@ public class Requests {
         this.status = status;
     }
 
-    public String getNote() {
-        return note;
+    public String getRequestNote() {
+        return requestNote;
     }
 
-    public void setNote(String note) {
-        this.note = note;
+    public void setRequestNote(String requestNote) {
+        this.requestNote = requestNote;
+    }
+
+    public String getResponseNote() {
+        return responseNote;
+    }
+
+    public void setResponseNote(String responseNote) {
+        this.responseNote = responseNote;
     }
 
     public String getHandleBY() {
@@ -137,9 +135,9 @@ public class Requests {
 
     @Override
     public String toString() {
-        return "Requests{" + "rID=" + rID + ", title=" + title + ", authorID=" + authorID + ", authorName=" + authorName + ", type=" + type + ", draftID=" + draftID + ", foodName=" + foodName + ", status=" + status + ", note=" + note + ", handleBY=" + handleBY + ", create_at=" + create_at + ", update_at=" + update_at + '}';
+        return "Requests{" + "rID=" + rID + ", title=" + title + ", authorID=" + authorID + ", authorName=" + authorName + ", type=" + type + ", draftID=" + draftID + ", foodName=" + foodName + ", status=" + status + ", requestNote=" + requestNote + ", responseNote=" + responseNote + ", handleBY=" + handleBY + ", create_at=" + create_at + ", update_at=" + update_at + '}';
     }
 
-    
+   
   
 }

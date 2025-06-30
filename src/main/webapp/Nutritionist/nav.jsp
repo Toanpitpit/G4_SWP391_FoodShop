@@ -91,9 +91,8 @@
                     <i class="menu-arrow bi bi-chevron-right"></i>
                 </a>
                 <div class="submenu">
-                    <a href="#" class="menu-link">Request List</a>
-                    <a href="#" class="menu-link">Request Detail</a>
-                    <a href="#" class="menu-link">Request Tracking</a>
+                    <a href="${pageContext.request.contextPath}/nutricontrol?action=showrequestlist" class="menu-link">Request List</a>
+                    <a href="#" class="menu-link">Create Request</a>
                 </div>
             </div>
 
