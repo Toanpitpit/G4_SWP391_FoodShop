@@ -211,12 +211,14 @@
                 border-color: #28a745;
                 box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
                 background: rgba(255, 255, 255, 1);
+
             }
 
             .form-floating label {
                 color: #666;
                 font-weight: 500;
             }
+
 
             .form-check {
                 display: flex;
@@ -492,6 +494,12 @@
                     </div>
                 </c:if>
                 
+                <c:if test="${not empty success}">
+                    <div class="alert alert-success" role="alert" id="successAlert">
+                        <i class="fas fa-check-circle me-2"></i>${success}
+                    </div>
+                </c:if>
+                
                 <form action="login" method="post" id="loginForm">
                     <div class="form-floating">
                         <input type="text" class="form-control" id="username" name="username" placeholder="Your Email" value="${username}" required>
@@ -526,6 +534,7 @@
                     </a>
                 </div>
                 
+
                 <div class="login-footer">
                     <p>Do not have an account? <a href="register.jsp">Sign up</a></p>
                     <p>Forgot your password? <a href="forgetpassword.jsp">Reset Password</a></p>
@@ -554,7 +563,31 @@
                     }
                 });
             });
+
+     
+            document.addEventListener('DOMContentLoaded', function() {
+                const successAlert = document.getElementById('successAlert');
+    
+                if (successAlert) {
+                    setTimeout(() => {
+                        successAlert.style.animation = 'fadeOut 0.5s ease-out';
+                        setTimeout(() => {
+                            successAlert.style.display = 'none';
+                        }, 500);
+                    }, 5000);
+                }
+            });
         </script>
+        
+        <style>
+        /* THÊM CSS CHO FADE OUT ANIMATION */
+        @keyframes fadeOut {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 0; transform: translateY(-20px); }
+        }
+        </style>
+        
+
     </body>
 </html>
 

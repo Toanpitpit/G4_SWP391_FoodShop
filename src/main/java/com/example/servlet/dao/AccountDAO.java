@@ -36,17 +36,17 @@ public class AccountDAO {
         }
     }
 
-    public Account loginUser(String username, String password) throws SQLException {
+    public Account loginUser(String email, String password) throws SQLException {
         DBConnect dbConnect = new DBConnect();
         Connection conn = dbConnect.getConnection();
         try {
-            String sql = "SELECT * FROM Accounts WHERE username = ?";
+            String sql = "SELECT * FROM Accounts WHERE email = ?";
             PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setString(1, username);
+            stmt.setString(1, email);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                String hashedPassword = rs.getString("pass");
-                if (BCrypt.checkpw(password, hashedPassword)) {
+                String hashedPassword = rs.getString("pass");  
+                if (BCrypt.checkpw(password, hashedPassword) ) {
                     return new Account(
                             rs.getInt("id"),
                             rs.getString("username"),
@@ -180,29 +180,37 @@ public class AccountDAO {
         return accounts;
     }
 
-    public void addAccount(Account account) {
-        String query = "INSERT INTO Accounts (username, pass, name, email, phone, gender, birthDate, role, status, image, create_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, GETDATE())";
-        DBConnect dbConnect = new DBConnect();
-        try (Connection conn = dbConnect.getConnection();
-             PreparedStatement ps = conn.prepareStatement(query)) {
-            String hashedPassword = BCrypt.hashpw(account.getPass(), BCrypt.gensalt());
-            ps.setString(1, account.getUsername());
-            ps.setString(2, hashedPassword);
-            ps.setString(3, account.getName());
-            ps.setString(4, account.getEmail());
-            ps.setString(5, account.getPhone());
-            ps.setString(6, account.getGender());
-            ps.setDate(7, account.getBirthDate());
-            ps.setString(8, account.getRole());
-            ps.setString(9, account.getStatus());
-            ps.setString(10, account.getImage());
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            dbConnect.closeConnection();
-        }
+
+public boolean addAccount(Account account) {
+    String query = "INSERT INTO Accounts (username, pass, name, email, phone, gender, birthDate, role, status, image, create_at) " +
+                   "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, GETDATE())";
+    DBConnect dbConnect = new DBConnect();
+    try (Connection conn = dbConnect.getConnection();
+         PreparedStatement ps = conn.prepareStatement(query)) {
+
+        String hashedPassword = BCrypt.hashpw(account.getPass(), BCrypt.gensalt());
+        ps.setString(1, account.getUsername());
+        ps.setString(2, hashedPassword);
+        ps.setString(3, account.getName());
+        ps.setString(4, account.getEmail());
+        ps.setString(5, account.getPhone());
+        ps.setString(6, account.getGender());
+        ps.setDate(7, account.getBirthDate());
+        ps.setString(8, account.getRole());
+        ps.setString(9, account.getStatus());
+        ps.setString(10, account.getImage());
+
+        int rowsInserted = ps.executeUpdate();
+        return rowsInserted > 0;
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+        return false;
+    } finally {
+        dbConnect.closeConnection();
     }
+}
+
 
     public void updateAccount(Account account) {
         String query;

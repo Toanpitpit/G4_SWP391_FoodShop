@@ -1,265 +1,693 @@
-/*
-Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
-Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
-*/
-/* 
-    Created on : May 18, 2025, 10:14:26 PM
-    Author     : Admin
-*/
+/* =chart-container============ Enhanced Dashboard CSS with Green Theme ============= */
 
-body {
-    font-family: sans-serif;
-    margin: 0;
-    display: flex;
+:root {
+    /* Main Green Theme Colors */
+    --primary-green: #28a745;
+    --secondary-green: #20c997;
+    --light-green: #4fd69c;
+    --dark-green: #1e7e34;
+    --accent-green: #e8f5e8;
+    --glass-green: rgba(40, 167, 69, 0.1);
+    
+    /* Green colors from second file */
+    --green: #2ecc71;
+    --green-hover: #27ae60;
+    
+    /* Neutral Colors */
+    --white: #ffffff;
+    --gray-light: #f8f9fa;
+    --gray: #f1f3f5;
+    --gray-dark: #6c757d;
+    --black1: #1e1e1e;
+    --black2: #666;
+    --shadow-light: rgba(0, 0, 0, 0.05);
+    --shadow-medium: rgba(0, 0, 0, 0.1);
+    --shadow-dark: rgba(0, 0, 0, 0.15);
+    --shadow-heavy: rgba(0, 0, 0, 0.15);
+    
+    /* Chart Colors */
+    --chart-color-1: rgba(40, 167, 69, 0.8);
+    --chart-color-2: rgba(32, 201, 151, 0.8);
+    --chart-color-3: rgba(79, 214, 156, 0.8);
+    --chart-color-4: rgba(30, 126, 52, 0.8);
+    --chart-color-5: rgba(255, 193, 7, 0.8);
+    --chart-color-6: rgba(220, 53, 69, 0.8);
 }
 
-/* Sidebar */
-.sidebar {
-    width: 250px;
-    background-color: #f8f9fa;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    border-right: 1px solid #eee;
-}
+/* ============= Global Styles ============= */
 
-.logo {
-    margin-bottom: 20px;
-}
 
-.logo img {
-    max-width: 150px;
-    height: auto;
-}
-
-.user-info {
-    margin-bottom: 20px;
-}
-
-.avatar {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    overflow: hidden;
-    margin-bottom: 10px;
-}
-
-.avatar img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.navigation {
-    list-style: none;
-    padding: 0;
-    width: 100%;
-}
-
-.nav-item {
-    padding: 10px 15px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    border-radius: 5px;
-    margin-bottom: 5px;
-    text-align: left;
-}
-
-.nav-item:hover {
-    background-color: #e9ecef;
-}
-
-.nav-item.active {
-    background-color: #007bff;
-    color: white;
-}
-
-/* Main Content */
-.main-content {
-    flex-grow: 1;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-}
-
-/* Header */
-.main-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.account-info {
-    /* Style cho thông tin tài khoản */
-}
-
-.total-items {
-    font-weight: bold;
-}
-
-.filter input[type="text"] {
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-/* Content Area */
-.content-area {
-    flex-grow: 1;
-}
-
-.item-list {
-    display: none; /* Ẩn tất cả các danh sách mặc định */
-}
-
-.item-list.active {
-    display: block; /* Hiển thị danh sách đang được chọn */
-}
-
-.add-button {
-    background-color: #28a745;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-bottom: 15px;
-}
-
-.add-button:hover {
-    background-color: #218838;
-}
-
-/* Table */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
-}
-
-th, td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
-}
-
-th {
-    background-color: #f2f2f2;
-}
-
-/* Pagination */
-.pagination {
-    display: flex;
-    justify-content: center;
-}
-
-.pagination button, .pagination span {
-    padding: 8px 12px;
-    margin: 0 5px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.pagination button.active {
-    background-color: #007bff;
-    color: white;
-    border-color: #007bff;
-}
-
-.pagination button:hover {
-    background-color: #e9ecef;
-}
-
-/* Modal (CSS đã được định nghĩa ở phần trước, bạn có thể đặt nó ở đây hoặc import từ file khác) */
-.modal-overlay {
+/* Animated Background */
+body::before {
+    content: '';
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-image: 
+        radial-gradient(circle at 20% 80%, rgba(40, 167, 69, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(32, 201, 151, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(79, 214, 156, 0.1) 0%, transparent 50%);
+    animation: float 8s ease-in-out infinite;
+    z-index: -1;
+}
+
+@keyframes float {
+    0%, 100% { 
+        transform: translateY(0px) rotate(0deg); 
+        opacity: 0.8;
+    }
+    50% { 
+        transform: translateY(-20px) rotate(2deg); 
+        opacity: 1;
+    }
+}
+
+/* ===================== Main ===================== */
+
+.toggle {
+    position: relative;
+    width: 60px;
+    height: 60px;
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1000;
+    font-size: 2.5rem;
+    cursor: pointer;
+    border-radius: 15px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    color: var(--black1);
 }
 
-.modal {
-    background-color: #fff;
+.toggle:hover {
+    background: var(--green);
+    color: var(--white);
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
+}
+
+.search {
+    position: relative;
+    width: 400px;
+    margin: 0 10px;
+    transition: all 0.3s ease;
+}
+
+.search:focus-within {
+    transform: scale(1.02);
+}
+
+.search label {
+    position: relative;
+    width: 100%;
+}
+
+.search label input {
+    width: 100%;
+    height: 50px;
+    border-radius: 25px;
+    padding: 5px 20px;
+    padding-left: 45px;
+    font-size: 16px;
+    outline: none;
+    border: 2px solid transparent;
+    background: var(--gray);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 10px var(--shadow-light);
+}
+
+.search label input:focus {
+    border-color: var(--green);
+    background: var(--white);
+    box-shadow: 0 4px 20px rgba(46, 204, 113, 0.2);
+    transform: translateY(-2px);
+}
+
+.search label ion-icon {
+    position: absolute;
+    top: 50%;
+    left: 15px;
+    transform: translateY(-50%);
+    font-size: 1.3rem;
+    color: var(--black2);
+    transition: all 0.3s ease;
+}
+
+.search:focus-within label ion-icon {
+    color: var(--green);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.user {
+    position: relative;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 3px solid transparent;
+    box-shadow: 0 4px 15px var(--shadow-light);
+}
+
+.user:hover {
+    transform: scale(1.1);
+    border-color: var(--green);
+    box-shadow: 0 6px 25px rgba(46, 204, 113, 0.3);
+}
+
+.user img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.user:hover img {
+    transform: scale(1.05);
+}
+
+/* ============= Cards Section (Enhanced Version) ============= */
+.cardBox {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    margin-bottom: 35px;
+    animation: fadeInUp 0.8s ease 0.2s both;
+}
+
+@keyframes fadeInUp {
+    0% { opacity: 0; transform: translateY(30px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    padding: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 
+        0 10px 30px var(--shadow-light),
+        0 0 0 1px rgba(255, 255, 255, 0.2);
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(40, 167, 69, 0.1);
+    cursor: pointer;
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary-green), var(--secondary-green));
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.card:hover::before {
+    transform: scaleX(1);
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 
+        0 20px 40px var(--shadow-medium),
+        0 0 0 1px rgba(40, 167, 69, 0.2);
+    background: rgba(255, 255, 255, 0.95);
+}
+
+.card a {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    width: 100%;
+}
+
+.numbers {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary-green);
+    margin-bottom: 8px;
+    background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.cardName {
+    font-size: 1.1rem;
+    color: var(--black2);
+    font-weight: 500;
+    margin-bottom: 0;
+}
+
+.iconBx {
+    font-size: 3rem;
+    color: var(--primary-green);
+    opacity: 0.7;
+    transition: all 0.3s ease;
+}
+
+.card:hover .iconBx {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+/* ============= Charts Section ============= */
+.charts-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+    margin-bottom: 35px;
+}
+
+.charts-grid-bottom {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+    margin-bottom: 35px;
+}
+
+.chart-card {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(20px);
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 
+        0 10px 30px var(--shadow-light),
+        0 0 0 1px rgba(255, 255, 255, 0.2);
+    transition: all 0.4s ease;
+    border: 1px solid rgba(40, 167, 69, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.chart-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, var(--primary-green), var(--secondary-green));
+}
+
+.chart-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 
+        0 20px 40px var(--shadow-medium),
+        0 0 0 1px rgba(40, 167, 69, 0.2);
+}
+
+.chart-card h3 {
+    margin-bottom: 25px;
+    color: var(--black1);
+    font-size: 1.3rem;
+    font-weight: 600;
+    background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.chart-container {
+    position: relative;
+    height: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+/* ============= Status Overview ============= */
+.status-overview {
+    display: grid;
+    grid-template-columns: 1fr 0.8fr;
+    grid-gap: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(20px);
+    padding: 15px;
+    border-radius: 20px;
+    box-shadow: 
+        0 10px 30px var(--shadow-light),
+        0 0 0 1px rgba(255, 255, 255, 0.2);
+    transition: all 0.4s ease;
+}
+
+.status-overview:hover {
+    transform: translateY(-5px);
+    box-shadow: 
+        0 20px 40px var(--shadow-medium),
+        0 0 0 1px rgba(40, 167, 69, 0.2);
+}
+
+.status-chart {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 250px;
+    max-height: 250px;
+}
+
+#statusChart {
+    width: 100% !important;
+    height: auto !important;
+    max-height: 280px;
+}
+
+.status-legend {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    width: 80%;
-    max-width: 600px;
+    background: rgba(40, 167, 69, 0.03);
+    border-radius: 15px;
+    border: 1px solid rgba(40, 167, 69, 0.1);
 }
 
-.modal-header {
+.status-legend h3 {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    color: var(--black1);
+    font-weight: 600;
+    background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.legend-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 20px 0;
+}
+
+.legend-list li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+    padding: 8px 12px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.5);
+    transition: all 0.3s ease;
+}
+
+.legend-list li:hover {
+    background: rgba(40, 167, 69, 0.1);
+    transform: translateX(5px);
+}
+
+.legend-color-box {
+    width: 18px;
+    height: 18px;
+    border-radius: 6px;
+    margin-right: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.legend-label {
+    flex: 1;
+    font-size: 0.95rem;
+    color: var(--black1);
+    font-weight: 500;
+}
+
+.legend-value {
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--primary-green);
+    background: rgba(40, 167, 69, 0.1);
+    padding: 4px 8px;
+    border-radius: 6px;
+}
+
+.chart-name {
+    font-size: 0.9rem;
+    color: var(--black2);
+    font-style: italic;
+    margin-top: 15px;
+    padding: 10px;
+    background: rgba(40, 167, 69, 0.05);
+    border-radius: 8px;
+    border-left: 4px solid var(--primary-green);
+}
+
+/* ============= Chart Header ============= */
+.chart-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 15px;
-    border-bottom: 1px solid #ccc;
-    padding-bottom: 10px;
+    margin-bottom: 25px;
+    padding: 15px;
+    background: rgba(40, 167, 69, 0.05);
+    border-radius: 12px;
+    border: 1px solid rgba(40, 167, 69, 0.1);
 }
 
-.modal-header h2 {
+.chart-header h3 {
     margin: 0;
+    color: var(--black1);
+    font-size: 1.2rem;
+    font-weight: 600;
 }
 
-.modal-header button {
-    background: none;
+.chart-header form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.chart-header label {
+    font-size: 0.9rem;
+    color: var(--black2);
+    font-weight: 500;
+}
+
+.chart-header select {
+    padding: 8px 12px;
+    border: 2px solid rgba(40, 167, 69, 0.2);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--black1);
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.chart-header select:focus {
+    border-color: var(--primary-green);
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+}
+
+.chart-header button {
+    padding: 8px 16px;
+    background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
+    color: white;
     border: none;
-    font-size: 1.5em;
+    border-radius: 8px;
+    font-weight: 500;
     cursor: pointer;
+    transition: all 0.3s ease;
 }
 
-.form-group {
-    margin-bottom: 15px;
+.chart-header button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
 }
 
-.form-group label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
+/* ============= Notifications ============= */
+.notifications {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(20px);
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 
+        0 10px 30px var(--shadow-light),
+        0 0 0 1px rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(40, 167, 69, 0.1);
+    transition: all 0.4s ease;
+    position: relative;
 }
 
-.form-group input[type="text"],
-.form-group textarea,
-.form-group input[type="file"] {
+.notifications::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 3px;
-    box-sizing: border-box;
+    height: 2px;
+    background: linear-gradient(90deg, var(--primary-green), var(--secondary-green));
 }
 
-.form-group textarea {
-    resize: vertical;
-    min-height: 100px;
+.notifications:hover {
+    transform: translateY(-5px);
+    box-shadow: 
+        0 20px 40px var(--shadow-medium),
+        0 0 0 1px rgba(40, 167, 69, 0.2);
 }
 
-.form-actions {
-    text-align: right;
+.notifications h3 {
+    margin-bottom: 25px;
+    color: var(--black1);
+    font-size: 1.3rem;
+    font-weight: 600;
+    background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
-.form-actions button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1em;
+.notification-item {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid rgba(40, 167, 69, 0.1);
+    transition: all 0.3s ease;
+    border-radius: 10px;
+    margin-bottom: 10px;
 }
 
-.form-actions button.save {
-    background-color: #007bff;
-    color: white;
+.notification-item:hover {
+    background: rgba(40, 167, 69, 0.05);
+    transform: translateX(5px);
 }
 
-.form-actions button.cancel {
-    background-color: #6c757d;
-    color: white;
-    margin-left: 10px;
+.notification-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.notification-icon {
+    margin-right: 15px;
+    font-size: 1.4rem;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(40, 167, 69, 0.1);
+    transition: all 0.3s ease;
+}
+
+.notification-icon.success { 
+    color: var(--primary-green);
+    background: rgba(40, 167, 69, 0.1);
+}
+
+.notification-icon.error { 
+    color: #dc3545;
+    background: rgba(220, 53, 69, 0.1);
+}
+
+.notification-icon.warning { 
+    color: #ffc107;
+    background: rgba(255, 193, 7, 0.1);
+}
+
+.notification-text {
+    flex: 1;
+}
+
+.notification-text p {
+    margin: 0;
+    color: var(--black1);
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+.notification-text small {
+    color: var(--black2);
+    font-size: 0.8rem;
+    font-weight: 400;
+}
+
+/* ============= Responsive Design ============= */
+@media (max-width: 1200px) {
+    .charts-grid,
+    .charts-grid-bottom {
+        grid-template-columns: 1fr;
+    }
+    
+    .status-overview {
+        grid-template-columns: 1fr;
+    }
+    
+    .main {
+        width: calc(100% - 300px);
+        left: 300px;
+    }
+    
+    .main.active {
+        width: calc(100% - 80px);
+        left: 80px;
+    }
+}
+
+@media (max-width: 768px) {
+    .cardBox {
+        grid-template-columns: repeat(2, 1fr);
+        grid-gap: 20px;
+    }
+    
+    .main {
+        width: 100%;
+        left: 0;
+        padding: 15px;
+    }
+    
+    .main.active {
+        width: 100%;
+        left: 0;
+    }
+    
+    .navigation {
+        left: -300px;
+    }
+    
+    .navigation.active {
+        left: 0;
+        width: 300px;
+    }
+    
+    .card {
+        padding: 25px;
+    }
+    
+    .chart-card {
+        padding: 20px;
+    }
+    
+    .notifications {
+        padding: 20px;
+    }
+    
+    .chart-container {
+        height: 400px;
+    }
+    
+    .chart-header {
+        flex-direction: column;
+        gap: 15px;
+        align-items: stretch;
+    }
+    
+    .chart-header form {
+        justify-content: center;
+    }
+    
+    .search {
+        width: 250px;
+    }
 }

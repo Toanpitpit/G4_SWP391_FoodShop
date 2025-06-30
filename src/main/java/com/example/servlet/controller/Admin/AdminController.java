@@ -24,6 +24,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.mindrot.jbcrypt.BCrypt;
 
+// Annotation để cấu hình upload file
 @WebServlet("/adminDashboard")
 @MultipartConfig(
     fileSizeThreshold = 1024 * 1024,
@@ -35,6 +36,7 @@ public class AdminController extends HttpServlet {
     private AccountDAO dao;
     private static final String UPLOAD_DIR = "img/avar";
     private static final String TARGET_DIR = "target";
+
     private static final Logger LOGGER = Logger.getLogger(AdminController.class.getName());
 
     @Override
@@ -42,10 +44,11 @@ public class AdminController extends HttpServlet {
         dao = new AccountDAO();
     }
 
+    // Xử lý GET request (hiển thị danh sách, chi tiết, hoặc form chỉnh sửa)
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession(false);
+        HttpSession session = request.getSession(false); // Lấy session mà không tạo mới
         Account account = (session != null) ? (Account) session.getAttribute("account") : null;
 
         if (session == null || account == null || !"Admin".equalsIgnoreCase(account.getRole())) {
@@ -53,7 +56,7 @@ public class AdminController extends HttpServlet {
             return;
         }
 
-        String action = request.getParameter("action");
+        String action = request.getParameter("action"); // Lấy action từ URL
         String search = request.getParameter("search");
         String role = request.getParameter("role");
         String status = request.getParameter("status");
@@ -79,11 +82,13 @@ public class AdminController extends HttpServlet {
                 }
             } else if ("activate".equals(action)) {
                 int id = Integer.parseInt(request.getParameter("id"));
+
                 Account targetAccount = dao.findById(id);
                 if (targetAccount != null && "Admin".equalsIgnoreCase(targetAccount.getRole())) {
                     response.sendRedirect(request.getContextPath() + "/adminDashboard?error=CannotModifyAdminStatus");
                 } else {
                     dao.updateUserStatus(id, "Active");
+
                     response.sendRedirect(request.getContextPath() + "/adminDashboard");
                 }
             } else if ("deactivate".equals(action)) {
@@ -112,6 +117,7 @@ public class AdminController extends HttpServlet {
         }
     }
 
+    // Xử lý POST request (thêm hoặc cập nhật tài khoản)
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -137,7 +143,6 @@ public class AdminController extends HttpServlet {
                 Date birthDate = new Date(new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("birthDate")).getTime());
                 String role = request.getParameter("role");
                 String status = "Active";
-
                 Part filePart = request.getPart("image");
                 String fileName = getFileName(filePart);
                 if (fileName == null || fileName.isEmpty()) {
@@ -152,7 +157,6 @@ public class AdminController extends HttpServlet {
                     request.getRequestDispatcher("/addAccount.jsp").forward(request, response);
                     return;
                 }
-
                 String appPath = request.getServletContext().getRealPath("");
                 String savePath = new File(appPath, UPLOAD_DIR).getAbsolutePath();
                 String targetPath = new File(appPath, TARGET_DIR).getAbsolutePath();
@@ -175,8 +179,8 @@ public class AdminController extends HttpServlet {
                     }
                     LOGGER.info("Created directory: " + targetPath);
                 }
-
                 String uniqueFileName = System.currentTimeMillis() + "_" + fileName;
+
                 String filePath = new File(savePath, uniqueFileName).getAbsolutePath();
                 String targetFilePath = new File(targetPath, uniqueFileName).getAbsolutePath();
 
@@ -227,6 +231,7 @@ public class AdminController extends HttpServlet {
                     return;
                 }
                 if (!dao.validateBirthDate(birthDate)) {
+
                     request.setAttribute("error", "Ngày sinh không hợp lệ! Phải trước ngày hiện tại, tuổi từ 15 đến 100.");
                     request.getRequestDispatcher("/addAccount.jsp").forward(request, response);
                     return;
@@ -237,7 +242,9 @@ public class AdminController extends HttpServlet {
                     0, username, password, name, email, phone,
                     gender, birthDate, role, status, dbFilePath, createAt
                 );
+
                 dao.addAccount(newAccount);
+
                 response.sendRedirect(request.getContextPath() + "/adminDashboard");
             } catch (Exception e) {
                 LOGGER.log(Level.SEVERE, "Error adding account", e);
@@ -358,7 +365,7 @@ public class AdminController extends HttpServlet {
 
                 String passwordToSet = (password != null && !password.isEmpty())
                         ? BCrypt.hashpw(password, BCrypt.gensalt())
-                        : existingAccount.getPass();
+                        : existingAccount.getPass(); // Giữ mật khẩu cũ nếu không thay đổi
 
                 Account updatedAccount = new Account(
                     id, username, passwordToSet, name, email, phone, gender,

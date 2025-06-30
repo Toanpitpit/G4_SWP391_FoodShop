@@ -14,12 +14,14 @@
         :root {
             --sidebar-width: 280px;
             --sidebar-collapsed-width: 70px;
+
             --header-height: 90px; /* Increased to match Nutri's height */
             --primary-green: #47B77B;
             --sidebar-bg: #E6F4EA;
             --sidebar-text: #3A3A3A;
             --sidebar-hover: #FBBF24;
             --border-color: #B7E28B;
+
             --content-bg: #f8fafc;
         }
 
@@ -33,6 +35,7 @@
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background-color: var(--content-bg);
             overflow-x: hidden;
+
         }
 
         /* Sidebar Styles */
@@ -49,6 +52,7 @@
             overflow-x: hidden;
             border-right: 1px solid var(--border-color);
         }
+
 
         .sidebar.collapsed {
             width: var(--sidebar-collapsed-width);
@@ -67,7 +71,9 @@
             display: flex;
             align-items: center;
             text-decoration: none;
+
             color: #1e293b;
+
             font-weight: 700;
             font-size: 20px;
             transition: all 0.3s ease;
@@ -76,13 +82,16 @@
         .brand-icon {
             width: 40px;
             height: 40px;
+
             background: linear-gradient(135deg, #e0fff4, #a7fcd9);
+
             border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
             margin-right: 12px;
             font-size: 18px;
+
             color: var(--primary-green);
             flex-shrink: 0;
         }
@@ -113,6 +122,7 @@
             background: var(--sidebar-hover);
             color: white;
         }
+
 
         .sidebar-menu {
             padding: 20px 0;
@@ -147,13 +157,16 @@
         }
 
         .menu-link:hover {
+
             background: linear-gradient(135deg, var(--primary-green), #3b82f6);
             color: white;
             transform: translateX(2px);
         }
 
         .menu-link.active {
+
             background: linear-gradient(135deg, var(--primary-green), #3b82f6);
+
             color: white;
             box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
         }
@@ -188,12 +201,16 @@
             left: var(--sidebar-width);
             right: 0;
             height: var(--header-height);
+
             background: linear-gradient(#d0f0c0, #ffffff);
+
             border-bottom: 1px solid #e2e8f0;
             z-index: 999;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+
             padding-left: 130px;
+
         }
 
         .main-header.collapsed {
@@ -203,6 +220,7 @@
         .header-content {
             height: 100%;
             display: flex;
+
             align-items: center;
             justify-content: space-between;
             padding: 0 24px;
@@ -212,6 +230,7 @@
             display: flex;
             align-items: center;
             gap: 20px;
+
         }
 
         .mobile-toggle {
@@ -226,6 +245,7 @@
             transition: all 0.2s ease;
         }
 
+
         .mobile-toggle:hover {
             background: #f1f5f9;
             color: #1e293b;
@@ -235,6 +255,7 @@
             position: relative;
             width: 400px;
         }
+
 
         .search-input {
             width: 100%;
@@ -248,12 +269,15 @@
 
         .search-input:focus {
             outline: none;
+
             border-color: var(--primary-green);
             box-shadow: 0 0 0 3px rgba(71, 183, 123, 0.1);
+
             background: white;
         }
 
         .search-icon {
+
             position: absolute;
             left: 16px;
             top: 50%;
@@ -450,6 +474,7 @@
             font-size: 12px;
         }
 
+
         .content-wrapper {
             padding: 24px;
         }
@@ -495,8 +520,10 @@
         input[type="date"]:focus,
         select:focus,
         input[type="file"]:focus {
+
             border-color: var(--primary-green);
             box-shadow: 0 0 0 3px rgba(71, 183, 123, 0.1);
+
             background: white;
             outline: none;
         }
@@ -527,13 +554,17 @@
             display: inline-block;
             margin-top: 15px;
             text-decoration: none;
+
             color: var(--primary-green);
+
             font-size: 14px;
             transition: color 0.2s ease;
         }
 
         .back-link:hover {
+
             color: #2e8a5e;
+
         }
 
         img {
@@ -573,7 +604,9 @@
         }
 
         .footer-link:hover {
+
             color: var(--primary-green);
+
         }
 
         @media (max-width: 768px) {
@@ -665,7 +698,9 @@
                     <i class="bi bi-bell"></i>
                     <span class="notification-count">3</span>
                 </div>
+
                 <div class="user-profile" id="user-account">
+
                     <div class="user-avatar">A</div>
                     <div class="user-info">
                         <div class="user-name">Admin</div>
@@ -673,6 +708,7 @@
                     </div>
                     <i class="dropdown-arrow bi bi-chevron-down"></i>
                 </div>
+
                 <div class="account-dropdown" id="account-dropdown">
                     <ul>
                         <li><a href="/account"><i class="bi bi-person"></i> Account</a></li>
@@ -680,6 +716,7 @@
                         <li><a href="/logout"><i class="bi bi-box-arrow-right"></i> Log out</a></li>
                     </ul>
                 </div>
+
             </div>
         </div>
     </header>
@@ -830,6 +867,7 @@
             document.getElementById("birthDate").setAttribute("max", maxDate);
         });
 
+
         // User Dropdown Toggle
         const userBtn = document.getElementById("user-account");
         const dropdown = document.getElementById("account-dropdown");
@@ -842,7 +880,8 @@
             if (!userBtn.contains(e.target) && !dropdown.contains(e.target)) {
                 dropdown.style.display = "none";
             }
-        });
+
     </script>
 </body>
 </html>
+

@@ -1,0 +1,137 @@
+/* === Tối ưu chung cho Chart Cards === */
+
+:root {
+    --primary-green: #28a745;
+    --secondary-green: #20c997;
+    --black1: #222;
+    --black2: #555;
+    --shadow-light: rgba(0, 0, 0, 0.05);
+    --shadow-medium: rgba(0, 0, 0, 0.1);
+}
+
+.card.shadow-sm {
+    border-radius: 20px;
+    backdrop-filter: blur(20px);
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.05),
+        0 0 0 1px rgba(255, 255, 255, 0.3);
+    transition: all 0.4s ease;
+    border: 1px solid rgba(40, 167, 69, 0.1);
+}
+
+.card.shadow-sm:hover {
+    transform: translateY(-4px);
+    box-shadow:
+        0 20px 40px rgba(0, 0, 0, 0.08),
+        0 0 0 1px rgba(40, 167, 69, 0.2);
+}
+
+/* === Pie Chart kích thước hợp lý hơn === */
+#pieChart {
+     max-width: 350px;
+    max-height: 350px;
+    margin: 0 auto;
+    display: block;
+}
+
+/* === Legend style như cũ === */
+.status-legend {
+    margin-top: 20px;
+    padding: 20px;
+    background: rgba(40, 167, 69, 0.03);
+    border-radius: 15px;
+    border: 1px solid rgba(40, 167, 69, 0.1);
+}
+
+.status-legend h5 {
+    font-size: 1.1rem;
+    margin-bottom: 16px;
+    font-weight: 600;
+    color: var(--black1);
+    background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.legend-list {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 10px;
+}
+
+.legend-list li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 6px 12px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.5);
+    transition: all 0.3s ease;
+}
+
+.legend-list li:hover {
+    background: rgba(40, 167, 69, 0.1);
+    transform: translateX(5px);
+}
+
+.legend-color-box {
+    width: 16px;
+    height: 16px;
+    border-radius: 5px;
+    margin-right: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.legend-label {
+    flex: 1;
+    font-size: 0.95rem;
+    color: var(--black1);
+    font-weight: 500;
+}
+
+.legend-value {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--primary-green);
+    background: rgba(40, 167, 69, 0.1);
+    padding: 3px 8px;
+    border-radius: 6px;
+}
+
+.chart-name {
+    font-size: 0.85rem;
+    color: var(--black2);
+    font-style: italic;
+    margin-top: 12px;
+    padding: 8px;
+    background: rgba(40, 167, 69, 0.05);
+    border-radius: 6px;
+    border-left: 4px solid var(--primary-green);
+}
+/*.chart-container {
+    flex: 1;
+    min-width: 220px;
+    max-width: 360px;
+    height: 35000px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}*/
+
+.status-legend {
+    min-width: 260px;
+    max-width: 300px;
+    padding: 15px;
+    background: rgba(40, 167, 69, 0.03);
+    border-radius: 15px;
+    border: 1px solid rgba(40, 167, 69, 0.1);
+}
+
+@media (max-width: 768px) {
+    .chart-container, .status-legend {
+        width: 100%;
+        max-width: 100%;
+        flex: unset;
+    }
+}
