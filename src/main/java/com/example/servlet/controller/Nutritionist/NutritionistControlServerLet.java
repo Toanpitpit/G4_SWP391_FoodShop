@@ -22,6 +22,7 @@ import com.example.servlet.model.FoodDetail;
 import com.example.servlet.model.FoodDraftDTO;
 import com.example.servlet.model.Food_Draft;
 import com.example.servlet.model.MonthlyStat;
+import com.example.servlet.model.Requests;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -55,9 +56,9 @@ import org.jsoup.Jsoup;
  * @author Admin
  */
 @MultipartConfig(
-        fileSizeThreshold = 1024 * 1024, // 1MB
-        maxFileSize = 1024 * 1024 * 5, // 5MB
-        maxRequestSize = 1024 * 1024 * 10 // 10MB
+        fileSizeThreshold = 1024 * 1024,
+        maxFileSize = 1024 * 1024 * 5,
+        maxRequestSize = 1024 * 1024 * 10
 )
 public class NutritionistControlServerLet extends HttpServlet {
 
@@ -115,9 +116,6 @@ public class NutritionistControlServerLet extends HttpServlet {
             case "showBMI":
                 prepareBMIdata (request, response);
                 break;
-            case "CreateBMI":
-                displayBlogDetail (request, response);
-                break;
             case "showfood":
                 ShowFood (request, response);
                 break;
@@ -174,6 +172,12 @@ public class NutritionistControlServerLet extends HttpServlet {
                 break;
             case "deleteCategory":
                 deleteCategory (request, response);
+                break;
+            case "showrequestlist":
+                ShowRequestList (request, response);
+                break;
+            case "showrequestlistsort":
+                ShowRequestListSort (request, response);
                 break;
 
             default:
@@ -268,20 +272,11 @@ public class NutritionistControlServerLet extends HttpServlet {
         }
     }
 
-    private boolean isNotValidInput(String title, String content, String bmiIdStr, String status, Part imagePart) {
-        return title == null || title.trim ().isEmpty ()
-                || content == null || content.trim ().isEmpty ()
-                || bmiIdStr == null || bmiIdStr.isEmpty ()
-                || status == null || imagePart == null
-                || imagePart.getSize () == 0
-                || imagePart.getSubmittedFileName ().isEmpty ();
-    }
-
     protected void update(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession (false);
         if (session == null || session.getAttribute ("Account") == null) {
-            response.sendRedirect ("login.jsp");
+            response.sendRedirect ("Homedemo.jsp");
             return;
         }
         BlogDAO blogDAO = new BlogDAO ();
@@ -394,6 +389,11 @@ public class NutritionistControlServerLet extends HttpServlet {
         BMIClassificationDAO b_dao = new BMIClassificationDAO ();
         BlogDAO _dao = new BlogDAO ();
         try {
+            HttpSession session = request.getSession (false);
+            if (session == null || session.getAttribute ("Account") == null) {
+                response.sendRedirect ("Homedemo.jsp");
+                return;
+            }
             String id = request.getParameter ("id");
 
             response.setContentType ("text/html;charset=UTF-8");
@@ -442,12 +442,18 @@ public class NutritionistControlServerLet extends HttpServlet {
         try (PrintWriter out = response.getWriter ()) {
             HttpSession session = request.getSession (false);
             if (session == null) {
-                response.sendRedirect ("login.jsp");
+                response.sendRedirect ("Homedemo.jsp");
             }
-            int id = Integer.parseInt (request.getParameter ("id"));
+            int id = 0;
+            try {
+                id = Integer.parseInt (request.getParameter ("id"));
+            } catch (Exception e) {
+                session.setAttribute ("Errmess", "Fail to get ID");
+                return;
+            }
             BlogDAO b_dao = new BlogDAO ();
             String path = b_dao.getPathBlogByID (id);
-            String basePath = "D:/Semester 5/SWP391/Project/G4_SWP391_FoodShop-master/G4_SWP391_FoodShop-master/src/main/webapp/";
+            String basePath = BASE_PATH + "/src/main/webapp/";
             String realPath = basePath + path;
             b_dao.deleteImage (realPath);
             boolean check = b_dao.deleteBlogByID (id);
@@ -458,10 +464,9 @@ public class NutritionistControlServerLet extends HttpServlet {
             }
             DisplayBlog (request, response);
         }
-
     }
 
-    protected void DisplayBlog(HttpServletRequest request, HttpServletResponse response)
+    private void DisplayBlog(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.setCharacterEncoding ("UTF-8");
         response.setContentType ("text/html;charset=UTF-8");
@@ -499,7 +504,7 @@ public class NutritionistControlServerLet extends HttpServlet {
         }
     }
 
-    protected void displayBlogDetail(HttpServletRequest request, HttpServletResponse response)
+    private void displayBlogDetail(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType ("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter ()) {
@@ -538,7 +543,7 @@ public class NutritionistControlServerLet extends HttpServlet {
         }
     }
 
-    protected void dashboard(HttpServletRequest request, HttpServletResponse response)
+    private void dashboard(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType ("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter ()) {
@@ -1143,8 +1148,7 @@ public class NutritionistControlServerLet extends HttpServlet {
 
             } catch (Exception e) {
                 e.printStackTrace ();
-                String ErrMess = "Lỗi hệ thống xin vui lòng thử lại";
-                request.setAttribute ("Errmess", ErrMess);
+                request.setAttribute ("Errmess", "Lỗi hệ thống xin vui lòng thử lại");
                 ShowFood (request, response);
             }
         }
@@ -1162,7 +1166,6 @@ public class NutritionistControlServerLet extends HttpServlet {
                 BMIClassificationDAO bi_dao = new BMIClassificationDAO ();
                 List<Category> lstC = c_dao.getListCategoriesNoP (null, null, null);
                 List<BMIClassification> lstBMI = bi_dao.getAllBMI ();
-
                 if (lstC != null && lstBMI != null) {
                     request.setAttribute ("lstC", lstC);
                     request.setAttribute ("lstBMI", lstBMI);
@@ -1234,17 +1237,17 @@ public class NutritionistControlServerLet extends HttpServlet {
                     return;
                 }
 
-//                if (!isCKEditorContentEmpty (description)) {
-//                    request.setAttribute ("Errmess", "Description cannot be null");
-//                    ShowCreateFoodDraft (request, response);
-//                    return;
-//                }
-//
-//                if (!isCKEditorContentEmpty (ingredients)) {
-//                    request.setAttribute ("Errmess", "Ingredients cannot be null");
-//                    ShowCreateFoodDraft (request, response);
-//                    return;
-//                }
+                if (isCKEditorContentEmpty (description)) {
+                    request.setAttribute ("Errmess", "Description cannot be null");
+                    ShowCreateFoodDraft (request, response);
+                    return;
+                }
+
+                if (isCKEditorContentEmpty (ingredients)) {
+                    request.setAttribute ("Errmess", "Ingredients cannot be null");
+                    ShowCreateFoodDraft (request, response);
+                    return;
+                }
 
                 String imageUrl;
                 try {
@@ -1508,7 +1511,7 @@ public class NutritionistControlServerLet extends HttpServlet {
                 ShowUpdateFoodDraft (request, response);
                 return;
             } catch (Exception e) {
-                request.setAttribute ("Errmess", "Đã xảy ra lỗi khi tải ảnh: " + e.getMessage ());
+                request.setAttribute ("Errmess", "Đã xảy ra lỗi khi tải ảnh: ");
                 ShowUpdateFoodDraft (request, response);
                 return;
             }
@@ -1936,7 +1939,6 @@ public class NutritionistControlServerLet extends HttpServlet {
                 return;
             }
 
-            
         } catch (NumberFormatException e) {
             request.setAttribute ("Ermessr", "Invalid Food Draft ID format");
             ShowFoodDraft (request, response);
@@ -1944,6 +1946,158 @@ public class NutritionistControlServerLet extends HttpServlet {
             e.printStackTrace ();
             request.setAttribute ("Ermessr", "An unexpected error occurred while deleting Food Draft");
             ShowFoodDraft (request, response);
+        }
+    }
+
+    protected void ShowRequestList(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        HttpSession session = request.getSession (false);
+        if (session == null) {
+            response.sendRedirect ("/Nutritionist/Homedemo.jsp");
+            return;
+        } else {
+            Account acc = (Account) session.getAttribute ("Account");
+
+            try {
+                if (request.getParameter ("Errmess") != null) {
+                    request.setAttribute ("Errmess", request.getParameter ("Errmess"));
+                }
+                if (request.getParameter ("successMessage") != null) {
+                    request.setAttribute ("successMessage", request.getParameter ("successMessage"));
+                }
+                RequestDAO dao = new RequestDAO ();
+                List<Requests> lstR = dao.getListRequests (null, null, 1, 10);
+                int curentPage = 1;
+                int pageSize = 10;
+                int total = dao.getTotalRequest (acc.getId ());
+                int totalPages = (int) Math.ceil ((double) total / pageSize);
+                request.setAttribute ("currentPage", curentPage);
+                request.setAttribute ("totalPages", totalPages);
+                request.setAttribute ("totalRequest", total);
+                request.setAttribute ("lstR", lstR);
+//               try(PrintWriter o = response.getWriter () ){
+//                   for (Requests requests : lstR) {
+//                       o.print (requests.toString ());
+//                   }
+//                        o.print (totalPages);
+//                        o.print (total);
+//                        o.print (curentPage);
+//               }
+
+                request.getRequestDispatcher ("/Nutritionist/Requests.jsp").forward (request, response);
+            } catch (SQLException ex) {
+                request.setAttribute ("Ermessr", "Lỗi tai dữ liệu");
+                request.getRequestDispatcher ("/Nutritionist/Requests.jsp").forward (request, response);
+            }
+        }
+    }
+
+    protected void ShowRequestListSort(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        HttpSession session = request.getSession (false);
+        if (session == null) {
+            response.sendRedirect ("/Nutritionist/Homedemo.jsp");
+            return;
+        }
+
+        Account acc = (Account) session.getAttribute ("Account");
+        String searchKey = request.getParameter ("searchKey");
+        String sortCreate = request.getParameter ("sortCreate");
+        String sortType = request.getParameter ("sortType");
+        String sortStatus = request.getParameter ("sortStatus");
+        String isJsonRequest = request.getParameter ("json");
+
+        try {
+            RequestDAO r_dao = new RequestDAO ();
+            int pageSize = 10;
+            
+            
+            Map<String, String> filters = new HashMap<> ();
+            if (searchKey != null && !searchKey.trim ().isEmpty ()) {
+                filters.put ("title", searchKey);
+            }
+            if (sortType != null && !sortType.trim ().isEmpty ()) {
+                filters.put ("type", sortType);
+            }
+            if (sortStatus != null && !sortStatus.trim ().isEmpty ()) {
+                filters.put ("status", sortStatus);
+            }
+
+            Map<String, String> sortFields = new HashMap<> ();
+            if (sortCreate != null && !sortCreate.trim ().isEmpty ()) {
+                sortFields.put ("update_at", sortCreate);
+            }
+
+            int page = 1;
+            String pagetxt = request.getParameter ("page");
+
+            if (pagetxt != null && !pagetxt.trim ().isEmpty ()) {
+                try {
+                    page = Integer.parseInt (pagetxt);
+                    if (page < 1) {
+                        page = 1;
+                    }
+                } catch (NumberFormatException e) {
+                    page = 1;
+                }
+            }
+
+            List<Requests> lstR = r_dao.getListRequests (filters, sortFields, page, pageSize);
+            int total = r_dao.getListRequestsTotal (filters, sortFields);
+            int totalPages = (int) Math.ceil ((double) total / pageSize);
+
+            if ("true".equals (isJsonRequest)) {
+                response.setContentType ("application/json");
+                response.setCharacterEncoding ("UTF-8");
+
+                Map<String, Object> jsonResponse = new HashMap<> ();
+                jsonResponse.put ("requests", lstR);
+                jsonResponse.put ("totalPages", totalPages);
+                jsonResponse.put ("currentPage", page);
+                jsonResponse.put ("currentSize", lstR.size ());
+                jsonResponse.put ("totalSize", total);
+                jsonResponse.put ("totalRequest", total);
+
+                Map<String, String> responseFilters = new HashMap<> ();
+                responseFilters.put ("searchKey", searchKey != null ? searchKey : "");
+                responseFilters.put ("sortCreate", sortCreate != null ? sortCreate : "");
+                responseFilters.put ("sortType", sortType != null ? sortType : "");
+                responseFilters.put ("sortStatus", sortStatus != null ? sortStatus : "");
+                jsonResponse.put ("filters", responseFilters);
+
+                Gson gson = new Gson ();
+                String jsonString = gson.toJson (jsonResponse);
+                response.getWriter ().write (jsonString);
+                return;
+            }
+            if (request.getParameter ("Errmess") != null) {
+                request.setAttribute ("Errmess", request.getParameter ("Errmess"));
+            }
+            if (request.getParameter ("successMessage") != null) {
+                request.setAttribute ("successMessage", request.getParameter ("successMessage"));
+            }
+
+            request.setAttribute ("currentPage", page);
+            request.setAttribute ("totalPages", totalPages);
+            request.setAttribute ("totalRequest", total);
+            request.setAttribute ("lstR", lstR);
+            request.getRequestDispatcher ("/Nutritionist/Requests.jsp").forward (request, response);
+
+        } catch (SQLException ex) {
+            if ("true".equals (isJsonRequest)) {
+                response.setContentType ("application/json");
+                response.setCharacterEncoding ("UTF-8");
+
+                Map<String, String> errorResponse = new HashMap<> ();
+                errorResponse.put ("error", "Lỗi tại dữ liệu");
+                errorResponse.put ("message", ex.getMessage ());
+
+                Gson gson = new Gson ();
+                response.getWriter ().write (gson.toJson (errorResponse));
+            } else {
+                request.setAttribute ("Ermessr", "Lỗi tại dữ liệu");
+                request.getRequestDispatcher ("/Nutritionist/Requests.jsp").forward (request, response);
+            }
         }
     }
 
@@ -2063,6 +2217,15 @@ public class NutritionistControlServerLet extends HttpServlet {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    private boolean isNotValidInput(String title, String content, String bmiIdStr, String status, Part imagePart) {
+        return title == null || title.trim ().isEmpty ()
+                || content == null || content.trim ().isEmpty ()
+                || bmiIdStr == null || bmiIdStr.isEmpty ()
+                || status == null || imagePart == null
+                || imagePart.getSize () == 0
+                || imagePart.getSubmittedFileName ().isEmpty ();
     }
 
 }
