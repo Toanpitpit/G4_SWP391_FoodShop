@@ -211,12 +211,14 @@
                 border-color: #28a745;
                 box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
                 background: rgba(255, 255, 255, 1);
+
             }
 
             .form-floating label {
                 color: #666;
                 font-weight: 500;
             }
+
 
             .form-check {
                 display: flex;
@@ -532,6 +534,7 @@
                     </a>
                 </div>
                 
+
                 <div class="login-footer">
                     <p>Do not have an account? <a href="register.jsp">Sign up</a></p>
                     <p>Forgot your password? <a href="forgetpassword.jsp">Reset Password</a></p>
@@ -560,8 +563,8 @@
                     }
                 });
             });
-            
-            // THÊM AUTO-HIDE ALERTS AFTER 5 SECONDS
+
+     
             document.addEventListener('DOMContentLoaded', function() {
                 const successAlert = document.getElementById('successAlert');
     
@@ -584,5 +587,8 @@
         }
         </style>
         
+
     </body>
 </html>
+
+
