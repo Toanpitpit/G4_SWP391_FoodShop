@@ -1,6 +1,6 @@
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+ <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <!DOCTYPE html>
 <html lang="vi">
     <head>
@@ -387,13 +387,31 @@
                                 </div>
                             </div>
                         </c:if>
-                        
+                         <c:if test="${!isCreate}">
+                        <div class="form-section">
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Ngày tạo yêu cầu</label>
+                                    <div class="datetime-info">
+                                        <i class="fas fa-calendar-plus me-2"></i>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Ngày cập nhật cuối</label>
+                                    <div class="datetime-info">
+                                        <i class="fas fa-calendar-edit me-2"></i>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        </c:if>
                         <div class="form-section">
                             <div class="mb-3">
                                 <label class="form-label">Món ăn đề xuất</label>
 
                                 <c:choose>
-                                    <!-- View Mode -->
+                                   
                                     <c:when test="${isView}">
                                         <c:choose>
                                             <c:when test="${not empty requestView.draftID}">
@@ -444,26 +462,7 @@
                             </div>
                         </div>
 
-                      
-                        <div class="form-section">
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <label class="form-label">Ngày tạo yêu cầu</label>
-                                    <div class="datetime-info">
-                                        <i class="fas fa-calendar-plus me-2"></i>
-                                        
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label">Ngày cập nhật cuối</label>
-                                    <div class="datetime-info">
-                                        <i class="fas fa-calendar-edit me-2"></i>
-                                        
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
+                       
                        
                         <div class="d-flex justify-content-end action-buttons">
                             <a href="#" class="btn btn-primary">
@@ -485,5 +484,26 @@
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
         <script src="${pageContext.request.contextPath}/JS/Nutritionist/common.js"></script>
+        
+        <script>
+    function updateFoodLink() {
+        const select = document.getElementById("foodSelect");
+        const link = document.getElementById("foodLink");
+        const selectedId = select.value;
+
+        if (selectedId) {
+            link.href = "nutricontrol?action=showfooddraftdetail&id=" + selectedId;
+            link.style.display = "inline-block";
+        } else {
+            link.href = "#";
+            link.style.display = "none";
+        }
+    }
+
+    // Gọi khi trang load để hiển thị sẵn nếu có
+    window.addEventListener('DOMContentLoaded', function () {
+        updateFoodLink();
+    });
+</script>
     </body>
 </html>
