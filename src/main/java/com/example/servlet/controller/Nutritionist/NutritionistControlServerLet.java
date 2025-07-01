@@ -2100,6 +2100,39 @@ public class NutritionistControlServerLet extends HttpServlet {
             }
         }
     }
+    
+        protected void ShowRequestDetail(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        HttpSession session = request.getSession (false);
+        if (session == null) {
+            response.sendRedirect ("/Nutritionist/Homedemo.jsp");
+            return;
+        } else {
+             int id = 0;
+                RequestDAO dao = new RequestDAO ();
+                String idtxt = request.getParameter ("id");
+                if(isIntergerNumber (idtxt)){
+                     id = Integer.parseInt (idtxt);
+                }
+                else {
+                    request.setAttribute ("Errmess", "Failed to colect id.");
+                    ShowRequestList (request, response);
+                }
+                Requests requestdetail = dao.getRequestByID (id);
+                request.setAttribute ("re", requestdetail);
+                request.setAttribute ("actiondo", "ViewDetail");
+                
+//               try(PrintWriter o = response.getWriter () ){
+//                   for (Requests requests : lstR) {
+//                       o.print (requests.toString ());
+//                   }
+//                        o.print (totalPages);
+//                        o.print (total);
+//                        o.print (curentPage);
+//               }
+                request.getRequestDispatcher ("/Nutritionist/RequestDeatail.jsp").forward (request, response);
+        }
+    }
 
     private boolean isCKEditorContentEmpty(String html) {
         if (html == null) {
@@ -2107,6 +2140,18 @@ public class NutritionistControlServerLet extends HttpServlet {
         }
         String text = Jsoup.parse (html).text ();
         return text.trim ().isEmpty ();
+    }
+    
+    private boolean isIntergerNumber(String s) {
+        if (s == null) {
+            return false;
+        }
+        try {
+            Integer.parseInt (s);
+            return true;
+        } catch (Exception e) {
+            return false;
+        } 
     }
 
     public static boolean isValidText(String input, int minWords) {
