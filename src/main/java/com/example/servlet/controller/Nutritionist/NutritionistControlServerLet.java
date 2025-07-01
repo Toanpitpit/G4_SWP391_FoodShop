@@ -1286,7 +1286,6 @@ public class NutritionistControlServerLet extends HttpServlet {
                 }
 
             } catch (Exception e) {
-                System.err.println ("Unexpected error in CreateFoodDraft servlet: " + e.getMessage ());
                 e.printStackTrace ();
                 request.setAttribute ("Errmess", "An unexpected error occurred");
                 ShowCreateFoodDraft (request, response);
@@ -1314,7 +1313,8 @@ public class NutritionistControlServerLet extends HttpServlet {
                 List<BMIClassification> tagetaudience = fd_dao.getBMIClassificationsByFoodOrDraftId (fID, true);
 
                 if (food == null) {
-                    response.sendError (HttpServletResponse.SC_NOT_FOUND, "Fooddraft not found");
+                    request.setAttribute ("Errmess", "Fail to colect Food items");
+                    ShowFoodDraft (request, response);
                     return;
                 }
 
@@ -1355,8 +1355,6 @@ public class NutritionistControlServerLet extends HttpServlet {
 
                 Food_Draft food = dao.getFoodDraftById (id, acc.getId ());
                 FoodDetail fooddetail = fd_dao.getFoodDetailByIdAndDraft (id, true);
-
-                List<BMIClassification> tagetaudience = fd_dao.getBMIClassificationsByFoodOrDraftId (id, true);
                 request.setAttribute ("fooddraftedit", food);
                 request.setAttribute ("fooddetail", fooddetail);
                 CategoryDAO c_dao = new CategoryDAO ();
@@ -1364,8 +1362,6 @@ public class NutritionistControlServerLet extends HttpServlet {
                 BMIClassificationDAO bi_dao = new BMIClassificationDAO ();
                 List<Category> lstC = c_dao.getListCategoriesNoP (null, null, null);
                 List<BMIClassification> lstBMI = bi_dao.getAllBMI ();
-
-                BMI_RecommentdationDAO bre_dao = new BMI_RecommentdationDAO ();
                 List<BMIClassification> lstbmiRe = fd_dao.getBMIClassificationsByFoodOrDraftId (id, true);
 
                 Map<Integer, Boolean> selectedBmiMap = lstbmiRe.stream ()
@@ -1975,15 +1971,6 @@ public class NutritionistControlServerLet extends HttpServlet {
                 request.setAttribute ("totalPages", totalPages);
                 request.setAttribute ("totalRequest", total);
                 request.setAttribute ("lstR", lstR);
-//               try(PrintWriter o = response.getWriter () ){
-//                   for (Requests requests : lstR) {
-//                       o.print (requests.toString ());
-//                   }
-//                        o.print (totalPages);
-//                        o.print (total);
-//                        o.print (curentPage);
-//               }
-
                 request.getRequestDispatcher ("/Nutritionist/Requests.jsp").forward (request, response);
             } catch (SQLException ex) {
                 request.setAttribute ("Ermessr", "Lỗi tai dữ liệu");
@@ -2100,6 +2087,39 @@ public class NutritionistControlServerLet extends HttpServlet {
             }
         }
     }
+    
+        protected void ShowRequestDetail(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        HttpSession session = request.getSession (false);
+        if (session == null) {
+            response.sendRedirect ("/Nutritionist/Homedemo.jsp");
+            return;
+        } else {
+             int id = 0;
+                RequestDAO dao = new RequestDAO ();
+                String idtxt = request.getParameter ("id");
+                if(isIntergerNumber (idtxt)){
+                     id = Integer.parseInt (idtxt);
+                }
+                else {
+                    request.setAttribute ("Errmess", "Failed to colect id.");
+                    ShowRequestList (request, response);
+                }
+                Requests requestdetail = dao.getRequestByID (id);
+                request.setAttribute ("re", requestdetail);
+                request.setAttribute ("actiondo", "ViewDetail");
+                
+//               try(PrintWriter o = response.getWriter () ){
+//                   for (Requests requests : lstR) {
+//                       o.print (requests.toString ());
+//                   }
+//                        o.print (totalPages);
+//                        o.print (total);
+//                        o.print (curentPage);
+//               }
+                request.getRequestDispatcher ("/Nutritionist/RequestDeatail.jsp").forward (request, response);
+        }
+    }
 
     private boolean isCKEditorContentEmpty(String html) {
         if (html == null) {
@@ -2107,6 +2127,18 @@ public class NutritionistControlServerLet extends HttpServlet {
         }
         String text = Jsoup.parse (html).text ();
         return text.trim ().isEmpty ();
+    }
+    
+    private boolean isIntergerNumber(String s) {
+        if (s == null) {
+            return false;
+        }
+        try {
+            Integer.parseInt (s);
+            return true;
+        } catch (Exception e) {
+            return false;
+        } 
     }
 
     public static boolean isValidText(String input, int minWords) {
