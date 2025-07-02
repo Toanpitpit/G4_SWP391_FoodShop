@@ -500,9 +500,10 @@ tbody tr td[colspan="8"] {
                                                         <td>
                                                             <span class="status-badge status-${fn:toLowerCase(re.status)}">${re.status}</span> 
                                                         </td>
-                                                        <td>${empty re.handleBY ? 'Chưa có' : re.handleBY}</td>                                                        <td>
+                                                        <td>${empty re.handleBY ? 'Chưa có' : re.handleBY}</td>                                                        
+                                                        <td>
                                                             <div class="table-actions">
-                                                               <a class="action-btn view-btn" title="Xem chi tiết" href="nutricontrol?action=showfooddraftdetail&id=${re.rID}">
+                                                               <a class="action-btn view-btn" title="Xem chi tiết" href="nutricontrol?action=showrequesdetail&id=${re.rID}">
                                                                     <i class="fas fa-eye"></i>
                                                                 </a>
                                                                 <c:if test="${re.status eq 'Pending'}">
