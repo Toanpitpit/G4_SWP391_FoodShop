@@ -179,6 +179,12 @@ public class NutritionistControlServerLet extends HttpServlet {
             case "showrequestlistsort":
                 ShowRequestListSort (request, response);
                 break;
+            case "showrequesdetail":
+                ShowRequestDetail (request, response);
+                break;
+            case "showcreaterequest":
+                ShowCreateRequest (request, response);
+                break;
 
             default:
         }
@@ -1986,8 +1992,6 @@ public class NutritionistControlServerLet extends HttpServlet {
             response.sendRedirect ("/Nutritionist/Homedemo.jsp");
             return;
         }
-
-        Account acc = (Account) session.getAttribute ("Account");
         String searchKey = request.getParameter ("searchKey");
         String sortCreate = request.getParameter ("sortCreate");
         String sortType = request.getParameter ("sortType");
@@ -2071,20 +2075,10 @@ public class NutritionistControlServerLet extends HttpServlet {
             request.getRequestDispatcher ("/Nutritionist/Requests.jsp").forward (request, response);
 
         } catch (SQLException ex) {
-            if ("true".equals (isJsonRequest)) {
-                response.setContentType ("application/json");
-                response.setCharacterEncoding ("UTF-8");
-
-                Map<String, String> errorResponse = new HashMap<> ();
-                errorResponse.put ("error", "Lỗi tại dữ liệu");
-                errorResponse.put ("message", ex.getMessage ());
-
-                Gson gson = new Gson ();
-                response.getWriter ().write (gson.toJson (errorResponse));
-            } else {
+   
                 request.setAttribute ("Ermessr", "Lỗi tại dữ liệu");
                 request.getRequestDispatcher ("/Nutritionist/Requests.jsp").forward (request, response);
-            }
+
         }
     }
     
@@ -2106,8 +2100,8 @@ public class NutritionistControlServerLet extends HttpServlet {
                     ShowRequestList (request, response);
                 }
                 Requests requestdetail = dao.getRequestByID (id);
-                request.setAttribute ("re", requestdetail);
-                request.setAttribute ("actiondo", "ViewDetail");
+                request.setAttribute ("requestView", requestdetail);
+                request.setAttribute ("action", "ViewDetail");
                 
 //               try(PrintWriter o = response.getWriter () ){
 //                   for (Requests requests : lstR) {
@@ -2117,7 +2111,37 @@ public class NutritionistControlServerLet extends HttpServlet {
 //                        o.print (total);
 //                        o.print (curentPage);
 //               }
-                request.getRequestDispatcher ("/Nutritionist/RequestDeatail.jsp").forward (request, response);
+                request.getRequestDispatcher ("/Nutritionist/RequestDetail.jsp").forward (request, response);
+        }
+    } 
+        protected void ShowCreateRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        HttpSession session = request.getSession (false);
+        if (session == null) {
+            response.sendRedirect ("/Nutritionist/Homedemo.jsp");
+            return;
+        } else {
+            try {
+                Account acc = (Account) session.getAttribute ("Account");
+                int id = 0;
+                FoodDraftDAO fdao = new FoodDraftDAO ();
+                List<Food_Draft> lstF = fdao.getTotalFoodDraftsByAuthor (acc.getId());
+                String idtxt = request.getParameter ("idfood");
+                if(isIntergerNumber (idtxt)){
+                    id = Integer.parseInt (idtxt);
+                    request.setAttribute ("foodID", id);
+                }
+                request.setAttribute ("action", "Create");
+                request.setAttribute ("foodList", lstF);
+//                try(PrintWriter o = response.getWriter () ){
+//                        o.print ("aloo");
+////                        o.print (total);
+////                        o.print (curentPage);
+//               }
+            request.getRequestDispatcher ("/Nutritionist/RequestDetail.jsp").forward (request, response);
+            } catch (SQLException ex) {
+                Logger.getLogger (NutritionistControlServerLet.class.getName()).log (Level.SEVERE, null, ex);
+            }
         }
     }
 
@@ -2218,7 +2242,7 @@ public class NutritionistControlServerLet extends HttpServlet {
 
             File sourceFile = new File (filePath);
             if (sourceFile.exists ()) {
-                sourceFile.delete ();
+                 sourceFile.delete ();
             }
             throw new IOException ("Error copying file: " + e.getMessage (), e);
         }
@@ -2226,7 +2250,7 @@ public class NutritionistControlServerLet extends HttpServlet {
         return "img/" + folder + "/" + uniqueFileName;
     }
 
-    private boolean deleteOldImage(String oldImagePath) {
+    private boolean deleteOldImage(String oldImagePath)  {
         if (oldImagePath == null || oldImagePath.isEmpty ()) {
             return true;
         }

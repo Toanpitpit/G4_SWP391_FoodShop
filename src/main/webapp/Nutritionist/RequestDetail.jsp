@@ -236,6 +236,10 @@
                     width: 100%;
                 }
             }
+            #foodSelect{
+                max-width: 400px;
+                
+            }
             .form-control:not([readonly]):hover {
                 border-color: #a7f3d0;
                 background: #fefffe;
@@ -266,7 +270,7 @@
         <!-- Main Header -->
         <jsp:include page="/Nutritionist/main-header.jsp"/>  
         
-        <c:set  var="actiontodo" value="${action ? action : 'ViewDetail'}"/>
+        <c:set  var="actiontodo" value="${not empty action ? action : 'ViewDetail'}"/>
         <c:set  var="isView" value="${actiontodo eq 'ViewDetail'}"/>
         <c:set  var="isCreate" value="${actiontodo eq 'Create'}"/>
         <c:set  var="isUpdate" value="${actiontodo eq 'Update'}"/>
@@ -274,9 +278,9 @@
         
         <c:set  var="titleinput" value="${ not empty param.titleinput ? param.titleinput : ''}"/>    
         <c:set  var="typeinput" value="${ not empty param.typeinput ? param.typeinput : ''}"/>    
-        <c:set  var="foodinput" value="${ not empty param.foodinput ? param.foodinput : ''}"/>    
+        <c:set var="foodinput" value="${not empty param.foodinput ? param.foodinput : (not empty foodID ? foodID : '')}" />
         <c:set  var="requestNoteInput" value="${ not empty param.requestNoteInput ? param.requestNoteInput : ''}"/>    
-         
+
              
         <c:set var="titleUpdate" value="${not empty param.titleUpdate ? param.titleUpdate : (not empty requestupdate.title ? requestupdate.title : 'No data')}" />
         <c:set var="typeUpdate" value="${not empty param.typeUpdate ? param.typeUpdate : (not empty requestupdate.type ? requestupdate.type : 'No data')}" />
@@ -411,7 +415,6 @@
                                 <label class="form-label">Món ăn đề xuất</label>
 
                                 <c:choose>
-                                   
                                     <c:when test="${isView}">
                                         <c:choose>
                                             <c:when test="${not empty requestView.draftID}">
@@ -433,16 +436,16 @@
                                                 id="foodSelect" onchange="updateFoodLink()">
                                             <option value="">-- Chọn món ăn --</option>
                                             <c:forEach var="food" items="${foodList}">
-                                                <option value="${food.id}"
+                                                <option value="${food.fdrID}"
                                                         <c:choose>
                                                             <c:when test="${isUpdate}">
-                                                                <c:if test="${foodUpdate == food.id}">selected</c:if>
+                                                                <c:if test="${foodUpdate == food.fdrID}">selected</c:if>
                                                             </c:when>
                                                             <c:otherwise>
-                                                                <c:if test="${foodinput == food.id}">selected</c:if>
+                                                                <c:if test="${foodinput == food.fdrID}">selected</c:if>
                                                             </c:otherwise>
                                                         </c:choose>
-                                                        >${food.name}</option>
+                                                        >${food.foodName}</option>
                                             </c:forEach>
                                         </select>
                                         <a href="#" id="foodLink" target="_blank" class="food-link d-block mt-2" style="display:none;">
@@ -453,16 +456,38 @@
                             </div>
                         </div>
 
+                        
 
 
                         <div class="form-section">
-                            <div class="mb-3">
-                                <label class="form-label">Ghi chú từ người gửi</label>
-                                <textarea class="form-control" readonly></textarea>
+                            <div class=" col mb-3">
+                                <label class="form-label">Ghi chú từ người gửi</label> 
+                                <c:choose>
+                                    <c:when test="${isView}">
+                                           <textarea class="form-control" readonly>${not empty requestView.requestNote? requestView.requestNote: 'No data'}</textarea>
+                                    </c:when>
+                                    <c:when test="${isCreate}">
+                                         <textarea class="form-control">${not empty requestNote? requestNote : ''}</textarea>
+                                    </c:when>
+                                    <c:otherwise>
+                                         <textarea class="form-control">${not empty requestNote? requestNote : ''}</textarea>
+                                    </c:otherwise>
+                                </c:choose>
+                                
                             </div>
                         </div>
-
-                       
+                        
+                       <div class="form-section">
+                            <div class="col mb-3">
+                                
+                                <c:choose>
+                                    <c:when test="${isView}">
+                                            <label class="form-label">Phản Hồi</label> 
+                                           <textarea class="form-control" readonly>${not empty requestView.responseNote ? requestView.responseNote : 'No data'}</textarea>
+                                    </c:when>
+                                </c:choose>
+                            </div>
+                        </div>
                        
                         <div class="d-flex justify-content-end action-buttons">
                             <a href="#" class="btn btn-primary">
@@ -485,25 +510,5 @@
         <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
         <script src="${pageContext.request.contextPath}/JS/Nutritionist/common.js"></script>
         
-        <script>
-    function updateFoodLink() {
-        const select = document.getElementById("foodSelect");
-        const link = document.getElementById("foodLink");
-        const selectedId = select.value;
-
-        if (selectedId) {
-            link.href = "nutricontrol?action=showfooddraftdetail&id=" + selectedId;
-            link.style.display = "inline-block";
-        } else {
-            link.href = "#";
-            link.style.display = "none";
-        }
-    }
-
-    // Gọi khi trang load để hiển thị sẵn nếu có
-    window.addEventListener('DOMContentLoaded', function () {
-        updateFoodLink();
-    });
-</script>
     </body>
 </html>

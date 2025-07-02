@@ -476,6 +476,11 @@
                                                                        href="#" onclick="showDeletePopup('nutricontrol?action=deletefooddraft&id=${food.fdrID}', '${food.foodName}'); return false;">
                                                                         <i class="fas fa-trash"></i>
                                                                     </a>
+                                                                    <a class="action-btn create-btn" title="Create Request"
+                                                                       style="background-color:green; color:white; margin-left:8px"
+                                                                       href="nutricontrol?action=showcreaterequest&idfood=${food.fdrID}">
+                                                                        <i class="fas fa-plus"></i>
+                                                                    </a>
                                                                 </c:if>
                                                             </div>
                                                         </td>

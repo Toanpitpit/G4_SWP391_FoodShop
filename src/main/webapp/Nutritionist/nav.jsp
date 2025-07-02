@@ -92,7 +92,7 @@
                 </a>
                 <div class="submenu">
                     <a href="${pageContext.request.contextPath}/nutricontrol?action=showrequestlist" class="menu-link">Request List</a>
-                    <a href="#" class="menu-link">Create Request</a>
+                    <a href="${pageContext.request.contextPath}/nutricontrol?action=showcreaterequest" class="menu-link">Create Request</a>
                 </div>
             </div>
 
