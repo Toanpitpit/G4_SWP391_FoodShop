@@ -1,89 +1,66 @@
+
+
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package com.example.servlet.model;
 
+/**
+ *
+ * @author Admin
+ */
 public class FoodDetail {
-    private int id;
-    private String name;
-    private String image;
-    private String category;
-    private double price;
-    private String status;
+    private int fdID;
+    private Integer fdrID;
+    private Integer fID;
+    private boolean isDraft;
+    private String description;
+    private String ingredients;
 
-    // Dữ liệu mở rộng từ bảng FoodDetail
-    private String bmiClass;     // classification từ bảng bmi_classification
-    private String description;  // Pdetail
-    private String ingredients;  // thanh_phan
+    public FoodDetail() {
+    }
 
-    public FoodDetail() {}
-
-    public FoodDetail(int id, String name, String image, String category, double price, String status,
-                      String bmiClass, String description, String ingredients) {
-        this.id = id;
-        this.name = name;
-        this.image = image;
-        this.category = category;
-        this.price = price;
-        this.status = status;
-        this.bmiClass = bmiClass;
+    public FoodDetail(int fdID, Integer fdrID, Integer fID, boolean isDraft, String description, String ingredients) {
+        this.fdID = fdID;
+        this.fdrID = fdrID;
+        this.fID = fID;
+        this.isDraft = isDraft;
         this.description = description;
         this.ingredients = ingredients;
     }
 
-    // Getter & Setter
-
-    public int getId() {
-        return id;
+    public int getFdID() {
+        return fdID;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setFdID(int fdID) {
+        this.fdID = fdID;
     }
 
-    public String getName() {
-        return name;
+    public Integer getFdrID() {
+        return fdrID;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFdrID(Integer fdrID) {
+        this.fdrID = fdrID;
     }
 
-    public String getImage() {
-        return image;
+    public Integer getfID() {
+        return fID;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setfID(Integer fID) {
+        this.fID = fID;
     }
 
-    public String getCategory() {
-        return category;
+    public boolean isIsDraft() {
+        return isDraft;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
-    }
+    public void setIsDraft(boolean isDraft) {
+        this.isDraft = isDraft;
 
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getBmiClass() {
-        return bmiClass;
-    }
-
-    public void setBmiClass(String bmiClass) {
-        this.bmiClass = bmiClass;
     }
 
     public String getDescription() {
@@ -101,4 +78,11 @@ public class FoodDetail {
     public void setIngredients(String ingredients) {
         this.ingredients = ingredients;
     }
+
+
+    @Override
+    public String toString() {
+        return "FoodDetail{" + "fdID=" + fdID + ", fdrID=" + fdrID + ", fID=" + fID + ", isDraft=" + isDraft + ", description=" + description + ", ingredients=" + ingredients + '}';
+    }
+    
 }

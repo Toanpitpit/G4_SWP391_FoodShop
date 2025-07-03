@@ -2,13 +2,15 @@ package com.example.servlet.utils;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class DBConnect {
-    private Connection c;
+       private Connection c;
     private static final String URL = "jdbc:sqlserver://localhost:1433;databaseName=SWP391_PROJECT_FOODSHOP;encrypt=true;trustServerCertificate=true;useUnicode=true;";
     private static final String USERNAME = "sa";
-    private static final String PASSWORD = "1234";
+    private static final String PASSWORD = "123";
 
     public DBConnect() {
         try {

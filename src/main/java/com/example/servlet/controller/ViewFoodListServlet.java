@@ -17,7 +17,7 @@ public class ViewFoodListServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // Lấy tham số từ form tìm kiếm
+        
         String searchID = request.getParameter("searchID");
         String searchName = request.getParameter("searchName");
         String searchCategory = request.getParameter("searchCategory");
@@ -28,18 +28,18 @@ public class ViewFoodListServlet extends HttpServlet {
 
             List<Food> foodList;
 
-            // Nếu không có điều kiện search nào thì lấy toàn bộ
+            
             if ((searchID == null || searchID.isBlank()) &&
                 (searchName == null || searchName.isBlank()) &&
                 (searchCategory == null || searchCategory.isBlank()) &&
                 (priceRange == null || priceRange.isBlank())) {
-                foodList = dao.getAllFoods();
+                foodList = dao.getListFoods (null, null, null, null, null, null, null, 1, 100000000);
             } else {
-                // Có điều kiện -> gọi search
-                foodList = dao.searchFoods(searchID, searchName, searchCategory, priceRange);
+                
+//                foodList = dao.searchFoods(searchID, searchName, searchCategory, priceRange);
             }
 
-            request.setAttribute("foodList", foodList);
+//            request.setAttribute("foodList", foodList);
             request.getRequestDispatcher("viewFoods.jsp").forward(request, response);
 
         } catch (Exception e) {
