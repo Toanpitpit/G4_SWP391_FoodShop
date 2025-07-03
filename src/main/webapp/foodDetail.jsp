@@ -198,7 +198,7 @@
                 </a>
                 <div class="submenu">
                     <a href="viewFoodList" class="menu-link">Food List </a>
-                    <a href="foodDetail.jsp" class="menu-link">Food Detail</a>
+                    <a href="viewFoodDetail" class="menu-link">Food Detail</a>
                 </div>
             </div>
             <div class="menu-item">
@@ -345,7 +345,7 @@
         </div>
     </div>
 </header>
-       <!-- Main Content -->
+    
         <!-- Main Content -->
 <main class="main-content" id="mainContent">
     <!-- Breadcrumb Section -->
@@ -477,19 +477,18 @@
                                     </c:choose>
                                 </td>
                                 <td>
-                                    <span class="status-badge 
-                                        ${food.bmiClass eq 'Underweight' ? 'status-out' : 
-                                          food.bmiClass eq 'Normal' ? 'status-available' : 
-                                          food.bmiClass eq 'Overweight' ? 'status-out' : 'status-out'}">
+                                    <span class="status-badge
+                                          ${food.bmiClass eq 'Underweight' ? 'status-out' : 
+                      food.bmiClass eq 'Normal' ? 'status-available' : 
+                      food.bmiClass eq 'Overweight' ? 'status-out' : 'status-out'}">
                                         ${food.bmiClass}
                                     </span>
                                 </td>
                                 <td><span class="category-badge">${food.category}</span></td>
                                 <td>
                                     <div class="nutrition-info">
-                                        <div><i class="fas fa-fire text-danger me-1"></i> Calories: ${food.calories}kcal</div>
-                                        <div><i class="fas fa-bread-slice text-warning me-1"></i> Carbs: ${food.carbs}g</div>
-                                        <div><i class="fas fa-drumstick-bite text-primary me-1"></i> Protein: ${food.protein}g</div>
+                                        <div><i class="fas fa-drumstick-bite text-primary me-1"></i> Thành phần: ${food.ingredients}</div>
+                                        <div><i class="fas fa-scroll text-info me-1"></i> Mô tả: ${food.description}</div>
                                     </div>
                                 </td>
                                 <td class="price-tag">
@@ -509,6 +508,7 @@
                             </tr>
                         </c:forEach>
                     </tbody>
+
                 </table>
             </div>
 

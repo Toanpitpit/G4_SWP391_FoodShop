@@ -531,7 +531,7 @@ SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
                 </a>
                 <div class="submenu">
                     <a href="viewFoodList" class="menu-link">Food List </a>
-                    <a href="foodDetail.jsp" class="menu-link">Food Detail</a>
+                    <a href="viewFoodDetail" class="menu-link">Food Detail</a>
                 </div>
             </div>
             <div class="menu-item">
