@@ -1,3 +1,5 @@
+
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
@@ -58,6 +60,7 @@ public class FoodDetail {
 
     public void setIsDraft(boolean isDraft) {
         this.isDraft = isDraft;
+
     }
 
     public String getDescription() {
@@ -75,13 +78,11 @@ public class FoodDetail {
     public void setIngredients(String ingredients) {
         this.ingredients = ingredients;
     }
-    
-    
+
 
     @Override
     public String toString() {
         return "FoodDetail{" + "fdID=" + fdID + ", fdrID=" + fdrID + ", fID=" + fID + ", isDraft=" + isDraft + ", description=" + description + ", ingredients=" + ingredients + '}';
     }
-    
     
 }

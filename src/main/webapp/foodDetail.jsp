@@ -6,6 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="vi">
     <head>
@@ -19,62 +20,141 @@
         <link rel="stylesheet" href="CSS/defauld.css">
           <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
           <style>
-              /* Nutrition Info badges */
-.nutrition-info {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
-}
-
-.nutrition-info .badge {
-    font-size: 0.75rem;
-    padding: 4px 8px;
-    border-radius: 4px;
-}
-
-/* Description cell */
-.description-cell {
-    max-width: 200px;
-}
-
-.truncate-text {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 100%;
-}
-
-/* BMI Class badges */
-.bmi-badge {
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 0.85rem;
-    font-weight: 500;
-}
-
-.bmi-badge.underweight {
-    background-color: #ffecb3;
-    color: #f57c00;
-}
-
-.bmi-badge.normal {
-    background-color: #c8e6c9;
-    color: #388e3c;
-}
-
-.bmi-badge.overweight {
-    background-color: #ffccbc;
-    color: #e64a19;
-}
-
-.bmi-badge.obese {
-    background-color: #ffcdd2;
-    color: #d32f2f;
-}
-          </style>
+            /* Food List Specific Styles */
+            .food-list-container {
+                background-color: white;
+                border-radius: 10px;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+                padding: 25px;
+                margin-bottom: 30px;
+            }
+            
+            .food-search-bar {
+                background-color: #f8f9fa;
+                border-radius: 10px;
+                padding: 15px 20px;
+                margin-bottom: 25px;
+            }
+            
+            .food-table {
+                width: 100%;
+                border-collapse: separate;
+                border-spacing: 0;
+            }
+            
+            .food-table th {
+                background-color: #2c3e50;
+                color: white;
+                padding: 12px 15px;
+                font-weight: 600;
+            }
+            
+            .food-table td {
+                padding: 12px 15px;
+                border-bottom: 1px solid #eee;
+            }
+            
+            .food-table tr:nth-child(even) {
+                background-color: #f8f9fa;
+            }
+            
+            .food-table tr:hover {
+                background-color: #e9f7ff;
+            }
+            
+            .food-image {
+                width: 60px;
+                height: 60px;
+                object-fit: cover;
+                border-radius: 8px;
+                border: 1px solid #eee;
+            }
+            
+            .status-badge {
+                padding: 6px 12px;
+                border-radius: 20px;
+                font-size: 0.85rem;
+                font-weight: 500;
+            }
+            
+            .status-available {
+                background-color: #d4edda;
+                color: #155724;
+            }
+            
+            .status-out {
+                background-color: #f8d7da;
+                color: #721c24;
+            }
+            
+            .action-btn {
+                width: 35px;
+                height: 35px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 50%;
+                margin: 0 3px;
+                transition: all 0.2s;
+            }
+            
+            .action-btn:hover {
+                transform: translateY(-2px);
+            }
+            
+            .btn-view {
+                background-color: #e3f2fd;
+                color: #0d6efd;
+            }
+            
+            .btn-edit {
+                background-color: #e8f5e9;
+                color: #198754;
+            }
+            
+            .btn-delete {
+                background-color: #fce4ec;
+                color: #dc3545;
+            }
+            
+            .category-badge {
+                display: inline-block;
+                padding: 4px 10px;
+                border-radius: 15px;
+                font-size: 0.8rem;
+                background-color: #e0f7fa;
+                color: #006064;
+            }
+            
+            .price-tag {
+                font-weight: 600;
+                color: #c62828;
+            }
+            
+            .no-image-placeholder {
+                width: 60px;
+                height: 60px;
+                background-color: #f5f5f5;
+                border-radius: 8px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #9e9e9e;
+                font-size: 1.5rem;
+            }
+            
+            .pagination .page-item .page-link {
+                color: #2c3e50;
+            }
+            
+            .pagination .page-item.active .page-link {
+                background-color: #4CAF50;
+                border-color: #4CAF50;
+            }
+        </style>
     </head>
     <body>
-        <!-- Sidebar -->
+         <!-- Sidebar -->
       <nav class="sidebar" id="sidebar">
     <div class="sidebar-header">
         <a href="#" class="sidebar-brand">
@@ -265,325 +345,214 @@
         </div>
     </div>
 </header>
+    
         <!-- Main Content -->
-        <main class="main-content" id="mainContent">
-            <!-- Breadcrumb Section -->
-            <div class="breadcrumb-section">
-                <div class="breadcrumb-container">
-                    <h1 class="page-title">Dashboard</h1>
-                    <nav class="breadcrumb-nav">
-                        <a href="#" class="breadcrumb-item">Home</a>
-                        <span class="breadcrumb-separator">
-                            <i class="bi bi-chevron-right"></i>
-                        </span>
-                        <a href="#" class="breadcrumb-item">Pages</a>
-                        <span class="breadcrumb-separator">
-                            <i class="bi bi-chevron-right"></i>
-                        </span>
-                        <span class="breadcrumb-item active">Dashboard</span>
-                    </nav>
-                </div>
-            </div>
-
-            <!-- Content Wrapper -->
-            <div class="content-wrapper">
-                <div class="content-card">
-                    <div class="row mb-4">
-                        <div class="col-12">
-                            <h2 class="mb-3">Welcome to Saler Dashboard</h2>
-                            <p class="text-muted">Manage your eCommerce store with powerful tools and analytics.</p>
-                        </div>
-                    </div>
-
-                    <!-- Stats Cards Row -->
-                    <div class="row mb-4">
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-0 shadow-sm h-100">
-                                <div class="card-body">
-                                    <div class="d-flex align-items-center">
-                                        <div class="flex-shrink-0">
-                                            <div class="bg-primary bg-gradient text-white rounded-3 p-3">
-                                                <i class="bi bi-cart-fill fs-4"></i>
-                                            </div>
-                                        </div>
-                                        <div class="flex-grow-1 ms-3">
-                                            <h6 class="text-muted mb-1">Total Orders</h6>
-                                            <h3 class="mb-0">1,234</h3>
-                                            <small class="text-success">
-                                                <i class="bi bi-arrow-up"></i> +12% from last month
-                                            </small>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-0 shadow-sm h-100">
-                                <div class="card-body">
-                                    <div class="d-flex align-items-center">
-                                        <div class="flex-shrink-0">
-                                            <div class="bg-success bg-gradient text-white rounded-3 p-3">
-                                                <i class="bi bi-currency-dollar fs-4"></i>
-                                            </div>
-                                        </div>
-                                        <div class="flex-grow-1 ms-3">
-                                            <h6 class="text-muted mb-1">Revenue</h6>
-                                            <h3 class="mb-0">$45,678</h3>
-                                            <small class="text-success">
-                                                <i class="bi bi-arrow-up"></i> +8% from last month
-                                            </small>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-0 shadow-sm h-100">
-                                <div class="card-body">
-                                    <div class="d-flex align-items-center">
-                                        <div class="flex-shrink-0">
-                                            <div class="bg-info bg-gradient text-white rounded-3 p-3">
-                                                <i class="bi bi-people-fill fs-4"></i>
-                                            </div>
-                                        </div>
-                                        <div class="flex-grow-1 ms-3">
-                                            <h6 class="text-muted mb-1">Customers</h6>
-                                            <h3 class="mb-0">892</h3>
-                                            <small class="text-success">
-                                                <i class="bi bi-arrow-up"></i> +15% from last month
-                                            </small>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-0 shadow-sm h-100">
-                                <div class="card-body">
-                                    <div class="d-flex align-items-center">
-                                        <div class="flex-shrink-0">
-                                            <div class="bg-warning bg-gradient text-white rounded-3 p-3">
-                                                <i class="bi bi-box-seam fs-4"></i>
-                                            </div>
-                                        </div>
-                                        <div class="flex-grow-1 ms-3">
-                                            <h6 class="text-muted mb-1">Products</h6>
-                                            <h3 class="mb-0">567</h3>
-                                            <small class="text-danger">
-                                                <i class="bi bi-arrow-down"></i> -3% from last month
-                                            </small>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                <!-- Content Wrapper -->
-<div class="content-wrapper">
-    <div class="food-list-container">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h3 class="mb-0">Food List Management</h3>
-            <a href="addFoods.jsp" class="btn btn-success">
-                <i class="fas fa-plus me-2"></i> Add New Food
-            </a>
+<main class="main-content" id="mainContent">
+    <!-- Breadcrumb Section -->
+    <div class="breadcrumb-section">
+        <div class="breadcrumb-container">
+            <h1 class="page-title">Food Nutrition Dashboard</h1>
+            <nav class="breadcrumb-nav">
+                <a href="#" class="breadcrumb-item">Home</a>
+                <span class="breadcrumb-separator">
+                    <i class="bi bi-chevron-right"></i>
+                </span>
+                <a href="#" class="breadcrumb-item">Nutrition Management</a>
+                <span class="breadcrumb-separator">
+                    <i class="bi bi-chevron-right"></i>
+                </span>
+                <span class="breadcrumb-item active">Food Nutrition</span>
+            </nav>
         </div>
-        
-        <!-- Search and Filter Bar -->
-        <div class="food-search-bar">
-            <form action="viewFoodList" method="get" class="row g-3">
-                <div class="col-md-3">
-                    <div class="input-group">
-                        <span class="input-group-text bg-white">
-                            <i class="fas fa-hashtag text-primary"></i>
-                        </span>
-                        <input type="text" name="searchID" class="form-control" placeholder="Food ID">
-                    </div>
-                </div>
-                
-                <div class="col-md-3">
-                    <div class="input-group">
-                        <span class="input-group-text bg-white">
-                            <i class="fas fa-utensils text-primary"></i>
-                        </span>
-                        <input type="text" name="searchName" class="form-control" placeholder="Food Name">
-                    </div>
-                </div>
-                
-                <div class="col-md-3">
-                    <div class="input-group">
-                        <span class="input-group-text bg-white">
-                            <i class="fas fa-tags text-primary"></i>
-                        </span>
-                        <select name="searchCategory" class="form-select">
-                            <option value="">All Categories</option>
-                            <option value="Đồ uống">🥤 Drinks</option>
-                            <option value="Healthy Food">🥗 Healthy Food</option>
-                            <option value="Món Chính">🍛 Main Dishes</option>
-                            <option value="Món Khai Vị">🥟 Appetizers</option>
-                            <option value="Món Tráng Miệng">🍰 Desserts</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <div class="col-md-3">
-                    <div class="input-group">
-                        <span class="input-group-text bg-white">
-                            <i class="fas fa-money-bill-wave text-primary"></i>
-                        </span>
-                        <select name="priceRange" class="form-select">
-                            <option value="">All Prices</option>
-                            <option value="1">🔽 Under 30,000đ</option>
-                            <option value="2">💰 30,000–50,000đ</option>
-                            <option value="3">💵 50,000–100,000đ</option>
-                            <option value="4">💎 Over 100,000đ</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <!-- New row for BMI Class and Nutrition Info search -->
-                <div class="col-md-4">
-                    <div class="input-group">
-                        <span class="input-group-text bg-white">
-                            <i class="fas fa-weight-scale text-primary"></i>
-                        </span>
-                        <select name="bmiClass" class="form-select">
-                            <option value="">BMI Class</option>
-                            <option value="Underweight">Underweight</option>
-                            <option value="Normal">Normal</option>
-                            <option value="Overweight">Overweight</option>
-                            <option value="Obese">Obese</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <div class="col-md-4">
-                    <div class="input-group">
-                        <span class="input-group-text bg-white">
-                            <i class="fas fa-apple-alt text-primary"></i>
-                        </span>
-                        <input type="text" name="nutritionInfo" class="form-control" placeholder="Nutrition Info">
-                    </div>
-                </div>
-                
-                <!-- Search and Reset buttons -->
-                <div class="col-md-2">
-                    <button type="submit" class="btn btn-primary w-100">
-                        <i class="fas fa-search me-2"></i> Search
-                    </button>
-                </div>
-                
-                <div class="col-md-2">
-                    <button type="reset" class="btn btn-outline-secondary w-100">
-                        <i class="fas fa-sync me-2"></i> Reset
-                    </button>
-                </div>
-            </form>
-        </div>
-        
-        <!-- Food Table -->
-        <div class="table-responsive">
-            <table class="food-table table table-bordered table-hover">
-                <thead class="thead-dark">
-                    <tr>
-                        <th>FoodID</th>
-                        <th>Food Name</th>
-                        <th>Image</th>
-                        <th>BMI Class</th>
-                        <th>Category</th>
-                        <th>Nutrition Information</th>
-                        <th>Description</th>
-                        <th>Price</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <c:forEach var="food" items="${foodList}">
-                        <tr>
-                            <td>${food.id}</td>
-                            <td>${food.name}</td>
-                            <td>
-                                <c:choose>
-                                    <c:when test="${not empty food.image}">
-                                        <img src="${pageContext.request.contextPath}/${food.image}" 
-                                             alt="${food.name}" class="food-image"
-                                             style="width: 50px; height: 50px; object-fit: cover;" />
-                                    </c:when>
-                                    <c:otherwise>
-                                        <i class="bi bi-image" style="font-size: 24px; color: gray;"></i>
-                                    </c:otherwise>
-                                </c:choose>
-                            </td>
-                            <td>
-                                <span class="bmi-badge ${food.bmiClass.toLowerCase()}">
-                                    ${food.bmiClass}
-                                </span>
-                            </td>
-                            <td><span class="category-badge">${food.category}</span></td>
-                            <td>
-                                <div class="nutrition-info">
-                                    <span class="badge bg-info">Cal: ${food.calories}</span>
-                                    <span class="badge bg-success">Protein: ${food.protein}g</span>
-                                    <span class="badge bg-warning">Carbs: ${food.carbs}g</span>
-                                </div>
-                            </td>
-                            <td class="description-cell">
-                                <div class="truncate-text" title="${food.description}">
-                                    ${food.description}
-                                </div>
-                            </td>
-                            <td class="price-tag">
-                                ${food.price}
-                            </td>
-                            <td>
-                                <span class="status-badge ${food.status eq 'Available' ? 'status-available' : 'status-out'}">
-                                    ${food.status}
-                                </span>
-                            </td>
-                            <td>
-                                <button class="action-btn btn-view" title="View Details">
-                                    <i class="fas fa-eye"></i>
-                                </button>
-                                <button class="action-btn btn-edit" title="Edit">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button class="action-btn btn-delete" title="Delete">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </td>
-                        </tr>
-                    </c:forEach>
-                </tbody>
-            </table>
-        </div>
-        
-        <!-- Pagination -->
-        <nav class="mt-4 d-flex justify-content-between align-items-center">
-            <div class="text-muted">
-                Showing 1 to 5 of 25 foods
-            </div>
-            <ul class="pagination mb-0">
-                <li class="page-item disabled">
-                    <a class="page-link" href="#" tabindex="-1">Previous</a>
-                </li>
-                <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item"><a class="page-link" href="#">4</a></li>
-                <li class="page-item"><a class="page-link" href="#">5</a></li>
-                <li class="page-item">
-                    <a class="page-link" href="#">Next</a>
-                </li>
-            </ul>
-        </nav>
     </div>
-</div>
-                    
-                    
+
+    <!-- Content Wrapper -->
+    <div class="content-wrapper">
+        <div class="food-list-container">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3 class="mb-0">Food Nutrition Dashboard</h3>
+                <a href="addFoods.jsp" class="btn btn-success">
+                    <i class="fas fa-plus me-2"></i> Add New Food
+                </a>
+            </div>
+
+            <!-- Search and Filter Bar -->
+            <div class="food-search-bar">
+                <form action="viewFoodList" method="get" class="row g-3">
+                    <div class="col-md-3">
+                        <div class="input-group">
+                            <span class="input-group-text bg-white">
+                                <i class="fas fa-hashtag text-primary"></i>
+                            </span>
+                            <input type="text" name="searchID" class="form-control" placeholder="Food ID">
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="input-group">
+                            <span class="input-group-text bg-white">
+                                <i class="fas fa-utensils text-primary"></i>
+                            </span>
+                            <input type="text" name="searchName" class="form-control" placeholder="Food Name">
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="input-group">
+                            <span class="input-group-text bg-white">
+                                <i class="fas fa-weight-scale text-primary"></i>
+                            </span>
+                            <select name="bmiClass" class="form-select">
+                                <option value="">All BMI Classes</option>
+                                <option value="Underweight">Underweight</option>
+                                <option value="Normal">Normal</option>
+                                <option value="Overweight">Overweight</option>
+                                <option value="Obese">Obese</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="input-group">
+                            <span class="input-group-text bg-white">
+                                <i class="fas fa-tags text-primary"></i>
+                            </span>
+                            <select name="searchCategory" class="form-select">
+                                <option value="">All Categories</option>
+                                <option value="Đồ uống">🥤 Drinks</option>
+                                <option value="Healthy Food">🥗 Healthy Food</option>
+                                <option value="Món Chính">🍛 Main Dishes</option>
+                                <option value="Món Khai Vị">🥟 Appetizers</option>
+                                <option value="Món Tráng Miệng">🍰 Desserts</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fas fa-search me-2"></i> Search
+                        </button>
+                    </div>
+
+                    <div class="col-md-6">
+                        <button type="reset" class="btn btn-outline-secondary w-100">
+                            <i class="fas fa-sync me-2"></i> Reset
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Food Table -->
+            <div class="table-responsive">
+                <table class="food-table table table-bordered table-hover">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>FoodID</th>
+                            <th>Food Name</th>
+                            <th>Image</th>
+                            <th>BMI Class</th>
+                            <th>Category</th>
+                            <th>Infomation</th>
+                            <th>description</th>
+                            <th>Price</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <c:forEach var="food" items="${foodList}">
+                            <tr>
+                                <td>${food.id}</td>
+                                <td>${food.name}</td>
+                                <td>
+                                    <c:choose>
+                                        <c:when test="${not empty food.image}">
+                                            <img src="${pageContext.request.contextPath}/${food.image}"
+                                                 alt="${food.name}" class="food-image"
+                                                 style="width: 50px; height: 50px; object-fit: cover;" />
+                                        </c:when>
+                                        <c:otherwise>
+                                            <div class="no-image-placeholder">
+                                                <i class="bi bi-image"></i>
+                                            </div>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </td>
+                                <td>
+                                    <span class="status-badge
+                                          ${food.bmiClass eq 'Underweight' ? 'status-out' : 
+                      food.bmiClass eq 'Normal' ? 'status-available' : 
+                      food.bmiClass eq 'Overweight' ? 'status-out' : 'status-out'}">
+                                        ${food.bmiClass}
+                                    </span>
+                                </td>
+                                <td><span class="category-badge">${food.category}</span></td>
+                                <td>
+                                    <div class="nutrition-info">
+                                        <div> Thành phần: ${food.ingredients}</div>
+                                       
+                                    </div>
+                                </td>
+                                <td>${food.description}</td>
+                                <td class="price-tag">
+                                    ${food.price}
+                                </td>
+                                <td>
+                                    <button class="action-btn btn-view" title="View Details">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="action-btn btn-edit" title="Edit">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="action-btn btn-delete" title="Delete">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </c:forEach>
+                    </tbody>
+
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <nav class="mt-4 d-flex justify-content-between align-items-center">
+                <div class="text-muted">
+                    Showing 1 to 5 of 25 foods
+                </div>
+                <ul class="pagination mb-0">
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1">Previous</a>
+                    </li>
+                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item"><a class="page-link" href="#">4</a></li>
+                    <li class="page-item"><a class="page-link" href="#">5</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-left">
+                <span>© 2024 Nutrition Dashboard. All rights reserved.</span>
+                <span>•</span>
+                <a href="#" class="footer-link">Privacy Policy</a>
+                <span>•</span>
+                <a href="#" class="footer-link">Terms of Service</a>
+            </div>
+            <div class="footer-right">
+                <span>Version 2.0.0</span>
+            </div>
+        </div>
+    </footer>
+</main>
+
             <!-- Footer -->
             <footer class="main-footer">
                 <div class="footer-content">

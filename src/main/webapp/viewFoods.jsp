@@ -198,7 +198,7 @@
                 </a>
                 <div class="submenu">
                     <a href="viewFoodList" class="menu-link">Food List </a>
-                    <a href="${pageContext.request.contextPath}/nutricontrol?action=showfood" class="menu-link">Food Detail</a>
+                    <a href="viewFoodDetail" class="menu-link">Food Detail</a>
                 </div>
             </div>
             <div class="menu-item">
@@ -370,7 +370,7 @@
                 <div class="food-list-container">
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <h3 class="mb-0">Food List Management</h3>
-                        <a href="#" class="btn btn-success">
+                        <a href="addFoods.jsp" class="btn btn-success">
                             <i class="fas fa-plus me-2"></i> Add New Food
                         </a>
                     </div>
