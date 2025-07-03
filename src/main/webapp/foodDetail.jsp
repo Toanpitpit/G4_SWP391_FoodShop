@@ -452,7 +452,8 @@
                             <th>Image</th>
                             <th>BMI Class</th>
                             <th>Category</th>
-                            <th>Nutrition Info</th>
+                            <th>Infomation</th>
+                            <th>description</th>
                             <th>Price</th>
                             <th>Actions</th>
                         </tr>
@@ -487,10 +488,11 @@
                                 <td><span class="category-badge">${food.category}</span></td>
                                 <td>
                                     <div class="nutrition-info">
-                                        <div><i class="fas fa-drumstick-bite text-primary me-1"></i> Thành phần: ${food.ingredients}</div>
-                                        <div><i class="fas fa-scroll text-info me-1"></i> Mô tả: ${food.description}</div>
+                                        <div> Thành phần: ${food.ingredients}</div>
+                                       
                                     </div>
                                 </td>
+                                <td>${food.description}</td>
                                 <td class="price-tag">
                                     ${food.price}
                                 </td>
